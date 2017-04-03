@@ -492,14 +492,17 @@ int acquirevJoyDevice(int deviceID) {
 
 USHORT Z = 0;
 
-void updatevJoyDevice(int deviceID, t_joycon *jc) {
+void updatevJoyDevice(/*int deviceID, */t_joycon *jc) {
 
-	UINT DevID = deviceID;
-	USHORT X = 0;
-	USHORT Y = 0;
-	//USHORT Z = 0;
-	LONG   Btns = 0;
+	// If it's the left JoyCon update device 1,
+	// if it's the right JoyCon update device 2
+	//if (jc->left_right == 1) {
+	//	DevID = 1;
+	//} else {
+	//	DevID = 2;
+	//}
 
+	UINT DevID = jc->left_right;
 
 	PVOID pPositionMessage;
 	UINT	IoCode = LOAD_POSITIONS;
@@ -509,24 +512,25 @@ void updatevJoyDevice(int deviceID, t_joycon *jc) {
 	UINT iInterface = 1;
 
 	// Set destination vJoy device
-	id = (BYTE)deviceID;
+	id = (BYTE)DevID;
 	iReport.bDevice = id;
 
-	// only left joycon for now
-	//if (jc->left_right == 2) {
-	//	return;
-	//}
 
-	//// Set position data of 3 first axes
-	//if (Z>35000) Z = 0;
-	//Z += 200;
-	//iReport.wAxisZ = Z;
-	//iReport.wAxisX = 32000 - Z;
-	//iReport.wAxisY = Z / 2 + 7000;
 
-	int x = 200 * (jc->stick.horizontal - 10) + 15000;
-	int y = 200 * (jc->stick.vertical - 10) + 15000;
-	int z = 200 * (jc->stick.unknown - 10) + 15000;
+	
+
+	// Set Stick data
+	// todo: calibration of some kind
+	int x, y, z;
+	if (DevID == 1) {
+		x = 200 * (jc->stick.horizontal - 10) + 15000;
+		y = 200 * (jc->stick.vertical - 10) + 15000;
+		//z = 200 * (jc->stick.unknown - 10) + 15000;
+	} else {
+		x = 200 * (jc->stick.horizontal - 10) + 15000;
+		y = 200 * (jc->stick.vertical - 10) + 19000;
+		//z = 200 * (jc->stick.unknown - 10) + 15000;
+	}
 
 	// Set position data of 3 first axes
 	//iReport.wAxisZ = 250 * jc->stick.unknown;
@@ -559,8 +563,10 @@ void updatevJoyDevice(int deviceID, t_joycon *jc) {
 
 int main(int argc, char *argv[]) {
 
-
+	// get vJoy Device 1
 	acquirevJoyDevice(1);
+	// get vJoy Device 2
+	acquirevJoyDevice(2);
 
 
 	int res;
@@ -587,7 +593,15 @@ int main(int argc, char *argv[]) {
 	}
 	hid_free_enumeration(devs);
 
+
+
 	t_joycon *jc;
+
+
+
+
+
+
 
 	while(true) {
 
@@ -597,11 +611,23 @@ int main(int argc, char *argv[]) {
 				continue;
 			}
 
+			updatevJoyDevice(jc);
 
 
-			updatevJoyDevice(1, jc);
+			//updatevJoyDevice(1, jc);
+			//updatevJoyDevice(2, jc);
 
+			//if (jci > 0 && jci < 3) {
+			//	updatevJoyDevice(jci, jc);
+			//}
 
+			//if (jci == 1) {
+			//	updatevJoyDevice(1, jc);
+			//}
+			//if (jci == 2) {
+			//	updatevJoyDevice(2, jc);
+			//}
+			
 
 			//uint8_t rbuf[0x31];
 			//memset(rbuf, 0, 0x31);
