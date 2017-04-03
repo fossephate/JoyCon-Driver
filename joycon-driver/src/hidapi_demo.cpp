@@ -10,14 +10,14 @@
 #include <wchar.h>
 
 
-
-
 #include <Windows.h>
 
 #include <hidapi.h>
 
 #include <fstream>
 #include <iostream>
+
+#include <bitset>
 
 /* vJoy */
 // Monitor Force Feedback (FFB) vJoy device
@@ -39,6 +39,14 @@
 #define JOYCON_PRODUCT_R 0x2007
 
 #define SERIAL_LEN 18
+
+
+
+
+
+
+
+
 
 uint8_t joycon_crc_lookup[256] = {
     0x00, 0x8D, 0x97, 0x1A, 0xA3, 0x2E, 0x34, 0xB9, 0xCB, 0x46, 0x5C, 0xD1,
@@ -212,7 +220,8 @@ void print_stick2(t_joycon *jc) {
 	//printf("%d", jc->stick.horizontal)
 	//printf("\n");
 
-	printf("%d %d\n", jc->stick.horizontal, jc->stick.vertical);
+	//printf("%d %d\n", jc->stick.horizontal, jc->stick.vertical);
+	printf("%d %d %d\n", jc->stick.horizontal, jc->stick.vertical, jc->stick.unknown);
 
 	
 }
@@ -244,11 +253,11 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 
 	if (packet[0] == 63) {
 
-		//uint16_t old_buttons = jc->buttons;
-		//int8_t old_dstick = jc->dstick;
-		//// button update
-		//jc->buttons = packet[1] + packet[2] * 256;
-		//jc->dstick = packet[3];
+		uint16_t old_buttons = jc->buttons;
+		int8_t old_dstick = jc->dstick;
+		// button update
+		jc->buttons = packet[1] + packet[2] * 256;
+		jc->dstick = packet[3];
 		//if (jc->buttons != old_buttons) {
 		//	print_buttons(jc);
 		//}
@@ -276,6 +285,13 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 			//   Bit 5: JR SL
 			//   Bit 6: JR R
 			//   Bit 7: JR ZR
+			// Byte 3
+			//   Bit 0: Minus
+			//   Bit 1: Plus
+			//   Bit 2: RStick
+			//   Bit 3: LStick
+			//   Bit 4: Home
+			//   Bit 5: Capture
 			// Byte 4
 			//   Bit 0: JL Down
 			//   Bit 1: JL Up
@@ -285,14 +301,10 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 			//   Bit 5: JL SL
 			//   Bit 6: JL L
 			//   Bit 7: JL ZL
-			// Byte 3
-			//   Bit 0: Minus
-			//   Bit 1: Plus
-			//   Bit 2: RStick
-			//   Bit 3: LStick
-			//   Bit 4: Home
-			//   Bit 5: Capture
+
 		}
+
+		
 
 		if (jc->controller_id == -1) {
 			//printf("Joycon %c (Unattached): ", L_OR_R(jc->left_right));
@@ -313,43 +325,57 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 
 		uint8_t *pckt = packet + 2;
 
-		std::string buttonStatesString;
+		std::string buttonStates1;
+		std::string buttonStates2;
+		//std::string buttonStates2;
+		//buttonStates1.resize(24);
+		//buttonStates2.resize(16);
+
 		//bool buttonStatesBools[32];
-		
 
-		if (pckt[0] != 0x8E) {
-			//printf("[!!!] Button status not starting with 0x8E\n");
-		} else {
+		if (pckt[0] == 0x8E) {
 
-			int count = 0;
-
+			// get button states
 			//printf("Button status: ");
 			for (int i = 1; i < 4; i++) {
 				for (int b = 0; b < 8; b++) {
 
-					
-
 					char c = (pckt[i] & (1 << b)) ? '1' : '0';
-					buttonStatesString += c;
-					//printf("%c", c);
 
-					bool state = (pckt[i] & (1 << b)) ? true : false;
-					//buttonStatesBools[count] = state;
-					jc->buttons2[count] = state;
-
-
-					count++;
+					buttonStates1 += c;
 				}
-				buttonStatesString += " ";
-				//printf(" ");
 			}
 
-			//printf(buttonStatesString.c_str());
+			// re-order bits:
 
-			jc->buttonStatesString = buttonStatesString;
-			//jc->buttons2[ = buttonStatesBools;
+			// Left JoyCon:
+			if (jc->left_right == 1) {
+				for (int i = 15; i > 7; --i) {
+					buttonStates2 += buttonStates1[i];
+				}
+				//buttonStates2 += " ";
+				for (int i = 23; i > 15; --i) {
+					buttonStates2 += buttonStates1[i];
+				}
 			
+			}
+
+			// Right JoyCon:
+			if (jc->left_right == 2) {
+				for (int i = 15; i > 7; --i) {
+					buttonStates2 += buttonStates1[i];
+				}
+
+				for (int i = 7; i > -1; --i) {
+					buttonStates2 += buttonStates1[i];
+				}
+			}
+
+			//printf(buttonStates2.c_str());
 			//printf("\n");
+
+			jc->buttonStatesString = buttonStates2;
+
 		}
 
 		uint8_t *stick_data = nullptr;
@@ -403,7 +429,7 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 
 	//print_buttons(jc);
 	//print_buttons2(jc);
-	print_stick2(jc);
+	//print_stick2(jc);
 }
 
 
@@ -459,6 +485,11 @@ int acquirevJoyDevice(int deviceID) {
 	}
 }
 
+
+
+
+
+
 USHORT Z = 0;
 
 void updatevJoyDevice(int deviceID, t_joycon *jc) {
@@ -482,9 +513,9 @@ void updatevJoyDevice(int deviceID, t_joycon *jc) {
 	iReport.bDevice = id;
 
 	// only left joycon for now
-	if (jc->left_right == 2) {
-		return;
-	}
+	//if (jc->left_right == 2) {
+	//	return;
+	//}
 
 	//// Set position data of 3 first axes
 	//if (Z>35000) Z = 0;
@@ -493,18 +524,22 @@ void updatevJoyDevice(int deviceID, t_joycon *jc) {
 	//iReport.wAxisX = 32000 - Z;
 	//iReport.wAxisY = Z / 2 + 7000;
 
-	int x = 200 * (jc->stick.horizontal-10) + 15000;
-	int y = 200 * (jc->stick.vertical-10) + 15000;
+	int x = 200 * (jc->stick.horizontal - 10) + 15000;
+	int y = 200 * (jc->stick.vertical - 10) + 15000;
+	int z = 200 * (jc->stick.unknown - 10) + 15000;
 
 	// Set position data of 3 first axes
 	//iReport.wAxisZ = 250 * jc->stick.unknown;
 	iReport.wAxisX = x;
 	iReport.wAxisY = y;
 
-	// Set position data of first 8 buttons
-	//Btns = 1 << (Z / 4000);
-	Btns = (LONG)jc->buttons;
-	iReport.lButtons = Btns;
+	// Set button data
+	long btns = strtol(jc->buttonStatesString.c_str(), nullptr, 2);
+
+	//printf(jc->buttonStatesString.c_str());
+	//printf("\n");
+
+	iReport.lButtons = btns;
 
 	// Send position data to vJoy device
 	pPositionMessage = (PVOID)(&iReport);
@@ -525,28 +560,7 @@ void updatevJoyDevice(int deviceID, t_joycon *jc) {
 int main(int argc, char *argv[]) {
 
 
-
-
-
-
-
-
-
-
-
-
 	acquirevJoyDevice(1);
-
-
-
-
-
-
-
-
-
-
-
 
 
 	int res;
