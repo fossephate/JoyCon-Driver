@@ -403,7 +403,7 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 
 	//print_buttons(jc);
 	//print_buttons2(jc);
-	//print_stick2(jc);
+	print_stick2(jc);
 }
 
 
@@ -493,10 +493,13 @@ void updatevJoyDevice(int deviceID, t_joycon *jc) {
 	//iReport.wAxisX = 32000 - Z;
 	//iReport.wAxisY = Z / 2 + 7000;
 
+	int x = 200 * (jc->stick.horizontal-10) + 15000;
+	int y = 200 * (jc->stick.vertical-10) + 15000;
+
 	// Set position data of 3 first axes
 	//iReport.wAxisZ = 250 * jc->stick.unknown;
-	iReport.wAxisX = 250 * jc->stick.horizontal;
-	iReport.wAxisY = 250 * jc->stick.vertical;
+	iReport.wAxisX = x;
+	iReport.wAxisY = y;
 
 	// Set position data of first 8 buttons
 	//Btns = 1 << (Z / 4000);
