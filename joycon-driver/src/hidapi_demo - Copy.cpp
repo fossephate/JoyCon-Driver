@@ -10,27 +10,12 @@
 #include <wchar.h>
 
 
-
-
 #include <Windows.h>
 
 #include <hidapi.h>
 
 #include <fstream>
 #include <iostream>
-
-/* vJoy */
-// Monitor Force Feedback (FFB) vJoy device
-#include "stdafx.h"
-//#include "Devioctl.h"
-#include "public.h"
-#include <malloc.h>
-#include <string.h>
-#include <stdlib.h>
-#include "vjoyinterface.h"
-#include "Math.h"
-/* end of vJoy includes */
-
 
 #pragma warning(disable:4996)
 
@@ -113,8 +98,6 @@ typedef struct s_joycon {
 
 t_joycon g_joycons[8];
 
-JOYSTICK_POSITION_V2 iReport; // The structure that holds the full position data
-
 
 
 void found_joycon(struct hid_device_info *dev) {
@@ -173,14 +156,11 @@ void print_buttons(t_joycon *jc) {
 
 	for (int i = 0; i < 16; i++) {
 		if (jc->buttons & (1 << button_map[i].bit)) {
-			printf("1");
-			//printf("%s", button_map[i].name);
 			//printf("\033[0m\033[1m");
 		} else {
-			printf("0");
 			//printf("\033[0m");
 		}
-		//printf("%s", button_map[i].name);
+		printf("%s", button_map[i].name);
 		//printf("\033[0m ");
 	}
 	printf("\n");
@@ -242,20 +222,20 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 
 
 
-	if (packet[0] == 63) {
+	//if (packet[0] == 63) {
 
-		//uint16_t old_buttons = jc->buttons;
-		//int8_t old_dstick = jc->dstick;
-		//// button update
-		//jc->buttons = packet[1] + packet[2] * 256;
-		//jc->dstick = packet[3];
-		//if (jc->buttons != old_buttons) {
-		//	print_buttons(jc);
-		//}
-		//if (jc->dstick != old_dstick) {
-		//	print_dstick(jc);
-		//}
-	}
+	//	uint16_t old_buttons = jc->buttons;
+	//	int8_t old_dstick = jc->dstick;
+	//	// button update
+	//	jc->buttons = packet[1] + packet[2] * 256;
+	//	jc->dstick = packet[3];
+	//	if (jc->buttons != old_buttons) {
+	//		print_buttons(jc);
+	//	}
+	//	if (jc->dstick != old_dstick) {
+	//		print_dstick(jc);
+	//	}
+	//}
 
 	
 	//printf(jc->buttons);
@@ -375,9 +355,14 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 
 		uint8_t stick_unknown = stick_data[0];
 		//uint8_t stick_unknown = ((stick_data[0] & 0x0F) << 4) | ((stick_data[0] & 0xF0) >> 4);;
+
 		uint8_t stick_horizontal = ((stick_data[1] & 0x0F) << 4) | ((stick_data[1] & 0xF0) >> 4);// horizontal axis is reversed
 		//uint8_t stick_horizontal = stick_data[1];
 		uint8_t stick_vertical = stick_data[2];
+
+		//printf("Stick %c: [%02X] %d %d\n", L_OR_R(jc->left_right), stick_unk,
+		//	-128 + (int)(unsigned int)stick_hz,
+		//	-128 + (int)(unsigned int)stick_vert - 16);
 
 		jc->stick.unknown2 = stick_unknown;
 		jc->stick.horizontal2 = stick_horizontal;
@@ -386,6 +371,27 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 		jc->stick.unknown = -128 + (int)(unsigned int)stick_unknown;
 		jc->stick.horizontal = -128 + (int)(unsigned int)stick_horizontal;
 		jc->stick.vertical = -128 + (int)(unsigned int)stick_vertical;
+		
+
+
+
+		//printf("%d %d\n",
+		//	-128 + (int)(unsigned int)stick_horizontal,
+		//	-128 + (int)(unsigned int)stick_vertical);
+
+		//printf("%d\n",
+		//	-128 + (int)(unsigned int)stick_unknown);
+
+		//std::ofstream out("C:\\Users\\Matt\\Desktop\\log.txt");
+		//out << -128 + (int)(unsigned int)stick_horizontal;
+		//out << " ";
+		//out << -128 + (int)(unsigned int)stick_vertical;
+		//out.close();
+
+		//printf("Unknown: %02X %02X %02X %02X\n", pckt[10], pckt[11], pckt[12], pckt[13]);
+		//printf("\n");
+
+		//print_buttons2(jc);
 	}
 
 
@@ -401,117 +407,16 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 	}
 
 
-	//print_buttons(jc);
-	//print_buttons2(jc);
-	//print_stick2(jc);
+
+	print_buttons2(jc);
+	print_stick2(jc);
+
+
 }
 
 
 
 
-
-
-int acquirevJoyDevice(int deviceID) {
-
-	int stat;
-
-	// Get the driver attributes (Vendor ID, Product ID, Version Number)
-	if (!vJoyEnabled()) {
-		_tprintf("Function vJoyEnabled Failed - make sure that vJoy is installed and enabled\n");
-		int dummy = getchar();
-		stat = -2;
-		throw;
-		//goto Exit;
-	} else {
-		wprintf(L"Vendor: %s\nProduct :%s\nVersion Number:%s\n", static_cast<TCHAR *> (GetvJoyManufacturerString()), static_cast<TCHAR *>(GetvJoyProductString()), static_cast<TCHAR *>(GetvJoySerialNumberString()));
-	};
-
-	// Get the status of the vJoy device before trying to acquire it
-	VjdStat status = GetVJDStatus(deviceID);
-
-	switch (status) {
-		case VJD_STAT_OWN:
-			_tprintf("vJoy device %d is already owned by this feeder\n", deviceID);
-			break;
-		case VJD_STAT_FREE:
-			_tprintf("vJoy device %d is free\n", deviceID);
-			break;
-		case VJD_STAT_BUSY:
-			_tprintf("vJoy device %d is already owned by another feeder\nCannot continue\n", deviceID);
-			return -3;
-		case VJD_STAT_MISS:
-			_tprintf("vJoy device %d is not installed or disabled\nCannot continue\n", deviceID);
-			return -4;
-		default:
-			_tprintf("vJoy device %d general error\nCannot continue\n", deviceID);
-			return -1;
-	};
-
-	// Acquire the vJoy device
-	if (!AcquireVJD(deviceID)) {
-		_tprintf("Failed to acquire vJoy device number %d.\n", deviceID);
-		int dummy = getchar();
-		stat = -1;
-		//goto Exit;
-		throw;
-	} else {
-		_tprintf("Acquired device number %d - OK\n", deviceID);
-	}
-}
-
-USHORT Z = 0;
-
-void updatevJoyDevice(int deviceID, t_joycon *jc) {
-
-	UINT DevID = deviceID;
-	USHORT X = 0;
-	USHORT Y = 0;
-	//USHORT Z = 0;
-	LONG   Btns = 0;
-
-
-	PVOID pPositionMessage;
-	UINT	IoCode = LOAD_POSITIONS;
-	UINT	IoSize = sizeof(JOYSTICK_POSITION);
-	// HID_DEVICE_ATTRIBUTES attrib;
-	BYTE id = 1;
-	UINT iInterface = 1;
-
-	// Set destination vJoy device
-	id = (BYTE)deviceID;
-	iReport.bDevice = id;
-
-	// only left joycon for now
-	if (jc->left_right == 2) {
-		return;
-	}
-
-	//// Set position data of 3 first axes
-	//if (Z>35000) Z = 0;
-	//Z += 200;
-	//iReport.wAxisZ = Z;
-	//iReport.wAxisX = 32000 - Z;
-	//iReport.wAxisY = Z / 2 + 7000;
-
-	// Set position data of 3 first axes
-	//iReport.wAxisZ = 250 * jc->stick.unknown;
-	iReport.wAxisX = 250 * jc->stick.horizontal;
-	iReport.wAxisY = 250 * jc->stick.vertical;
-
-	// Set position data of first 8 buttons
-	//Btns = 1 << (Z / 4000);
-	Btns = (LONG)jc->buttons;
-	iReport.lButtons = Btns;
-
-	// Send position data to vJoy device
-	pPositionMessage = (PVOID)(&iReport);
-	if (!UpdateVJD(DevID, pPositionMessage)) {
-		printf("Feeding vJoy device number %d failed - try to enable device then press enter\n", DevID);
-		getchar();
-		AcquireVJD(DevID);
-	}
-	//Sleep(2);
-}
 
 
 
@@ -520,32 +425,6 @@ void updatevJoyDevice(int deviceID, t_joycon *jc) {
 
 
 int main(int argc, char *argv[]) {
-
-
-
-
-
-
-
-
-
-
-
-
-	acquirevJoyDevice(1);
-
-
-
-
-
-
-
-
-
-
-
-
-
 	int res;
 	unsigned char buf[65];
 #define MAX_STR 255
@@ -582,7 +461,7 @@ int main(int argc, char *argv[]) {
 
 
 
-			updatevJoyDevice(1, jc);
+
 
 
 
@@ -656,7 +535,5 @@ int main(int argc, char *argv[]) {
 		//usleep(15);
 		Sleep(5);
 	}
-
-	RelinquishVJD(1);
 	return 0;
 }
