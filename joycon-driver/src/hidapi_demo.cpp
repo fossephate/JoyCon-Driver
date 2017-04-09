@@ -19,6 +19,8 @@
 
 #include <bitset>
 
+#include <random>
+
 /* vJoy */
 // Monitor Force Feedback (FFB) vJoy device
 #include "stdafx.h"
@@ -41,7 +43,13 @@
 #define SERIAL_LEN 18
 
 
-
+float rand0t1() {
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<> dis(0.0f, 1.0f);
+	float rnd = dis(gen);
+	return rnd;
+}
 
 
 
@@ -113,6 +121,18 @@ typedef struct s_joycon {
 		uint8_t vertical2;
 		uint8_t unknown2;
 	} stick;
+
+	struct Gyroscope {
+		int x;
+		int y;
+		int z;
+	} gyro;
+
+	struct Accelerometer {
+		int x;
+		int y;
+		int z;
+	} accel;
 
 
 	uint8_t newButtons[3];
@@ -323,7 +343,7 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 			}
 		}
 
-		uint8_t *pckt = packet + 2;
+		uint8_t *pckt = packet + 2;// byte 16/17
 
 		std::string buttonStates1;
 		std::string buttonStates2;
@@ -400,18 +420,33 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 		//}
 
 		uint8_t stick_unknown = stick_data[0];
-		//uint8_t stick_unknown = ((stick_data[0] & 0x0F) << 4) | ((stick_data[0] & 0xF0) >> 4);;
-		uint8_t stick_horizontal = ((stick_data[1] & 0x0F) << 4) | ((stick_data[1] & 0xF0) >> 4);// horizontal axis is reversed
+		
+		//uint8_t stick_unknown = ((stick_data[0] & 0x0F) << 4) | ((stick_data[0] & 0xF0) >> 4);
+
+		//it appears that the X component of the stick data isn't just nibble reversed,
+		//specifically, the second nibble of second byte is combined with the first nibble of the first byte
+		//to get the correct X stick value:
+		
+		//uint8_t stick_horizontal = ((stick_data[1] & 0x0F) << 4) | ((stick_data[1] & 0xF0) >> 4);// horizontal axis is reversed
+		uint8_t stick_horizontal = ((stick_data[1] & 0x0F) << 4) | ((stick_data[0] & 0xF0) >> 4);// horizontal axis is reversed / combined with byte 0
 		//uint8_t stick_horizontal = stick_data[1];
+		
 		uint8_t stick_vertical = stick_data[2];
 
-		jc->stick.unknown2 = stick_unknown;
+		//jc->stick.unknown2 = stick_unknown;
 		jc->stick.horizontal2 = stick_horizontal;
 		jc->stick.vertical2 = stick_vertical;
 
-		jc->stick.unknown = -128 + (int)(unsigned int)stick_unknown;
+		//jc->stick.unknown = -128 + (int)(unsigned int)stick_unknown;
 		jc->stick.horizontal = -128 + (int)(unsigned int)stick_horizontal;
 		jc->stick.vertical = -128 + (int)(unsigned int)stick_vertical;
+
+		//printf("%d ", jc->stick.horizontal);
+		//printf("\n");
+
+		//printf("%02X ", stick_data[0]);
+		//printf("%02X ", stick_data[1]);
+		//printf("\n");
 	}
 
 
@@ -419,12 +454,24 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 
 	if (packet[0] != 63 && packet[0] != 0x21) {
 		printf("Unknown packet: ");
-		//for (int i = 0; i < len; i++) {
-		//	printf("%02X ", packet[i]);
-		//}
+		for (int i = 0; i < len; i++) {
+			printf("%02X ", packet[i]);
+		}
 		//system("cls");
 		printf("\n");
 	}
+
+	//for (int i = 0; i < 40; ++i) {
+	//}
+
+	//printf("\r");
+	//fflush(stdout);
+	//for (int i = 0; i < (len-30); ++i) {
+	//	//printf("%02X ", packet[i]);
+	//	printf("%02X ", packet[i]);
+
+	//}
+	//printf("\n");
 
 
 	//print_buttons(jc);
@@ -490,7 +537,7 @@ int acquirevJoyDevice(int deviceID) {
 
 
 
-USHORT Z = 0;
+
 
 void updatevJoyDevice(/*int deviceID, */t_joycon *jc) {
 
@@ -523,12 +570,12 @@ void updatevJoyDevice(/*int deviceID, */t_joycon *jc) {
 	// todo: calibration of some kind
 	int x, y, z;
 	if (DevID == 1) {
-		x = 200 * (jc->stick.horizontal - 10) + 15000;
-		y = 200 * (jc->stick.vertical - 10) + 15000;
+		x = 240 * (jc->stick.horizontal - 10) + 17000;
+		y = 240 * (jc->stick.vertical - 10) + 15000;
 		//z = 200 * (jc->stick.unknown - 10) + 15000;
 	} else {
-		x = 200 * (jc->stick.horizontal - 10) + 15000;
-		y = 200 * (jc->stick.vertical - 10) + 19000;
+		x = 240 * (jc->stick.horizontal - 10) + 19000;
+		y = 240 * (jc->stick.vertical - 10) + 22000;
 		//z = 200 * (jc->stick.unknown - 10) + 15000;
 	}
 
@@ -641,7 +688,7 @@ int main(int argc, char *argv[]) {
 
 
 
-
+			// read response
 			res = hid_read(jc->handle, buf, 65);
 			if (res < 0) {
 				printf("Unable to read from joycon %i, disconnecting\n", jci);
@@ -672,31 +719,78 @@ int main(int argc, char *argv[]) {
 					}
 				//}
 
-				// if R was pressed
+				// when ZL pressed:
 				if (!(old_buttons & (1 << 15)) && (jc->buttons & (1 << 15))) {
+					//C: 0x19 0x1 0x3 0x11 0x0 0x92 0x0 0xa 0x0 0x0 0xef 0xa2 0x10 0x8 0x0 0x1 0x40 0x40 0x0 0x1 0x40 0x40
+
+					printf("Sending: 01 ");
+
 					memset(buf, 0, 65);
+					//buf[0] = 0x01;
 					buf[0] = 0x01;
-					buf[1] = 0;
-					buf[2] = 0x92;
-					buf[3] = 0x00;
-					buf[4] = 0x00;
-					buf[5] = 0x01;
-					buf[6] = 0;
-					buf[7] = 0;
-					buf[8] = 0x69;
-					buf[9] = 0x2d;
-					buf[10] = 0;
-					buf[11] = 0;
-					buf[12] = 0;
+					for (int i = 1; i < 17; ++i) {
+						buf[i] = (int)(rand0t1() * 10);
+						printf("%02X ", buf[i]);
+					}
+					printf("\n");
+					//buf[1] = 0x1;
+					//buf[2] = 0x3;
+					//buf[3] = 0x11;
+					//buf[4] = 0x0;
+					//buf[5] = 0x92;
+					//buf[6] = 0x0;
+					//buf[7] = 0xa;
+					//buf[8] = 0x0;
+					//buf[9] = 0x0;
+					//buf[10] = 0xef;
+					//buf[11] = 0xa2;
+					//buf[12] = 0x10;
+					//buf[13] = 0x8;
+					//buf[14] = 0x0;
+					//buf[15] = 0x5;
+					//buf[16] = 0x40;
+					//buf[17] = 0x40;
+					//buf[18] = 0x0;
+					//buf[19] = 0x1;
+					//buf[20] = 0x40;
+					//buf[21] = 0x40;
+
 					errno = 0;
-					res = hid_write(jc->handle, buf, 9);
+					res = hid_write(jc->handle, buf, 17);
 					if (res < 0) {
 						printf("write error: %s\n", strerror(errno));
 					}
+
 				}
+
+
+
+
+				//// if ZL was pressed
+				//if (!(old_buttons & (1 << 15)) && (jc->buttons & (1 << 15))) {
+				//	memset(buf, 0, 65);
+				//	buf[0] = 0x01;
+				//	buf[1] = 0;
+				//	buf[2] = 0x92;
+				//	buf[3] = 0x00;
+				//	buf[4] = 0x00;
+				//	buf[5] = 0x01;
+				//	buf[6] = 0;
+				//	buf[7] = 0;
+				//	buf[8] = 0x69;
+				//	buf[9] = 0x2d;
+				//	buf[10] = 0;
+				//	buf[11] = 0;
+				//	buf[12] = 0;
+				//	errno = 0;
+				//	res = hid_write(jc->handle, buf, 9);
+				//	if (res < 0) {
+				//		printf("write error: %s\n", strerror(errno));
+				//	}
+				//}
 			}
 		}
-		//usleep(15);
+		//Sleep(15);
 		Sleep(5);
 	}
 
