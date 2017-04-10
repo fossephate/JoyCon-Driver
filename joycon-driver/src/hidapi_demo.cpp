@@ -508,15 +508,7 @@ int acquirevJoyDevice(int deviceID) {
 
 
 
-void updatevJoyDevice(/*int deviceID, */t_joycon *jc) {
-
-	// If it's the left JoyCon update device 1,
-	// if it's the right JoyCon update device 2
-	//if (jc->left_right == 1) {
-	//	DevID = 1;
-	//} else {
-	//	DevID = 2;
-	//}
+void updatevJoyDevice(t_joycon *jc) {
 
 	UINT DevID = jc->left_right;
 
@@ -575,14 +567,6 @@ void updatevJoyDevice(/*int deviceID, */t_joycon *jc) {
 
 void updatevJoyDevice2(t_joycon *jc, bool combineJoyCons) {
 
-	// If it's the left JoyCon update device 1,
-	// if it's the right JoyCon update device 2
-	//if (jc->left_right == 1) {
-	//	DevID = 1;
-	//} else {
-	//	DevID = 2;
-	//}
-
 	UINT DevID;
 
 	if (!combineJoyCons) {
@@ -604,10 +588,21 @@ void updatevJoyDevice2(t_joycon *jc, bool combineJoyCons) {
 
 
 
+	// todo: calibration of some kind
+	int leftJoyConXOffset = 16000;
+	int leftJoyConYOffset = 13000;
 
+	int rightJoyConXOffset = 15000;
+	int rightJoyConYOffset = 19000;
+
+	// multipliers, these shouldn't really be different from one another
+	int leftJoyConXMultiplier = 240;
+	int leftJoyConYMultiplier = 240;
+	int rightJoyConXMultiplier = 240;
+	int rightJoyConYMultiplier = 240;
 
 	// Set Stick data
-	// todo: calibration of some kind
+	
 	int x, y, z;
 	int rx = 0;
 	int ry = 0;
@@ -616,19 +611,19 @@ void updatevJoyDevice2(t_joycon *jc, bool combineJoyCons) {
 	if (!combineJoyCons) {
 
 		if (jc->left_right == 1) {
-			x = 240 * (jc->stick.horizontal - 10) + 18000;
-			y = 240 * (jc->stick.vertical - 10) + 15000;
+			x = leftJoyConXMultiplier * (jc->stick.horizontal) + leftJoyConXOffset;
+			y = leftJoyConYMultiplier * (jc->stick.vertical) + leftJoyConYOffset;
 		} else if (jc->left_right == 2) {
-			x = 240 * (jc->stick.horizontal - 10) + 18000;
-			y = 240 * (jc->stick.vertical - 10) + 22000;
+			x = rightJoyConXMultiplier * (jc->stick.horizontal) + rightJoyConXOffset;
+			y = rightJoyConYMultiplier * (jc->stick.vertical) + rightJoyConYOffset;
 		}
 	} else {
 		if (jc->left_right == 1) {
-			x = 240 * (jc->stick.horizontal - 10) + 18000;
-			y = 240 * (jc->stick.vertical - 10) + 15000;
+			x = leftJoyConXMultiplier * (jc->stick.horizontal) + leftJoyConXOffset;
+			y = leftJoyConYMultiplier * (jc->stick.vertical) + leftJoyConYOffset;
 		} else if (jc->left_right == 2) {
-			rx = 240 * (jc->stick.horizontal - 10) + 18000;
-			ry = 240 * (jc->stick.vertical - 10) + 22000;
+			rx = rightJoyConXMultiplier * (jc->stick.horizontal) + rightJoyConXOffset;
+			ry = rightJoyConYMultiplier * (jc->stick.vertical) + rightJoyConYOffset;
 		}
 	}
 
@@ -662,9 +657,6 @@ void updatevJoyDevice2(t_joycon *jc, bool combineJoyCons) {
 			btns = strtol(jc->buttonStatesString.c_str(), nullptr, 2);
 		}
 	}
-
-	//printf(jc->buttonStatesString.c_str());
-	//printf("\n");
 
 	iReport.lButtons = btns;
 
@@ -721,7 +713,7 @@ int main(int argc, char *argv[]) {
 	t_joycon *jc;
 
 
-
+	bool combineJoyCons = false;
 
 
 
@@ -735,7 +727,7 @@ int main(int argc, char *argv[]) {
 			}
 
 			//updatevJoyDevice(jc);
-			updatevJoyDevice2(jc, false);
+			updatevJoyDevice2(jc, combineJoyCons);
 
 
 

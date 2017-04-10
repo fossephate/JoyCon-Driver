@@ -12,11 +12,11 @@ c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hid
   c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(468): note: consider using '%hs' in the format string
   c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(468): note: consider using '%Ts' in the format string
   c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(468): note: this warning is based on non-standard semantics used by Visual C++
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(540): warning C4101: 'z': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(611): warning C4101: 'z': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(699): warning C4101: 'handle': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(698): warning C4101: 'wstr': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(700): warning C4101: 'i': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(532): warning C4101: 'z': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(606): warning C4101: 'z': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(691): warning C4101: 'handle': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(690): warning C4101: 'wstr': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(692): warning C4101: 'i': unreferenced local variable
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(502): warning C4715: 'acquirevJoyDevice': not all control paths return a value
   joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Debug\joycon-driver.exe
   joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Debug\joycon-driver.pdb (Partial PDB)
