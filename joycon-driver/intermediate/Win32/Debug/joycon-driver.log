@@ -1,21 +1,22 @@
 ﻿  hidapi_demo.cpp
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(50): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(477): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 1 has type 'TCHAR *'
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(477): note: consider using '%hs' in the format string
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(477): note: consider using '%Ts' in the format string
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(477): note: this warning is based on non-standard semantics used by Visual C++
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(477): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 2 has type 'TCHAR *'
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(477): note: consider using '%hs' in the format string
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(477): note: consider using '%Ts' in the format string
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(477): note: this warning is based on non-standard semantics used by Visual C++
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(477): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 3 has type 'TCHAR *'
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(477): note: consider using '%hs' in the format string
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(477): note: consider using '%Ts' in the format string
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(477): note: this warning is based on non-standard semantics used by Visual C++
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(549): warning C4101: 'z': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(601): warning C4101: 'handle': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(600): warning C4101: 'wstr': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(602): warning C4101: 'i': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(511): warning C4715: 'acquirevJoyDevice': not all control paths return a value
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(468): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 1 has type 'TCHAR *'
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(468): note: consider using '%hs' in the format string
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(468): note: consider using '%Ts' in the format string
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(468): note: this warning is based on non-standard semantics used by Visual C++
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(468): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 2 has type 'TCHAR *'
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(468): note: consider using '%hs' in the format string
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(468): note: consider using '%Ts' in the format string
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(468): note: this warning is based on non-standard semantics used by Visual C++
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(468): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 3 has type 'TCHAR *'
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(468): note: consider using '%hs' in the format string
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(468): note: consider using '%Ts' in the format string
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(468): note: this warning is based on non-standard semantics used by Visual C++
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(540): warning C4101: 'z': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(611): warning C4101: 'z': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(699): warning C4101: 'handle': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(698): warning C4101: 'wstr': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(700): warning C4101: 'i': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\hidapi_demo.cpp(502): warning C4715: 'acquirevJoyDevice': not all control paths return a value
   joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Debug\joycon-driver.exe
   joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Debug\joycon-driver.pdb (Partial PDB)

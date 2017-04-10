@@ -430,26 +430,17 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 
 
 
-	if (packet[0] != 63 && packet[0] != 0x21) {
+	if (packet[0] != 0x3F && packet[0] != 0x21) {
+		printf("Unknown packet: ");
 
-		//printf("Unknown packet: ");
 		for (int i = 0; i < len; i++) {
-			//if (packet[i] != 0) {
+			if (packet[i] != 0) {
 				printf("%02X ", packet[i]);
-			//}
+			}
 		}
 		printf("\n");
 
 	}
-
-	//printf("\r");
-	//fflush(stdout);
-	//for (int i = 0; i < (len-30); ++i) {
-	//	//printf("%02X ", packet[i]);
-	//	printf("%02X ", packet[i]);
-
-	//}
-	//printf("\n");
 
 
 	//print_buttons(jc);
@@ -548,11 +539,11 @@ void updatevJoyDevice(/*int deviceID, */t_joycon *jc) {
 	// todo: calibration of some kind
 	int x, y, z;
 	if (DevID == 1) {
-		x = 240 * (jc->stick.horizontal - 10) + 17000;
+		x = 240 * (jc->stick.horizontal - 10) + 18000;
 		y = 240 * (jc->stick.vertical - 10) + 15000;
 		//z = 200 * (jc->stick.unknown - 10) + 15000;
 	} else {
-		x = 240 * (jc->stick.horizontal - 10) + 19000;
+		x = 240 * (jc->stick.horizontal - 10) + 18000;
 		y = 240 * (jc->stick.vertical - 10) + 22000;
 		//z = 200 * (jc->stick.unknown - 10) + 15000;
 	}
@@ -564,6 +555,113 @@ void updatevJoyDevice(/*int deviceID, */t_joycon *jc) {
 
 	// Set button data
 	long btns = strtol(jc->buttonStatesString.c_str(), nullptr, 2);
+
+	//printf(jc->buttonStatesString.c_str());
+	//printf("\n");
+
+	iReport.lButtons = btns;
+
+	// Send position data to vJoy device
+	pPositionMessage = (PVOID)(&iReport);
+	if (!UpdateVJD(DevID, pPositionMessage)) {
+		printf("Feeding vJoy device number %d failed - try to enable device then press enter\n", DevID);
+		getchar();
+		AcquireVJD(DevID);
+	}
+}
+
+
+
+
+void updatevJoyDevice2(t_joycon *jc, bool combineJoyCons) {
+
+	// If it's the left JoyCon update device 1,
+	// if it's the right JoyCon update device 2
+	//if (jc->left_right == 1) {
+	//	DevID = 1;
+	//} else {
+	//	DevID = 2;
+	//}
+
+	UINT DevID;
+
+	if (!combineJoyCons) {
+		DevID = jc->left_right;
+	} else {
+		DevID = 1;
+	}
+
+	PVOID pPositionMessage;
+	UINT	IoCode = LOAD_POSITIONS;
+	UINT	IoSize = sizeof(JOYSTICK_POSITION);
+	// HID_DEVICE_ATTRIBUTES attrib;
+	BYTE id = 1;
+	UINT iInterface = 1;
+
+	// Set destination vJoy device
+	id = (BYTE)DevID;
+	iReport.bDevice = id;
+
+
+
+
+
+	// Set Stick data
+	// todo: calibration of some kind
+	int x, y, z;
+	int rx = 0;
+	int ry = 0;
+	int rz = 0;
+
+	if (!combineJoyCons) {
+
+		if (jc->left_right == 1) {
+			x = 240 * (jc->stick.horizontal - 10) + 18000;
+			y = 240 * (jc->stick.vertical - 10) + 15000;
+		} else if (jc->left_right == 2) {
+			x = 240 * (jc->stick.horizontal - 10) + 18000;
+			y = 240 * (jc->stick.vertical - 10) + 22000;
+		}
+	} else {
+		if (jc->left_right == 1) {
+			x = 240 * (jc->stick.horizontal - 10) + 18000;
+			y = 240 * (jc->stick.vertical - 10) + 15000;
+		} else if (jc->left_right == 2) {
+			rx = 240 * (jc->stick.horizontal - 10) + 18000;
+			ry = 240 * (jc->stick.vertical - 10) + 22000;
+		}
+	}
+
+	// both left and right joycons
+	if (!combineJoyCons) {
+		iReport.wAxisX = x;
+		iReport.wAxisY = y;
+	} else {
+
+		// Set position data
+		if (jc->left_right == 1) {
+			iReport.wAxisX = x;
+			iReport.wAxisY = y;
+		}
+
+		if (jc->left_right == 2) {
+			iReport.wAxisXRot = rx;
+			iReport.wAxisYRot = ry;
+		}
+	}
+
+	// Set button data
+
+	long btns;
+	if (!combineJoyCons) {
+		btns = strtol(jc->buttonStatesString.c_str(), nullptr, 2);
+	} else {
+		if (jc->left_right == 2) {
+			btns = iReport.lButtons | strtol(jc->buttonStatesString.c_str(), nullptr, 2) << 16;
+		} else {
+			btns = strtol(jc->buttonStatesString.c_str(), nullptr, 2);
+		}
+	}
 
 	//printf(jc->buttonStatesString.c_str());
 	//printf("\n");
@@ -636,33 +734,8 @@ int main(int argc, char *argv[]) {
 				continue;
 			}
 
-			updatevJoyDevice(jc);
-
-
-			//updatevJoyDevice(1, jc);
-			//updatevJoyDevice(2, jc);
-
-			//if (jci > 0 && jci < 3) {
-			//	updatevJoyDevice(jci, jc);
-			//}
-
-			//if (jci == 1) {
-			//	updatevJoyDevice(1, jc);
-			//}
-			//if (jci == 2) {
-			//	updatevJoyDevice(2, jc);
-			//}
-			
-
-			//uint8_t rbuf[0x31];
-			//memset(rbuf, 0, 0x31);
-
-			//int read_res;
-			//read_res = hid_read_timeout((hid_device *)jc->handle, rbuf, 0x31, /*JC_READ_TIMEOUT*/2);
-
-			//if (rbuf[0] == 0x21) {
-			//	handle_input(jc, rbuf+1, res);
-			//}
+			//updatevJoyDevice(jc);
+			updatevJoyDevice2(jc, false);
 
 
 
@@ -680,6 +753,7 @@ int main(int argc, char *argv[]) {
 
 				// if L was pressed
 				//if (!(old_buttons & (1 << 14)) && (jc->buttons & (1 << 14))) {
+					// request update
 					memset(buf, 0, 65);
 					buf[0] = 0x01;
 					buf[1] = 0x91;
@@ -698,21 +772,19 @@ int main(int argc, char *argv[]) {
 				//}
 
 
-
+				// testing:
 
 				// findings:
-				// 0x6 on byte 10 causes disconnect
-				// 0x3 on byte 10 gets some wierd response that doesn't stop
-				// 0x11 on byte 0 isn't an error
+				// 0x6 on byte 10 causes a disconnect
+				// 0x3 on byte 10 gets some wierd response that doesn't stop until the joycon disconnects
+				// 0x10, 0x11, and 0x12 on byte 0 don't produce an error
 
-				//// when ZL pressed:
+				// when ZL pressed:
 				////if (!(old_buttons & (1 << 15)) && (jc->buttons & (1 << 15))) {
-				//	//C: 0x19 0x1 0x3 0x11 0x0 0x92 0x0 0xa 0x0 0x0 0xef 0xa2 0x10 0x8 0x0 0x1 0x40 0x40 0x0 0x1 0x40 0x40
-
 				//	//printf("Sending: ");
 
 				//	memset(buf, 0, 65);
-				//	buf[0] = 0x1;
+				//	//buf[0] = 0x1;
 				//	//buf[0] = 0x19;
 				//	// 10-12
 				//	//for (int i = 0; i < 1; ++i) {
@@ -723,19 +795,23 @@ int main(int argc, char *argv[]) {
 				//	//}
 				//	//printf("\n");
 
-				//	buf[1] = 0x80;
-				//	//buf[1] = 0x1;
-				//	//buf[2] = 0x3;
-				//	//buf[3] = 0x11;
-				//	//buf[4] = 0x0;
+
+				//	buf[0] = 0x10;
+				//	//buf[1] = 0x81;
+				//	//buf[0] = (int)(rand0t1() * 255);
+				//	//buf[1] = 0x80;
+				//	//buf[1] = 0x01;
+				//	//buf[2] = 0x03;
+				//	//buf[3] = 0x08;
+				//	//buf[4] = 0x00;
 				//	//buf[5] = 0x92;
-				//	//buf[6] = 0x0;
-				//	//buf[7] = 0xa;
-				//	//buf[8] = 0x0;
-				//	//buf[9] = 0x0;
-				//	//buf[10] = 0x03;
-				//	//buf[11] = 0xa2;
-				//	//buf[12] = 0x10;
+				//	//buf[6] = 0x00;
+				//	//buf[7] = 0x01;
+				//	//buf[8] = 0x00;
+				//	//buf[9] = 0x00;
+				//	//buf[10] = 0x69;
+				//	//buf[11] = 0x2D;
+				//	//buf[12] = 0x1F;
 				//	//buf[13] = 0x8;
 				//	//buf[14] = 0x0;
 				//	//buf[15] = 0x5;
