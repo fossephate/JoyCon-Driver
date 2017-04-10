@@ -115,11 +115,9 @@ typedef struct s_joycon {
 	struct Stick {
 		int horizontal;
 		int vertical;
-		int unknown;
 
 		uint8_t horizontal2;
 		uint8_t vertical2;
-		uint8_t unknown2;
 	} stick;
 
 	struct Gyroscope {
@@ -241,7 +239,7 @@ void print_stick2(t_joycon *jc) {
 	//printf("\n");
 
 	//printf("%d %d\n", jc->stick.horizontal, jc->stick.vertical);
-	printf("%d %d %d\n", jc->stick.horizontal, jc->stick.vertical, jc->stick.unknown);
+	printf("%d %d\n", jc->stick.horizontal, jc->stick.vertical);
 
 	
 }
@@ -270,8 +268,8 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 
 
 
-
-	if (packet[0] == 63) {
+	// 63
+	if (packet[0] == 0x3F) {
 
 		uint16_t old_buttons = jc->buttons;
 		int8_t old_dstick = jc->dstick;
@@ -290,7 +288,7 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 	//printf(jc->buttons);
 
 
-
+	// 33
 	if (packet[0] == 0x21) {
 
 		{
@@ -347,9 +345,6 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 
 		std::string buttonStates1;
 		std::string buttonStates2;
-		//std::string buttonStates2;
-		//buttonStates1.resize(24);
-		//buttonStates2.resize(16);
 
 		//bool buttonStatesBools[32];
 
@@ -398,6 +393,8 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 
 		}
 
+		// stick data:
+
 		uint8_t *stick_data = nullptr;
 		if (jc->left_right == 1) {
 			stick_data = pckt + 4;
@@ -407,29 +404,12 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 			//printf("Stick R: %02X %02X %02X\n", pckt[7], pckt[8], pckt[9]);
 		}
 
-
-		//if (jc->side == 1) {
-		//	 //Left JoyCon:
-		//	 //packet[5];
-		//	jc->stick_h = ((packet[6] & 0x0F) << 4) | ((packet[6] & 0xF0) >> 4);
-		//	jc->stick_v = packet[7];
-		//} else {
-		//	// packet[8];
-		//	jc->stick_h = ((packet[9] & 0x0F) << 4) | ((packet[9] & 0xF0) >> 4);
-		//	jc->stick_v = packet[10];
-		//}
-
-		uint8_t stick_unknown = stick_data[0];
 		
-		//uint8_t stick_unknown = ((stick_data[0] & 0x0F) << 4) | ((stick_data[0] & 0xF0) >> 4);
 
-		//it appears that the X component of the stick data isn't just nibble reversed,
-		//specifically, the second nibble of second byte is combined with the first nibble of the first byte
-		//to get the correct X stick value:
-		
-		//uint8_t stick_horizontal = ((stick_data[1] & 0x0F) << 4) | ((stick_data[1] & 0xF0) >> 4);// horizontal axis is reversed
+		// it appears that the X component of the stick data isn't just nibble reversed,
+		// specifically, the second nibble of second byte is combined with the first nibble of the first byte
+		// to get the correct X stick value:
 		uint8_t stick_horizontal = ((stick_data[1] & 0x0F) << 4) | ((stick_data[0] & 0xF0) >> 4);// horizontal axis is reversed / combined with byte 0
-		//uint8_t stick_horizontal = stick_data[1];
 		
 		uint8_t stick_vertical = stick_data[2];
 
@@ -437,15 +417,13 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 		jc->stick.horizontal2 = stick_horizontal;
 		jc->stick.vertical2 = stick_vertical;
 
-		//jc->stick.unknown = -128 + (int)(unsigned int)stick_unknown;
 		jc->stick.horizontal = -128 + (int)(unsigned int)stick_horizontal;
 		jc->stick.vertical = -128 + (int)(unsigned int)stick_vertical;
 
-		//printf("%d ", jc->stick.horizontal);
-		//printf("\n");
+		// left over nibbles from getting x component data, unknown what they are
+		//uint8_t stick_unknown = ((stick_data[0] & 0x0F) << 4) | ((stick_data[1] & 0xF0) >> 4);
 
-		//printf("%02X ", stick_data[0]);
-		//printf("%02X ", stick_data[1]);
+		//printf("%02X ", stick_unknown);
 		//printf("\n");
 	}
 
@@ -453,16 +431,16 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 
 
 	if (packet[0] != 63 && packet[0] != 0x21) {
-		printf("Unknown packet: ");
-		for (int i = 0; i < len; i++) {
-			printf("%02X ", packet[i]);
-		}
-		//system("cls");
-		printf("\n");
-	}
 
-	//for (int i = 0; i < 40; ++i) {
-	//}
+		//printf("Unknown packet: ");
+		for (int i = 0; i < len; i++) {
+			//if (packet[i] != 0) {
+				printf("%02X ", packet[i]);
+			//}
+		}
+		printf("\n");
+
+	}
 
 	//printf("\r");
 	//fflush(stdout);
@@ -719,49 +697,62 @@ int main(int argc, char *argv[]) {
 					}
 				//}
 
-				// when ZL pressed:
-				if (!(old_buttons & (1 << 15)) && (jc->buttons & (1 << 15))) {
-					//C: 0x19 0x1 0x3 0x11 0x0 0x92 0x0 0xa 0x0 0x0 0xef 0xa2 0x10 0x8 0x0 0x1 0x40 0x40 0x0 0x1 0x40 0x40
 
-					printf("Sending: 01 ");
 
-					memset(buf, 0, 65);
-					//buf[0] = 0x01;
-					buf[0] = 0x01;
-					for (int i = 1; i < 17; ++i) {
-						buf[i] = (int)(rand0t1() * 10);
-						printf("%02X ", buf[i]);
-					}
-					printf("\n");
-					//buf[1] = 0x1;
-					//buf[2] = 0x3;
-					//buf[3] = 0x11;
-					//buf[4] = 0x0;
-					//buf[5] = 0x92;
-					//buf[6] = 0x0;
-					//buf[7] = 0xa;
-					//buf[8] = 0x0;
-					//buf[9] = 0x0;
-					//buf[10] = 0xef;
-					//buf[11] = 0xa2;
-					//buf[12] = 0x10;
-					//buf[13] = 0x8;
-					//buf[14] = 0x0;
-					//buf[15] = 0x5;
-					//buf[16] = 0x40;
-					//buf[17] = 0x40;
-					//buf[18] = 0x0;
-					//buf[19] = 0x1;
-					//buf[20] = 0x40;
-					//buf[21] = 0x40;
 
-					errno = 0;
-					res = hid_write(jc->handle, buf, 17);
-					if (res < 0) {
-						printf("write error: %s\n", strerror(errno));
-					}
+				// findings:
+				// 0x6 on byte 10 causes disconnect
+				// 0x3 on byte 10 gets some wierd response that doesn't stop
+				// 0x11 on byte 0 isn't an error
 
-				}
+				//// when ZL pressed:
+				////if (!(old_buttons & (1 << 15)) && (jc->buttons & (1 << 15))) {
+				//	//C: 0x19 0x1 0x3 0x11 0x0 0x92 0x0 0xa 0x0 0x0 0xef 0xa2 0x10 0x8 0x0 0x1 0x40 0x40 0x0 0x1 0x40 0x40
+
+				//	//printf("Sending: ");
+
+				//	memset(buf, 0, 65);
+				//	buf[0] = 0x1;
+				//	//buf[0] = 0x19;
+				//	// 10-12
+				//	//for (int i = 0; i < 1; ++i) {
+				//		//int rand = (int)(rand0t1() * 255);
+				//		////if (rand == 6) continue;
+				//		//buf[0] = rand;
+				//		//printf("%02X ", buf[0]);
+				//	//}
+				//	//printf("\n");
+
+				//	buf[1] = 0x80;
+				//	//buf[1] = 0x1;
+				//	//buf[2] = 0x3;
+				//	//buf[3] = 0x11;
+				//	//buf[4] = 0x0;
+				//	//buf[5] = 0x92;
+				//	//buf[6] = 0x0;
+				//	//buf[7] = 0xa;
+				//	//buf[8] = 0x0;
+				//	//buf[9] = 0x0;
+				//	//buf[10] = 0x03;
+				//	//buf[11] = 0xa2;
+				//	//buf[12] = 0x10;
+				//	//buf[13] = 0x8;
+				//	//buf[14] = 0x0;
+				//	//buf[15] = 0x5;
+				//	//buf[16] = 0x40;
+				//	//buf[17] = 0x40;
+				//	//buf[18] = 0x0;
+				//	//buf[19] = 0x1;
+				//	//buf[20] = 0x40;
+				//	//buf[21] = 0x40;
+
+				//	errno = 0;
+				//	res = hid_write(jc->handle, buf, 65);
+				//	if (res < 0) {
+				//		printf("write error: %s\n", strerror(errno));
+				//	}
+
+				////}
 
 
 
@@ -770,7 +761,7 @@ int main(int argc, char *argv[]) {
 				//if (!(old_buttons & (1 << 15)) && (jc->buttons & (1 << 15))) {
 				//	memset(buf, 0, 65);
 				//	buf[0] = 0x01;
-				//	buf[1] = 0;
+				//	buf[1] = 0x00;
 				//	buf[2] = 0x92;
 				//	buf[3] = 0x00;
 				//	buf[4] = 0x00;
@@ -788,6 +779,7 @@ int main(int argc, char *argv[]) {
 				//		printf("write error: %s\n", strerror(errno));
 				//	}
 				//}
+			
 			}
 		}
 		//Sleep(15);

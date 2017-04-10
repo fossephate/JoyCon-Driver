@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClInclude Include="include\public.h" />
     <ClInclude Include="include\vjoyinterface.h" />
-    <ClInclude Include="src\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hidapi_demo.cpp" />
