@@ -21,6 +21,12 @@
     <ClInclude Include="include\public.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\hidapi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hidapi_demo.cpp">

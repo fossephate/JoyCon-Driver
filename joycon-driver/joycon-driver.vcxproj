@@ -19,7 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\hidapi.h" />
     <ClInclude Include="include\public.h" />
+    <ClInclude Include="include\stdafx.h" />
     <ClInclude Include="include\vjoyinterface.h" />
   </ItemGroup>
   <ItemGroup>
