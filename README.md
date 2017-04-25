@@ -12,10 +12,10 @@ A vJoy feeder for the Nintendo Switch JoyCons with analog stick support
 3. Pair the JoyCon(s) to your PC
 
 4. Run the Application, if it doesn't detect your JoyCon(s), make sure they are fully paired/connected and restart the program.
-    * To verify its working you can use the vJoy monitor that comes with vJoy, it looks like this: http://i.imgur.com/x4Fn7Cq.png
-    * To re-pair the JoyCons go into Settings and remove the JoyCon(s) and then pair them again.
 
 5. Once the program is running vJoy should register the input from the JoyCons.
+    * To verify it's working you can use the vJoy monitor that comes with vJoy, it looks like this: http://i.imgur.com/x4Fn7Cq.png
+    * To re-pair the JoyCons go into Settings and remove the JoyCon(s) and then pair them again.
     * You'll likely want to use this with something like x360ce (http://www.x360ce.com), which will let you map the vJoy device to a virtual xbox controller for games that support them.
 
 
