@@ -44,7 +44,7 @@
 
 #define SERIAL_LEN 18
 
-//#define WEIRD_VIBRATION_TEST
+//#define VIBRATION_TEST
 //#define DEBUG_PRINT
 
 
@@ -139,9 +139,38 @@ typedef struct s_joycon {
 } t_joycon;
 
 
-std::vector<t_joycon> g_joycons;
+std::vector<t_joycon> joycons;
 
 JOYSTICK_POSITION_V2 iReport; // The structure that holds the full position data
+
+
+struct Settings {
+	// todo: calibration mode of some kind
+
+	// there appears to be a good amount of variance between JoyCons,
+	// but they work great once you find the right offsets
+	// these are the values that worked well for my JoyCons:
+	int leftJoyConXOffset = 16000;
+	int leftJoyConYOffset = 13000;
+
+	int rightJoyConXOffset = 15000;
+	int rightJoyConYOffset = 19000;
+
+	// multipliers to go from the range (-128,128) to (-32768, 32768)
+	// These shouldn't need to be changed too much, but the option is there
+	// I found that 240 works for me
+	int leftJoyConXMultiplier = 240;
+	int leftJoyConYMultiplier = 240;
+	int rightJoyConXMultiplier = 240;
+	int rightJoyConYMultiplier = 240;
+
+	// Enabling this combines both JoyCons to a single vJoy Device(#1)
+	// if left disabled:
+	// JoyCon(L) is mapped to vJoy Device #1
+	// JoyCon(R) is mapped to vJoy Device #2
+	bool combineJoyCons = false;
+} settings;
+
 
 
 
@@ -150,7 +179,7 @@ void found_joycon(struct hid_device_info *dev) {
 	
 	t_joycon jc;
 
-	int i = g_joycons.size();
+	int i = joycons.size();
 
 	if (dev->product_id == JOYCON_PRODUCT_CHARGE_GRIP) {
 		if (dev->interface_number == 0) {
@@ -175,17 +204,26 @@ void found_joycon(struct hid_device_info *dev) {
 	// set non-blocking:
 	hid_set_nonblocking(jc.handle, 1);
 	//if (jc.handle == nullptr) {
-	//	printf("Could not open serial %ls: %s\n", g_joycons[i].serial, strerror(errno));
+	//	printf("Could not open serial %ls: %s\n", joycons[i].serial, strerror(errno));
 	//}
 
-	g_joycons.push_back(jc);
+	joycons.push_back(jc);
 
+}
+
+unsigned createMask(unsigned a, unsigned b) {
+	unsigned r = 0;
+	for (unsigned i = a; i <= b; i++)
+		r |= 1 << i;
+
+	return r;
 }
 
 struct s_button_map {
 	int bit;
 	char *name;
 };
+
 
 struct s_button_map button_map[16] = {
     {0, "D"},   {1, "R"},   {2, "L"},   {3, "U"},    {4, "SL"},  {5, "SR"},
@@ -217,18 +255,6 @@ void print_buttons2(t_joycon *jc) {
 			printf("0");
 		}
 		
-	}
-	printf("\n");
-}
-
-
-void printBitsFromInt(uint16_t *s) {
-	for (int i = 0; i < 16; i++) {
-		if (s[i] & (1 << i)) {
-			printf("1");
-		} else {
-			printf("0");
-		}
 	}
 	printf("\n");
 }
@@ -371,10 +397,8 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 		//}
 
 
-
-		if (!false) {
-
-			std::string buttonStates1;
+		// get button states:
+		{
 			std::string buttonStates2;
 
 			// get button states
@@ -392,24 +416,13 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 
 			// Left JoyCon:
 			if (jc->left_right == 1) {
-				//for (int i = 15; i > 7; --i) {
-				//	buttonStates2 += buttonStates1[i];
-				//}
-				////buttonStates2 += " ";
-				//for (int i = 23; i > 15; --i) {
-				//	buttonStates2 += buttonStates1[i];
-				//}
 
 				for (int i = 0; i < 8; ++i) {
-					//int b = i + 16;
-					//buttonStates2 += buttonStates1[b];
 					char c = (pckt[2] & (1 << i)) ? '1' : '0';
 					buttonStates2 += c;
 				}
 
 				for (int i = 0; i < 8; ++i) {
-					//int b = i + 8;
-					//buttonStates2 += buttonStates1[b];
 					char c = (pckt[1] & (1 << i)) ? '1' : '0';
 					buttonStates2 += c;
 				}
@@ -419,28 +432,20 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 
 			// Right JoyCon:
 			if (jc->left_right == 2) {
-				//for (int i = 15; i > 7; --i) {
-				//	buttonStates2 += buttonStates1[i];
-				//}
 
-				//for (int i = 7; i > -1; --i) {
-				//	buttonStates2 += buttonStates1[i];
-				//}
-
-				for (int i = 15; i > 7; --i) {
-					buttonStates2 += buttonStates1[i];
+				for (int i = 0; i < 8; ++i) {
+					char c = (pckt[0] & (1 << i)) ? '1' : '0';
+					buttonStates2 += c;
 				}
-
-				for (int i = 7; i > -1; --i) {
-					buttonStates2 += buttonStates1[i];
+				for (int i = 0; i < 8; ++i) {
+					char c = (pckt[1] & (1 << i)) ? '1' : '0';
+					buttonStates2 += c;
 				}
 			}
 
-			printf(buttonStates2.c_str());
-			printf("\n");
-
-			//uint16_t states = std::stoi(buttonStates2.c_str(), nullptr, 2);
-			//jc->buttons = states;
+			std::reverse(buttonStates2.begin(), buttonStates2.end());
+			uint16_t states = std::stoi(buttonStates2.c_str(), nullptr, 2);
+			jc->buttons = states;
 		}
 
 
@@ -542,7 +547,7 @@ int joycon_init(hid_device *handle, const char *name) {
 	
 
 	
-#ifndef WEIRD_VIBRATION_TEST
+#ifndef VIBRATION_TEST
 	// Switch baudrate to 3Mbit
 	printf("Switching baudrate...\n");
 	memset(buf, 0x00, 0x40);
@@ -646,66 +651,25 @@ int acquirevJoyDevice(int deviceID) {
 
 
 
-
-
 void updatevJoyDevice(t_joycon *jc) {
 
-	UINT DevID = jc->left_right;
-
-	PVOID pPositionMessage;
-	UINT	IoCode = LOAD_POSITIONS;
-	UINT	IoSize = sizeof(JOYSTICK_POSITION);
-	// HID_DEVICE_ATTRIBUTES attrib;
-	BYTE id = 1;
-	UINT iInterface = 1;
-
-	// Set destination vJoy device
-	id = (BYTE)DevID;
-	iReport.bDevice = id;
-
-
-
-	
-
-	// Set Stick data
 	// todo: calibration of some kind
-	int x, y, z;
-	if (DevID == 1) {
-		x = 240 * (jc->stick.horizontal - 10) + 18000;
-		y = 240 * (jc->stick.vertical - 10) + 15000;
-		//z = 200 * (jc->stick.unknown - 10) + 15000;
-	} else {
-		x = 240 * (jc->stick.horizontal - 10) + 18000;
-		y = 240 * (jc->stick.vertical - 10) + 22000;
-		//z = 200 * (jc->stick.unknown - 10) + 15000;
-	}
+	int leftJoyConXOffset = settings.leftJoyConXOffset;
+	int leftJoyConYOffset = settings.leftJoyConYOffset;
 
-	// Set position data of 3 first axes
-	//iReport.wAxisZ = 250 * jc->stick.unknown;
-	iReport.wAxisX = x;
-	iReport.wAxisY = y;
+	int rightJoyConXOffset = settings.rightJoyConXOffset;
+	int rightJoyConYOffset = settings.rightJoyConYOffset;
 
-	// Set button data
-	long btns = jc->buttons;
+	// multipliers, these shouldn't really be different from one another
+	int leftJoyConXMultiplier = settings.leftJoyConXMultiplier;
+	int leftJoyConYMultiplier = settings.leftJoyConYMultiplier;
+	int rightJoyConXMultiplier = settings.rightJoyConXMultiplier;
+	int rightJoyConYMultiplier = settings.rightJoyConYMultiplier;
 
-	//printf(jc->buttonStatesString.c_str());
-	//printf("\n");
-
-	iReport.lButtons = btns;
-
-	// Send position data to vJoy device
-	pPositionMessage = (PVOID)(&iReport);
-	if (!UpdateVJD(DevID, pPositionMessage)) {
-		printf("Feeding vJoy device number %d failed - try to enable device then press enter\n", DevID);
-		getchar();
-		AcquireVJD(DevID);
-	}
-}
+	bool combineJoyCons = settings.combineJoyCons;
 
 
 
-
-void updatevJoyDevice2(t_joycon *jc, bool combineJoyCons) {
 
 	UINT DevID;
 
@@ -728,18 +692,7 @@ void updatevJoyDevice2(t_joycon *jc, bool combineJoyCons) {
 
 
 
-	// todo: calibration of some kind
-	int leftJoyConXOffset = 16000;
-	int leftJoyConYOffset = 13000;
 
-	int rightJoyConXOffset = 15000;
-	int rightJoyConYOffset = 19000;
-
-	// multipliers, these shouldn't really be different from one another
-	int leftJoyConXMultiplier = 240;
-	int leftJoyConYMultiplier = 240;
-	int rightJoyConXMultiplier = 240;
-	int rightJoyConYMultiplier = 240;
 
 	// Set Stick data
 	
@@ -787,30 +740,41 @@ void updatevJoyDevice2(t_joycon *jc, bool combineJoyCons) {
 
 	// Set button data
 
-	long btns;
+	long btns = 0;
 	if (!combineJoyCons) {
-		//btns = strtol(jc->buttonStatesString.c_str(), nullptr, 2);
 		btns = jc->buttons;
 	} else {
+
 		if (jc->left_right == 2) {
-			//btns = iReport.lButtons | strtol(jc->buttonStatesString.c_str(), nullptr, 2) << 16;
-			btns = iReport.lButtons | jc->buttons << 16;
-		} else {
-			//btns = strtol(jc->buttonStatesString.c_str(), nullptr, 2);
-			btns = jc->buttons;
+			//btns = iReport.lButtons | jc->buttons << 16;
+			//unsigned low8bits = iReport.lButtons & 0xFF;
+			//btns = (jc->buttons << 16) | (iReport.lButtons & 0xFF);
+			//btns = ((jc->buttons) << 16) | (iReport.lButtons & 0xFF);
+
+			unsigned r = createMask(0, 15);
+			btns = ((jc->buttons) << 16) | (r & iReport.lButtons);
+			//std::bitset<32> x(btns);
+			//std::cout << x;
+			//printf("\n");
+		} else if(jc->left_right == 1) {
+			//unsigned high8bits = iReport.lButtons;
+			btns = ((iReport.lButtons >> 16) << 16) | (jc->buttons);
+
+			//std::bitset<32> x(btns);
+			//std::cout << x;
+			//printf("\n");
 		}
 	}
 
 	iReport.lButtons = btns;
 
-	// Send position data to vJoy device
+	// Send data to vJoy device
 	pPositionMessage = (PVOID)(&iReport);
 	if (!UpdateVJD(DevID, pPositionMessage)) {
 		printf("Feeding vJoy device number %d failed - try to enable device then press enter\n", DevID);
 		getchar();
 		AcquireVJD(DevID);
 	}
-	//Sleep(2);
 }
 
 
@@ -832,11 +796,11 @@ int main(int argc, char *argv[]) {
 
 
 	int res;
+	int i;
 	unsigned char buf[65];
 	#define MAX_STR 255
 	wchar_t wstr[MAX_STR];
-	hid_device *handle;
-	int i;
+	
 
 	// Enumerate and print the HID devices on the system
 	struct hid_device_info *devs, *cur_dev;
@@ -872,9 +836,6 @@ int main(int argc, char *argv[]) {
 	t_joycon *jc;
 
 
-	bool combineJoyCons = false;
-
-
 
 
 	if (usingGrip) {
@@ -882,30 +843,30 @@ int main(int argc, char *argv[]) {
 		unsigned char buf_l[65];
 		unsigned char buf_r[65];
 
-		hid_device *handle_l = g_joycons[0].handle;
-		hid_device *handle_r = g_joycons[1].handle;
+		hid_device *handle_l = joycons[0].handle;
+		hid_device *handle_r = joycons[1].handle;
 
 		joycon_init(handle_l, "Left JoyCon");
 		joycon_init(handle_r, "Right JoyCon");
 
 	}
 
-	//hid_set_nonblocking(g_joycons[0].handle, 1);
-	//hid_set_nonblocking(g_joycons[1].handle, 1);
+	//hid_set_nonblocking(joycons[0].handle, 1);
+	//hid_set_nonblocking(joycons[1].handle, 1);
 	
 
 
 
 	while(true) {
 
-			//for (int i = 0; i < g_joycons.size(); i++) {
-			//	jc = &g_joycons[i];
+			//for (int i = 0; i < joycons.size(); i++) {
+			//	jc = &joycons[i];
 			//	if (!jc->handle) {
 			//		continue;
 			//	}
 
 				//updatevJoyDevice(jc);
-				//updatevJoyDevice2(jc, combineJoyCons);
+				//updatevJoyDevice(jc, combineJoyCons);
 
 
 
@@ -958,7 +919,6 @@ int main(int argc, char *argv[]) {
 					//	res = hid_read(jc->handle, buf, 64);
 					//	hex_dump(buf, 64);
 					//}
-
 
 
 
@@ -1052,50 +1012,52 @@ int main(int argc, char *argv[]) {
 
 
 
-		//hid_device *handle_l = g_joycons[0].handle;
-		//hid_device *handle_r = g_joycons[1].handle;
+		//hid_device *handle_l = joycons[0].handle;
+		//hid_device *handle_r = joycons[1].handle;
 
 
-#ifdef WEIRD_VIBRATION_TEST
-		for (int l = 0x10; l < 0x20; l++) {
-			for (int i = 0; i < 8; i++) {
-				for (int k = 0; k < 256; k++) {
-					memset(buf, 0, 0x40);
-					buf[0] = 0x80;
-					buf[1] = 0x92;
-					buf[2] = 0x0;
-					buf[3] = 0xa;
-					buf[4] = 0x0;
-					buf[5] = 0x0;
-					buf[8] = 0x10;
-					for (int j = 0; j <= 8; j++) {
-						buf[10 /*+ i*/] = 0x1;//(i + j) & 0xFF;
+		#ifdef VIBRATION_TEST
+				for (int l = 0x10; l < 0x20; l++) {
+					for (int i = 0; i < 8; i++) {
+						for (int k = 0; k < 256; k++) {
+							memset(buf, 0, 0x40);
+							buf[0] = 0x80;
+							buf[1] = 0x92;
+							buf[2] = 0x0;
+							buf[3] = 0xa;
+							buf[4] = 0x0;
+							buf[5] = 0x0;
+							buf[8] = 0x10;
+							for (int j = 0; j <= 8; j++) {
+								buf[10 /*+ i*/] = 0x1;//(i + j) & 0xFF;
+							}
+
+							// Set frequency to increase
+							buf[10 + 0] = k;
+							buf[10 + 4] = k;
+
+							//if (buf[1]) {
+							//	memcpy(buf[1], buf[0], 0x40);
+							//}
+
+							hid_dual_exchange(handle_l, handle_r, buf, buf, 0x40);
+							printf("Sent %x %x %u\n", i & 0xFF, l, k);
+						}
 					}
-
-					// Set frequency to increase
-					buf[10 + 0] = k;
-					buf[10 + 4] = k;
-
-					//if (buf[1]) {
-					//	memcpy(buf[1], buf[0], 0x40);
-					//}
-
-					hid_dual_exchange(handle_l, handle_r, buf, buf, 0x40);
-					printf("Sent %x %x %u\n", i & 0xFF, l, k);
 				}
-			}
-		}
-#endif
+		#endif
 
 
 
-		for (int i = 0; i < g_joycons.size(); ++i) {
-			t_joycon *jc = &g_joycons[i];
+		for (int i = 0; i < joycons.size(); ++i) {
+
+			t_joycon *jc = &joycons[i];
+
 			if (!jc->handle) {
 				continue;
 			}
 
-			updatevJoyDevice2(jc, combineJoyCons);
+			updatevJoyDevice(jc);
 
 			if (usingGrip) {
 				memset(buf, 0, 65);
@@ -1106,11 +1068,12 @@ int main(int argc, char *argv[]) {
 				buf[8] = 0x1F; // 1F     Get input command
 			} else {
 				buf[0] = 0x1;
-				buf[1] = 0x91;
-				buf[2] = 0x11;
+				buf[1] = 0x0;
+				buf[2] = 0x0;
 			}
 
-			hid_set_nonblocking(jc->handle, 1);
+			//hid_set_nonblocking(jc->handle, 1);
+
 			// send data
 			hid_write(jc->handle, buf, 9);
 			
@@ -1131,13 +1094,6 @@ int main(int argc, char *argv[]) {
 		}
 
 
-
-
-
-
-
-
-		
 		//Sleep(15);
 		Sleep(1);
 	}

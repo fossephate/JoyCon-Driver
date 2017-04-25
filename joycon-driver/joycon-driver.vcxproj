@@ -25,7 +25,7 @@
     <ClInclude Include="include\vjoyinterface.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\hidapi_demo.cpp" />
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{edc0440c-f596-4709-a091-ee8c8a365018}</ProjectGuid>
