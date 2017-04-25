@@ -1,25 +1,12 @@
 
-
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include <errno.h>
-#include <stdbool.h>
-//#include <unistd.h>
-#include <wchar.h>
-
-
-#include <Windows.h>
+//#include <Windows.h>
 
 #include <hidapi.h>
 
-#include <fstream>
-#include <iostream>
+//#include <fstream>
+//#include <iostream>
 
 #include <bitset>
-
 #include <random>
 
 /* vJoy */
@@ -27,11 +14,11 @@
 #include "stdafx.h"
 //#include "Devioctl.h"
 #include "public.h"
-#include <malloc.h>
+//#include <malloc.h>
 #include <string.h>
-#include <stdlib.h>
+//#include <stdlib.h>
 #include "vjoyinterface.h"
-#include "Math.h"
+//#include "Math.h"
 /* end of vJoy includes */
 
 
