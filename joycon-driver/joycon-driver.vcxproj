@@ -81,28 +81,28 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)\$(ProjectName)\build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\$(ProjectName)\intermediate\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)\$(ProjectName)\include;$(SolutionDir)\$(ProjectName)\include\external;$(SolutionDir)\$(ProjectName)\include\base;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)\$(ProjectName)\include;$(SolutionDir)\$(ProjectName)\include\external;$(SolutionDir)\$(ProjectName)\include\base;$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\Program Files (x86)\Windows Kits\8.1\Include</IncludePath>
     <LibraryPath>$(SolutionDir)\$(ProjectName)\libs;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
     <SourcePath>$(SolutionDir)\$(ProjectName)\src;</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)\$(ProjectName)\build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\$(ProjectName)\intermediate\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)\$(ProjectName)\include;$(SolutionDir)\$(ProjectName)\include\external;$(SolutionDir)\$(ProjectName)\include\base;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)\$(ProjectName)\include;$(SolutionDir)\$(ProjectName)\include\external;$(SolutionDir)\$(ProjectName)\include\base;$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\Program Files (x86)\Windows Kits\8.1\Include</IncludePath>
     <LibraryPath>$(SolutionDir)\$(ProjectName)\libs;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
     <SourcePath>$(SolutionDir)\$(ProjectName)\src;</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)\$(ProjectName)\build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\$(ProjectName)\intermediate\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)\$(ProjectName)\include;$(SolutionDir)\$(ProjectName)\include\external;$(SolutionDir)\$(ProjectName)\include\base;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)\$(ProjectName)\include;$(SolutionDir)\$(ProjectName)\include\external;$(SolutionDir)\$(ProjectName)\include\base;$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\Program Files (x86)\Windows Kits\8.1\Include</IncludePath>
     <LibraryPath>$(SolutionDir)\$(ProjectName)\libs;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
     <SourcePath>$(SolutionDir)\$(ProjectName)\src;</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)\$(ProjectName)\build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\$(ProjectName)\intermediate\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)\$(ProjectName)\include;$(SolutionDir)\$(ProjectName)\include\external;$(SolutionDir)\$(ProjectName)\include\base;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir)\$(ProjectName)\include;$(SolutionDir)\$(ProjectName)\include\external;$(SolutionDir)\$(ProjectName)\include\base;$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\Program Files (x86)\Windows Kits\8.1\Include</IncludePath>
     <LibraryPath>$(SolutionDir)\$(ProjectName)\libs;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
     <SourcePath>$(SolutionDir)\$(ProjectName)\src;</SourcePath>
   </PropertyGroup>

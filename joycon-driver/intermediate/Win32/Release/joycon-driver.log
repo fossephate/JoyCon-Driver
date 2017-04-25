@@ -1,0 +1,27 @@
+﻿  main.cpp
+src\main.cpp(56): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+src\main.cpp(614): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 1 has type 'TCHAR *'
+  src\main.cpp(614): note: consider using '%hs' in the format string
+  src\main.cpp(614): note: consider using '%Ts' in the format string
+  src\main.cpp(614): note: this warning is based on non-standard semantics used by Visual C++
+src\main.cpp(614): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 2 has type 'TCHAR *'
+  src\main.cpp(614): note: consider using '%hs' in the format string
+  src\main.cpp(614): note: consider using '%Ts' in the format string
+  src\main.cpp(614): note: this warning is based on non-standard semantics used by Visual C++
+src\main.cpp(614): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 3 has type 'TCHAR *'
+  src\main.cpp(614): note: consider using '%hs' in the format string
+  src\main.cpp(614): note: consider using '%Ts' in the format string
+  src\main.cpp(614): note: this warning is based on non-standard semantics used by Visual C++
+src\main.cpp(700): warning C4101: 'z': unreferenced local variable
+src\main.cpp(1078): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(862): warning C4101: 'jc': unreferenced local variable
+src\main.cpp(828): warning C4101: 'wstr': unreferenced local variable
+src\main.cpp(825): warning C4101: 'i': unreferenced local variable
+src\main.cpp(870): warning C4101: 'buf_r': unreferenced local variable
+src\main.cpp(869): warning C4101: 'buf_l': unreferenced local variable
+  Generating code
+  0 of 185 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Release\joycon-driver.exe
