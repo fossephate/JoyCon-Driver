@@ -28,6 +28,34 @@ A vJoy feeder for the Nintendo Switch JoyCons with analog stick support
 * The JoyCons seem to need to be re-paired anytime after they've reconnected to the switch.
 
 These are the settings you'll want to change:
+	* EDIT: Added command line arguments:
+	* Run with "--combine" to combine the left and right joycons
+	* Run with "--LXO 16000" to add an X Offset to the Left JoyCon of 16000
+	* Run with "--LYO 16000" to add an Y Offset to the Left JoyCon of 16000
+	* Run with "--RYO 16000" to add an X Offset to the Right JoyCon of 16000
+	* Run with "--RYO 16000" to add an Y Offset to the Right JoyCon of 16000
+
+```
+if (std::string(args[i]) == "--combine") {
+	settings.combineJoyCons = true;
+	printf("JoyCon combining enabled.\n");
+}
+if (std::string(args[i]) == "--LXO") {
+	settings.leftJoyConXOffset = std::stoi(args[i + 1]);
+}
+if (std::string(args[i]) == "--LYO") {
+	settings.leftJoyConYOffset = std::stoi(args[i + 1]);
+}
+if (std::string(args[i]) == "--RXO") {
+	settings.rightJoyConXOffset = std::stoi(args[i + 1]);
+}
+if (std::string(args[i]) == "--RYO") {
+	settings.rightJoyConYOffset = std::stoi(args[i + 1]);
+}
+```
+
+
+These are the default settings:
 ```
 // there appears to be a good amount of variance between JoyCons,
 // but they work great once you find the right offsets
@@ -52,6 +80,10 @@ int rightJoyConYMultiplier = 240;
 // JoyCon(R) is mapped to vJoy Device #2
 bool combineJoyCons = false;
 ```
+
+
+
+
 
 
 

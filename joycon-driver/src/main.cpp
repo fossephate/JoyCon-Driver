@@ -778,7 +778,32 @@ void updatevJoyDevice(t_joycon *jc) {
 }
 
 
+//int leftJoyConXOffset = 16000;
+//int leftJoyConYOffset = 13000;
+//
+//int rightJoyConXOffset = 15000;
+//int rightJoyConYOffset = 19000;
 
+void parseSettings(int length, char *args[]) {
+	for (int i = 0; i < length; ++i) {
+		if (std::string(args[i]) == "--combine") {
+			settings.combineJoyCons = true;
+			printf("JoyCon combining enabled.\n");
+		}
+		if (std::string(args[i]) == "--LXO") {
+			settings.leftJoyConXOffset = std::stoi(args[i + 1]);
+		}
+		if (std::string(args[i]) == "--LYO") {
+			settings.leftJoyConYOffset = std::stoi(args[i + 1]);
+		}
+		if (std::string(args[i]) == "--RXO") {
+			settings.rightJoyConXOffset = std::stoi(args[i + 1]);
+		}
+		if (std::string(args[i]) == "--RYO") {
+			settings.rightJoyConYOffset = std::stoi(args[i + 1]);
+		}
+	}
+}
 
 
 
@@ -836,7 +861,7 @@ int main(int argc, char *argv[]) {
 	t_joycon *jc;
 
 
-
+	parseSettings(argc, argv);
 
 	if (usingGrip) {
 
