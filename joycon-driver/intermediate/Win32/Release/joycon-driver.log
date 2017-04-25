@@ -1,1 +1,26 @@
-﻿  joycon-driver.vcxproj -> C:\Users\mattc\Desktop\JoyCon-Driver\\joycon-driver\build\Win32\Release\joycon-driver.exe
+﻿  main.cpp
+src\main.cpp(43): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+src\main.cpp(601): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 1 has type 'TCHAR *'
+  src\main.cpp(601): note: consider using '%hs' in the format string
+  src\main.cpp(601): note: consider using '%Ts' in the format string
+  src\main.cpp(601): note: this warning is based on non-standard semantics used by Visual C++
+src\main.cpp(601): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 2 has type 'TCHAR *'
+  src\main.cpp(601): note: consider using '%hs' in the format string
+  src\main.cpp(601): note: consider using '%Ts' in the format string
+  src\main.cpp(601): note: this warning is based on non-standard semantics used by Visual C++
+src\main.cpp(601): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 3 has type 'TCHAR *'
+  src\main.cpp(601): note: consider using '%hs' in the format string
+  src\main.cpp(601): note: consider using '%Ts' in the format string
+  src\main.cpp(601): note: this warning is based on non-standard semantics used by Visual C++
+src\main.cpp(687): warning C4101: 'z': unreferenced local variable
+src\main.cpp(1065): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(849): warning C4101: 'jc': unreferenced local variable
+src\main.cpp(815): warning C4101: 'wstr': unreferenced local variable
+src\main.cpp(812): warning C4101: 'i': unreferenced local variable
+src\main.cpp(857): warning C4101: 'buf_r': unreferenced local variable
+src\main.cpp(856): warning C4101: 'buf_l': unreferenced local variable
+  Generating code
+c:\users\mattc\desktop\joycon-driver\joycon-driver\src\main.cpp(635): warning C4715: 'acquirevJoyDevice': not all control paths return a value
+  All 185 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  joycon-driver.vcxproj -> C:\Users\mattc\Desktop\JoyCon-Driver\\joycon-driver\build\Win32\Release\joycon-driver.exe
