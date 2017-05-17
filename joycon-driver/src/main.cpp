@@ -157,6 +157,11 @@ struct Settings {
 	// JoyCon(L) is mapped to vJoy Device #1
 	// JoyCon(R) is mapped to vJoy Device #2
 	bool combineJoyCons = false;
+
+	bool reverseX = false;// reverses x
+	bool reverseY = false;// reverses y
+
+
 } settings;
 
 
@@ -535,7 +540,7 @@ int joycon_init(hid_device *handle, const char *name) {
 	
 
 	
-#ifndef VIBRATION_TEST
+//#ifndef VIBRATION_TEST
 	// Switch baudrate to 3Mbit
 	printf("Switching baudrate...\n");
 	memset(buf, 0x00, 0x40);
@@ -554,7 +559,7 @@ int joycon_init(hid_device *handle, const char *name) {
 	buf[0] = 0x80;
 	buf[1] = 0x04;
 	hid_exchange(handle, buf, 0x2);
-#endif
+//#endif
 
 	return 0;
 }
@@ -655,6 +660,10 @@ void updatevJoyDevice(t_joycon *jc) {
 	int rightJoyConYMultiplier = settings.rightJoyConYMultiplier;
 
 	bool combineJoyCons = settings.combineJoyCons;
+
+	bool reverseX = settings.reverseX;
+	bool reverseY = settings.reverseY;
+
 
 
 

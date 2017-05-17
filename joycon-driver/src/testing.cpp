@@ -1,5 +1,5 @@
 
-//#include <Windows.h>
+#include <Windows.h>
 
 #include <hidapi.h>
 
@@ -8,11 +8,11 @@
 
 #include <bitset>
 #include <random>
-//#include <istream>
-//#include <iostream>
+#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
+
 
 /* vJoy */
 // Monitor Force Feedback (FFB) vJoy device
@@ -305,9 +305,10 @@ void hid_exchange(hid_device *handle, unsigned char *buf, int len) {
 	hid_write(handle, buf, len);
 
 	int res = hid_read(handle, buf, 0x41);
-#ifdef DEBUG_PRINT
+//#ifdef DEBUG_PRINT
+	printf("rcvd: ");
 	hex_dump(buf, 0x40);
-#endif
+//#endif
 }
 
 
@@ -519,7 +520,7 @@ void handle_input(t_joycon *jc, uint8_t *packet, int len) {
 		//hex_dump(packet, len);
 	//}
 
-	//hex_dump2(packet, len-15);
+	//hex_dump2(packet, len);
 
 
 	//print_buttons(jc);
@@ -914,12 +915,8 @@ int main(int argc, char *argv[]) {
 
 	
 	// Replays a string of hex values (ie 80 92 .. ..) separated by newlines
-	#ifdef REPLAY
-	//size_t read;
-	//char *line;
-	//size_t len = 0;
-	//FILE *replay = fopen("replay.txt", "rb");
-	//while ((read = std::getline(&line, &len, replay)) > 0) {
+	#ifdef REPLAY1
+
 
 	std::ifstream infile("replay.txt");
 	std::string line;
@@ -930,24 +927,59 @@ int main(int argc, char *argv[]) {
 
 		memset(buf, 0, 0x40);
 
-		char line_temp[200];
-		line.copy(line_temp, line.size(), 0);
-
-
+		const char *test = line.c_str();
+		char *t;
+		buf[i++] = strtol(test, &t, 16);
 		while (i < 0x40) {
-			buf[i++] = strtol(line_temp, nullptr, 16);
+			buf[i++] = strtol(t, &t, 16);
 		}
-		if (buf[8] == 0x1f) continue; // Cull out input packets
 
-		printf("Sent: ");
-		hex_dump(buf, 0x40);
+		//printf("sending:  ");
+		//hex_dump(buf, 0x20);
+
+
+		//char line_temp[200];
+		//line.copy(line_temp, line.size(), 0);
+
+		//printf("sending: ");
+		//for (int i = 0; i < 100; ++i) {
+		//	printf("%02x ", line_temp[i]);
+		//}
+		//printf("\n");
+
+
+		//while (i < 0x40) {
+		//	buf[i++] = strtol(line_temp, nullptr, 16);
+		//}
+		////if (buf[8] == 0x1f) continue; // Cull out input packets
+
+		printf("sent: ");
+		hex_dump(buf, 0x25);
+
+
+		hid_set_nonblocking(joycons[0].handle, 1);// set blocking to guarantee response
+
+		// write:
+		hid_write(joycons[0].handle, buf, 0x40);
+
+		// read:
+		hid_read(joycons[0].handle, buf, 0x40);
+
+		hid_set_nonblocking(joycons[0].handle, 0);// no longer blocking
+
+		//hid_write(joycons[0].handle, buf, 0x20);
+
+		
+
+		printf("rcvd: ");
+		hex_dump(buf, 0x25);
 
 
 		//hid_dual_exchange(handle_l, handle_r, buf[1], buf[0], 0x40);
 
-		printf("Got:  ");
-		hex_dump(buf, 0x40);
-		printf("\n");
+		//printf("Got:  ");
+		//hex_dump(buf, 0x40);
+		//printf("\n");
 	}
 	#endif
 
@@ -1172,22 +1204,56 @@ int main(int argc, char *argv[]) {
 				buf[8] = 0x1F; // 1F     Get input command
 			} else {
 
-				buf[0] = 0x1;
-				buf[1] = 0x0;
-				buf[2] = 0x0;
+				buf[0] = 0x01;
+				//buf[1] = 0x92; // 92     Post-handshake type command
+				//buf[2] = 0x00; // 0001   u16 second part size
+				//buf[3] = 0x01;
+				//buf[8] = 0x1F; // 1F     Get input command
 			}
 
-			//hid_set_nonblocking(jc->handle, 1);
+			//// testing:
+			//{
+			//	std::string line = "19 01 03 08 00 92 00 01 00 00 69 2d 1f";
 
+			//	const char *test = line.c_str();
+			//	char *t;
+			//	int i = 0;
+			//	buf[i++] = strtol(test, &t, 16);
+			//	while (i < line.size()) {
+			//		buf[i++] = strtol(t, &t, 16);
+			//	}
+
+			//	hid_set_nonblocking(jc->handle, 1);// set as non-blocking
+			//}
+			//buf[0] = 0x81;
+			//buf[1] = 0x03;
+			//buf[2] = 0x38;
+			//buf[3] = 0x00;
+			//buf[4] = 0x92;
+			//buf[5] = 0x00;
+			//buf[6] = 0x31;
+
+			printf("send: ");
+			hex_dump(buf, 0x25);
+
+			
 			// send data
-			hid_write(jc->handle, buf, 9);
+			hid_write(jc->handle, buf, 10);
 			
 			
 			// read response
 			res = hid_read(jc->handle, buf, 65);// returns length of actual bytes read
+
+
 			
 			if (res > 0) {
+
 				//printf("res: %d\n", res);
+
+
+				printf("rcvd: ");
+				hex_dump(buf, 0x25);
+
 				// handle input data
 				handle_input(jc, buf, res);
 			} else if (res < 0) {
@@ -1196,6 +1262,45 @@ int main(int argc, char *argv[]) {
 				jc->left_right = 0;
 				continue;
 			}
+
+
+
+
+
+
+
+
+
+
+
+			//for (int l = 0x10; l < 0x20; l++) {
+			//	for (int i = 0; i < 8; i++) {
+			//		for (int k = 0; k < 256; k++) {
+			//			memset(buf, 0, 0x40);
+			//			buf[0] = 0x80;
+			//			buf[1] = 0x92;
+			//			buf[2] = 0x0;
+			//			buf[3] = 0xa;
+			//			buf[4] = 0x0;
+			//			buf[5] = 0x0;
+			//			buf[8] = 0x10;
+			//			for (int j = 0; j <= 8; j++) {
+			//				buf[10 /*+ i*/] = 0x1;//(i + j) & 0xFF;
+			//			}
+
+			//			// Set frequency to increase
+			//			buf[10 + 0] = k;
+			//			buf[10 + 4] = k;
+
+			//			//if (buf[1]) {
+			//			//	memcpy(buf[1], buf[0], 0x40);
+			//			//}
+
+			//			hid_exchange(jc->handle, buf, 0x40);
+			//			printf("Sent %x %x %u\n", i & 0xFF, l, k);
+			//		}
+			//	}
+			//}
 
 		}
 
