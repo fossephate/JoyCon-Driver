@@ -12,13 +12,13 @@ c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\mai
   c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(606): note: consider using '%hs' in the format string
   c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(606): note: consider using '%Ts' in the format string
   c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(606): note: this warning is based on non-standard semantics used by Visual C++
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(696): warning C4101: 'z': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1074): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(858): warning C4101: 'jc': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(824): warning C4101: 'wstr': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(821): warning C4101: 'i': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(866): warning C4101: 'buf_r': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(865): warning C4101: 'buf_l': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(705): warning C4101: 'z': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1083): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(867): warning C4101: 'jc': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(833): warning C4101: 'wstr': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(830): warning C4101: 'i': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(875): warning C4101: 'buf_r': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(874): warning C4101: 'buf_l': unreferenced local variable
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(640): warning C4715: 'acquirevJoyDevice': not all control paths return a value
   joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Debug\joycon-driver.exe
   joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Debug\joycon-driver.pdb (Partial PDB)
