@@ -158,8 +158,8 @@ struct Settings {
 	// JoyCon(R) is mapped to vJoy Device #2
 	bool combineJoyCons = false;
 
-	bool reverseX = false;// reverses x
-	bool reverseY = false;// reverses y
+	bool reverseX = false;// reverses joystick x
+	bool reverseY = false;// reverses joystick y
 
 
 } settings;
@@ -687,6 +687,15 @@ void updatevJoyDevice(t_joycon *jc) {
 	id = (BYTE)DevID;
 	iReport.bDevice = id;
 
+	if (reverseX) {
+		leftJoyConXMultiplier *= -1;
+		rightJoyConXMultiplier *= -1;
+	}
+	if (reverseY) {
+		leftJoyConYMultiplier *= -1;
+		rightJoyConYMultiplier *= -1;
+	}
+
 
 
 
@@ -699,7 +708,6 @@ void updatevJoyDevice(t_joycon *jc) {
 	int rz = 0;
 
 	if (!combineJoyCons) {
-
 		if (jc->left_right == 1) {
 			x = leftJoyConXMultiplier * (jc->stick.horizontal) + leftJoyConXOffset;
 			y = leftJoyConYMultiplier * (jc->stick.vertical) + leftJoyConYOffset;
@@ -775,12 +783,6 @@ void updatevJoyDevice(t_joycon *jc) {
 }
 
 
-//int leftJoyConXOffset = 16000;
-//int leftJoyConYOffset = 13000;
-//
-//int rightJoyConXOffset = 15000;
-//int rightJoyConYOffset = 19000;
-
 void parseSettings(int length, char *args[]) {
 	for (int i = 0; i < length; ++i) {
 		if (std::string(args[i]) == "--combine") {
@@ -798,6 +800,13 @@ void parseSettings(int length, char *args[]) {
 		}
 		if (std::string(args[i]) == "--RYO") {
 			settings.rightJoyConYOffset = std::stoi(args[i + 1]);
+		}
+
+		if (std::string(args[i]) == "--REVX") {
+			settings.reverseX = true;
+		}
+		if (std::string(args[i]) == "--REVY") {
+			settings.reverseY = true;
 		}
 	}
 }

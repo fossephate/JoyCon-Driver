@@ -52,6 +52,12 @@ if (std::string(args[i]) == "--RXO") {
 if (std::string(args[i]) == "--RYO") {
 	settings.rightJoyConYOffset = std::stoi(args[i + 1]);
 }
+if (std::string(args[i]) == "--REVX") {
+	settings.reverseX = true;
+}
+if (std::string(args[i]) == "--REVY") {
+	settings.reverseY = true;
+}
 ```
 
 
@@ -79,6 +85,10 @@ int rightJoyConYMultiplier = 240;
 // JoyCon(L) is mapped to vJoy Device #1
 // JoyCon(R) is mapped to vJoy Device #2
 bool combineJoyCons = false;
+
+bool reverseX = false;// reverses joystick x
+bool reverseY = false;// reverses joystick y
+
 ```
 
 
