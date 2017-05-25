@@ -436,46 +436,18 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 		// get button states:
 		{
-			std::string buttonStates2;
-			// get button states
-			//printf("Button status: ");
-			//for (int i = 0; i < 3; i++) {
-			//	for (int b = 0; b < 8; b++) {
-			//		char c = (pckt[i] & (1 << b)) ? '1' : '0';
-			//		buttonStates1 += c;
-			//	}
-			//}
+			uint16_t states = 0;
 
 			// re-order bits:
 
 			// Left JoyCon:
 			if (jc->left_right == 1) {
-				for (int i = 0; i < 8; ++i) {
-					char c = (pckt[2] & (1 << i)) ? '1' : '0';
-					buttonStates2 += c;
-				}
-
-				for (int i = 0; i < 8; ++i) {
-					char c = (pckt[1] & (1 << i)) ? '1' : '0';
-					buttonStates2 += c;
-				}
-			}
-
+				states = (pckt[1] << 8) | (pckt[2] & 0xff);
 			// Right JoyCon:
-			if (jc->left_right == 2) {
-				for (int i = 0; i < 8; ++i) {
-					char c = (pckt[0] & (1 << i)) ? '1' : '0';
-					buttonStates2 += c;
-				}
-
-				for (int i = 0; i < 8; ++i) {
-					char c = (pckt[1] & (1 << i)) ? '1' : '0';
-					buttonStates2 += c;
-				}
+			} else if (jc->left_right == 2) {
+				states = (pckt[1] << 8) | (pckt[0] & 0xff);
 			}
 
-			std::reverse(buttonStates2.begin(), buttonStates2.end());
-			uint16_t states = std::stoi(buttonStates2.c_str(), nullptr, 2);
 			jc->buttons = states;
 		}
 
@@ -518,7 +490,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		//printf("Unknown packet: ");
 		//hex_dump2(packet, len);
 
-		hex_dump(packet, len);
+		//hex_dump(packet, len);
 	}
 
 	if (jc->left_right == 1) {
@@ -533,7 +505,8 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 	//printf("\n");
 
-	//hex_dump(packet, len);
+	//hex_dump_0(packet, len);
+	//printf("\n");
 
 	// response packet to?:
 	// buf[0] = 0x01
@@ -544,49 +517,36 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 
 
+
+	//uint8_t *pckt = packet + 10;
+
+	//hex_dump(pckt, 12);
+
+
 	// USB polled info:
-	//if (packet[0] == 0x81/*129*/) {
 	if (packet[5] == 0x31/*49*/) {
 
-		uint8_t *pckt = packet + 10;
+		uint8_t *pckt = packet + 13;
 
-		hex_dump(pckt, 12);
-
+		//if (jc->left_right == 1) {
+		//	hex_dump(pckt, 20);
+		//}
 
 		// get button states:
 		{
-			std::string buttonStates2;
+
+			uint16_t states = 0;
 
 			// re-order bits:
 
 			// Left JoyCon:
 			if (jc->left_right == 1) {
-				for (int i = 0; i < 8; ++i) {
-					char c = (pckt[2] & (1 << i)) ? '1' : '0';
-					buttonStates2 += c;
-				}
-
-				for (int i = 0; i < 8; ++i) {
-					char c = (pckt[1] & (1 << i)) ? '1' : '0';
-					buttonStates2 += c;
-				}
-			}
-
+				states = (pckt[1] << 8) | (pckt[2] & 0xff);
 			// Right JoyCon:
-			if (jc->left_right == 2) {
-				for (int i = 0; i < 8; ++i) {
-					char c = (pckt[0] & (1 << i)) ? '1' : '0';
-					buttonStates2 += c;
-				}
-
-				for (int i = 0; i < 8; ++i) {
-					char c = (pckt[1] & (1 << i)) ? '1' : '0';
-					buttonStates2 += c;
-				}
+			} else if (jc->left_right == 2) {
+				states = (pckt[1] << 8) | (pckt[0] & 0xff);
 			}
 
-			std::reverse(buttonStates2.begin(), buttonStates2.end());
-			uint16_t states = std::stoi(buttonStates2.c_str(), nullptr, 2);
 			jc->buttons = states;
 		}
 
@@ -594,11 +554,9 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 		uint8_t *stick_data = nullptr;
 		if (jc->left_right == 1) {
-			stick_data = packet + 0;
-			//printf("Stick L: %02X %02X %02X\n", pckt[4], pckt[5], pckt[6]);
+			stick_data = packet + 16;
 		} else if (jc->left_right == 2) {
-			stick_data = packet + 3;
-			//printf("Stick R: %02X %02X %02X\n", pckt[7], pckt[8], pckt[9]);
+			stick_data = packet + 19;
 		}
 
 
@@ -649,7 +607,7 @@ int joycon_init(hid_device *handle, const char *name) {
 
 	// set blocking:
 	// this insures we get the MAC Address
-	//hid_set_nonblocking(handle, 0);
+	hid_set_nonblocking(handle, 0);
 
 	// USB:
 
@@ -667,17 +625,17 @@ int joycon_init(hid_device *handle, const char *name) {
 		printf("Found %s, MAC: %02x:%02x:%02x:%02x:%02x:%02x\n", name, buf[9], buf[8], buf[7], buf[6], buf[5], buf[4]);
 	}
 
-	// USB:
-
 	// set non-blocking:
 	//hid_set_nonblocking(handle, 1);
 
 	//Do handshaking
-	printf("Doing handshake...\n");
-	memset(buf, 0x00, 0x40);
-	buf[0] = 0x80;
-	buf[1] = 0x02;
-	hid_exchange(handle, buf, 0x2);
+	//for (int j = 0; j < 2; ++j) {
+		printf("Doing handshake...\n");
+		memset(buf, 0x00, 0x40);
+		buf[0] = 0x80;
+		buf[1] = 0x02;
+		hid_exchange(handle, buf, 0x2);
+	//}
 
 	//#ifndef VIBRATION_TEST
 
@@ -696,7 +654,7 @@ int joycon_init(hid_device *handle, const char *name) {
 	hid_exchange(handle, buf, 0x2);
 
 	// set non-blocking:
-	hid_set_nonblocking(handle, 1);
+	//hid_set_nonblocking(handle, 1);
 
 	//Only talk HID from now on
 	printf("Only talk HID:\n");
@@ -753,10 +711,10 @@ int joycon_init_bt(hid_device *handle, const char *name) {
 	//unsigned char buf[0x40];
 	//memset(buf, 0, 0x40);
 
-	////unsigned char buf2[0x40];
-	////unsigned char buf3[0x40];
-	////memset(buf2, 0, 0x40);
-	////memset(buf3, 0, 0x40);
+	//unsigned char buf2[0x40];
+	//unsigned char buf3[0x40];
+	//memset(buf2, 0, 0x40);
+	//memset(buf3, 0, 0x40);
 
 	//// BT:
 	//// 0x06 on byte 10 causes a disconnect
@@ -774,46 +732,58 @@ int joycon_init_bt(hid_device *handle, const char *name) {
 	//// set blocking:
 	////hid_set_nonblocking(handle, 0);
 
-	//for (int i = 0; i < 255; ++i) {
+	//for (int j = 0; j < 1000; ++j) {
 
-	//	//printf("Sending BT test data...\n");
-	//	memset(buf, 0x00, 0x40);
-	//	//buf[0] = 0x01;
-	//	//buf[10] = 0x03;
-	//	buf[0] = i;
-	//	buf[1] = (int)(rand0t1() * 10);
-	//	buf[2] = (int)(rand0t1() * 10);
-	//	buf[3] = (int)(rand0t1() * 10);
-	//	buf[4] = (int)(rand0t1() * 10);
-	//	buf[5] = (int)(rand0t1() * 10);
-	//	buf[6] = (int)(rand0t1() * 10);
-	//	buf[7] = (int)(rand0t1() * 10);
-	//	buf[8] = (int)(rand0t1() * 10);
-	//	buf[9] = (int)(rand0t1() * 10);
-	//	buf[10] = (int)(rand0t1() * 10);
-	//	//hid_exchange(handle, buf, 12);
+	//	//for (int i = 0x10; i < 0x13; ++i) {
+
+	//		//printf("Sending BT test data...\n");
+	//		memset(buf, 0x00, 0x40);
+	//		buf[0] = 0x01;
+	//		//buf[10] = 0x03;
+	//		//buf[0] = i;
+	//		//buf[1] = 0x0;
+	//		//buf[2] = 0x1;
+	//		buf[1] = (int)(rand0t1() * 100);
+	//		buf[2] = (int)(rand0t1() * 100);
+	//		buf[3] = (int)(rand0t1() * 100);
+	//		buf[4] = (int)(rand0t1() * 100);
+	//		buf[5] = (int)(rand0t1() * 100);
+	//		buf[6] = (int)(rand0t1() * 100);
+	//		buf[7] = (int)(rand0t1() * 100);
+	//		buf[8] = (int)(rand0t1() * 100);
+	//		buf[9] = (int)(rand0t1() * 100);
+	//		//buf[10] = (int)(rand0t1() * 10);
+	//		//hid_exchange(handle, buf, 12);
+
+	//		int written = 0;
+	//		int read = 0;
 
 
-	//	res = hid_write(handle, buf, 12);
-	//	//printf("%d bytes written.\n", res);
-
-	//	// successful command written:
-	//	if (res > -1) {
+	//		written = hid_write(handle, buf, 12);
+	//		//printf("%d bytes written.\n", res);
 
 
-	//		printf("I: %d\n", i);
+	//		//printf("I: 0x%02x\n", i);
 
-	//		printf("%d bytes written.\n", res);
+	//		printf("%d bytes written.\n", written);
 
-	//		hex_dump(buf, 40);
+	//		for (int j = 0; j < 64; j++) {
+	//			buf2[j] = buf[j];
+	//		}
 
-	//		res = hid_read(handle, buf, 0x40);
-	//		printf("%d bytes read.\n", res);
+	//		
+
+	//		read = hid_read(handle, buf, 0x40);
+	//		printf("%d bytes read.\n", read);
+
+	//		// print test data:
+	//		hex_dump(buf2, 40);
 
 
 	//		// print response to test data:
 	//		hex_dump(buf, 40);
-	//	}
+
+	//	//}
 
 	//}
 
@@ -835,7 +805,6 @@ void joycon_deinit(hid_device *handle/*, const wchar_t *name*/) {
 	buf[0] = 0x80;
 	buf[1] = 0x05;
 	hid_exchange(handle, buf, 0x2);
-
 	//printf("Deinitialized %ls\n", name);
 	printf("Deinitialized Joycon\n");
 }
@@ -1034,7 +1003,7 @@ void updatevJoyDevice(Joycon *jc) {
 			//btns = (jc->buttons << 16) | (iReport.lButtons & 0xFF);
 			//btns = ((jc->buttons) << 16) | (iReport.lButtons & 0xFF);
 
-			unsigned r = createMask(0, 15);
+			unsigned r = createMask(0, 16);// 15
 			btns = ((jc->buttons) << 16) | (r & iReport.lButtons);
 			//std::bitset<32> x(btns);
 			//std::cout << x;
@@ -1131,7 +1100,6 @@ init_start:
 
 	usingGrip = false;
 
-	//devs = hid_enumerate(0x0, 0x0);
 	devs = hid_enumerate(JOYCON_VENDOR, 0x0);
 	cur_dev = devs;
 	while (cur_dev) {
@@ -1156,6 +1124,7 @@ init_start:
 			// charging grip:
 			if (cur_dev->product_id == JOYCON_CHARGING_GRIP) {
 				usingGrip = true;
+				settings.combineJoyCons = true;
 				found_joycon(cur_dev);
 			}
 		}
@@ -1232,7 +1201,7 @@ init_start:
 
 
 	// use stick data to calibrate:
-	//if (settings.autoCenterSticks) {
+	if (settings.autoCenterSticks) {
 		for (int i = 0; i < joycons.size(); ++i) {
 			Joycon *jc = &joycons[i];
 
@@ -1259,7 +1228,7 @@ init_start:
 
 
 		}
-	//}
+	}
 
 
 	while(true) {
