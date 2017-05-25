@@ -30,41 +30,17 @@ A vJoy feeder for the Nintendo Switch JoyCons with analog stick support
 These are the settings you'll want to change:
 	* EDIT: Added command line arguments:
 	* Run with "--combine" to combine the left and right joycons
+	* Run with "--auto-center" to attempt an automatic 
 	* Run with "--LXO 16000" to add an X Offset to the Left JoyCon of 16000
 	* Run with "--LYO 16000" to add an Y Offset to the Left JoyCon of 16000
 	* Run with "--RYO 16000" to add an X Offset to the Right JoyCon of 16000
 	* Run with "--RYO 16000" to add an Y Offset to the Right JoyCon of 16000
 
-```
-if (std::string(args[i]) == "--combine") {
-	settings.combineJoyCons = true;
-	printf("JoyCon combining enabled.\n");
-}
-if (std::string(args[i]) == "--LXO") {
-	settings.leftJoyConXOffset = std::stoi(args[i + 1]);
-}
-if (std::string(args[i]) == "--LYO") {
-	settings.leftJoyConYOffset = std::stoi(args[i + 1]);
-}
-if (std::string(args[i]) == "--RXO") {
-	settings.rightJoyConXOffset = std::stoi(args[i + 1]);
-}
-if (std::string(args[i]) == "--RYO") {
-	settings.rightJoyConYOffset = std::stoi(args[i + 1]);
-}
-if (std::string(args[i]) == "--REVX") {
-	settings.reverseX = true;
-}
-if (std::string(args[i]) == "--REVY") {
-	settings.reverseY = true;
-}
-```
-
 
 These are the default settings:
 ```
 // there appears to be a good amount of variance between JoyCons,
-// but they work great once you find the right offsets
+// but they work well once you find the right offsets
 // these are the values that worked well for my JoyCons:
 int leftJoyConXOffset = 16000;
 int leftJoyConYOffset = 13000;
@@ -88,6 +64,11 @@ bool combineJoyCons = false;
 
 bool reverseX = false;// reverses joystick x
 bool reverseY = false;// reverses joystick y
+
+// attempt to automatically center sticks
+// works by getting joystick position at start
+// and assumes that to be 0, and calculates offset accordingly
+bool autoCenterSticks = false;
 
 ```
 
