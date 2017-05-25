@@ -1,29 +1,29 @@
 ﻿  main.cpp
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(50): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(854): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 1 has type 'TCHAR *'
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(854): note: consider using '%hs' in the format string
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(854): note: consider using '%Ts' in the format string
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(854): note: this warning is based on non-standard semantics used by Visual C++
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(854): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 2 has type 'TCHAR *'
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(854): note: consider using '%hs' in the format string
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(854): note: consider using '%Ts' in the format string
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(854): note: this warning is based on non-standard semantics used by Visual C++
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(854): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 3 has type 'TCHAR *'
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(854): note: consider using '%hs' in the format string
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(854): note: consider using '%Ts' in the format string
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(854): note: this warning is based on non-standard semantics used by Visual C++
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(955): warning C4101: 'z': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1141): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1145): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1158): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1206): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1270): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1336): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1102): warning C4102: 'init_start': unreferenced label
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1150): warning C4101: 'jc': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1088): warning C4101: 'device_name': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1086): warning C4101: 'wstr': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1083): warning C4101: 'i': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(888): warning C4715: 'acquirevJoyDevice': not all control paths return a value
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(882): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 1 has type 'TCHAR *'
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(882): note: consider using '%hs' in the format string
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(882): note: consider using '%Ts' in the format string
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(882): note: this warning is based on non-standard semantics used by Visual C++
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(882): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 2 has type 'TCHAR *'
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(882): note: consider using '%hs' in the format string
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(882): note: consider using '%Ts' in the format string
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(882): note: this warning is based on non-standard semantics used by Visual C++
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(882): warning C4477: 'wprintf' : format string '%s' requires an argument of type 'wchar_t *', but variadic argument 3 has type 'TCHAR *'
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(882): note: consider using '%hs' in the format string
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(882): note: consider using '%Ts' in the format string
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(882): note: this warning is based on non-standard semantics used by Visual C++
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(983): warning C4101: 'z': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1169): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1173): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1187): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1236): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1303): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1369): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1130): warning C4102: 'init_start': unreferenced label
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1178): warning C4101: 'jc': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1116): warning C4101: 'device_name': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1114): warning C4101: 'wstr': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1111): warning C4101: 'i': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(916): warning C4715: 'acquirevJoyDevice': not all control paths return a value
   joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Debug\joycon-driver.exe
   joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Debug\joycon-driver.pdb (Partial PDB)
