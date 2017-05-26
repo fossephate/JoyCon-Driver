@@ -5,9 +5,11 @@
 #include <random>
 #include <stdafx.h>
 #include <string.h>
-
+#include <chrono>
 
 #include <hidapi.h>
+
+
 
 #include "public.h"
 #include "vjoyinterface.h"
@@ -109,11 +111,11 @@ struct Settings {
 	// there appears to be a good amount of variance between JoyCons,
 	// but they work great once you find the right offsets
 	// these are the values that worked well for my JoyCons:
-	int leftJoyConXOffset = 16000;
-	int leftJoyConYOffset = 13000;
+	int leftJoyConXOffset = 16384;// 16000;
+	int leftJoyConYOffset = 16384;// 13000;
 
-	int rightJoyConXOffset = 15000;
-	int rightJoyConYOffset = 19000;
+	int rightJoyConXOffset = 16384;// 15000;
+	int rightJoyConYOffset = 16384;// 19000;
 
 	// multipliers to go from the range (-128,128) to (-32768, 32768)
 	// These shouldn't need to be changed too much, but the option is there
@@ -127,7 +129,7 @@ struct Settings {
 	// if left disabled:
 	// JoyCon(L) is mapped to vJoy Device #1
 	// JoyCon(R) is mapped to vJoy Device #2
-	bool combineJoyCons = false;
+	bool combineJoyCons = false;// false
 
 	bool reverseX = false;// reverses joystick x
 	bool reverseY = false;// reverses joystick y
@@ -136,6 +138,8 @@ struct Settings {
 	// works by getting joystick position at start
 	// and assumes that to be 0, and calculates offset accordingly
 	bool autoCenterSticks = false;
+
+	bool usingGrip = false;
 
 } settings;
 
@@ -147,8 +151,6 @@ void found_joycon(struct hid_device_info *dev) {
 	
 	
 	Joycon jc;
-
-	int i = joycons.size();
 
 	if (dev->product_id == JOYCON_CHARGING_GRIP) {
 
@@ -175,7 +177,7 @@ void found_joycon(struct hid_device_info *dev) {
 	jc.serial = wcsdup(dev->serial_number);
 	jc.buttons = 0;
 
-	printf("Found joycon %c %i: %ls %s\n", L_OR_R(jc.left_right), i, jc.serial, dev->path);
+	printf("Found joycon %c %i: %ls %s\n", L_OR_R(jc.left_right), joycons.size(), jc.serial, dev->path);
 	//errno = 0;
 	jc.handle = hid_open_path(dev->path);
 	// set non-blocking:
@@ -183,7 +185,7 @@ void found_joycon(struct hid_device_info *dev) {
 
 
 	if (jc.handle == nullptr) {
-		printf("Could not open serial %ls: %s\n", joycons[i].serial, strerror(errno));
+		printf("Could not open serial %ls: %s\n", jc.serial, strerror(errno));
 		throw;
 	}
 
@@ -1003,7 +1005,7 @@ void updatevJoyDevice(Joycon *jc) {
 			//btns = (jc->buttons << 16) | (iReport.lButtons & 0xFF);
 			//btns = ((jc->buttons) << 16) | (iReport.lButtons & 0xFF);
 
-			unsigned r = createMask(0, 16);// 15
+			unsigned r = createMask(0, 15);// 15
 			btns = ((jc->buttons) << 16) | (r & iReport.lButtons);
 			//std::bitset<32> x(btns);
 			//std::cout << x;
@@ -1079,9 +1081,12 @@ int main(int argc, char *argv[]) {
 	int res;
 	int i;
 	unsigned char buf[65];
-	#define MAX_STR 255
-	wchar_t wstr[MAX_STR];
-	bool usingGrip = false;
+	unsigned char buf2[65];
+
+	int read;	// number of bytes read
+	int written;// number of bytes written
+
+
 	const char *device_name;
 	
 
@@ -1097,8 +1102,6 @@ int main(int argc, char *argv[]) {
 
 
 init_start:
-
-	usingGrip = false;
 
 	devs = hid_enumerate(JOYCON_VENDOR, 0x0);
 	cur_dev = devs;
@@ -1123,7 +1126,7 @@ init_start:
 
 			// charging grip:
 			if (cur_dev->product_id == JOYCON_CHARGING_GRIP) {
-				usingGrip = true;
+				settings.usingGrip = true;
 				settings.combineJoyCons = true;
 				found_joycon(cur_dev);
 			}
@@ -1134,7 +1137,14 @@ init_start:
 	}
 	hid_free_enumeration(devs);
 
-	if (usingGrip) {
+
+	settings.combineJoyCons = true;
+	settings.autoCenterSticks = true;
+
+
+
+	// init joycons:
+	if (settings.usingGrip) {
 		for (int i = 0; i < joycons.size(); ++i) {
 			joycon_init(&joycons[i]);
 		}
@@ -1144,11 +1154,10 @@ init_start:
 		}
 	}
 
-	Joycon *jc;
-
 
 	parseSettings(argc, argv);
 
+	
 
 	
 	// do first poll to get stick data:
@@ -1160,7 +1169,7 @@ init_start:
 				continue;
 			}
 
-			if (usingGrip) {
+			if (settings.usingGrip) {
 				memset(buf, 0, 65);
 				buf[0] = 0x80; // 80     Do custom command
 				buf[1] = 0x92; // 92     Post-handshake type command
@@ -1185,14 +1194,9 @@ init_start:
 			res = hid_read(jc->handle, buf, 65);// returns length of actual bytes read
 
 			// set to be blocking:
-			//hid_set_nonblocking(jc->handle, 0);
+			hid_set_nonblocking(jc->handle, 0);
 
-
-
-			if (res > 0) {
-				// handle input data
-				handle_input(jc, buf, res);
-			}
+			handle_input(jc, buf, res);
 
 			updatevJoyDevice(jc);
 		}
@@ -1204,9 +1208,6 @@ init_start:
 	if (settings.autoCenterSticks) {
 		for (int i = 0; i < joycons.size(); ++i) {
 			Joycon *jc = &joycons[i];
-
-			//jc->stick.horizontal = 0;
-			//jc->stick.vertical = 0;
 
 			// left joycon:
 			if (jc->left_right == 1) {
@@ -1220,18 +1221,23 @@ init_start:
 			} else if (jc->left_right == 2) {
 
 				int x = (settings.rightJoyConXMultiplier * (jc->stick.horizontal));
-				settings.leftJoyConXOffset = -x + (16384);
+				settings.rightJoyConXOffset = -x + (16384);
 
 				int y = (settings.rightJoyConYMultiplier * (jc->stick.vertical));
-				settings.leftJoyConYOffset = -y + (16384);
+				settings.rightJoyConYOffset = -y + (16384);
 			}
 
 
 		}
 	}
 
+	int missedPollCount = 0;
+	
 
 	while(true) {
+
+		//auto start = std::chrono::steady_clock::now();
+		//std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
 
 
 		#ifdef VIBRATION_TEST
@@ -1280,7 +1286,7 @@ init_start:
 			updatevJoyDevice(jc);
 
 
-			if (usingGrip) {
+			if (settings.usingGrip) {
 				memset(buf, 0, 65);
 				buf[0] = 0x80; // 80     Do custom command
 				buf[1] = 0x92; // 92     Post-handshake type command
@@ -1299,23 +1305,32 @@ init_start:
 			hid_set_nonblocking(jc->handle, 1);
 
 			// send data:
-			hid_write(jc->handle, buf, 9);
+			written = hid_write(jc->handle, buf, 9);
+			//printf("%d bytes written.\n", written);
 
 			// read response:
-			res = hid_read(jc->handle, buf, 65);// returns length of actual bytes read
+			read = hid_read(jc->handle, buf, 65);// returns length of actual bytes read
+			//printf("%d bytes read.\n", res);
 
 			// set to be blocking:
 			hid_set_nonblocking(jc->handle, 0);
-			
-			if (res > 0) {
+
+			if (read == 0) {
+				//missedPollCount += 1;
+
+			} else if (read > 0) {
 				// handle input data
 				handle_input(jc, buf, res);	
 				//printf("%d\n", res);
 			} else if (res < 0) {
 				printf("Unable to read from joycon %i, disconnecting\n", i);
-				jc->handle = 0;
-				jc->left_right = 0;
+				goto init_start;
 				continue;
+			}
+
+			if (missedPollCount > 100) {
+				printf("Connection not stable, retrying\n", i);
+				goto init_start;
 			}
 
 		}
@@ -1324,6 +1339,13 @@ init_start:
 		// sleep:
 		//Sleep(10);
 		Sleep(1);
+
+
+		//auto end = std::chrono::steady_clock::now();
+		//std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
+
+		//printf("time: %d\n", duration);
 
 		//if (disconnect) {
 		//	printf("DISCONNECTED\n");
