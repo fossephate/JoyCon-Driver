@@ -22,13 +22,13 @@ c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\mai
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1124): warning C4018: '<': signed/unsigned mismatch
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1137): warning C4018: '<': signed/unsigned mismatch
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1181): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1364): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1076): warning C4102: 'init_start': unreferenced label
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1288): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1370): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1342): warning C4474: 'printf' : too many arguments passed for format string
+  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1342): note: placeholders and their parameters expect 0 variadic arguments, but 1 were provided
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1062): warning C4101: 'device_name': unreferenced local variable
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1056): warning C4101: 'buf2': unreferenced local variable
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1054): warning C4101: 'i': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1059): warning C4101: 'written': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1058): warning C4101: 'read': unreferenced local variable
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(859): warning C4715: 'acquirevJoyDevice': not all control paths return a value
   joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Debug\joycon-driver.exe
   joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Debug\joycon-driver.pdb (Partial PDB)
