@@ -504,11 +504,11 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		//hex_dump(packet, len-20);
 	}
 
-	//if (packet[5] == 0x31/*49*/) {
-	//	if (jc->left_right == 2) {
-	//		hex_dump(packet, len - 30);
-	//	}
-	//}
+	if (packet[5] == 0x31/*49*/) {
+		if (jc->left_right == 2) {
+			//hex_dump(packet, len - 30);
+		}
+	}
 
 	//printf("\n");
 
@@ -519,7 +519,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 	// buf[0] = 0x01
 	// buf[10] = 0x03
 	//if (packet[0] == 0x30/*48*/) {
-		hex_dump(packet, len);
+		//hex_dump(packet, len);
 	//}
 
 
