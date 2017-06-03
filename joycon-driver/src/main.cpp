@@ -103,6 +103,8 @@ std::vector<Joycon> joycons;
 
 JOYSTICK_POSITION_V2 iReport; // The structure that holds the full position data
 bool disconnect = false;
+bool bluetooth = true;
+uint8_t global_count = 0;
 
 
 struct Settings {
@@ -303,6 +305,9 @@ void hid_exchange(hid_device *handle, unsigned char *buf, int len) {
 		printf("%d bytes written.\n", res);
 	}
 
+	//// set non-blocking:
+	//hid_set_nonblocking(handle, 1);
+
 	//res = hid_read(handle, buf, 0x41);
 	res = hid_read(handle, buf, 0x40);
 
@@ -311,6 +316,7 @@ void hid_exchange(hid_device *handle, unsigned char *buf, int len) {
 	} else {
 		printf("%d bytes read.\n", res);
 	}
+
 #ifdef DEBUG_PRINT
 	hex_dump(buf, 0x40);
 #endif
@@ -321,8 +327,7 @@ void hid_exchange(hid_device *handle, unsigned char *buf, int len) {
 
 
 
-void hid_dual_write(hid_device *handle_l, hid_device *handle_r, unsigned char *buf_l, unsigned char *buf_r, int len)
-{
+void hid_dual_write(hid_device *handle_l, hid_device *handle_r, unsigned char *buf_l, unsigned char *buf_r, int len) {
 	int res;
 
 	if (handle_l && buf_l) {
@@ -590,13 +595,62 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 
 
-int joycon_init(hid_device *handle, const char *name) {
+
+
+
+
+
+
+
+void joycon_send_command(hid_device *handle, int command, uint8_t *data, int len) {
+	unsigned char buf[0x400];
+	memset(buf, 0, 0x400);
+
+	if (!bluetooth) {
+		buf[0x00] = 0x80;
+		buf[0x01] = 0x92;
+		buf[0x03] = 0x31;
+	}
+
+	buf[bluetooth ? 0x0 : 0x8] = command;
+	if (data != nullptr && len != 0) {
+		memcpy(buf + (bluetooth ? 0x1 : 0x9), data, len);
+	}
+
+	hid_exchange(handle, buf, len + (bluetooth ? 0x1 : 0x9));
+
+	if (data) {
+		memcpy(data, buf, 0x40);
+	}
+}
+
+void joycon_send_subcommand(hid_device *handle, int command, int subcommand, uint8_t *data, int len) {
+	unsigned char buf[0x400];
+	memset(buf, 0, 0x400);
+
+	uint8_t rumble_base[9] = { (++global_count) & 0xF, 0x00, 0x01, 0x40, 0x40, 0x00, 0x01, 0x40, 0x40 };
+	memcpy(buf, rumble_base, 9);
+
+	buf[9] = subcommand;
+	if (data && len != 0) {
+		memcpy(buf + 10, data, len);
+	}
+
+	joycon_send_command(handle, command, buf, 10 + len);
+
+	if (data) {
+		memcpy(data, buf, 0x40); //TODO
+	}
+}
+
+
+void joycon_init_usb(Joycon *jc) {
 	unsigned char buf[0x40];
 	memset(buf, 0, 0x40);
 
 
 	// USB:
-	//80 01 (Handled elsewhere ? Returns MAC packet)
+	//	80 01 (Handled elsewhere ? Returns MAC packet)
 	//	80 02 (Do two handshakes 19 01 03 07 00 91 10 00, 19 01 03 0B 00 91 12 04)
 	//	80 03 (Do baud switch)
 	//	80 04 (Set something to 1)
@@ -609,7 +663,7 @@ int joycon_init(hid_device *handle, const char *name) {
 
 	// set blocking:
 	// this insures we get the MAC Address
-	hid_set_nonblocking(handle, 0);
+	hid_set_nonblocking(jc->handle, 0);
 
 	// USB:
 
@@ -618,55 +672,41 @@ int joycon_init(hid_device *handle, const char *name) {
 	memset(buf, 0x00, 0x40);
 	buf[0] = 0x80;
 	buf[1] = 0x01;
-	hid_exchange(handle, buf, 0x2);
+	hid_exchange(jc->handle, buf, 0x2);
 
 	if (buf[2] == 0x3) {
-		printf("%s disconnected!\n", name);
-		return -1;
+		printf("%s disconnected!\n", jc->name.c_str());
 	} else {
-		printf("Found %s, MAC: %02x:%02x:%02x:%02x:%02x:%02x\n", name, buf[9], buf[8], buf[7], buf[6], buf[5], buf[4]);
+		printf("Found %s, MAC: %02x:%02x:%02x:%02x:%02x:%02x\n", jc->name.c_str(), buf[9], buf[8], buf[7], buf[6], buf[5], buf[4]);
 	}
 
-	// set non-blocking:
-	//hid_set_nonblocking(handle, 1);
-
-	//Do handshaking
-	//for (int j = 0; j < 2; ++j) {
-		printf("Doing handshake...\n");
-		memset(buf, 0x00, 0x40);
-		buf[0] = 0x80;
-		buf[1] = 0x02;
-		hid_exchange(handle, buf, 0x2);
-	//}
-
-	//#ifndef VIBRATION_TEST
+	// Do handshaking
+	printf("Doing handshake...\n");
+	memset(buf, 0x00, 0x40);
+	buf[0] = 0x80;
+	buf[1] = 0x02;
+	hid_exchange(jc->handle, buf, 0x2);
 
 	// Switch baudrate to 3Mbit
 	printf("Switching baudrate...\n");
 	memset(buf, 0x00, 0x40);
 	buf[0] = 0x80;
 	buf[1] = 0x03;
-	hid_exchange(handle, buf, 0x2);
+	hid_exchange(jc->handle, buf, 0x2);
 
 	//Do handshaking again at new baudrate so the firmware pulls pin 3 low?
 	printf("Doing handshake...\n");
 	memset(buf, 0x00, 0x40);
 	buf[0] = 0x80;
 	buf[1] = 0x02;
-	hid_exchange(handle, buf, 0x2);
-
-	// set non-blocking:
-	//hid_set_nonblocking(handle, 1);
+	hid_exchange(jc->handle, buf, 0x2);
 
 	//Only talk HID from now on
 	printf("Only talk HID:\n");
 	memset(buf, 0x00, 0x40);
 	buf[0] = 0x80;
 	buf[1] = 0x04;
-	hid_exchange(handle, buf, 0x2);
-
-	//#endif
-
+	hid_exchange(jc->handle, buf, 0x2);
 
 	
 	// Enable vibration
@@ -680,7 +720,7 @@ int joycon_init(hid_device *handle, const char *name) {
 	buf[0x08] = 0x01; // Extended command set
 	buf[0x12] = 0x48; // Command ID 0x48
 	buf[0x13] = 0x01; // Enabled
-	hid_exchange(handle, buf, 0x40);
+	hid_exchange(jc->handle, buf, 0x40);
 
 	
 	// Enable IMU data
@@ -694,100 +734,32 @@ int joycon_init(hid_device *handle, const char *name) {
 	buf[0x08] = 0x01; // Extended command set
 	buf[0x12] = 0x40; // Command ID 0x40
 	buf[0x13] = 0x01; // Enabled
-	hid_exchange(handle, buf, 0x40);
+	hid_exchange(jc->handle, buf, 0x40);
 
 	printf("Done.\n");
-
-	return 0;
-}
-
-int joycon_init(Joycon *jc) {
-	int i = joycon_init(jc->handle, jc->name.c_str());
-	return i;
 }
 
 
 
 int joycon_init_bt(hid_device *handle, const char *name) {
 
-	//unsigned char buf[0x40];
-	//memset(buf, 0, 0x40);
+	unsigned char buf[0x400];
+	memset(buf, 0, 0x400);
 
-	//unsigned char buf2[0x40];
-	//unsigned char buf3[0x40];
-	//memset(buf2, 0, 0x40);
-	//memset(buf3, 0, 0x40);
+	// set non-blocking:
+	hid_set_nonblocking(handle, 1);
 
-	//// BT:
-	//// 0x06 on byte 10 causes a disconnect
-	//// 0x03 on byte 10 gets some wierd response that doesn't stop until the joycon disconnects
-	//// 0x10, 0x11, and 0x12 on byte 0 don't produce an error
+	// Enable vibration
+	memset(buf, 0x00, 0x400);
+	buf[0] = 0x01; // Enabled
+	joycon_send_subcommand(handle, 0x1, 0x48, buf, 1);
 
+	// Enable IMU data
+	memset(buf, 0x00, 0x400);
+	buf[0] = 0x01; // Enabled
+	joycon_send_subcommand(handle, 0x1, 0x40, buf, 1);
 
-	//// BT testing:
-
-	//int res;
-
-	//// set non-blocking:
-	//hid_set_nonblocking(handle, 1);
-
-	//// set blocking:
-	////hid_set_nonblocking(handle, 0);
-
-	//for (int j = 0; j < 1000; ++j) {
-
-	//	//for (int i = 0x10; i < 0x13; ++i) {
-
-	//		//printf("Sending BT test data...\n");
-	//		memset(buf, 0x00, 0x40);
-	//		buf[0] = 0x01;
-	//		//buf[10] = 0x03;
-	//		//buf[0] = i;
-	//		//buf[1] = 0x0;
-	//		//buf[2] = 0x1;
-	//		buf[1] = (int)(rand0t1() * 100);
-	//		buf[2] = (int)(rand0t1() * 100);
-	//		buf[3] = (int)(rand0t1() * 100);
-	//		buf[4] = (int)(rand0t1() * 100);
-	//		buf[5] = (int)(rand0t1() * 100);
-	//		buf[6] = (int)(rand0t1() * 100);
-	//		buf[7] = (int)(rand0t1() * 100);
-	//		buf[8] = (int)(rand0t1() * 100);
-	//		buf[9] = (int)(rand0t1() * 100);
-	//		//buf[10] = (int)(rand0t1() * 10);
-	//		//hid_exchange(handle, buf, 12);
-
-	//		int written = 0;
-	//		int read = 0;
-
-
-	//		written = hid_write(handle, buf, 12);
-	//		//printf("%d bytes written.\n", res);
-
-
-	//		//printf("I: 0x%02x\n", i);
-
-	//		printf("%d bytes written.\n", written);
-
-	//		for (int j = 0; j < 64; j++) {
-	//			buf2[j] = buf[j];
-	//		}
-
-	//		
-
-	//		read = hid_read(handle, buf, 0x40);
-	//		printf("%d bytes read.\n", read);
-
-	//		// print test data:
-	//		hex_dump(buf2, 40);
-
-
-	//		// print response to test data:
-	//		hex_dump(buf, 40);
-
-	//	//}
-
-	//}
+	printf("Successfully initialized %ls!\n", name);
 
 	return 0;
 }
@@ -1146,7 +1118,7 @@ init_start:
 	// init joycons:
 	if (settings.usingGrip) {
 		for (int i = 0; i < joycons.size(); ++i) {
-			joycon_init(&joycons[i]);
+			joycon_init_usb(&joycons[i]);
 		}
 	} else {
 		for (int i = 0; i < joycons.size(); ++i) {
@@ -1240,100 +1212,132 @@ init_start:
 		//std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
 
 
-		#ifdef VIBRATION_TEST
+		//#ifdef VIBRATION_TEST
+		//for (int l = 0x10; l < 0x20; l++) {
+		//	for (int i = 0; i < 8; i++) {
+		//		for (int k = 0; k < 256; k++) {
+		//			memset(buf, 0, 0x40);
+		//			buf[0] = 0x80;
+		//			buf[1] = 0x92;
+		//			buf[2] = 0x0;
+		//			buf[3] = 0xa;
+		//			buf[4] = 0x0;
+		//			buf[5] = 0x0;
+		//			buf[8] = 0x10;
+		//			for (int j = 0; j <= 8; j++) {
+		//				buf[10 /*+ i*/] = 0x1;//(i + j) & 0xFF;
+		//			}
+
+		//			// Set frequency to increase
+		//			buf[10 + 0] = k;
+		//			buf[10 + 4] = k;
+
+		//			//if (buf[1]) {
+		//			//	memcpy(buf[1], buf[0], 0x40);
+		//			//}
+
+		//			hid_dual_exchange(joycons[0].handle, joycons[1].handle, buf, buf, 0x40);
+		//			printf("Sent %x %x %u\n", i & 0xFF, l, k);
+		//		}
+		//	}
+		//}
+
+		Joycon *jc = &joycons[0];
+
 		for (int l = 0x10; l < 0x20; l++) {
-			for (int i = 0; i < 8; i++) {
+			for (int i = 1; i < 8; i++) {
 				for (int k = 0; k < 256; k++) {
 					memset(buf, 0, 0x40);
-					buf[0] = 0x80;
-					buf[1] = 0x92;
-					buf[2] = 0x0;
-					buf[3] = 0xa;
-					buf[4] = 0x0;
-					buf[5] = 0x0;
-					buf[8] = 0x10;
 					for (int j = 0; j <= 8; j++) {
-						buf[10 /*+ i*/] = 0x1;//(i + j) & 0xFF;
+						buf[1 + i] = 0x1;//(i + j) & 0xFF;
 					}
 
 					// Set frequency to increase
-					buf[10 + 0] = k;
-					buf[10 + 4] = k;
+					buf[1 + 0] = k;
+					buf[1 + 4] = k;
 
-					//if (buf[1]) {
-					//	memcpy(buf[1], buf[0], 0x40);
+					//if (buf) {
+					//	memcpy(buf[1], buf[0], 0x400);
 					//}
 
-					hid_dual_exchange(joycons[0].handle, joycons[1].handle, buf, buf, 0x40);
+					// set non-blocking:
+					//hid_set_nonblocking(jc->handle, 1);
+					
+					joycon_send_command(jc->handle, 0x10, (uint8_t*)buf, 0x9);
+
+					//joycon_send_command(handle_r, 0x10, (uint8_t*)buf, 0x9);
 					printf("Sent %x %x %u\n", i & 0xFF, l, k);
+
+					//Sleep(15);
 				}
 			}
 		}
-		#endif
+
+		//#endif
 
 
 
 		// input poll loop:
 
-		for (int i = 0; i < joycons.size(); ++i) {
+		//for (int i = 0; i < joycons.size(); ++i) {
 
-			Joycon *jc = &joycons[i];
+		//	Joycon *jc = &joycons[i];
 
-			if (!jc->handle) {
-				continue;
-			}
+		//	if (!jc->handle) {
+		//		continue;
+		//	}
 
-			updatevJoyDevice(jc);
-
-
-			if (settings.usingGrip) {
-				memset(buf, 0, 65);
-				buf[0] = 0x80; // 80     Do custom command
-				buf[1] = 0x92; // 92     Post-handshake type command
-				buf[2] = 0x00; // 0001   u16 second part size
-				buf[3] = 0x01;
-				buf[8] = 0x1F; // 1F     Get input command
-			} else {
-				buf[0] = 0x1;// HID get input
-				buf[1] = 0x0;
-				buf[2] = 0x0;
-			}
-			
+		//	updatevJoyDevice(jc);
 
 
-			// set to be non-blocking:
-			hid_set_nonblocking(jc->handle, 1);
+		//	if (settings.usingGrip) {
+		//		memset(buf, 0, 65);
+		//		buf[0] = 0x80; // 80     Do custom command
+		//		buf[1] = 0x92; // 92     Post-handshake type command
+		//		buf[2] = 0x00; // 0001   u16 second part size
+		//		buf[3] = 0x01;
+		//		buf[8] = 0x1F; // 1F     Get input command
+		//	} else {
+		//		buf[0] = 0x1;// HID get input
+		//		buf[1] = 0x0;
+		//		buf[2] = 0x0;
+		//	}
+		//	
 
-			// send data:
-			written = hid_write(jc->handle, buf, 9);
-			//printf("%d bytes written.\n", written);
 
-			// read response:
-			read = hid_read(jc->handle, buf, 65);// returns length of actual bytes read
-			//printf("%d bytes read.\n", res);
+		//	// set to be non-blocking:
+		//	hid_set_nonblocking(jc->handle, 1);
 
-			// set to be blocking:
-			hid_set_nonblocking(jc->handle, 0);
+		//	// send data:
+		//	written = hid_write(jc->handle, buf, 9);
+		//	//printf("%d bytes written.\n", written);
 
-			if (read == 0) {
-				//missedPollCount += 1;
+		//	// read response:
+		//	read = hid_read(jc->handle, buf, 65);// returns length of actual bytes read
+		//	//printf("%d bytes read.\n", res);
 
-			} else if (read > 0) {
-				// handle input data
-				handle_input(jc, buf, res);	
-				//printf("%d\n", res);
-			} else if (res < 0) {
-				printf("Unable to read from joycon %i, disconnecting\n", i);
-				goto init_start;
-				continue;
-			}
+		//	// set to be blocking:
+		//	//hid_set_nonblocking(jc->handle, 0);
 
-			if (missedPollCount > 100) {
-				printf("Connection not stable, retrying\n", i);
-				goto init_start;
-			}
+		//	if (read == 0) {
+		//		//missedPollCount += 1;
 
-		}
+		//	} else if (read > 0) {
+		//		// handle input data
+		//		handle_input(jc, buf, res);	
+		//		//printf("%d\n", res);
+		//	} else if (res < 0) {
+		//		printf("Unable to read from joycon %i, disconnecting\n", i);
+		//		goto init_start;
+		//		continue;
+		//	}
+
+		//	if (missedPollCount > 100) {
+		//		printf("Connection not stable, retrying\n", i);
+		//		goto init_start;
+		//	}
+
+		//}
 
 
 		// sleep:
