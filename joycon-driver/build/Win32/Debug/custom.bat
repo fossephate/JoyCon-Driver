@@ -1,0 +1,1 @@
+start joycon-driver.exe

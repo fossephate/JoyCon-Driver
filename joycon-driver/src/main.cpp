@@ -917,17 +917,15 @@ void updatevJoyDevice(Joycon *jc) {
 	id = (BYTE)DevID;
 	iReport.bDevice = id;
 
-	if (reverseX) {
-		leftJoyConXMultiplier *= -1;
-		rightJoyConXMultiplier *= -1;
-	}
-	if (reverseY) {
-		leftJoyConYMultiplier *= -1;
-		rightJoyConYMultiplier *= -1;
-	}
 
-
-
+	//if (reverseX) {
+	//	leftJoyConXMultiplier *= -1;
+	//	rightJoyConXMultiplier *= -1;
+	//}
+	//if (reverseY) {
+	//	leftJoyConYMultiplier *= -1;
+	//	rightJoyConYMultiplier *= -1;
+	//}
 
 
 	// Set Stick data
@@ -953,6 +951,13 @@ void updatevJoyDevice(Joycon *jc) {
 			rx = rightJoyConXMultiplier * (jc->stick.horizontal) + rightJoyConXOffset;
 			ry = rightJoyConYMultiplier * (jc->stick.vertical) + rightJoyConYOffset;
 		}
+	}
+
+	if (reverseX) {
+		x *= -1;
+	}
+	if (reverseY) {
+		y *= -1;
 	}
 
 	// both left and right joycons
@@ -1118,10 +1123,6 @@ init_start:
 		cur_dev = cur_dev->next;
 	}
 	hid_free_enumeration(devs);
-
-
-	settings.combineJoyCons = true;
-	settings.autoCenterSticks = true;
 
 
 
