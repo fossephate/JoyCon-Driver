@@ -1148,7 +1148,7 @@ init_start:
 
 	
 		// do a few polls to get stick data:
-		for (int j = 0; j < 3; ++j) {
+		for (int j = 0; j < 5; ++j) {
 			for (int i = 0; i < joycons.size(); ++i) {
 
 				Joycon *jc = &joycons[i];
@@ -1379,7 +1379,7 @@ init_start:
 			}
 
 			if (missedPollCount > 2000) {
-				printf("Connection not stable, retrying\n", i);
+				//printf("Connection not stable, retrying\n", i);
 				missedPollCount = 0;
 				//goto init_start;
 			}

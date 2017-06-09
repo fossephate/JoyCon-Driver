@@ -8,8 +8,6 @@ c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\mai
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1195): warning C4018: '<': signed/unsigned mismatch
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1330): warning C4018: '<': signed/unsigned mismatch
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1414): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1382): warning C4474: 'printf' : too many arguments passed for format string
-  c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1382): note: placeholders and their parameters expect 0 variadic arguments, but 1 were provided
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1085): warning C4102: 'init_start': unreferenced label
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1071): warning C4101: 'device_name': unreferenced local variable
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1065): warning C4101: 'buf2': unreferenced local variable
