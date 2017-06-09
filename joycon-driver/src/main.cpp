@@ -102,22 +102,22 @@ struct Joycon {
 std::vector<Joycon> joycons;
 
 JOYSTICK_POSITION_V2 iReport; // The structure that holds the full position data
-bool disconnect = false;
-bool bluetooth = true;
+//bool disconnect = false;
+//bool bluetooth = true;
 uint8_t global_count = 0;
 
 
 struct Settings {
-	// todo: calibration mode of some kind
 
 	// there appears to be a good amount of variance between JoyCons,
-	// but they work great once you find the right offsets
+	// but they work well once you find the right offsets
 	// these are the values that worked well for my JoyCons:
-	int leftJoyConXOffset = 16384;// 16000;
-	int leftJoyConYOffset = 16384;// 13000;
+	// alternatively just use --auto-center, it overrides these settings
+	int leftJoyConXOffset = 16000;
+	int leftJoyConYOffset = 13000;
 
-	int rightJoyConXOffset = 16384;// 15000;
-	int rightJoyConYOffset = 16384;// 19000;
+	int rightJoyConXOffset = 15000;
+	int rightJoyConYOffset = 19000;
 
 	// multipliers to go from the range (-128,128) to (-32768, 32768)
 	// These shouldn't need to be changed too much, but the option is there
@@ -128,20 +128,24 @@ struct Settings {
 	int rightJoyConYMultiplier = 240;
 
 	// Enabling this combines both JoyCons to a single vJoy Device(#1)
-	// if left disabled:
+	// when combineJoyCons == false:
 	// JoyCon(L) is mapped to vJoy Device #1
 	// JoyCon(R) is mapped to vJoy Device #2
-	bool combineJoyCons = false;// false
+	// when combineJoyCons == true:
+	// JoyCon(L) and JoyCon(R) are mapped to vJoy Device #1
+	bool combineJoyCons = false;
 
-	bool reverseX = false;// reverses joystick x
-	bool reverseY = false;// reverses joystick y
+	bool reverseX = false;// reverses joystick x (both sticks)
+	bool reverseY = false;// reverses joystick y (both sticks)
 
-	// attempt to automatically center sticks
+	// Automatically center sticks
 	// works by getting joystick position at start
-	// and assumes that to be 0, and calculates offset accordingly
+	// and assumes that to be (0,0), and uses that to calculate the offsets
 	bool autoCenterSticks = false;
 
 	bool usingGrip = false;
+	bool usingBluetooth = false;
+	bool disconnect = false;
 
 } settings;
 
@@ -334,7 +338,7 @@ void hid_dual_write(hid_device *handle_l, hid_device *handle_r, unsigned char *b
 		hid_set_nonblocking(handle_l, 1);
 		res = hid_write(handle_l, buf_l, len);
 		if (res < 0) {
-			disconnect = true;
+			settings.disconnect = true;
 			return;
 		}
 
@@ -345,7 +349,7 @@ void hid_dual_write(hid_device *handle_l, hid_device *handle_r, unsigned char *b
 		hid_set_nonblocking(handle_r, 1);
 		res = hid_write(handle_r, buf_r, len);
 		if (res < 0) {
-			disconnect = true;
+			settings.disconnect = true;
 
 			//throw;
 			return;
@@ -510,6 +514,10 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		}
 	}
 
+	//if (jc->stick.horizontal < -50) {
+	//	printf("TEST%d\n", rand0t1()*100);
+	//}
+
 	//printf("\n");
 
 	//hex_dump_0(packet, len);
@@ -606,18 +614,18 @@ void joycon_send_command(hid_device *handle, int command, uint8_t *data, int len
 	unsigned char buf[0x400];
 	memset(buf, 0, 0x400);
 
-	if (!bluetooth) {
+	if (!settings.usingBluetooth) {
 		buf[0x00] = 0x80;
 		buf[0x01] = 0x92;
 		buf[0x03] = 0x31;
 	}
 
-	buf[bluetooth ? 0x0 : 0x8] = command;
+	buf[settings.usingBluetooth ? 0x0 : 0x8] = command;
 	if (data != nullptr && len != 0) {
-		memcpy(buf + (bluetooth ? 0x1 : 0x9), data, len);
+		memcpy(buf + (settings.usingBluetooth ? 0x1 : 0x9), data, len);
 	}
 
-	hid_exchange(handle, buf, len + (bluetooth ? 0x1 : 0x9));
+	hid_exchange(handle, buf, len + (settings.usingBluetooth ? 0x1 : 0x9));
 
 	if (data) {
 		memcpy(data, buf, 0x40);
@@ -680,6 +688,9 @@ void joycon_init_usb(Joycon *jc) {
 		printf("Found %s, MAC: %02x:%02x:%02x:%02x:%02x:%02x\n", jc->name.c_str(), buf[9], buf[8], buf[7], buf[6], buf[5], buf[4]);
 	}
 
+	// set non-blocking:
+	//hid_set_nonblocking(jc->handle, 1);
+
 	// Do handshaking
 	printf("Doing handshake...\n");
 	memset(buf, 0x00, 0x40);
@@ -709,19 +720,16 @@ void joycon_init_usb(Joycon *jc) {
 	hid_exchange(jc->handle, buf, 0x2);
 
 	// Enable vibration
+	printf("Enabling vibration:\n");
 	memset(buf, 0x00, 0x400);
 	buf[0] = 0x01; // Enabled
 	joycon_send_subcommand(jc->handle, 0x1, 0x48, buf, 1);
 
 	// Enable IMU data
+	printf("Enabling IMU data:\n");
 	memset(buf, 0x00, 0x400);
 	buf[0] = 0x01; // Enabled
 	joycon_send_subcommand(jc->handle, 0x1, 0x40, buf, 1);
-
-	// 60hz?
-	memset(buf, 0x00, 0x400);
-	buf[0] = 0x01; // Enabled
-	joycon_send_subcommand(jc->handle, 0x1, 0x03, buf, 1);
 
 	printf("Successfully initialized %s!\n", jc->name.c_str());
 }
@@ -744,23 +752,29 @@ int joycon_init_bt(Joycon *jc) {
 	// Enable IMU data
 	memset(buf, 0x00, 0x400);
 	buf[0] = 0x01; // Enabled
-	joycon_send_subcommand(jc->handle, 0x1, 0x40, buf, 1);
+	joycon_send_subcommand(jc->handle, 0x01, 0x40, buf, 1);
+
+
+	// start polling at 60hz?
+	memset(buf, 0x00, 0x400);
+	buf[0] = 0x01; // Enabled
+	//									cmd subcmd
+	joycon_send_subcommand(jc->handle, 0x01, 0x03, buf, 1);
 
 	printf("Successfully initialized %s!\n", jc->name.c_str());
 
 	return 0;
 }
 
-void joycon_deinit(hid_device *handle/*, const wchar_t *name*/) {
+void joycon_deinit(Joycon *jc) {
 	unsigned char buf[0x40];
 	memset(buf, 0x00, 0x40);
 
 	//Let the Joy-Con talk BT again    
 	buf[0] = 0x80;
 	buf[1] = 0x05;
-	hid_exchange(handle, buf, 0x2);
-	//printf("Deinitialized %ls\n", name);
-	printf("Deinitialized Joycon\n");
+	hid_exchange(jc->handle, buf, 0x2);
+	printf("Deinitialized %s\n", jc->name.c_str());
 }
 
 
@@ -802,7 +816,8 @@ int acquirevJoyDevice(int deviceID) {
 		throw;
 		//goto Exit;
 	} else {
-		wprintf(L"Vendor: %s\nProduct :%s\nVersion Number:%s\n", static_cast<TCHAR *> (GetvJoyManufacturerString()), static_cast<TCHAR *>(GetvJoyProductString()), static_cast<TCHAR *>(GetvJoySerialNumberString()));
+		//wprintf(L"Vendor: %s\nProduct :%s\nVersion Number:%s\n", static_cast<TCHAR *> (GetvJoyManufacturerString()), static_cast<TCHAR *>(GetvJoyProductString()), static_cast<TCHAR *>(GetvJoySerialNumberString()));
+		//wprintf(L"Product :%s\n", static_cast<TCHAR *>(GetvJoyProductString()));
 	};
 
 	// Get the status of the vJoy device before trying to acquire it
@@ -1079,6 +1094,7 @@ init_start:
 			// charging grip:
 			if (cur_dev->product_id == JOYCON_CHARGING_GRIP) {
 				settings.usingGrip = true;
+				settings.usingBluetooth = true;
 				settings.combineJoyCons = true;
 				found_joycon(cur_dev);
 			}
@@ -1114,9 +1130,11 @@ init_start:
 	// use stick data to calibrate:
 	if (settings.autoCenterSticks) {
 
+		printf("Auto centering sticks...\n");
+
 	
 		// do first poll to get stick data:
-		for (int j = 0; j < 1; ++j) {
+		for (int j = 0; j < 3; ++j) {
 			for (int i = 0; i < joycons.size(); ++i) {
 
 				Joycon *jc = &joycons[i];
@@ -1183,6 +1201,9 @@ init_start:
 
 
 		}
+
+
+		printf("Done centering sticks.\n");
 	}
 
 	int missedPollCount = 0;
@@ -1310,21 +1331,18 @@ init_start:
 
 
 			if (read == 0) {
-				//missedPollCount += 1;
+				missedPollCount += 1;
 
 			} else if (read > 0) {
 				// handle input data
 				handle_input(jc, buf, res);	
 				//printf("%d\n", res);
-			} else if (res < 0) {
-				printf("Unable to read from joycon %i, disconnecting\n", i);
-				goto init_start;
-				continue;
 			}
 
-			if (missedPollCount > 100) {
+			if (missedPollCount > 2000) {
 				printf("Connection not stable, retrying\n", i);
-				goto init_start;
+				missedPollCount = 0;
+				//goto init_start;
 			}
 
 
@@ -1334,7 +1352,7 @@ init_start:
 
 
 		// sleep:
-		//Sleep(10);
+		//Sleep(5);
 		Sleep(1);
 
 
@@ -1355,7 +1373,7 @@ init_start:
 
 
 	for (int i = 0; i < joycons.size(); ++i) {
-		joycon_deinit(joycons[i].handle);
+		joycon_deinit(&joycons[i]);
 	}
 
 	// Finalize the hidapi library

@@ -42,6 +42,7 @@ These are the default settings:
 // there appears to be a good amount of variance between JoyCons,
 // but they work well once you find the right offsets
 // these are the values that worked well for my JoyCons:
+// alternatively just use --auto-center, it overrides these settings
 int leftJoyConXOffset = 16000;
 int leftJoyConYOffset = 13000;
 
@@ -57,17 +58,19 @@ int rightJoyConXMultiplier = 240;
 int rightJoyConYMultiplier = 240;
 
 // Enabling this combines both JoyCons to a single vJoy Device(#1)
-// if left disabled:
+// when combineJoyCons == false:
 // JoyCon(L) is mapped to vJoy Device #1
 // JoyCon(R) is mapped to vJoy Device #2
+// when combineJoyCons == true:
+// JoyCon(L) and JoyCon(R) are mapped to vJoy Device #1
 bool combineJoyCons = false;
 
-bool reverseX = false;// reverses joystick x
-bool reverseY = false;// reverses joystick y
+bool reverseX = false;// reverses joystick x (both sticks)
+bool reverseY = false;// reverses joystick y (both sticks)
 
-// attempt to automatically center sticks
+// Automatically center sticks
 // works by getting joystick position at start
-// and assumes that to be 0, and calculates offset accordingly
+// and assumes that to be (0,0), and uses that to calculate the offsets
 bool autoCenterSticks = false;
 
 ```
