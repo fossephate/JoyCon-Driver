@@ -1,1 +1,1 @@
-start joycon-driver.exe
+start joycon-driver.exe --auto-center --REVX --REVY

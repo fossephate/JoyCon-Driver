@@ -954,10 +954,10 @@ void updatevJoyDevice(Joycon *jc) {
 	}
 
 	if (reverseX) {
-		x *= -1;
+		x *= 32768 - x;
 	}
 	if (reverseY) {
-		y *= -1;
+		y = 32768 - y;
 	}
 
 	// both left and right joycons
