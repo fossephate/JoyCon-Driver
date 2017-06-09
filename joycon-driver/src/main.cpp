@@ -30,6 +30,7 @@
 
 //#define VIBRATION_TEST
 //#define DEBUG_PRINT
+//#define LED_TEST
 
 
 
@@ -713,20 +714,20 @@ void joycon_init_usb(Joycon *jc) {
 	hid_exchange(jc->handle, buf, 0x2);
 
 	//Only talk HID from now on
-	printf("Only talk HID:\n");
+	printf("Only talk HID...\n");
 	memset(buf, 0x00, 0x40);
 	buf[0] = 0x80;
 	buf[1] = 0x04;
 	hid_exchange(jc->handle, buf, 0x2);
 
 	// Enable vibration
-	printf("Enabling vibration:\n");
+	printf("Enabling vibration...\n");
 	memset(buf, 0x00, 0x400);
 	buf[0] = 0x01; // Enabled
 	joycon_send_subcommand(jc->handle, 0x1, 0x48, buf, 1);
 
 	// Enable IMU data
-	printf("Enabling IMU data:\n");
+	printf("Enabling IMU data...\n");
 	memset(buf, 0x00, 0x400);
 	buf[0] = 0x01; // Enabled
 	joycon_send_subcommand(jc->handle, 0x1, 0x40, buf, 1);
@@ -745,28 +746,41 @@ int joycon_init_bt(Joycon *jc) {
 	hid_set_nonblocking(jc->handle, 1);
 
 	// Enable vibration
+	printf("Enabling vibration...\n");
 	memset(buf, 0x00, 0x400);
 	buf[0] = 0x01; // Enabled
-	//joycon_send_subcommand(jc->handle, 0x1, 0x48, buf, 1);
+	joycon_send_subcommand(jc->handle, 0x1, 0x48, buf, 1);
 
 	// Enable IMU data
+	printf("Enabling IMU data...\n");
 	memset(buf, 0x00, 0x400);
 	buf[0] = 0x01; // Enabled
 	joycon_send_subcommand(jc->handle, 0x01, 0x40, buf, 1);
 
 
 	// start polling at 60hz?
+	printf("Set to poll at 60hz?\n");
 	memset(buf, 0x00, 0x400);
 	buf[0] = 0x01; // Enabled
 	//									cmd subcmd
 	joycon_send_subcommand(jc->handle, 0x01, 0x03, buf, 1);
+
+
+	//for (int i = 0; i < 100; ++i) {
+	//	// set lights:
+	//	memset(buf, 0x00, 0x400);
+	//	buf[0] = i;
+	//	buf[1] = i;
+	//	//									cmd subcmd
+	//	joycon_send_subcommand(jc->handle, 0x10, 0x30, buf, 1);
+	//}
 
 	printf("Successfully initialized %s!\n", jc->name.c_str());
 
 	return 0;
 }
 
-void joycon_deinit(Joycon *jc) {
+void joycon_deinit_usb(Joycon *jc) {
 	unsigned char buf[0x40];
 	memset(buf, 0x00, 0x40);
 
@@ -1133,7 +1147,7 @@ init_start:
 		printf("Auto centering sticks...\n");
 
 	
-		// do first poll to get stick data:
+		// do a few polls to get stick data:
 		for (int j = 0; j < 3; ++j) {
 			for (int i = 0; i < joycons.size(); ++i) {
 
@@ -1274,7 +1288,6 @@ init_start:
 		//			
 		//			joycon_send_command(jc->handle, 0x10, (uint8_t*)buf, 0x9);
 
-		//			//joycon_send_command(handle_r, 0x10, (uint8_t*)buf, 0x9);
 		//			printf("Sent %x %x %u\n", i /*& 0xFF*/, l, k);
 
 		//			Sleep(50);
@@ -1284,7 +1297,33 @@ init_start:
 
 		//#endif
 
+		#ifdef LED_TEST
+		for (int r = 0; r < 10; ++r) {
+			for (int i = 0; i < joycons.size(); ++i) {
 
+				Joycon *jc = &joycons[i];
+
+				//hid_set_nonblocking(jc->handle, 1);
+
+				printf("Enabling some LEDs, sometimes this can fail and take a few times?\n");
+
+				// Player LED Enable
+				memset(buf, 0x00, 0x40);
+				buf[0] = 0x80 | 0x40 | 0x2 | 0x1; // Flash top two, solid bottom two
+				joycon_send_subcommand(jc->handle, 0x1, 0x30, buf, 1);
+
+				// Home LED Enable
+				memset(buf, 0x00, 0x40);
+				buf[0] = 0xFF; // Slowest pulse?
+				joycon_send_subcommand(jc->handle, 0x1, 0x38, buf, 1);
+
+				Sleep(100);
+			}
+		}
+		Sleep(1000000);
+		#endif
+
+		
 
 		// input poll loop:
 
@@ -1371,9 +1410,10 @@ init_start:
 	RelinquishVJD(1);
 	RelinquishVJD(2);
 
-
-	for (int i = 0; i < joycons.size(); ++i) {
-		joycon_deinit(&joycons[i]);
+	if (settings.usingGrip) {
+		for (int i = 0; i < joycons.size(); ++i) {
+			joycon_deinit_usb(&joycons[i]);
+		}
 	}
 
 	// Finalize the hidapi library
