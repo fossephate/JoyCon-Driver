@@ -95,6 +95,7 @@ struct Joycon {
 		int z;
 	} accel;
 
+    int light;
 
 	uint8_t newButtons[3];
 };
@@ -146,6 +147,16 @@ struct Settings {
 	// works by getting joystick position at start
 	// and assumes that to be (0,0), and uses that to calculate the offsets
 	bool autoCenterSticks = false;
+
+    // Really just for user preference, but theses can be set to 1-4
+    // for whatever lights should be enabled on each JoyCon.
+    // The way this works is that when combining is enabled,
+    // the primary light is used for both; when combining is disabled,
+    // the left JoyCon gets primary and the right JoyCon gets secondary.
+    int primaryJoyConLight = 1;
+    int secondaryJoyConLight = 2;
+
+    bool disconnectOnExit = false;  // whether to disconnect the controllers on exit
 
 	bool usingGrip = false;
 	bool usingBluetooth = false;
@@ -798,13 +809,27 @@ int joycon_general_setup(Joycon *jc) {
   // bits correspond to lights:
   // 0-3 decide whether to keep lights on
   // 4-7 decide whether to flash lights
-  printf("Setting player lights to player 1.\n");
-  for (int i = 0; i < 5; ++i) {
+  printf("Setting player lights on %s.\n", jc->name.c_str());
+  if (settings.combineJoyCons) {
+    jc->light = settings.primaryJoyConLight;
+  }
+  else {
+    if (jc->left_right == 1) {
+      // left
+      jc->light = settings.primaryJoyConLight;
+    }
+    else if (jc->left_right == 2) {
+      // right
+      jc->light = settings.secondaryJoyConLight;
+    }
+  }
+  for (int i = 0; i < 10; ++i) {
     memset(buf, 0x00, 0x40);
     std::bitset<8> bits;
-    bits[0] = 1;
+    for (int j = (jc->light - 1); j > -1; --j) {
+      bits[j] = 1;
+    }
     buf[0] = (int)(bits.to_ulong());
-    //								 cmd subcmd
     joycon_send_subcommand(jc->handle, 0x1, 0x30, buf, 1);
   }
 
@@ -817,10 +842,22 @@ void joycon_general_teardown(Joycon *jc) {
   unsigned char buf[0x40];
   memset(buf, 0, 0x40);
 
+  // If the user wanted to disconnect the JoyCons on exit,
+  // now is a good time to do that. We can also just skip the rest of the
+  // function, as disconnecting automatically fully resets the JoyCons.
+  // (just like the lights, it can take multiple tries)
+  if (settings.disconnectOnExit) {
+    memset(buf, 0x00, 0x40);
+    for (int i = 0; i < 10; ++i) {
+      joycon_send_subcommand(jc->handle, 0x1, 0x06, buf, 0);
+    }
+    goto teardown_end;
+  }
+
   // Reset lights into flashing mode
-  // just like setting the lights, it takes multiple tries
+  // (just like setting the lights, it takes multiple tries)
   // (TODO: maybe there's a special subcommand that can do this correctly for us?)
-  for (int i = 0; i < 5; ++i) {
+  for (int i = 0; i < 10; ++i) {
     memset(buf, 0x00, 0x40);
     std::bitset<8> bits;
     bits[4] = 1;
@@ -831,6 +868,7 @@ void joycon_general_teardown(Joycon *jc) {
     joycon_send_subcommand(jc->handle, 0x1, 0x30, buf, 1);
   }
 
+teardown_end:
   printf("Toredown %s\n", jc->name.c_str());
 }
 
@@ -1099,6 +1137,33 @@ settings.reverseY = true;
         }
         if (std::string(args[i]) == "--auto-center") {
           settings.autoCenterSticks = true;
+        }
+        if (std::string(args[i]) == "--primary-light") {
+          int tmp = std::stoi(args[i + 1]);
+          if (tmp < 1) {
+            tmp = 1;
+            printf("Primary light: setting is too low, defaulting to 1.\n");
+          }
+          if (tmp > 4) {
+            tmp = 4;
+            printf("Primary light: setting is too high, defaulting to 4.\n");
+          }
+          settings.primaryJoyConLight = tmp;
+        }
+        if (std::string(args[i]) == "--secondary-light") {
+          int tmp = std::stoi(args[i + 1]);
+          if (tmp < 1) {
+            tmp = 1;
+            printf("Secondary light: setting is too low, defaulting to 1.\n");
+          }
+          if (tmp > 4) {
+            tmp = 4;
+            printf("Secondary light: setting is too high, defaulting to 4.\n");
+          }
+          settings.secondaryJoyConLight = tmp;
+        }
+        if (std::string(args[i]) == "--disconnect") {
+          settings.disconnectOnExit = true;
         }
     }
 }
@@ -1469,15 +1534,15 @@ init_start:
 	RelinquishVJD(1);
 	RelinquishVJD(2);
 
-    for (int i = 0; i < joycons.size(); ++i) {
-      joycon_general_teardown(&joycons[i]);
-    }
-
 	if (settings.usingGrip) {
 		for (int i = 0; i < joycons.size(); ++i) {
 			joycon_deinit_usb(&joycons[i]);
 		}
 	}
+
+    for (int i = 0; i < joycons.size(); ++i) {
+      joycon_general_teardown(&joycons[i]);
+    }
 
 	// Finalize the hidapi library
 	res = hid_exit();
