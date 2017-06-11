@@ -28,13 +28,16 @@ A vJoy feeder for the Nintendo Switch JoyCons with analog stick support
 * The JoyCons seem to need to be re-paired anytime after they've reconnected to the switch.
 
 These are the settings you'll want to change:
-	* EDIT: Added command line arguments:
-	* Run with "--combine" to combine the left and right joycons
-	* Run with "--auto-center" to attempt an automatic 
-	* Run with "--LXO 16000" to add an X Offset to the Left JoyCon of 16000
-	* Run with "--LYO 16000" to add an Y Offset to the Left JoyCon of 16000
-	* Run with "--RYO 16000" to add an X Offset to the Right JoyCon of 16000
-	* Run with "--RYO 16000" to add an Y Offset to the Right JoyCon of 16000
+  * EDIT: Added command line arguments:
+  * Run with "--combine" to combine the left and right joycons
+  * Run with "--auto-center" to attempt an automatic 
+  * Run with "--LXO 16000" to add an X Offset to the Left JoyCon of 16000
+  * Run with "--LYO 16000" to add an Y Offset to the Left JoyCon of 16000
+  * Run with "--RYO 16000" to add an X Offset to the Right JoyCon of 16000
+  * Run with "--RYO 16000" to add an Y Offset to the Right JoyCon of 16000
+  * Run with "--primary-light 3" to set the primary JoyCon light to 3
+  * Run with "--secondary-light 1" to set the secondary JoyCon light to 1
+  * Run with "--disconnect" to disconnect the JoyCons when the driver exits
 
 
 These are the default settings:
@@ -73,6 +76,15 @@ bool reverseY = false;// reverses joystick y (both sticks)
 // and assumes that to be (0,0), and uses that to calculate the offsets
 bool autoCenterSticks = false;
 
+// Really just for user preference, but theses can be set to 1-4
+// for whatever lights should be enabled on each JoyCon.
+// The way this works is that when combining is enabled,
+// the primary light is used for both; when combining is disabled,
+// the left JoyCon gets primary and the right JoyCon gets secondary.
+int primaryJoyConLight = 1;
+int secondaryJoyConLight = 2;
+
+bool disconnectOnExit = false;  // whether to disconnect the controllers on exit
 ```
 
 
