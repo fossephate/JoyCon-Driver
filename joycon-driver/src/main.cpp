@@ -6,6 +6,7 @@
 #include <stdafx.h>
 #include <string.h>
 #include <chrono>
+#include <windows.h>
 
 #include <hidapi.h>
 
@@ -107,6 +108,8 @@ JOYSTICK_POSITION_V2 iReport; // The structure that holds the full position data
 //bool bluetooth = true;
 uint8_t global_count = 0;
 
+bool volatile keepMainLoop = true;
+
 
 struct Settings {
 
@@ -151,7 +154,14 @@ struct Settings {
 } settings;
 
 
+BOOL WINAPI signal_handler(DWORD signal) {
+  if (signal == CTRL_C_EVENT) {
+    keepMainLoop = false;
+    return TRUE;
+  }
 
+  return FALSE;
+}
 
 
 void found_joycon(struct hid_device_info *dev) {
@@ -626,6 +636,11 @@ void joycon_send_command(hid_device *handle, int command, uint8_t *data, int len
 		memcpy(buf + (settings.usingBluetooth ? 0x1 : 0x9), data, len);
 	}
 
+    /*int totalLen = len + (settings.usingBluetooth ? 0x1 : 0x9);
+    for (int i = 0; i < totalLen; ++i) {
+        printf("buffer[%d] = %d\n", i, buf[i]);
+    }*/
+
 	hid_exchange(handle, buf, len + (settings.usingBluetooth ? 0x1 : 0x9));
 
 	if (data) {
@@ -637,13 +652,17 @@ void joycon_send_subcommand(hid_device *handle, int command, int subcommand, uin
 	unsigned char buf[0x400];
 	memset(buf, 0, 0x400);
 
-	uint8_t rumble_base[9] = { (++global_count) & 0xF, 0x00, 0x01, 0x40, 0x40, 0x00, 0x01, 0x40, 0x40 };
-	memcpy(buf, rumble_base, 9);
+    // set neutral rumble base only if the command is vibrate (0x01)
+    // if set when other commands are set, might cause the command to be misread and not executed
+    if (subcommand == 0x01) {
+        uint8_t rumble_base[9] = { (++global_count) & 0xF, 0x00, 0x01, 0x40, 0x40, 0x00, 0x01, 0x40, 0x40 };
+        memcpy(buf + 10, rumble_base, 9);
+    }
 
 	buf[9] = subcommand;
 	if (data && len != 0) {
 		memcpy(buf + 10, data, len);
-	}
+    }
 
 	joycon_send_command(handle, command, buf, 10 + len);
 
@@ -765,19 +784,54 @@ int joycon_init_bt(Joycon *jc) {
 	//									cmd subcmd
 	joycon_send_subcommand(jc->handle, 0x01, 0x03, buf, 1);
 
-
-	//for (int i = 0; i < 100; ++i) {
-	//	// set lights:
-	//	memset(buf, 0x00, 0x400);
-	//	buf[0] = i;
-	//	buf[1] = i;
-	//	//									cmd subcmd
-	//	joycon_send_subcommand(jc->handle, 0x10, 0x30, buf, 1);
-	//}
-
 	printf("Successfully initialized %s!\n", jc->name.c_str());
 
 	return 0;
+}
+
+int joycon_general_setup(Joycon *jc) {
+  unsigned char buf[0x40];
+  memset(buf, 0, 0x40);
+
+  // Set player lights:
+  // (takes multiple tries)
+  // bits correspond to lights:
+  // 0-3 decide whether to keep lights on
+  // 4-7 decide whether to flash lights
+  printf("Setting player lights to player 1.\n");
+  for (int i = 0; i < 5; ++i) {
+    memset(buf, 0x00, 0x40);
+    std::bitset<8> bits;
+    bits[0] = 1;
+    buf[0] = (int)(bits.to_ulong());
+    //								 cmd subcmd
+    joycon_send_subcommand(jc->handle, 0x1, 0x30, buf, 1);
+  }
+
+  printf("Successfully setup %s!\n", jc->name.c_str());
+
+  return 0;
+}
+
+void joycon_general_teardown(Joycon *jc) {
+  unsigned char buf[0x40];
+  memset(buf, 0, 0x40);
+
+  // Reset lights into flashing mode
+  // just like setting the lights, it takes multiple tries
+  // (TODO: maybe there's a special subcommand that can do this correctly for us?)
+  for (int i = 0; i < 5; ++i) {
+    memset(buf, 0x00, 0x40);
+    std::bitset<8> bits;
+    bits[4] = 1;
+    bits[5] = 1;
+    bits[6] = 1;
+    bits[7] = 1;
+    buf[0] = (int)(bits.to_ulong());
+    joycon_send_subcommand(jc->handle, 0x1, 0x30, buf, 1);
+  }
+
+  printf("Toredown %s\n", jc->name.c_str());
 }
 
 void joycon_deinit_usb(Joycon *jc) {
@@ -1041,47 +1095,43 @@ void parseSettings(int length, char *args[]) {
 			settings.reverseX = true;
 		}
 		if (std::string(args[i]) == "--REVY") {
-			settings.reverseY = true;
-		}
-		if (std::string(args[i]) == "--auto-center") {
-			settings.autoCenterSticks = true;
-		}
-	}
+settings.reverseY = true;
+        }
+        if (std::string(args[i]) == "--auto-center") {
+          settings.autoCenterSticks = true;
+        }
+    }
 }
-
-
-
-
 
 
 
 
 int main(int argc, char *argv[]) {
 
-	// get vJoy Device 1
-	acquirevJoyDevice(1);
-	// get vJoy Device 2
-	acquirevJoyDevice(2);
+  // get vJoy Device 1
+  acquirevJoyDevice(1);
+  // get vJoy Device 2
+  acquirevJoyDevice(2);
 
 
-	int res;
-	int i;
-	unsigned char buf[65];
-	unsigned char buf2[65];
+  int res;
+  int i;
+  unsigned char buf[65];
+  unsigned char buf2[65];
 
-	int read;	// number of bytes read
-	int written;// number of bytes written
+  int read;	// number of bytes read
+  int written;// number of bytes written
 
 
-	const char *device_name;
-	
+  const char *device_name;
 
-	// Enumerate and print the HID devices on the system
-	struct hid_device_info *devs, *cur_dev;
 
-	res = hid_init();
+  // Enumerate and print the HID devices on the system
+  struct hid_device_info *devs, *cur_dev;
 
-	
+  res = hid_init();
+
+
 
 
 
@@ -1089,56 +1139,62 @@ int main(int argc, char *argv[]) {
 
 init_start:
 
-	devs = hid_enumerate(JOYCON_VENDOR, 0x0);
-	cur_dev = devs;
-	while (cur_dev) {
-		// identify by vendor:
-		if (cur_dev->vendor_id == JOYCON_VENDOR) {
+  devs = hid_enumerate(JOYCON_VENDOR, 0x0);
+  cur_dev = devs;
+  while (cur_dev) {
+    // identify by vendor:
+    if (cur_dev->vendor_id == JOYCON_VENDOR) {
 
-			//device_print(cur_dev);
-			Joycon jc;
+      //device_print(cur_dev);
+      Joycon jc;
 
-			// bluetooth, left / right joycon:
-			if (cur_dev->product_id == JOYCON_L_BT || cur_dev->product_id == JOYCON_R_BT) {
-				found_joycon(cur_dev);
-			}
+      // bluetooth, left / right joycon:
+      if (cur_dev->product_id == JOYCON_L_BT || cur_dev->product_id == JOYCON_R_BT) {
+        settings.usingBluetooth = true;
+        found_joycon(cur_dev);
+      }
 
-			// pro controller:
-			// (probably won't work right, I'm just putting this here so it detects it,
-			// I don't have a pro controller to test with.)
-			if (cur_dev->product_id == PRO_CONTROLLER) {
-				found_joycon(cur_dev);
-			}
+      // pro controller:
+      // (probably won't work right, I'm just putting this here so it detects it,
+      // I don't have a pro controller to test with.)
+      if (cur_dev->product_id == PRO_CONTROLLER) {
+        found_joycon(cur_dev);
+      }
 
-			// charging grip:
-			if (cur_dev->product_id == JOYCON_CHARGING_GRIP) {
-				settings.usingGrip = true;
-				settings.usingBluetooth = true;
-				settings.combineJoyCons = true;
-				found_joycon(cur_dev);
-			}
-		}
-
-
-		cur_dev = cur_dev->next;
-	}
-	hid_free_enumeration(devs);
+      // charging grip:
+      if (cur_dev->product_id == JOYCON_CHARGING_GRIP) {
+        settings.usingGrip = true;
+        settings.usingBluetooth = true;
+        settings.combineJoyCons = true;
+        found_joycon(cur_dev);
+      }
+    }
 
 
-
-	// init joycons:
-	if (settings.usingGrip) {
-		for (int i = 0; i < joycons.size(); ++i) {
-			joycon_init_usb(&joycons[i]);
-		}
-	} else {
-		for (int i = 0; i < joycons.size(); ++i) {
-			joycon_init_bt(&joycons[i]);
-		}
-	}
+    cur_dev = cur_dev->next;
+  }
+  hid_free_enumeration(devs);
 
 
-	parseSettings(argc, argv);
+
+  // init joycons:
+  if (settings.usingGrip) {
+    for (int i = 0; i < joycons.size(); ++i) {
+      joycon_init_usb(&joycons[i]);
+    }
+  }
+  else {
+    for (int i = 0; i < joycons.size(); ++i) {
+      joycon_init_bt(&joycons[i]);
+    }
+  }
+
+
+  parseSettings(argc, argv);
+
+  for (int i = 0; i < joycons.size(); ++i) {
+    joycon_general_setup(&joycons[i]);
+  }
 
 	
 
@@ -1222,13 +1278,15 @@ init_start:
 	}
 
 	int missedPollCount = 0;
+
+    // intercept ctrl-c
+    SetConsoleCtrlHandler(signal_handler, TRUE);
 	
 
-	while(true) {
+	while(keepMainLoop) {
 
 		//auto start = std::chrono::steady_clock::now();
 		//std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
-
 
 		//#ifdef VIBRATION_TEST
 		//for (int l = 0x10; l < 0x20; l++) {
@@ -1410,6 +1468,10 @@ init_start:
 
 	RelinquishVJD(1);
 	RelinquishVJD(2);
+
+    for (int i = 0; i < joycons.size(); ++i) {
+      joycon_general_teardown(&joycons[i]);
+    }
 
 	if (settings.usingGrip) {
 		for (int i = 0; i < joycons.size(); ++i) {
