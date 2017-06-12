@@ -931,8 +931,8 @@ void updatevJoyDevice(Joycon *jc) {
 	// Set Stick data
 	
 	int x, y, z;
-	int rx = 0;
-	int ry = 0;
+	int rx = 16383;
+	int ry = 16383;
 	int rz = 0;
 
 	if (!combineJoyCons) {
@@ -964,6 +964,8 @@ void updatevJoyDevice(Joycon *jc) {
 	if (!combineJoyCons) {
 		iReport.wAxisX = x;
 		iReport.wAxisY = y;
+		iReport.wAxisXRot = rx;
+		iReport.wAxisYRot = ry;
 	} else {
 
 		// Set position data
