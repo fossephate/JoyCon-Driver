@@ -463,7 +463,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			jc->buttons = states;
 		}
 
-		// stick data:
+		// get stick data:
 
 		uint8_t *stick_data = nullptr;
 		if (jc->left_right == 1) {
@@ -481,7 +481,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		
 		uint8_t stick_vertical = stick_data[2];
 
-		//jc->stick.unknown2 = stick_unknown;
 		jc->stick.horizontal2 = stick_horizontal;
 		jc->stick.vertical2 = stick_vertical;
 
@@ -506,12 +505,19 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 	}
 
 	if (jc->left_right == 2) {
-		//hex_dump(packet, len-20);
+		//hex_dump(packet, len);
 	}
 
 	if (packet[5] == 0x31/*49*/) {
 		if (jc->left_right == 2) {
 			//hex_dump(packet, len - 20);
+		}
+	}
+
+	// if there's gyro data:
+	if (packet[0] == 0x30) {
+		if (jc->left_right == 2) {
+			//hex_dump(packet, len);
 		}
 	}
 
@@ -758,6 +764,20 @@ int joycon_init_bt(Joycon *jc) {
 	joycon_send_subcommand(jc->handle, 0x01, 0x40, buf, 1);
 
 
+	//for (int i = 0; i < 10; ++i) {
+	//	// Enable IMU data
+	//	printf("Enabling IMU data...\n");
+	//	memset(buf, 0x00, 0x400);
+	//	buf[0] = 0x01; // command
+	//	buf[10] = 0x40; // IMU
+	//	buf[11] = 0x01; // enabled
+	//	//joycon_send_subcommand(jc->handle, 0x1, 0x40, buf, 1);
+
+	//	//joycon_send_command(jc->handle, 0x10, (uint8_t*)buf, 0x9);
+	//	hid_exchange(jc->handle, buf, 0x13);
+	//}
+
+
 	// start polling at 60hz?
 	printf("Set to poll at 60hz?\n");
 	memset(buf, 0x00, 0x400);
@@ -918,16 +938,6 @@ void updatevJoyDevice(Joycon *jc) {
 	iReport.bDevice = id;
 
 
-	//if (reverseX) {
-	//	leftJoyConXMultiplier *= -1;
-	//	rightJoyConXMultiplier *= -1;
-	//}
-	//if (reverseY) {
-	//	leftJoyConYMultiplier *= -1;
-	//	rightJoyConYMultiplier *= -1;
-	//}
-
-
 	// Set Stick data
 	
 	int x, y, z;
@@ -954,7 +964,7 @@ void updatevJoyDevice(Joycon *jc) {
 	}
 
 	if (reverseX) {
-		x *= 32768 - x;
+		x = 32768 - x;
 	}
 	if (reverseY) {
 		y = 32768 - y;
