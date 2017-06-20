@@ -2,12 +2,14 @@
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(53): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(640): warning C4838: conversion from 'int' to 'uint8_t' requires a narrowing conversion
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(958): warning C4101: 'z': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1158): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1162): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1180): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1223): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1409): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1493): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1159): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1163): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1181): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1224): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1265): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1292): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1384): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1467): warning C4018: '<': signed/unsigned mismatch
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1117): warning C4102: 'init_start': unreferenced label
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1103): warning C4101: 'device_name': unreferenced local variable
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1097): warning C4101: 'buf2': unreferenced local variable

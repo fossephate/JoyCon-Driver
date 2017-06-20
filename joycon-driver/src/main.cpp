@@ -145,7 +145,7 @@ struct Settings {
 	bool autoCenterSticks = false;
 
 	bool usingGrip = false;
-	bool usingBluetooth = false;
+	bool usingBluetooth = true;
 	bool disconnect = false;
 
 } settings;
@@ -668,11 +668,11 @@ void joycon_rumble(Joycon *jc, int frequency, int intensity) {
 	}
 
 	// Set frequency to increase
-	if (jc->left_right == 1) {
+	//if (jc->left_right == 1) {
 		buf[1 + 0] = frequency;// (0, 255)
-	} else {
+	//} else {
 		buf[1 + 4] = frequency;// (0, 255)
-	}
+	//}
 
 	//if (i > 3) {
 	//	continue;
@@ -1090,7 +1090,7 @@ int main(int argc, char *argv[]) {
 	// get vJoy Device 2
 	acquirevJoyDevice(2);
 
-
+	int missedPollCount = 0;
 	int res;
 	int i;
 	unsigned char buf[65];
@@ -1128,6 +1128,7 @@ init_start:
 			// bluetooth, left / right joycon:
 			if (cur_dev->product_id == JOYCON_L_BT || cur_dev->product_id == JOYCON_R_BT) {
 				found_joycon(cur_dev);
+				settings.usingBluetooth = true;
 			}
 
 			// pro controller:
@@ -1140,7 +1141,7 @@ init_start:
 			// charging grip:
 			if (cur_dev->product_id == JOYCON_CHARGING_GRIP) {
 				settings.usingGrip = true;
-				settings.usingBluetooth = true;
+				settings.usingBluetooth = false;
 				settings.combineJoyCons = true;
 				found_joycon(cur_dev);
 			}
@@ -1248,7 +1249,56 @@ init_start:
 		printf("Done centering sticks.\n");
 	}
 
-	int missedPollCount = 0;
+
+
+
+
+
+
+
+
+
+
+	// set lights:
+	printf("setting LEDs...\n");
+	for (int r = 0; r < 5; ++r) {
+		for (int i = 0; i < joycons.size(); ++i) {
+
+			Joycon *jc = &joycons[i];
+
+			// Player LED Enable
+			memset(buf, 0x00, 0x40);
+			if (i == 0) {
+				buf[0] = 0x0 | 0x0 | 0x0 | 0x1;		// solid 1
+			}
+			if (i == 1) {
+				if (settings.combineJoyCons) {
+					buf[0] = 0x0 | 0x0 | 0x0 | 0x1; // solid 1
+				} else if (!settings.combineJoyCons) {
+					buf[0] = 0x0 | 0x0 | 0x2 | 0x0; // solid 2
+				}
+			}
+			//buf[0] = 0x80 | 0x40 | 0x2 | 0x1; // Flash top two, solid bottom two
+			//buf[0] = 0x8 | 0x4 | 0x2 | 0x1; // All solid
+			//buf[0] = 0x80 | 0x40 | 0x20 | 0x10; // All flashing
+			//buf[0] = 0x80 | 0x00 | 0x20 | 0x10; // All flashing except 3rd light (off)
+
+			joycon_send_subcommand(jc, 0x1, 0x30, buf, 1);
+		}
+	}
+
+	// give a small rumble to all joycons:
+	for (int k = 0; k < 5; ++k) {
+		for (int i = 0; i < joycons.size(); ++i) {
+			joycon_rumble(&joycons[1], 100, 2);
+		}
+		Sleep(1000);
+	}
+
+
+
+
+	
 	
 
 	while(true) {
@@ -1260,82 +1310,6 @@ init_start:
 		#ifdef VIBRATION_TEST
 
 		Joycon *jc = &joycons[0];
-
-
-
-
-		//for (int l = 0x10; l < 0x20; l++) {
-		//	for (int i = 0; i < 8; i++) {
-		//		for (int k = 0; k < 256; k++) {
-		//			memset(buf, 0, 0x40);
-		//			buf[0] = 0x80;
-		//			buf[1] = 0x92;
-		//			buf[2] = 0x0;
-		//			buf[3] = 0xa;
-		//			buf[4] = 0x0;
-		//			buf[5] = 0x0;
-		//			buf[8] = 0x10;
-		//			for (int j = 0; j <= 8; j++) {
-		//				buf[10 /*+ i*/] = 0x1;//(i + j) & 0xFF;
-		//			}
-
-		//			// Set frequency to increase
-		//			buf[10 + 0] = k;
-		//			buf[10 + 4] = k;
-
-		//			//if (buf[1]) {
-		//			//	memcpy(buf[1], buf[0], 0x40);
-		//			//}
-
-		//			hid_dual_exchange(joycons[0].handle, joycons[1].handle, buf, buf, 0x40);
-		//			printf("Sent %x %x %u\n", i & 0xFF, l, k);
-		//		}
-		//	}
-		//}
-
-		//for (int l = 0x10; l < 0x20; l++) {
-		//	for (int i = 1; i < 8; i++) {
-		//		for (int k = 0; k < 256; k++) {
-		//			memset(buf, 0, 0x40);
-		//			for (int j = 0; j <= 8; j++) {
-		//				buf[1 + i] = 0x1;//(i + j) & 0xFF;
-		//			}
-
-		//			// Set frequency to increase
-		//			buf[1 + 0] = k;
-		//			buf[1 + 4] = k;
-
-		//			//if (buf) {
-		//			//	memcpy(buf[1], buf[0], 0x400);
-		//			//}
-		//			if (i > 3) {
-		//				continue;
-		//			}
-		//			if (k > 200) {
-		//				continue;
-		//			}
-
-		//			// set non-blocking:
-		//			hid_set_nonblocking(jc->handle, 1);
-		//			
-		//			joycon_send_command(jc->handle, 0x10, (uint8_t*)buf, 0x9);
-
-		//			printf("Sent %x %x %u\n", i /*& 0xFF*/, l, k);
-
-		//			Sleep(50);
-		//		}
-		//	}
-		//}
-
-		//for (int i = 0; i < 8; ++i) {
-		//	for (int j = 0; j < 200; ++j) {
-		//		int intensity = i;
-		//		int frequency = j;
-		//		joycon_rumble(jc, frequency, intensity);
-		//		Sleep(50);
-		//	}
-		//}
-
 
 		for (int l = 0x10; l < 0x20; l++) {
 			for (int i = 1; i < 8; i++) {
@@ -1352,29 +1326,26 @@ init_start:
 					//if (buf) {
 					//	memcpy(buf[1], buf[0], 0x400);
 					//}
-					if (i > 3) {
-						continue;
-					}
-					if (k > 200) {
-						continue;
-					}
+
+					if (i > 3) continue;
+					if (k > 200) continue;
 
 					// set non-blocking:
-					hid_set_nonblocking(jc->handle, 1);
-					
+					//hid_set_nonblocking(jc->handle, 1);
+
 					joycon_send_command(jc, 0x10, (uint8_t*)buf, 0x9);
-					int intensity = i;
-					int frequency = k;
-					joycon_rumble(jc, frequency, intensity);
 
-					printf("Sent %x %x %u\n", i /*& 0xFF*/, l, k);
+					//joycon_send_command(handle_r, 0x10, (uint8_t*)buf, 0x9);
+					printf("Sent %x %x %u\n", i & 0xFF, l, k);
 
-					Sleep(10);
+					Sleep(15);
 				}
 			}
 		}
 
 		#endif
+
+		
 
 		#ifdef LED_TEST
 		for (int r = 0; r < 10; ++r) {
@@ -1388,19 +1359,23 @@ init_start:
 
 				// Player LED Enable
 				memset(buf, 0x00, 0x40);
-				buf[0] = 0x80 | 0x40 | 0x2 | 0x1; // Flash top two, solid bottom two
-				joycon_send_subcommand(jc->handle, 0x1, 0x30, buf, 1);
+				//buf[0] = 0x80 | 0x40 | 0x2 | 0x1; // Flash top two, solid bottom two
+				//buf[0] = 0x8 | 0x4 | 0x2 | 0x1; // All solid
+				//buf[0] = 0x80 | 0x40 | 0x20 | 0x10; // All flashing
+				//buf[0] = 0x80 | 0x00 | 0x20 | 0x10; // All flashing except 3rd light (off)
+
+				joycon_send_subcommand(jc, 0x1, 0x30, buf, 1);
 
 				// Home LED Enable
 				memset(buf, 0x00, 0x40);
 				buf[0] = 0xFF; // Slowest pulse?
-				joycon_send_subcommand(jc->handle, 0x1, 0x38, buf, 1);
+				joycon_send_subcommand(jc, 0x1, 0x38, buf, 1);
 
-				Sleep(100);
+				Sleep(10);
 			}
 		}
-		Sleep(1000000);
 		#endif
+		
 
 		
 
@@ -1454,7 +1429,6 @@ init_start:
 			} else if (read > 0) {
 				// handle input data
 				handle_input(jc, buf, res);	
-				//printf("%d\n", res);
 			}
 
 			if (missedPollCount > 2000) {
