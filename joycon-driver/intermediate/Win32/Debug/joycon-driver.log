@@ -1,17 +1,17 @@
 ﻿  main.cpp
 c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(53): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(646): warning C4838: conversion from 'int' to 'uint8_t' requires a narrowing conversion
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(943): warning C4101: 'z': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1143): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1147): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1165): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1208): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1343): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1427): warning C4018: '<': signed/unsigned mismatch
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1102): warning C4102: 'init_start': unreferenced label
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1088): warning C4101: 'device_name': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1082): warning C4101: 'buf2': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1080): warning C4101: 'i': unreferenced local variable
-c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(888): warning C4715: 'acquirevJoyDevice': not all control paths return a value
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(640): warning C4838: conversion from 'int' to 'uint8_t' requires a narrowing conversion
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(958): warning C4101: 'z': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1158): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1162): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1180): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1223): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1409): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1493): warning C4018: '<': signed/unsigned mismatch
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1117): warning C4102: 'init_start': unreferenced label
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1103): warning C4101: 'device_name': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1097): warning C4101: 'buf2': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(1095): warning C4101: 'i': unreferenced local variable
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(903): warning C4715: 'acquirevJoyDevice': not all control paths return a value
   joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Debug\joycon-driver.exe
   joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Debug\joycon-driver.pdb (Partial PDB)

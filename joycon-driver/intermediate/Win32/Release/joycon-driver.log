@@ -1,20 +1,19 @@
 ﻿  main.cpp
 src\main.cpp(53): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 src\main.cpp(640): warning C4838: conversion from 'int' to 'uint8_t' requires a narrowing conversion
-src\main.cpp(933): warning C4101: 'z': unreferenced local variable
-src\main.cpp(1131): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1135): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1153): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1196): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1331): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1415): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1090): warning C4102: 'init_start': unreferenced label
-src\main.cpp(1076): warning C4101: 'device_name': unreferenced local variable
-src\main.cpp(1070): warning C4101: 'buf2': unreferenced local variable
-src\main.cpp(1068): warning C4101: 'i': unreferenced local variable
+src\main.cpp(958): warning C4101: 'z': unreferenced local variable
+src\main.cpp(1158): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1162): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1180): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1223): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1409): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1493): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1117): warning C4102: 'init_start': unreferenced label
+src\main.cpp(1103): warning C4101: 'device_name': unreferenced local variable
+src\main.cpp(1097): warning C4101: 'buf2': unreferenced local variable
+src\main.cpp(1095): warning C4101: 'i': unreferenced local variable
   Generating code
-  0 of 195 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\main.cpp(903): warning C4715: 'acquirevJoyDevice': not all control paths return a value
+  All 195 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Release\joycon-driver.exe

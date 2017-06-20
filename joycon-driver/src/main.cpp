@@ -160,8 +160,6 @@ void found_joycon(struct hid_device_info *dev) {
 	Joycon jc;
 
 	if (dev->product_id == JOYCON_CHARGING_GRIP) {
-
-		
 		
 		//if (dev->interface_number == 0) {
 		if (dev->interface_number == 0 || dev->interface_number == -1) {
@@ -613,11 +611,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 
 
-
-
-
-
-void joycon_send_command(hid_device *handle, int command, uint8_t *data, int len) {
+void joycon_send_command(Joycon *jc, int command, uint8_t *data, int len) {
 	unsigned char buf[0x400];
 	memset(buf, 0, 0x400);
 
@@ -632,14 +626,14 @@ void joycon_send_command(hid_device *handle, int command, uint8_t *data, int len
 		memcpy(buf + (settings.usingBluetooth ? 0x1 : 0x9), data, len);
 	}
 
-	hid_exchange(handle, buf, len + (settings.usingBluetooth ? 0x1 : 0x9));
+	hid_exchange(jc->handle, buf, len + (settings.usingBluetooth ? 0x1 : 0x9));
 
 	if (data) {
 		memcpy(data, buf, 0x40);
 	}
 }
 
-void joycon_send_subcommand(hid_device *handle, int command, int subcommand, uint8_t *data, int len) {
+void joycon_send_subcommand(Joycon *jc, int command, int subcommand, uint8_t *data, int len) {
 	unsigned char buf[0x400];
 	memset(buf, 0, 0x400);
 
@@ -651,11 +645,47 @@ void joycon_send_subcommand(hid_device *handle, int command, int subcommand, uin
 		memcpy(buf + 10, data, len);
 	}
 
-	joycon_send_command(handle, command, buf, 10 + len);
+	joycon_send_command(jc, command, buf, 10 + len);
 
 	if (data) {
 		memcpy(data, buf, 0x40); //TODO
 	}
+}
+
+
+void joycon_rumble(Joycon *jc, int frequency, int intensity) {
+	unsigned char buf[0x400];
+	memset(buf, 0, 0x40);
+
+	// intensity: (0, 8)
+	// frequency: (0, 255)
+
+	//[0 1 x40 x40 0 1 x40 x40] is neutral.
+
+
+	for (int j = 0; j <= 8; j++) {
+		buf[1 + intensity] = 0x1;//(i + j) & 0xFF;
+	}
+
+	// Set frequency to increase
+	if (jc->left_right == 1) {
+		buf[1 + 0] = frequency;// (0, 255)
+	} else {
+		buf[1 + 4] = frequency;// (0, 255)
+	}
+
+	//if (i > 3) {
+	//	continue;
+	//}
+	//if (k > 200) {
+	//	continue;
+	//}
+
+	// set non-blocking:
+	hid_set_nonblocking(jc->handle, 1);
+
+	joycon_send_command(jc, 0x10, (uint8_t*)buf, 0x9);
+	//joycon_send_subcommand(jc, 0x10, 0);
 }
 
 
@@ -730,13 +760,13 @@ void joycon_init_usb(Joycon *jc) {
 	printf("Enabling vibration...\n");
 	memset(buf, 0x00, 0x400);
 	buf[0] = 0x01; // Enabled
-	joycon_send_subcommand(jc->handle, 0x1, 0x48, buf, 1);
+	joycon_send_subcommand(jc, 0x1, 0x48, buf, 1);
 
 	// Enable IMU data
 	printf("Enabling IMU data...\n");
 	memset(buf, 0x00, 0x400);
 	buf[0] = 0x01; // Enabled
-	joycon_send_subcommand(jc->handle, 0x1, 0x40, buf, 1);
+	joycon_send_subcommand(jc, 0x1, 0x40, buf, 1);
 
 	printf("Successfully initialized %s!\n", jc->name.c_str());
 }
@@ -755,35 +785,20 @@ int joycon_init_bt(Joycon *jc) {
 	printf("Enabling vibration...\n");
 	memset(buf, 0x00, 0x400);
 	buf[0] = 0x01; // Enabled
-	joycon_send_subcommand(jc->handle, 0x1, 0x48, buf, 1);
+	joycon_send_subcommand(jc, 0x1, 0x48, buf, 1);
 
 	// Enable IMU data
 	printf("Enabling IMU data...\n");
 	memset(buf, 0x00, 0x400);
 	buf[0] = 0x01; // Enabled
-	joycon_send_subcommand(jc->handle, 0x01, 0x40, buf, 1);
+	joycon_send_subcommand(jc, 0x01, 0x40, buf, 1);
 
 
-	//for (int i = 0; i < 10; ++i) {
-	//	// Enable IMU data
-	//	printf("Enabling IMU data...\n");
-	//	memset(buf, 0x00, 0x400);
-	//	buf[0] = 0x01; // command
-	//	buf[10] = 0x40; // IMU
-	//	buf[11] = 0x01; // enabled
-	//	//joycon_send_subcommand(jc->handle, 0x1, 0x40, buf, 1);
-
-	//	//joycon_send_command(jc->handle, 0x10, (uint8_t*)buf, 0x9);
-	//	hid_exchange(jc->handle, buf, 0x13);
-	//}
-
-
-	// start polling at 60hz?
-	printf("Set to poll at 60hz?\n");
+	// Increase data rate for Bluetooth
+	printf("Increase data rate for Bluetooth...\n");
 	memset(buf, 0x00, 0x400);
-	buf[0] = 0x01; // Enabled
-	//									cmd subcmd
-	joycon_send_subcommand(jc->handle, 0x01, 0x03, buf, 1);
+	buf[0] = 0x31; // Enabled
+	joycon_send_subcommand(jc, 0x01, 0x03, buf, 1);
 
 
 	//for (int i = 0; i < 100; ++i) {
@@ -1242,7 +1257,13 @@ init_start:
 		//std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
 
 
-		//#ifdef VIBRATION_TEST
+		#ifdef VIBRATION_TEST
+
+		Joycon *jc = &joycons[0];
+
+
+
+
 		//for (int l = 0x10; l < 0x20; l++) {
 		//	for (int i = 0; i < 8; i++) {
 		//		for (int k = 0; k < 256; k++) {
@@ -1271,8 +1292,6 @@ init_start:
 		//		}
 		//	}
 		//}
-
-		//Joycon *jc = &joycons[0];
 
 		//for (int l = 0x10; l < 0x20; l++) {
 		//	for (int i = 1; i < 8; i++) {
@@ -1308,7 +1327,54 @@ init_start:
 		//	}
 		//}
 
-		//#endif
+		//for (int i = 0; i < 8; ++i) {
+		//	for (int j = 0; j < 200; ++j) {
+		//		int intensity = i;
+		//		int frequency = j;
+		//		joycon_rumble(jc, frequency, intensity);
+		//		Sleep(50);
+		//	}
+		//}
+
+
+		for (int l = 0x10; l < 0x20; l++) {
+			for (int i = 1; i < 8; i++) {
+				for (int k = 0; k < 256; k++) {
+					memset(buf, 0, 0x40);
+					for (int j = 0; j <= 8; j++) {
+						buf[1 + i] = 0x1;//(i + j) & 0xFF;
+					}
+
+					// Set frequency to increase
+					buf[1 + 0] = k;
+					buf[1 + 4] = k;
+
+					//if (buf) {
+					//	memcpy(buf[1], buf[0], 0x400);
+					//}
+					if (i > 3) {
+						continue;
+					}
+					if (k > 200) {
+						continue;
+					}
+
+					// set non-blocking:
+					hid_set_nonblocking(jc->handle, 1);
+					
+					joycon_send_command(jc, 0x10, (uint8_t*)buf, 0x9);
+					int intensity = i;
+					int frequency = k;
+					joycon_rumble(jc, frequency, intensity);
+
+					printf("Sent %x %x %u\n", i /*& 0xFF*/, l, k);
+
+					Sleep(10);
+				}
+			}
+		}
+
+		#endif
 
 		#ifdef LED_TEST
 		for (int r = 0; r < 10; ++r) {
