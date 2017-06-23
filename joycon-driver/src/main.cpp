@@ -1286,6 +1286,7 @@ init_start:
 			joycon_send_subcommand(jc, 0x1, 0x30, buf, 1);
 		}
 	}
+	printf("LEDs should be set.\n");
 
 	// give a small rumble to all joycons:
 	for (int k = 0; k < 5; ++k) {
