@@ -640,6 +640,13 @@ void joycon_send_subcommand(Joycon *jc, int command, int subcommand, uint8_t *da
 	uint8_t rumble_base[9] = { (++global_count) & 0xF, 0x00, 0x01, 0x40, 0x40, 0x00, 0x01, 0x40, 0x40 };
 	memcpy(buf, rumble_base, 9);
 
+	// set neutral rumble base only if the command is vibrate (0x01)
+	// if set when other commands are set, might cause the command to be misread and not executed
+	//if (subcommand == 0x01) {
+	//	uint8_t rumble_base[9] = { (++global_count) & 0xF, 0x00, 0x01, 0x40, 0x40, 0x00, 0x01, 0x40, 0x40 };
+	//	memcpy(buf + 10, rumble_base, 9);
+	//}
+
 	buf[9] = subcommand;
 	if (data && len != 0) {
 		memcpy(buf + 10, data, len);
@@ -660,12 +667,16 @@ void joycon_rumble(Joycon *jc, int frequency, int intensity) {
 	// intensity: (0, 8)
 	// frequency: (0, 255)
 
+	//	 X	AA	BB	 Y	CC	DD
 	//[0 1 x40 x40 0 1 x40 x40] is neutral.
 
 
-	for (int j = 0; j <= 8; j++) {
-		buf[1 + intensity] = 0x1;//(i + j) & 0xFF;
-	}
+	//for (int j = 0; j <= 8; j++) {
+	//	buf[1 + intensity] = 0x1;//(i + j) & 0xFF;
+	//}
+
+	buf[1 + 0 + intensity] = 0x1;
+	buf[1 + 4 + intensity] = 0x1;
 
 	// Set frequency to increase
 	//if (jc->left_right == 1) {
@@ -685,7 +696,7 @@ void joycon_rumble(Joycon *jc, int frequency, int intensity) {
 	hid_set_nonblocking(jc->handle, 1);
 
 	joycon_send_command(jc, 0x10, (uint8_t*)buf, 0x9);
-	//joycon_send_subcommand(jc, 0x10, 0);
+	//joycon_send_subcommand(jc, 0x10, 0x01, (uint8_t*)buf, 9);
 }
 
 
@@ -1288,13 +1299,19 @@ init_start:
 	}
 	printf("LEDs should be set.\n");
 
+
+	printf("vibrating JoyCon(s).\n");
 	// give a small rumble to all joycons:
-	for (int k = 0; k < 5; ++k) {
+	for (int k = 0; k < 1; ++k) {
 		for (int i = 0; i < joycons.size(); ++i) {
-			joycon_rumble(&joycons[1], 100, 2);
+			joycon_rumble(&joycons[i], 100, 1);
+			Sleep(20);
+			joycon_rumble(&joycons[i], 10, 3);
+			//Sleep(100);
 		}
-		Sleep(1000);
+		
 	}
+	printf("Done.\n");
 
 
 

@@ -1,19 +1,19 @@
 ﻿  main.cpp
 src\main.cpp(53): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 src\main.cpp(640): warning C4838: conversion from 'int' to 'uint8_t' requires a narrowing conversion
-src\main.cpp(958): warning C4101: 'z': unreferenced local variable
-src\main.cpp(1159): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1163): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1181): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1224): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1265): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1293): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1385): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1468): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1117): warning C4102: 'init_start': unreferenced label
-src\main.cpp(1103): warning C4101: 'device_name': unreferenced local variable
-src\main.cpp(1097): warning C4101: 'buf2': unreferenced local variable
-src\main.cpp(1095): warning C4101: 'i': unreferenced local variable
+src\main.cpp(969): warning C4101: 'z': unreferenced local variable
+src\main.cpp(1170): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1174): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1192): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1235): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1276): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1306): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1402): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1485): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1128): warning C4102: 'init_start': unreferenced label
+src\main.cpp(1114): warning C4101: 'device_name': unreferenced local variable
+src\main.cpp(1108): warning C4101: 'buf2': unreferenced local variable
+src\main.cpp(1106): warning C4101: 'i': unreferenced local variable
   Generating code
   1 of 196 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
