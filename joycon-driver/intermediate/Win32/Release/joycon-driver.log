@@ -1,21 +1,21 @@
 ﻿  main.cpp
 src\main.cpp(53): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-src\main.cpp(640): warning C4838: conversion from 'int' to 'uint8_t' requires a narrowing conversion
-src\main.cpp(969): warning C4101: 'z': unreferenced local variable
-src\main.cpp(1170): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1174): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1192): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1235): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1276): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1306): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1402): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1485): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1128): warning C4102: 'init_start': unreferenced label
-src\main.cpp(1114): warning C4101: 'device_name': unreferenced local variable
-src\main.cpp(1108): warning C4101: 'buf2': unreferenced local variable
-src\main.cpp(1106): warning C4101: 'i': unreferenced local variable
+src\main.cpp(648): warning C4838: conversion from 'int' to 'uint8_t' requires a narrowing conversion
+src\main.cpp(977): warning C4101: 'z': unreferenced local variable
+src\main.cpp(1178): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1182): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1200): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1243): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1284): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1314): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1504): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1587): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1136): warning C4102: 'init_start': unreferenced label
+src\main.cpp(1122): warning C4101: 'device_name': unreferenced local variable
+src\main.cpp(1116): warning C4101: 'buf2': unreferenced local variable
+src\main.cpp(1114): warning C4101: 'i': unreferenced local variable
   Generating code
-  1 of 196 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
+  1 of 197 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code

@@ -148,6 +148,11 @@ struct Settings {
 	bool usingBluetooth = true;
 	bool disconnect = false;
 
+
+	// plays a version of the mario theme by vibrating
+	// the first JoyCon connected.
+	bool marioTheme = false;
+
 } settings;
 
 
@@ -203,6 +208,14 @@ unsigned createMask(unsigned a, unsigned b) {
 		r |= 1 << i;
 
 	return r;
+}
+
+inline int mk_even(int n) {
+	return n - n % 2;
+}
+
+inline int mk_odd(int n) {
+	return n - (n % 2 ? 0 : 1);
 }
 
 struct s_button_map {
@@ -1084,6 +1097,10 @@ void parseSettings(int length, char *args[]) {
 		if (std::string(args[i]) == "--auto-center") {
 			settings.autoCenterSticks = true;
 		}
+
+		if (std::string(args[i]) == "--mario-theme") {
+			settings.marioTheme = true;
+		}
 	}
 }
 
@@ -1188,7 +1205,7 @@ init_start:
 
 	
 		// do a few polls to get stick data:
-		for (int j = 0; j < 5; ++j) {
+		for (int j = 0; j < 10; ++j) {
 			for (int i = 0; i < joycons.size(); ++i) {
 
 				Joycon *jc = &joycons[i];
@@ -1311,6 +1328,98 @@ init_start:
 		}
 		
 	}
+
+	// Plays the Mario theme on the JoyCons:
+	// I'm bad with music I just did this by ear
+	// using a video of someone playing a piano version of the mario theme.
+	// maybe eventually I'll be able to play something like sound files.
+
+
+	// C1: 110
+	// D1: 120
+	// E1: 130
+	// F1: 140
+	// G1: 150
+	// A2: 160
+	// B2: 170
+	// C2: 180
+	// D2: 190
+	// E2: 200
+	// F2: 210
+	// G2: 220
+	// A3: 230
+
+
+	if(settings.marioTheme) {
+
+		printf("Playing mario theme...\n");
+
+		//int n = ((i % 2) ? i : i-1);// always odd
+		//joycon_rumble(&joycons[0], (sin(i*0.01)*127)+127, 2);
+		//joycon_rumble(&joycons[0], n, 1);
+		//Sleep(200);
+		//joycon_rumble(&joycons[0], 1, 3);
+		//Sleep(100);
+
+		Sleep(1000);
+		
+		joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
+		Sleep(100);
+		joycon_rumble(&joycons[0], mk_odd(200), 1);Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
+		Sleep(150);
+		joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
+		Sleep(50);
+		joycon_rumble(&joycons[0], mk_odd(180), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// C2
+		Sleep(50);
+		joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
+		Sleep(50);
+		joycon_rumble(&joycons[0], mk_odd(220), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// G2
+
+
+
+		Sleep(200);
+		joycon_rumble(&joycons[0], mk_odd(150), 1); Sleep(250); joycon_rumble(&joycons[0], 1, 3);	// G1
+
+		Sleep(200);
+		joycon_rumble(&joycons[0], mk_odd(180), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// C2
+
+		Sleep(100);
+		joycon_rumble(&joycons[0], mk_odd(150), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// G1
+
+		Sleep(100);
+		joycon_rumble(&joycons[0], mk_odd(125), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// E1
+
+		Sleep(100);
+		joycon_rumble(&joycons[0], mk_odd(160), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// A2
+
+		Sleep(100);
+		joycon_rumble(&joycons[0], mk_odd(170), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// B2
+
+		Sleep(50);
+		joycon_rumble(&joycons[0], mk_odd(165), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// A-B?
+		Sleep(50);
+		joycon_rumble(&joycons[0], mk_odd(160), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// A2
+		Sleep(50);
+		joycon_rumble(&joycons[0], mk_odd(150), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// G1
+
+
+		Sleep(100);
+		joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
+		Sleep(100);
+		joycon_rumble(&joycons[0], mk_odd(220), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// G2
+
+		Sleep(100);
+		joycon_rumble(&joycons[0], mk_odd(230), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// A3
+
+		Sleep(100);
+		joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
+
+
+		Sleep(1000);
+	}
+
+
+
 	printf("Done.\n");
 
 

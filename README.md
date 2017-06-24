@@ -12,7 +12,7 @@ A vJoy feeder for the Nintendo Switch JoyCons with analog stick support
 3. Pair the JoyCon(s) to your PC
 
 4. Run the Application, if it doesn't detect your JoyCon(s), make sure they are fully paired/connected and restart the program.
-	* There's a precompiled version of the program in build.zip if you can't compile it yourself, just clone the repo and extract it.
+	* There's a precompiled version of the program in the release folder with all of the dlls it needs, just download the zip and extract it.
 
 5. Once the program is running vJoy should register the input from the JoyCons.
     * To verify it's working you can use the vJoy monitor that comes with vJoy, it looks like this: http://i.imgur.com/x4Fn7Cq.png
@@ -21,16 +21,13 @@ A vJoy feeder for the Nintendo Switch JoyCons with analog stick support
 
 
 ## Important Notes
-* There are settings you'll probably want to change
-  * The offsets in the program are specific to my JoyCons, so you'll likely want to edit them to fit yours.
-  * There's also a bool to combine the JoyCons into a single vJoy device, or keep them as seperate vJoy devices (vJoy device #1 & #2)
-  * Just change these settings and recompile, I'll probably add a command line option for them sometime soon
 * The JoyCons seem to need to be re-paired anytime after they've reconnected to the switch.
 
 These are the settings you'll want to change:
-	* EDIT: Added command line arguments:
+	* Command line arguments:
 	* Run with "--combine" to combine the left and right joycons
-	* Run with "--auto-center" to attempt an automatic 
+	* Run with "--auto-center" to automatically center the sticks
+	* Run with "--mario-theme" to play a (bad) version of the mario theme on the first JoyCon connected
 	* Run with "--LXO 16000" to add an X Offset to the Left JoyCon of 16000
 	* Run with "--LYO 16000" to add an Y Offset to the Left JoyCon of 16000
 	* Run with "--RYO 16000" to add an X Offset to the Right JoyCon of 16000
@@ -72,6 +69,10 @@ bool reverseY = false;// reverses joystick y (both sticks)
 // works by getting joystick position at start
 // and assumes that to be (0,0), and uses that to calculate the offsets
 bool autoCenterSticks = false;
+
+// plays a version of the mario theme by vibrating
+// the first JoyCon connected.
+bool marioTheme = false;
 
 ```
 
