@@ -1478,7 +1478,7 @@ init_start:
 	// A3: 230
 
 
-	if (!settings.marioTheme) {
+	if (settings.marioTheme) {
 		for (int i = 0; i < 1; ++i) {
 
 			printf("Playing mario theme...\n");
