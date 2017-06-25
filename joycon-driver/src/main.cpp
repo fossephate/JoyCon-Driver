@@ -516,8 +516,12 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			gyro_data = packet + 13;// ?
 		}
 
+		//jc->gyro.relroll = (int)(unsigned int)((gyro_data[3] & 0x0F) << 4) | ((gyro_data[2] & 0xF0) >> 4) - jc->gyro.roll;
+		//jc->gyro.relpitch = ((int)(unsigned int)((gyro_data[1] & 0x0F) << 4) | ((gyro_data[0] & 0xF0) >> 4)) - jc->gyro.pitch;
+		//jc->gyro.relyaw = 
+
 		//gyro_data[7] = relative roll
-		//gyro_data[9] = relative pitch
+		//gyro_data[9]+gyro_data[10]? = relative pitch
 		//gyro_data[11] = relative yaw
 		//
 
@@ -535,31 +539,70 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 
 		// get relative roll:
-		a = 0xFF - gyro_data[7];
-		b = gyro_data[7];
-		if (a < b) {
-			jc->gyro.relroll = (0xFF - gyro_data[7]);
-		} else {
-			jc->gyro.relroll = -1 * (int)gyro_data[7];
-		}
+		//a = 0xFF - gyro_data[7];
+		//b = gyro_data[7];
+		//if (a < b) {
+		//	jc->gyro.relroll = (0xFF - gyro_data[7]);
+		//} else {
+		//	jc->gyro.relroll = -1 * (int)gyro_data[7];
+		//}
 
 		// get relative pitch:
-		a = 0xFF - gyro_data[9];
-		b = gyro_data[9];
-		if (a < b) {
-			jc->gyro.relpitch = (0xFF - gyro_data[9]);
-		} else {
-			jc->gyro.relpitch = -1 * (int)gyro_data[9];
-		}
+		//a = 0xFF - gyro_data[9];
+		//b = gyro_data[9];
+		//if (a < b) {
+		//	jc->gyro.relpitch = (0xFF - gyro_data[9]);
+		//} else {
+		//	jc->gyro.relpitch = -1 * (int) (gyro_data[9] | ((gyro_data[10] & 0xF0) >> 4));
+		//}
 
 		// get relative yaw:
-		a = 0xFF - gyro_data[11];
-		b = gyro_data[11];
+		//a = 0xFF - gyro_data[11];
+		//b = gyro_data[11];
+		//if (a < b) {
+		//	jc->gyro.relyaw = (0xFF - gyro_data[11]);
+		//} else {
+		//	jc->gyro.relyaw = -1 * (int)gyro_data[11];
+		//}
+
+
+
+
+
+
+		// get relative roll:
+		// second nibble from first byte + first nibble from second byte
+		a = (((gyro_data[7] & 0x0F) << 4) | ((gyro_data[8] & 0xF0) >> 4));
+		b = 0xFF - a;
 		if (a < b) {
-			jc->gyro.relyaw = (0xFF - gyro_data[11]);
+			jc->gyro.relroll = a;
 		} else {
-			jc->gyro.relyaw = -1 * (int)gyro_data[11];
+			jc->gyro.relroll = -1 * b;
 		}
+
+
+
+		// get relative pitch:
+		// second nibble from first byte + first nibble from second byte
+		a = (((gyro_data[9] & 0x0F) << 4) | ((gyro_data[10] & 0xF0) >> 4));
+		b = 0xFF - a;
+		if (a < b) {
+			jc->gyro.relpitch = a;
+		} else {
+			jc->gyro.relpitch = -1 * b;
+		}
+
+
+		// get relative yaw:
+		// second nibble from first byte + first nibble from second byte
+		a = (((gyro_data[11] & 0x0F) << 4) | ((gyro_data[12] & 0xF0) >> 4));
+		b = 0xFF - a;
+		if (a < b) {
+			jc->gyro.relyaw = a;
+		} else {
+			jc->gyro.relyaw = -1 * b;
+		}
+
 
 
 
@@ -571,8 +614,8 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			//printf("%02x\n", jc->gyro.pitch);
 		}
 
-		if (jc->left_right == 1) {
-			//hex_dump(packet, len);
+		if (jc->left_right == 2) {
+			//hex_dump(gyro_data+9, 3);
 			//printf("%d\n", jc->gyro.relpitch);
 			//printf("%02x\n", jc->gyro.relpitch);
 		}
@@ -1105,13 +1148,18 @@ void updatevJoyDevice(Joycon *jc) {
 		//iReport.wAxisZRot = jc->gyro.roll * 120;
 		//iReport.wSlider = jc->gyro.pitch * 120;
 
-		int multiplier = 600;
+		int multiplier = 240;
 
 		iReport.wAxisZRot = 16384 + (jc->gyro.relroll * multiplier);
-		
 		iReport.wSlider = 16384 + (jc->gyro.relpitch * multiplier);
-
 		iReport.wDial = 16384 + (jc->gyro.relyaw * multiplier);
+
+
+		//multiplier = 200;
+
+		//iReport.wAxisZRot = (jc->gyro.roll * multiplier);
+		//iReport.wSlider = (jc->gyro.pitch * multiplier);
+		//iReport.wDial = (jc->gyro.yaw * multiplier);
 
 	}
 	

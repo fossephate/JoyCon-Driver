@@ -1,22 +1,22 @@
 ﻿  main.cpp
 src\main.cpp(53): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-src\main.cpp(734): warning C4838: conversion from 'int' to 'uint8_t' requires a narrowing conversion
-src\main.cpp(1052): warning C4101: 'z': unreferenced local variable
-src\main.cpp(1267): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1271): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1289): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1332): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1373): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1403): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1630): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1740): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1225): warning C4102: 'init_start': unreferenced label
-src\main.cpp(1211): warning C4101: 'device_name': unreferenced local variable
-src\main.cpp(1205): warning C4101: 'buf2': unreferenced local variable
-src\main.cpp(1203): warning C4101: 'i': unreferenced local variable
+src\main.cpp(777): warning C4838: conversion from 'int' to 'uint8_t' requires a narrowing conversion
+src\main.cpp(1095): warning C4101: 'z': unreferenced local variable
+src\main.cpp(1315): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1319): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1337): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1380): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1421): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1451): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1678): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1788): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1273): warning C4102: 'init_start': unreferenced label
+src\main.cpp(1259): warning C4101: 'device_name': unreferenced local variable
+src\main.cpp(1253): warning C4101: 'buf2': unreferenced local variable
+src\main.cpp(1251): warning C4101: 'i': unreferenced local variable
   Generating code
-  1 of 197 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
+  2 of 197 functions ( 1.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Release\joycon-driver.exe
