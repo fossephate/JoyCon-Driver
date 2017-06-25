@@ -83,9 +83,15 @@ struct Joycon {
 	} stick;
 
 	struct Gyroscope {
+		// absolute:
 		int pitch;
 		int yaw;
 		int roll;
+
+		// relative:
+		int relpitch;
+		int relyaw;
+		int relroll;
 	} gyro;
 
 	struct Accelerometer {
@@ -506,20 +512,27 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 		uint8_t *gyro_data = nullptr;
 		if (jc->left_right == 1) {
-			gyro_data = packet + 14;
+			gyro_data = packet + 13;// 13
 		} else if (jc->left_right == 2) {
-			gyro_data = packet + 9;
+			gyro_data = packet + 9;// ?
 		}
 
-		// second nibble of the 0th byte + first nibble of the third byte
-		jc->gyro.pitch = (int)(unsigned int) ((gyro_data[0] & 0x0F) << 4) | ((gyro_data[3] & 0xF0) >> 4);
+		//[7] = relative roll
+		//[9] = relative pitch
+		//[11] = relative yaw
+		//
+
+		// second nibble from first byte + first nibble from 0th byte
+		//jc->gyro.pitch = (int)(unsigned int) ((gyro_data[1] & 0x0F) << 4) | ((gyro_data[4] & 0xF0) >> 4);
+		jc->gyro.pitch = (int)(unsigned int)((gyro_data[1] & 0x0F) << 4) | ((gyro_data[0] & 0xF0) >> 4);
 
 		// second nibble from second byte + first nibble from first byte
-		jc->gyro.roll = (int)(unsigned int)((gyro_data[2] & 0x0F) << 4) | ((gyro_data[1] & 0xF0) >> 4);
+		jc->gyro.roll = (int)(unsigned int)((gyro_data[3] & 0x0F) << 4) | ((gyro_data[2] & 0xF0) >> 4);
 
 		if (jc->left_right == 1) {
-			hex_dump(gyro_data, 10);
+			//hex_dump(gyro_data, 15);
 			//printf("%d\n", jc->gyro.roll);
+			//printf("%02x\n", jc->gyro.pitch);
 		}
 		
 	}
@@ -1384,7 +1397,7 @@ init_start:
 	// A3: 230
 
 
-	if (!settings.marioTheme) {
+	if (settings.marioTheme) {
 		for (int i = 0; i < 1; ++i) {
 
 			printf("Playing mario theme...\n");
