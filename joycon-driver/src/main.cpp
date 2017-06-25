@@ -154,13 +154,12 @@ struct Settings {
 	bool usingBluetooth = true;
 	bool disconnect = false;
 
+	// enables motion controls
+	bool enableGyro = false;
 
 	// plays a version of the mario theme by vibrating
 	// the first JoyCon connected.
 	bool marioTheme = false;
-
-	// enables motion controls
-	bool enableGyro = false;
 
 } settings;
 

@@ -1,5 +1,5 @@
 # JoyCon-Driver
-A vJoy feeder for the Nintendo Switch JoyCons with analog stick support
+A vJoy feeder for the Nintendo Switch JoyCons with analog stick support and motion controls
 
 
 ## How to use
@@ -27,6 +27,7 @@ These are the settings you'll want to change:
 	* Command line arguments:
 	* Run with "--combine" to combine the left and right joycons
 	* Run with "--auto-center" to automatically center the sticks
+	* Run with "--enable-gyro" to enable motion controls
 	* Run with "--mario-theme" to play a (bad) version of the mario theme on the first JoyCon connected
 	* Run with "--LXO 16000" to add an X Offset to the Left JoyCon of 16000
 	* Run with "--LYO 16000" to add an Y Offset to the Left JoyCon of 16000
@@ -69,6 +70,10 @@ bool reverseY = false;// reverses joystick y (both sticks)
 // works by getting joystick position at start
 // and assumes that to be (0,0), and uses that to calculate the offsets
 bool autoCenterSticks = false;
+
+
+// enables motion controls
+bool enableGyro = false;
 
 // plays a version of the mario theme by vibrating
 // the first JoyCon connected.
