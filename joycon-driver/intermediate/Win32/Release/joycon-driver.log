@@ -15,7 +15,7 @@ src\main.cpp(1259): warning C4101: 'device_name': unreferenced local variable
 src\main.cpp(1253): warning C4101: 'buf2': unreferenced local variable
 src\main.cpp(1251): warning C4101: 'i': unreferenced local variable
   Generating code
-  2 of 197 functions ( 1.0%) were compiled, the rest were copied from previous compilation.
+  1 of 197 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
