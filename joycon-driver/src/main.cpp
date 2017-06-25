@@ -83,9 +83,9 @@ struct Joycon {
 	} stick;
 
 	struct Gyroscope {
-		int x;
-		int y;
-		int z;
+		int pitch;
+		int yaw;
+		int roll;
 	} gyro;
 
 	struct Accelerometer {
@@ -502,6 +502,26 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		jc->stick.vertical = -128 + (int)(unsigned int)stick_vertical;
 
 		jc->battery = (stick_data[1] & 0xF0) >> 4;
+
+
+		uint8_t *gyro_data = nullptr;
+		if (jc->left_right == 1) {
+			gyro_data = packet + 14;
+		} else if (jc->left_right == 2) {
+			gyro_data = packet + 9;
+		}
+
+		// second nibble of the 0th byte + first nibble of the third byte
+		jc->gyro.pitch = (int)(unsigned int) ((gyro_data[0] & 0x0F) << 4) | ((gyro_data[3] & 0xF0) >> 4);
+
+		// second nibble from second byte + first nibble from first byte
+		jc->gyro.roll = (int)(unsigned int)((gyro_data[2] & 0x0F) << 4) | ((gyro_data[1] & 0xF0) >> 4);
+
+		if (jc->left_right == 1) {
+			hex_dump(gyro_data, 10);
+			//printf("%d\n", jc->gyro.roll);
+		}
+		
 	}
 
 
@@ -510,7 +530,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 	// if there's gyro data:
 	if (packet[0] == 0x31) {
 		if (jc->left_right == 1) {
-			hex_dump(packet, len);
+			//hex_dump(packet, len);
 		}
 		
 	}
@@ -1031,6 +1051,16 @@ void updatevJoyDevice(Joycon *jc) {
 		}
 	}
 
+	// gyro data:
+	if (jc->left_right == 1) {
+		//rz = jc->gyro.roll*240;
+		iReport.wAxisZRot = jc->gyro.roll * 120;
+		iReport.wSlider = jc->gyro.pitch * 120;
+	}
+	
+
+
+
 	// Set button data
 
 	long btns = 0;
@@ -1354,7 +1384,7 @@ init_start:
 	// A3: 230
 
 
-	if (settings.marioTheme) {
+	if (!settings.marioTheme) {
 		for (int i = 0; i < 1; ++i) {
 
 			printf("Playing mario theme...\n");
