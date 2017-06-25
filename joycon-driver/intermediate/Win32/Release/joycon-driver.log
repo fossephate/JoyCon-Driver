@@ -8,15 +8,15 @@ src\main.cpp(1256): warning C4018: '<': signed/unsigned mismatch
 src\main.cpp(1299): warning C4018: '<': signed/unsigned mismatch
 src\main.cpp(1340): warning C4018: '<': signed/unsigned mismatch
 src\main.cpp(1370): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1560): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1669): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1597): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1706): warning C4018: '<': signed/unsigned mismatch
 src\main.cpp(1192): warning C4102: 'init_start': unreferenced label
 src\main.cpp(1178): warning C4101: 'device_name': unreferenced local variable
 src\main.cpp(1172): warning C4101: 'buf2': unreferenced local variable
 src\main.cpp(1170): warning C4101: 'i': unreferenced local variable
   Generating code
-  38 of 197 functions (19.3%) were compiled, the rest were copied from previous compilation.
+  1 of 197 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Release\joycon-driver.exe

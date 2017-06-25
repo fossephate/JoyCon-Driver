@@ -1452,15 +1452,52 @@ init_start:
 
 
 			Sleep(100);
-			joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
+			joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// E2
 			Sleep(100);
-			joycon_rumble(&joycons[0], mk_odd(220), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// G2
+			joycon_rumble(&joycons[0], mk_odd(220), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// G2
+			Sleep(100);
+			joycon_rumble(&joycons[0], mk_odd(230), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// A3
+			
 
 			Sleep(100);
-			joycon_rumble(&joycons[0], mk_odd(230), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// A3
+			joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// E2
 
+			Sleep(50);
+			joycon_rumble(&joycons[0], mk_odd(180), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// C2
+			Sleep(50);
+			joycon_rumble(&joycons[0], mk_odd(190), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// D2
+			Sleep(50);
+			joycon_rumble(&joycons[0], mk_odd(170), 1); Sleep(400); joycon_rumble(&joycons[0], 1, 3);	// B2
+
+
+			Sleep(50);
+			joycon_rumble(&joycons[0], mk_odd(180), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// C2
+			Sleep(50);
+			joycon_rumble(&joycons[0], mk_odd(150), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// G1
+			Sleep(50);
+			joycon_rumble(&joycons[0], mk_odd(125), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// E1
+
+
+			Sleep(50);
+			joycon_rumble(&joycons[0], mk_odd(160), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// A2
+			Sleep(50);
+			joycon_rumble(&joycons[0], mk_odd(170), 1); Sleep(400); joycon_rumble(&joycons[0], 1, 3);	// B2
+			Sleep(50);
+			joycon_rumble(&joycons[0], mk_odd(165), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// A-B?
+			Sleep(50);
+			joycon_rumble(&joycons[0], mk_odd(160), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// A2
+			Sleep(50);
+			joycon_rumble(&joycons[0], mk_odd(150), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// G1
+
+
+
+			// repeat section:
 			Sleep(100);
-			joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
+			joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// E2
+			Sleep(100);
+			joycon_rumble(&joycons[0], mk_odd(220), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// G2
+			Sleep(100);
+			joycon_rumble(&joycons[0], mk_odd(230), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// A3
 
 
 			Sleep(1000);
