@@ -513,12 +513,12 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		if (jc->left_right == 1) {
 			gyro_data = packet + 13;// 13
 		} else if (jc->left_right == 2) {
-			gyro_data = packet + 9;// ?
+			gyro_data = packet + 13;// ?
 		}
 
-		//[7] = relative roll
-		//[9] = relative pitch
-		//[11] = relative yaw
+		//gyro_data[7] = relative roll
+		//gyro_data[9] = relative pitch
+		//gyro_data[11] = relative yaw
 		//
 
 		// second nibble from first byte + first nibble from 0th byte
@@ -528,16 +528,53 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		// second nibble from second byte + first nibble from first byte
 		jc->gyro.roll = (int)(unsigned int)((gyro_data[3] & 0x0F) << 4) | ((gyro_data[2] & 0xF0) >> 4);
 
+
+		//jc->gyro.relpitch = (int)(unsigned int)((gyro_data[9] & 0x0F) << 4);
+
+		int a, b;
+
+
+		// get relative roll:
+		a = 0xFF - gyro_data[7];
+		b = gyro_data[7];
+		if (a < b) {
+			jc->gyro.relroll = (0xFF - gyro_data[7]);
+		} else {
+			jc->gyro.relroll = -1 * (int)gyro_data[7];
+		}
+
+		// get relative pitch:
+		a = 0xFF - gyro_data[9];
+		b = gyro_data[9];
+		if (a < b) {
+			jc->gyro.relpitch = (0xFF - gyro_data[9]);
+		} else {
+			jc->gyro.relpitch = -1 * (int)gyro_data[9];
+		}
+
+		// get relative yaw:
+		a = 0xFF - gyro_data[11];
+		b = gyro_data[11];
+		if (a < b) {
+			jc->gyro.relyaw = (0xFF - gyro_data[11]);
+		} else {
+			jc->gyro.relyaw = -1 * (int)gyro_data[11];
+		}
+
+
+
+
+
 		if (jc->left_right == 1) {
 			//hex_dump(gyro_data, 15);
 			//printf("%d\n", jc->gyro.roll);
 			//printf("%02x\n", jc->gyro.pitch);
 		}
 
-		if (jc->left_right == 2) {
+		if (jc->left_right == 1) {
 			//hex_dump(packet, len);
-			//printf("%d\n", jc->gyro.roll);
-			//printf("%02x\n", jc->gyro.pitch);
+			//printf("%d\n", jc->gyro.relpitch);
+			//printf("%02x\n", jc->gyro.relpitch);
 		}
 		
 	}
@@ -1013,8 +1050,8 @@ void updatevJoyDevice(Joycon *jc) {
 	// Set Stick data
 	
 	int x, y, z;
-	int rx = 16383;
-	int ry = 16383;
+	int rx = 16384;
+	int ry = 16384;
 	int rz = 0;
 
 	if (!combineJoyCons) {
@@ -1063,10 +1100,19 @@ void updatevJoyDevice(Joycon *jc) {
 	}
 
 	// gyro data:
-	if (jc->left_right == 1) {
+	if (jc->left_right == 2) {
 		//rz = jc->gyro.roll*240;
-		iReport.wAxisZRot = jc->gyro.roll * 120;
-		iReport.wSlider = jc->gyro.pitch * 120;
+		//iReport.wAxisZRot = jc->gyro.roll * 120;
+		//iReport.wSlider = jc->gyro.pitch * 120;
+
+		int multiplier = 600;
+
+		iReport.wAxisZRot = 16384 + (jc->gyro.relroll * multiplier);
+		
+		iReport.wSlider = 16384 + (jc->gyro.relpitch * multiplier);
+
+		iReport.wDial = 16384 + (jc->gyro.relyaw * multiplier);
+
 	}
 	
 
@@ -1384,7 +1430,7 @@ init_start:
 	// A3: 230
 
 
-	if (settings.marioTheme) {
+	if (!settings.marioTheme) {
 		for (int i = 0; i < 1; ++i) {
 
 			printf("Playing mario theme...\n");
@@ -1660,6 +1706,7 @@ init_start:
 			if (missedPollCount > 2000) {
 				//printf("Connection not stable, retrying\n", i);
 				missedPollCount = 0;
+
 				//goto init_start;
 			}
 
