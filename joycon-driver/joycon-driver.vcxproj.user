@@ -4,19 +4,19 @@
     <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommandArguments>--auto-center --combine</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>--auto-center --combine --mario-theme --enable-gyro</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LocalDebuggerCommandArguments>--auto-center --combine</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>--auto-center --combine --mario-theme --enable-gyro</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerCommandArguments>--auto-center --combine</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>--auto-center --combine --mario-theme --enable-gyro</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LocalDebuggerCommandArguments>--auto-center --combine</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>--auto-center --combine --mario-theme --enable-gyro</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

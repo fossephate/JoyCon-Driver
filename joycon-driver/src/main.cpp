@@ -153,6 +153,9 @@ struct Settings {
 	// the first JoyCon connected.
 	bool marioTheme = false;
 
+	// enables motion controls
+	bool enableGyro = false;
+
 } settings;
 
 
@@ -398,7 +401,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 	}
 
 	// bluetooth polled update packet:
-	if (packet[0] == 0x21/*33*/) {
+	if (packet[0] == 0x21 || packet[0] == 0x31) {
 
 		{
 			// Button status:
@@ -502,6 +505,17 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 	}
 
 
+
+
+	// if there's gyro data:
+	if (packet[0] == 0x31) {
+		if (jc->left_right == 1) {
+			hex_dump(packet, len);
+		}
+		
+	}
+
+
 	//if (jc->left_right == 1) {
 	//	printf("L: ");
 	//} else if (jc->left_right == 2) {
@@ -525,12 +539,9 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		}
 	}
 
-	// if there's gyro data:
-	if (packet[0] == 0x30) {
-		if (jc->left_right == 2) {
-			//hex_dump(packet, len);
-		}
-	}
+
+	
+	
 
 	//if (jc->stick.horizontal < -50) {
 	//	printf("TEST%d\n", rand0t1()*100);
@@ -825,15 +836,6 @@ int joycon_init_bt(Joycon *jc) {
 	joycon_send_subcommand(jc, 0x01, 0x03, buf, 1);
 
 
-	//for (int i = 0; i < 100; ++i) {
-	//	// set lights:
-	//	memset(buf, 0x00, 0x400);
-	//	buf[0] = i;
-	//	buf[1] = i;
-	//	//									cmd subcmd
-	//	joycon_send_subcommand(jc->handle, 0x10, 0x30, buf, 1);
-	//}
-
 	printf("Successfully initialized %s!\n", jc->name.c_str());
 
 	return 0;
@@ -1097,9 +1099,11 @@ void parseSettings(int length, char *args[]) {
 		if (std::string(args[i]) == "--auto-center") {
 			settings.autoCenterSticks = true;
 		}
-
 		if (std::string(args[i]) == "--mario-theme") {
 			settings.marioTheme = true;
+		}
+		if (std::string(args[i]) == "--enable-gyro") {
+			settings.enableGyro = true;
 		}
 	}
 }
@@ -1350,72 +1354,74 @@ init_start:
 	// A3: 230
 
 
-	if(settings.marioTheme) {
+	if (settings.marioTheme) {
+		for (int i = 0; i < 1; ++i) {
 
-		printf("Playing mario theme...\n");
+			printf("Playing mario theme...\n");
 
-		//int n = ((i % 2) ? i : i-1);// always odd
-		//joycon_rumble(&joycons[0], (sin(i*0.01)*127)+127, 2);
-		//joycon_rumble(&joycons[0], n, 1);
-		//Sleep(200);
-		//joycon_rumble(&joycons[0], 1, 3);
-		//Sleep(100);
+			//int n = ((i % 2) ? i : i-1);// always odd
+			//joycon_rumble(&joycons[0], (sin(i*0.01)*127)+127, 2);
+			//joycon_rumble(&joycons[0], n, 1);
+			//Sleep(200);
+			//joycon_rumble(&joycons[0], 1, 3);
+			//Sleep(100);
 
-		Sleep(1000);
-		
-		joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
-		Sleep(100);
-		joycon_rumble(&joycons[0], mk_odd(200), 1);Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
-		Sleep(150);
-		joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
-		Sleep(50);
-		joycon_rumble(&joycons[0], mk_odd(180), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// C2
-		Sleep(50);
-		joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
-		Sleep(50);
-		joycon_rumble(&joycons[0], mk_odd(220), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// G2
+			Sleep(1000);
 
-
-
-		Sleep(200);
-		joycon_rumble(&joycons[0], mk_odd(150), 1); Sleep(250); joycon_rumble(&joycons[0], 1, 3);	// G1
-
-		Sleep(200);
-		joycon_rumble(&joycons[0], mk_odd(180), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// C2
-
-		Sleep(100);
-		joycon_rumble(&joycons[0], mk_odd(150), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// G1
-
-		Sleep(100);
-		joycon_rumble(&joycons[0], mk_odd(125), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// E1
-
-		Sleep(100);
-		joycon_rumble(&joycons[0], mk_odd(160), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// A2
-
-		Sleep(100);
-		joycon_rumble(&joycons[0], mk_odd(170), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// B2
-
-		Sleep(50);
-		joycon_rumble(&joycons[0], mk_odd(165), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// A-B?
-		Sleep(50);
-		joycon_rumble(&joycons[0], mk_odd(160), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// A2
-		Sleep(50);
-		joycon_rumble(&joycons[0], mk_odd(150), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// G1
+			joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
+			Sleep(100);
+			joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
+			Sleep(150);
+			joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
+			Sleep(50);
+			joycon_rumble(&joycons[0], mk_odd(180), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// C2
+			Sleep(50);
+			joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
+			Sleep(50);
+			joycon_rumble(&joycons[0], mk_odd(220), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// G2
 
 
-		Sleep(100);
-		joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
-		Sleep(100);
-		joycon_rumble(&joycons[0], mk_odd(220), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// G2
 
-		Sleep(100);
-		joycon_rumble(&joycons[0], mk_odd(230), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// A3
+			Sleep(200);
+			joycon_rumble(&joycons[0], mk_odd(150), 1); Sleep(250); joycon_rumble(&joycons[0], 1, 3);	// G1
 
-		Sleep(100);
-		joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
+			Sleep(200);
+			joycon_rumble(&joycons[0], mk_odd(180), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// C2
+
+			Sleep(100);
+			joycon_rumble(&joycons[0], mk_odd(150), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// G1
+
+			Sleep(100);
+			joycon_rumble(&joycons[0], mk_odd(125), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// E1
+
+			Sleep(100);
+			joycon_rumble(&joycons[0], mk_odd(160), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// A2
+
+			Sleep(100);
+			joycon_rumble(&joycons[0], mk_odd(170), 1); Sleep(200); joycon_rumble(&joycons[0], 1, 3);	// B2
+
+			Sleep(50);
+			joycon_rumble(&joycons[0], mk_odd(165), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// A-B?
+			Sleep(50);
+			joycon_rumble(&joycons[0], mk_odd(160), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// A2
+			Sleep(50);
+			joycon_rumble(&joycons[0], mk_odd(150), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// G1
 
 
-		Sleep(1000);
+			Sleep(100);
+			joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
+			Sleep(100);
+			joycon_rumble(&joycons[0], mk_odd(220), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// G2
+
+			Sleep(100);
+			joycon_rumble(&joycons[0], mk_odd(230), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// A3
+
+			Sleep(100);
+			joycon_rumble(&joycons[0], mk_odd(200), 1); Sleep(100); joycon_rumble(&joycons[0], 1, 3);	// E2
+
+
+			Sleep(1000);
+		}
 	}
 
 
@@ -1516,8 +1522,11 @@ init_start:
 				continue;
 			}
 
+			// set to be non-blocking:
+			hid_set_nonblocking(jc->handle, 1);
 			
 
+			// get input:
 
 			memset(buf, 0, 65);
 
@@ -1527,36 +1536,59 @@ init_start:
 				buf[2] = 0x00; // 0001   u16 second part size
 				buf[3] = 0x01;
 				buf[8] = 0x1F; // 1F     Get input command
-			} else {
-				buf[0] = 0x1;// HID get input
+			} else if(settings.enableGyro) {
+				buf[0] = 0x1F;// HID get input & gyro data
 				buf[1] = 0x0;
-				buf[2] = 0x0;
+			} else {
+				buf[0] = 0x01;// HID get input
+				buf[1] = 0x0;
 			}
 			
 
 
-			// set to be non-blocking:
-			hid_set_nonblocking(jc->handle, 1);
+
 
 			// send data:
 			written = hid_write(jc->handle, buf, 9);
-			//printf("%d bytes written.\n", written);
-
 			// read response:
 			read = hid_read(jc->handle, buf, 65);// returns length of actual bytes read
-			//printf("%d bytes read.\n", res);
-
-			// set to be blocking:
-			//hid_set_nonblocking(jc->handle, 0);
 
 
 			if (read == 0) {
 				missedPollCount += 1;
-
 			} else if (read > 0) {
 				// handle input data
 				handle_input(jc, buf, res);	
 			}
+
+
+			//Sleep(10);
+
+			//// get gyro data:
+			//if (settings.usingBluetooth) {
+			//	
+			//	buf[0] = 0x1F;// HID get gyro data
+			//	buf[1] = 0x0;
+
+
+			//	// send data:
+			//	written = hid_write(jc->handle, buf, 2);
+			//	// read response:
+			//	read = hid_read(jc->handle, buf, 65);// returns length of actual bytes read
+
+			//	if (read > 0) {
+			//		// handle input data
+			//		handle_input(jc, buf, res);
+			//	}
+			//}
+
+
+
+
+
+
+
+
 
 			if (missedPollCount > 2000) {
 				//printf("Connection not stable, retrying\n", i);
