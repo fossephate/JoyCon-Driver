@@ -533,6 +533,12 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			//printf("%d\n", jc->gyro.roll);
 			//printf("%02x\n", jc->gyro.pitch);
 		}
+
+		if (jc->left_right == 2) {
+			//hex_dump(packet, len);
+			//printf("%d\n", jc->gyro.roll);
+			//printf("%02x\n", jc->gyro.pitch);
+		}
 		
 	}
 
@@ -654,11 +660,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		jc->battery = (stick_data[1] & 0xF0) >> 4;
 
 	}
-
-
-	//print_buttons(jc);
-	//print_buttons2(jc);
-	//print_stick2(jc);
 }
 
 
@@ -863,9 +864,12 @@ int joycon_init_bt(Joycon *jc) {
 
 	// Increase data rate for Bluetooth
 	printf("Increase data rate for Bluetooth...\n");
-	memset(buf, 0x00, 0x400);
-	buf[0] = 0x31; // Enabled
-	joycon_send_subcommand(jc, 0x01, 0x03, buf, 1);
+	// just to be sure...
+	for (int i = 0; i < 10; ++i) {
+		memset(buf, 0x00, 0x400);
+		buf[0] = 0x31; // Enabled
+		joycon_send_subcommand(jc, 0x01, 0x03, buf, 1);
+	}
 
 
 	printf("Successfully initialized %s!\n", jc->name.c_str());
@@ -959,11 +963,6 @@ int acquirevJoyDevice(int deviceID) {
 		_tprintf("Acquired device number %d - OK\n", deviceID);
 	}
 }
-
-
-
-
-
 
 void updatevJoyDevice(Joycon *jc) {
 
@@ -1081,23 +1080,12 @@ void updatevJoyDevice(Joycon *jc) {
 	} else {
 
 		if (jc->left_right == 2) {
-			//btns = iReport.lButtons | jc->buttons << 16;
-			//unsigned low8bits = iReport.lButtons & 0xFF;
-			//btns = (jc->buttons << 16) | (iReport.lButtons & 0xFF);
-			//btns = ((jc->buttons) << 16) | (iReport.lButtons & 0xFF);
 
 			unsigned r = createMask(0, 15);// 15
 			btns = ((jc->buttons) << 16) | (r & iReport.lButtons);
-			//std::bitset<32> x(btns);
-			//std::cout << x;
-			//printf("\n");
-		} else if(jc->left_right == 1) {
-			//unsigned high8bits = iReport.lButtons;
-			btns = ((iReport.lButtons >> 16) << 16) | (jc->buttons);
 
-			//std::bitset<32> x(btns);
-			//std::cout << x;
-			//printf("\n");
+		} else if(jc->left_right == 1) {
+			btns = ((iReport.lButtons >> 16) << 16) | (jc->buttons);
 		}
 	}
 
@@ -1641,7 +1629,7 @@ init_start:
 			}
 
 
-			//Sleep(10);
+			
 
 			//// get gyro data:
 			//if (settings.usingBluetooth) {
