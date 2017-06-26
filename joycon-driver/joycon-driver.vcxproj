@@ -23,6 +23,8 @@
     <ClInclude Include="include\public.h" />
     <ClInclude Include="include\stdafx.h" />
     <ClInclude Include="include\vjoyinterface.h" />
+    <ClInclude Include="src\joycon.h" />
+    <ClInclude Include="src\packet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
@@ -30,7 +32,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{edc0440c-f596-4709-a091-ee8c8a365018}</ProjectGuid>
     <RootNamespace>_01</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <ProjectName>joycon-driver</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

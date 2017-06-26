@@ -6,14 +6,12 @@
 #include <stdafx.h>
 #include <string.h>
 #include <chrono>
-
+#include <thread>
 #include <hidapi.h>
-
-
-
 #include "public.h"
 #include "vjoyinterface.h"
-
+#include "packet.h"
+#include "joycon.h"
 
 #pragma warning(disable:4996)
 
@@ -53,58 +51,6 @@ float rand0t1() {
 	float rnd = dis(gen);
 	return rnd;
 }
-
-struct Joycon {
-
-	hid_device *handle;
-	wchar_t *serial;
-
-	std::string name;
-
-	unsigned char r_buf[65];// read buffer
-	unsigned char w_buf[65];// write buffer, what to hid_write to the device
-
-	int left_right = 0;// 1: left joycon, 2: right joycon
-
-	uint16_t buttons;
-
-	bool buttons2[32];
-
-	int8_t dstick;
-
-	uint8_t battery;
-
-	struct Stick {
-		int horizontal;
-		int vertical;
-
-		uint8_t horizontal2;
-		uint8_t vertical2;
-	} stick;
-
-	struct Gyroscope {
-		// absolute:
-		int pitch;
-		int yaw;
-		int roll;
-
-		// relative:
-		int relpitch;
-		int relyaw;
-		int relroll;
-	} gyro;
-
-	struct Accelerometer {
-		int x;
-		int y;
-		int z;
-	} accel;
-
-
-	uint8_t newButtons[3];
-};
-
-
 
 std::vector<Joycon> joycons;
 
@@ -382,363 +328,64 @@ void hid_dual_write(hid_device *handle_l, hid_device *handle_r, unsigned char *b
 
 
 void handle_input(Joycon *jc, uint8_t *packet, int len) {
+	Packet * pkt = (Packet *)packet;
+	struct UpdatePacket * upkt = nullptr;
+	StickData *stick_data = nullptr;
+	GyroData * gyro_data = nullptr;
+	AccData * acc_data = nullptr;
 
+	switch (pkt->type)
+	{
+	case (CMD_BLUETOOTH_BUTTON_PRESS):
+		jc->dstick = pkt->btbtn.dstick;
+		break;
+	case (CMD_POLL_UPDATE1):
+	case (CMD_POLL_UPDATE2):
+		upkt = &pkt->update;
 
+		// get button state: 
+		if (jc->left_right == 1) {	// Left JoyCon:
+			jc->buttons = (upkt->btupd_lr1.state1 << 8) | upkt->btupd_lr1.state2;
+		}
+		else if (jc->left_right == 2) { // Right JoyCon:
+			jc->buttons = (upkt->btupd_lr2.state1 << 8) | upkt->btupd_lr2.state2;
+		}
 
-	
-	// Upright: LDUR
-	// Sideways: DRLU
-	// bluetooth button pressed packet:
-	if (packet[0] == 0x3F/*63*/) {
+		// get joy stick data:
+		stick_data = (jc->left_right == 1) ? &upkt->stick_lr1 : &upkt->stick_lr2;
+		
+		jc->stick.horizontal2 = WEIRD_SWAP(stick_data->horiz_hi_batt, stick_data->horiz_lo);
+		jc->stick.horizontal = -128 + jc->stick.horizontal2;
 
-		uint16_t old_buttons = jc->buttons;
-		int8_t old_dstick = jc->dstick;
-		// button update
-		//jc->buttons = packet[1] + packet[2] * 256;
+		jc->stick.vertical2 = stick_data->vert;
+		jc->stick.vertical = -128 + stick_data->vert;
 
-		jc->dstick = packet[3];
-		//if (jc->buttons != old_buttons) {
-		//	print_buttons(jc);
-		//}
-		//if (jc->dstick != old_dstick) {
-		//	print_dstick(jc);
-		//}
-	}
+		jc->battery = (stick_data->horiz_hi_batt & 0xF) >> 4;
 
-	// bluetooth polled update packet:
-	if (packet[0] == 0x21 || packet[0] == 0x31) {
-
+		// Get Gyro and Accelerometer Data
+		if (jc->left_right == 1)
 		{
-			// Button status:
-			// Byte 1: 0x8E
-			//  Byte 2
-			//   Bit 0: JR Y
-			//   Bit 1: JR X
-			//   Bit 2: JR B
-			//   Bit 3: JR A
-			//   Bit 4: JR SR
-			//   Bit 5: JR SL
-			//   Bit 6: JR R
-			//   Bit 7: JR ZR
-			// Byte 3
-			//   Bit 0: Minus
-			//   Bit 1: Plus
-			//   Bit 2: RStick
-			//   Bit 3: LStick
-			//   Bit 4: Home
-			//   Bit 5: Capture
-			// Byte 4
-			//   Bit 0: JL Down
-			//   Bit 1: JL Up
-			//   Bit 2: JL Right
-			//   Bit 3: JL Left
-			//   Bit 4: JL SR
-			//   Bit 5: JL SL
-			//   Bit 6: JL L
-			//   Bit 7: JL ZL
+			// TODO: Verify these are correct, not confident just yet
+			// structure may be off by a byte (see unknown2 in UpdatePacket)
+			// Left Joycon 
+			//gyro_data = &upkt->gyro_data_lr1;
+			//jc->gyro.pitch = _16_BSWAP(gyro_data->pitch);
+			//jc->gyro.roll = _16_BSWAP(gyro_data->roll);
+			//jc->gyro.yaw = _16_BSWAP(gyro_data->yaw);
+
+			// Get Accelerometer Data
+			//acc_data = &upkt->acc_data_lr1;
+			//jc->accel.x = _16_BSWAP(acc_data->x);
+			//jc->accel.y = _16_BSWAP(acc_data->y);
+			//jc->accel.z = _16_BSWAP(acc_data->z);
 		}
-
-
-		uint8_t *pckt = packet + 3;
-		// Upright: DURL
-		// Sideways: RLUD
-		//if (pckt[0] == 0x8E && 0) {
-
-			//uint8_t buttons[3];
-			//buttons[0] = pckt[0];
-			//buttons[1] = pckt[1];
-			//buttons[2] = pckt[2];
-
-			//if (jc->left_right == 1) {
-			//	uint8_t b = pckt[2];// reversed
-			//	//b = ((b * 0x0802LU & 0x22110LU) | (b * 0x8020LU & 0x88440LU)) * 0x10101LU >> 16;
-			//	//jc->buttons = pckt[3] | (b << 8);
-			//	jc->buttons = pckt[3] | b;
-			//}
-
-			//if (jc->left_right == 2) {
-			//	uint8_t b = pckt[2];// reversed
-			//	//b = ((b * 0x0802LU & 0x22110LU) | (b * 0x8020LU & 0x88440LU)) * 0x10101LU >> 16;
-			//	//jc->buttons = pckt[1] | (b << 8);
-			//}
-			//printBitsFromInt(&jc->buttons);
-		//}
-
-
-		// get button states:
+		else if (jc->left_right == 2)
 		{
-			uint16_t states = 0;
-
-			// re-order bits:
-
-			// Left JoyCon:
-			if (jc->left_right == 1) {
-				states = (pckt[1] << 8) | (pckt[2] & 0xff);
-			// Right JoyCon:
-			} else if (jc->left_right == 2) {
-				states = (pckt[1] << 8) | (pckt[0] & 0xff);
-			}
-
-			jc->buttons = states;
+			//TODO
 		}
-
-		// get stick data:
-
-		uint8_t *stick_data = nullptr;
-		if (jc->left_right == 1) {
-			stick_data = packet + 6;
-		} else if(jc->left_right == 2) {
-			stick_data = packet + 9;
-		}
-
-		
-
-		// it appears that the X component of the stick data isn't just nibble reversed,
-		// specifically, the second nibble of second byte is combined with the first nibble of the first byte
-		// to get the correct X stick value:
-		uint8_t stick_horizontal = ((stick_data[1] & 0x0F) << 4) | ((stick_data[0] & 0xF0) >> 4);// horizontal axis is reversed / combined with byte 0
-		
-		uint8_t stick_vertical = stick_data[2];
-
-		jc->stick.horizontal2 = stick_horizontal;
-		jc->stick.vertical2 = stick_vertical;
-
-		jc->stick.horizontal = -128 + (int)(unsigned int)stick_horizontal;
-		jc->stick.vertical = -128 + (int)(unsigned int)stick_vertical;
-
-		jc->battery = (stick_data[1] & 0xF0) >> 4;
-
-
-		uint8_t *gyro_data = nullptr;
-		if (jc->left_right == 1) {
-			gyro_data = packet + 13;// 13
-		} else if (jc->left_right == 2) {
-			gyro_data = packet + 13;// ?
-		}
-
-		//jc->gyro.relroll = (int)(unsigned int)((gyro_data[3] & 0x0F) << 4) | ((gyro_data[2] & 0xF0) >> 4) - jc->gyro.roll;
-		//jc->gyro.relpitch = ((int)(unsigned int)((gyro_data[1] & 0x0F) << 4) | ((gyro_data[0] & 0xF0) >> 4)) - jc->gyro.pitch;
-		//jc->gyro.relyaw = 
-
-		//gyro_data[7] = relative roll
-		//gyro_data[9]+gyro_data[10]? = relative pitch
-		//gyro_data[11] = relative yaw
-		//
-
-		// second nibble from first byte + first nibble from 0th byte
-		//jc->gyro.pitch = (int)(unsigned int) ((gyro_data[1] & 0x0F) << 4) | ((gyro_data[4] & 0xF0) >> 4);
-		jc->gyro.pitch = (int)(unsigned int)((gyro_data[1] & 0x0F) << 4) | ((gyro_data[0] & 0xF0) >> 4);
-
-		// second nibble from second byte + first nibble from first byte
-		jc->gyro.roll = (int)(unsigned int)((gyro_data[3] & 0x0F) << 4) | ((gyro_data[2] & 0xF0) >> 4);
-
-
-		//jc->gyro.relpitch = (int)(unsigned int)((gyro_data[9] & 0x0F) << 4);
-
-		int a, b;
-
-
-		// get relative roll:
-		//a = 0xFF - gyro_data[7];
-		//b = gyro_data[7];
-		//if (a < b) {
-		//	jc->gyro.relroll = (0xFF - gyro_data[7]);
-		//} else {
-		//	jc->gyro.relroll = -1 * (int)gyro_data[7];
-		//}
-
-		// get relative pitch:
-		//a = 0xFF - gyro_data[9];
-		//b = gyro_data[9];
-		//if (a < b) {
-		//	jc->gyro.relpitch = (0xFF - gyro_data[9]);
-		//} else {
-		//	jc->gyro.relpitch = -1 * (int) (gyro_data[9] | ((gyro_data[10] & 0xF0) >> 4));
-		//}
-
-		// get relative yaw:
-		//a = 0xFF - gyro_data[11];
-		//b = gyro_data[11];
-		//if (a < b) {
-		//	jc->gyro.relyaw = (0xFF - gyro_data[11]);
-		//} else {
-		//	jc->gyro.relyaw = -1 * (int)gyro_data[11];
-		//}
-
-
-
-
-
-
-		// get relative roll:
-		// second nibble from first byte + first nibble from second byte
-		a = (((gyro_data[7] & 0x0F) << 4) | ((gyro_data[8] & 0xF0) >> 4));
-		b = 0xFF - a;
-		if (a < b) {
-			jc->gyro.relroll = a;
-		} else {
-			jc->gyro.relroll = -1 * b;
-		}
-
-
-
-		// get relative pitch:
-		// second nibble from first byte + first nibble from second byte
-		a = (((gyro_data[9] & 0x0F) << 4) | ((gyro_data[10] & 0xF0) >> 4));
-		b = 0xFF - a;
-		if (a < b) {
-			jc->gyro.relpitch = a;
-		} else {
-			jc->gyro.relpitch = -1 * b;
-		}
-
-
-		// get relative yaw:
-		// second nibble from first byte + first nibble from second byte
-		a = (((gyro_data[11] & 0x0F) << 4) | ((gyro_data[12] & 0xF0) >> 4));
-		b = 0xFF - a;
-		if (a < b) {
-			jc->gyro.relyaw = a;
-		} else {
-			jc->gyro.relyaw = -1 * b;
-		}
-
-
-
-
-
-
-		if (jc->left_right == 1) {
-			//hex_dump(gyro_data, 15);
-			//printf("%d\n", jc->gyro.roll);
-			//printf("%02x\n", jc->gyro.pitch);
-		}
-
-		if (jc->left_right == 2) {
-			//hex_dump(gyro_data+9, 3);
-			//printf("%d\n", jc->gyro.relpitch);
-			//printf("%02x\n", jc->gyro.relpitch);
-		}
-		
-	}
-
-
-
-
-	// if there's gyro data:
-	if (packet[0] == 0x31) {
-		if (jc->left_right == 1) {
-			//hex_dump(packet, len);
-		}
-		
-	}
-
-
-	//if (jc->left_right == 1) {
-	//	printf("L: ");
-	//} else if (jc->left_right == 2) {
-	//	printf("R: ");
-	//}
-
-	if (packet[0] != 0x3F && packet[0] != 0x21) {
-		//printf("Unknown packet: ");
-		//hex_dump2(packet, len);
-
-		//hex_dump(packet, len);
-	}
-
-	if (jc->left_right == 2) {
-		//hex_dump(packet, len);
-	}
-
-	if (packet[5] == 0x31/*49*/) {
-		if (jc->left_right == 2) {
-			//hex_dump(packet, len - 20);
-		}
-	}
-
-
-	
-	
-
-	//if (jc->stick.horizontal < -50) {
-	//	printf("TEST%d\n", rand0t1()*100);
-	//}
-
-	//printf("\n");
-
-	//hex_dump_0(packet, len);
-	//printf("\n");
-
-	// response packet to?:
-	// buf[0] = 0x01
-	// buf[10] = 0x03
-	//if (packet[0] == 0x30/*48*/) {
-		//hex_dump(packet, len);
-	//}
-
-
-
-
-	//uint8_t *pckt = packet + 10;
-
-	//hex_dump(pckt, 12);
-
-
-	// USB polled info:
-	if (packet[5] == 0x31/*49*/) {
-
-		uint8_t *pckt = packet + 13;
-
-		//if (jc->left_right == 1) {
-		//	hex_dump(pckt, 20);
-		//}
-
-		// get button states:
-		{
-
-			uint16_t states = 0;
-
-			// re-order bits:
-
-			// Left JoyCon:
-			if (jc->left_right == 1) {
-				states = (pckt[1] << 8) | (pckt[2] & 0xff);
-			// Right JoyCon:
-			} else if (jc->left_right == 2) {
-				states = (pckt[1] << 8) | (pckt[0] & 0xff);
-			}
-
-			jc->buttons = states;
-		}
-
-		// stick data:
-
-		uint8_t *stick_data = nullptr;
-		if (jc->left_right == 1) {
-			stick_data = packet + 16;
-		} else if (jc->left_right == 2) {
-			stick_data = packet + 19;
-		}
-
-
-
-		// it appears that the X component of the stick data isn't just nibble reversed,
-		// specifically, the second nibble of second byte is combined with the first nibble of the first byte
-		// to get the correct X stick value:
-		uint8_t stick_horizontal = ((stick_data[1] & 0x0F) << 4) | ((stick_data[0] & 0xF0) >> 4);// horizontal axis is reversed / combined with byte 0
-
-		uint8_t stick_vertical = stick_data[2];
-
-		//jc->stick.unknown2 = stick_unknown;
-		jc->stick.horizontal2 = stick_horizontal;
-		jc->stick.vertical2 = stick_vertical;
-
-		jc->stick.horizontal = -128 + (int)(unsigned int)stick_horizontal;
-		jc->stick.vertical = -128 + (int)(unsigned int)stick_vertical;
-
-		jc->battery = (stick_data[1] & 0xF0) >> 4;
-
+		break;
+	default:
+		break;
 	}
 }
 
@@ -1742,10 +1389,7 @@ init_start:
 		#endif
 		
 
-		
-
 		// input poll loop:
-
 		for (int i = 0; i < joycons.size(); ++i) {
 
 			Joycon *jc = &joycons[i];
@@ -1775,16 +1419,11 @@ init_start:
 				buf[0] = 0x01;// HID get input
 				buf[1] = 0x0;
 			}
-			
-
-
-
 
 			// send data:
 			written = hid_write(jc->handle, buf, 9);
 			// read response:
 			read = hid_read(jc->handle, buf, 65);// returns length of actual bytes read
-
 
 			if (read == 0) {
 				missedPollCount += 1;
@@ -1793,52 +1432,16 @@ init_start:
 				handle_input(jc, buf, res);	
 			}
 
-
-			
-
-			//// get gyro data:
-			//if (settings.usingBluetooth) {
-			//	
-			//	buf[0] = 0x1F;// HID get gyro data
-			//	buf[1] = 0x0;
-
-
-			//	// send data:
-			//	written = hid_write(jc->handle, buf, 2);
-			//	// read response:
-			//	read = hid_read(jc->handle, buf, 65);// returns length of actual bytes read
-
-			//	if (read > 0) {
-			//		// handle input data
-			//		handle_input(jc, buf, res);
-			//	}
-			//}
-
-
-
-
-
-
-
-
-
 			if (missedPollCount > 2000) {
 				//printf("Connection not stable, retrying\n", i);
 				missedPollCount = 0;
-
-				//goto init_start;
 			}
-
-
 			updatevJoyDevice(jc);
 
 		}
 
-
 		// sleep:
-		//Sleep(5);
-		Sleep(1);
-
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
 		//auto end = std::chrono::steady_clock::now();
 		//std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
