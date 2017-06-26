@@ -8,8 +8,9 @@ src\main.cpp(1337): warning C4018: '<': signed/unsigned mismatch
 src\main.cpp(1380): warning C4018: '<': signed/unsigned mismatch
 src\main.cpp(1421): warning C4018: '<': signed/unsigned mismatch
 src\main.cpp(1451): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1678): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1788): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1488): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+src\main.cpp(1749): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1859): warning C4018: '<': signed/unsigned mismatch
 src\main.cpp(1273): warning C4102: 'init_start': unreferenced label
 src\main.cpp(1259): warning C4101: 'device_name': unreferenced local variable
 src\main.cpp(1253): warning C4101: 'buf2': unreferenced local variable
