@@ -14,6 +14,9 @@
 #include "public.h"
 #include "vjoyinterface.h"
 
+#include "packet.h"
+#include "joycon.h"
+
 
 #pragma warning(disable:4996)
 
@@ -28,7 +31,7 @@
 
 #define SERIAL_LEN 18
 
-//#define VIBRATION_TEST
+
 //#define DEBUG_PRINT
 //#define LED_TEST
 
@@ -54,63 +57,11 @@ float rand0t1() {
 	return rnd;
 }
 
-struct Joycon {
-
-	hid_device *handle;
-	wchar_t *serial;
-
-	std::string name;
-
-	unsigned char r_buf[65];// read buffer
-	unsigned char w_buf[65];// write buffer, what to hid_write to the device
-
-	int left_right = 0;// 1: left joycon, 2: right joycon
-
-	uint16_t buttons;
-
-	bool buttons2[32];
-
-	int8_t dstick;
-
-	uint8_t battery;
-
-	struct Stick {
-		int horizontal;
-		int vertical;
-
-		uint8_t horizontal2;
-		uint8_t vertical2;
-	} stick;
-
-	struct Gyroscope {
-		// absolute:
-		int pitch;
-		int yaw;
-		int roll;
-
-		// relative:
-		int relpitch;
-		int relyaw;
-		int relroll;
-	} gyro;
-
-	struct Accelerometer {
-		int x;
-		int y;
-		int z;
-	} accel;
-
-
-	uint8_t newButtons[3];
-};
-
 
 
 std::vector<Joycon> joycons;
 
 JOYSTICK_POSITION_V2 iReport; // The structure that holds the full position data
-//bool disconnect = false;
-//bool bluetooth = true;
 uint8_t global_count = 0;
 
 
@@ -393,90 +344,29 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 		uint16_t old_buttons = jc->buttons;
 		int8_t old_dstick = jc->dstick;
-		// button update
-		//jc->buttons = packet[1] + packet[2] * 256;
 
 		jc->dstick = packet[3];
-		//if (jc->buttons != old_buttons) {
-		//	print_buttons(jc);
-		//}
-		//if (jc->dstick != old_dstick) {
-		//	print_dstick(jc);
-		//}
 	}
 
-	// bluetooth polled update packet:
+	// input update packet:
 	if (packet[0] == 0x21 || packet[0] == 0x31) {
-
-		{
-			// Button status:
-			// Byte 1: 0x8E
-			//  Byte 2
-			//   Bit 0: JR Y
-			//   Bit 1: JR X
-			//   Bit 2: JR B
-			//   Bit 3: JR A
-			//   Bit 4: JR SR
-			//   Bit 5: JR SL
-			//   Bit 6: JR R
-			//   Bit 7: JR ZR
-			// Byte 3
-			//   Bit 0: Minus
-			//   Bit 1: Plus
-			//   Bit 2: RStick
-			//   Bit 3: LStick
-			//   Bit 4: Home
-			//   Bit 5: Capture
-			// Byte 4
-			//   Bit 0: JL Down
-			//   Bit 1: JL Up
-			//   Bit 2: JL Right
-			//   Bit 3: JL Left
-			//   Bit 4: JL SR
-			//   Bit 5: JL SL
-			//   Bit 6: JL L
-			//   Bit 7: JL ZL
-		}
+		
+		// offset for usb or bluetooth data:
+		int offset = settings.usingBluetooth ? 0 : 10;
 
 
-		uint8_t *pckt = packet + 3;
-		// Upright: DURL
-		// Sideways: RLUD
-		//if (pckt[0] == 0x8E && 0) {
-
-			//uint8_t buttons[3];
-			//buttons[0] = pckt[0];
-			//buttons[1] = pckt[1];
-			//buttons[2] = pckt[2];
-
-			//if (jc->left_right == 1) {
-			//	uint8_t b = pckt[2];// reversed
-			//	//b = ((b * 0x0802LU & 0x22110LU) | (b * 0x8020LU & 0x88440LU)) * 0x10101LU >> 16;
-			//	//jc->buttons = pckt[3] | (b << 8);
-			//	jc->buttons = pckt[3] | b;
-			//}
-
-			//if (jc->left_right == 2) {
-			//	uint8_t b = pckt[2];// reversed
-			//	//b = ((b * 0x0802LU & 0x22110LU) | (b * 0x8020LU & 0x88440LU)) * 0x10101LU >> 16;
-			//	//jc->buttons = pckt[1] | (b << 8);
-			//}
-			//printBitsFromInt(&jc->buttons);
-		//}
+		uint8_t *btn_data = packet + 3 + offset;
 
 
 		// get button states:
 		{
 			uint16_t states = 0;
-
-			// re-order bits:
-
 			// Left JoyCon:
 			if (jc->left_right == 1) {
-				states = (pckt[1] << 8) | (pckt[2] & 0xff);
+				states = (btn_data[1] << 8) | (btn_data[2] & 0xFF);
 			// Right JoyCon:
 			} else if (jc->left_right == 2) {
-				states = (pckt[1] << 8) | (pckt[0] & 0xff);
+				states = (btn_data[1] << 8) | (btn_data[0] & 0xFF);
 			}
 
 			jc->buttons = states;
@@ -486,9 +376,9 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 		uint8_t *stick_data = nullptr;
 		if (jc->left_right == 1) {
-			stick_data = packet + 6;
+			stick_data = packet + 6 + offset;
 		} else if(jc->left_right == 2) {
-			stick_data = packet + 9;
+			stick_data = packet + 9 + offset;
 		}
 
 		
@@ -537,39 +427,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 		int a, b;
 
-
-		// get relative roll:
-		//a = 0xFF - gyro_data[7];
-		//b = gyro_data[7];
-		//if (a < b) {
-		//	jc->gyro.relroll = (0xFF - gyro_data[7]);
-		//} else {
-		//	jc->gyro.relroll = -1 * (int)gyro_data[7];
-		//}
-
-		// get relative pitch:
-		//a = 0xFF - gyro_data[9];
-		//b = gyro_data[9];
-		//if (a < b) {
-		//	jc->gyro.relpitch = (0xFF - gyro_data[9]);
-		//} else {
-		//	jc->gyro.relpitch = -1 * (int) (gyro_data[9] | ((gyro_data[10] & 0xF0) >> 4));
-		//}
-
-		// get relative yaw:
-		//a = 0xFF - gyro_data[11];
-		//b = gyro_data[11];
-		//if (a < b) {
-		//	jc->gyro.relyaw = (0xFF - gyro_data[11]);
-		//} else {
-		//	jc->gyro.relyaw = -1 * (int)gyro_data[11];
-		//}
-
-
-
-
-
-
 		// get relative roll:
 		// second nibble from first byte + first nibble from second byte
 		a = (((gyro_data[7] & 0x0F) << 4) | ((gyro_data[8] & 0xF0) >> 4));
@@ -603,143 +460,16 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			jc->gyro.relyaw = -1 * b;
 		}
 
-
-
-
-
-
 		if (jc->left_right == 1) {
 			//hex_dump(gyro_data, 15);
 			//printf("%d\n", jc->gyro.roll);
 			//printf("%02x\n", jc->gyro.pitch);
 		}
-
-		if (jc->left_right == 2) {
-			//hex_dump(gyro_data+9, 3);
-			//printf("%d\n", jc->gyro.relpitch);
-			//printf("%02x\n", jc->gyro.relpitch);
-		}
 		
 	}
 
 
 
-
-	// if there's gyro data:
-	if (packet[0] == 0x31) {
-		if (jc->left_right == 1) {
-			//hex_dump(packet, len);
-		}
-		
-	}
-
-
-	//if (jc->left_right == 1) {
-	//	printf("L: ");
-	//} else if (jc->left_right == 2) {
-	//	printf("R: ");
-	//}
-
-	if (packet[0] != 0x3F && packet[0] != 0x21) {
-		//printf("Unknown packet: ");
-		//hex_dump2(packet, len);
-
-		//hex_dump(packet, len);
-	}
-
-	if (jc->left_right == 2) {
-		//hex_dump(packet, len);
-	}
-
-	if (packet[5] == 0x31/*49*/) {
-		if (jc->left_right == 2) {
-			//hex_dump(packet, len - 20);
-		}
-	}
-
-
-	
-	
-
-	//if (jc->stick.horizontal < -50) {
-	//	printf("TEST%d\n", rand0t1()*100);
-	//}
-
-	//printf("\n");
-
-	//hex_dump_0(packet, len);
-	//printf("\n");
-
-	// response packet to?:
-	// buf[0] = 0x01
-	// buf[10] = 0x03
-	//if (packet[0] == 0x30/*48*/) {
-		//hex_dump(packet, len);
-	//}
-
-
-
-
-	//uint8_t *pckt = packet + 10;
-
-	//hex_dump(pckt, 12);
-
-
-	// USB polled info:
-	if (packet[5] == 0x31/*49*/) {
-
-		uint8_t *pckt = packet + 13;
-
-		//if (jc->left_right == 1) {
-		//	hex_dump(pckt, 20);
-		//}
-
-		// get button states:
-		{
-
-			uint16_t states = 0;
-
-			// re-order bits:
-
-			// Left JoyCon:
-			if (jc->left_right == 1) {
-				states = (pckt[1] << 8) | (pckt[2] & 0xff);
-			// Right JoyCon:
-			} else if (jc->left_right == 2) {
-				states = (pckt[1] << 8) | (pckt[0] & 0xff);
-			}
-
-			jc->buttons = states;
-		}
-
-		// stick data:
-
-		uint8_t *stick_data = nullptr;
-		if (jc->left_right == 1) {
-			stick_data = packet + 16;
-		} else if (jc->left_right == 2) {
-			stick_data = packet + 19;
-		}
-
-
-
-		// it appears that the X component of the stick data isn't just nibble reversed,
-		// specifically, the second nibble of second byte is combined with the first nibble of the first byte
-		// to get the correct X stick value:
-		uint8_t stick_horizontal = ((stick_data[1] & 0x0F) << 4) | ((stick_data[0] & 0xF0) >> 4);// horizontal axis is reversed / combined with byte 0
-
-		uint8_t stick_vertical = stick_data[2];
-
-		//jc->stick.unknown2 = stick_unknown;
-		jc->stick.horizontal2 = stick_horizontal;
-		jc->stick.vertical2 = stick_vertical;
-
-		jc->stick.horizontal = -128 + (int)(unsigned int)stick_horizontal;
-		jc->stick.vertical = -128 + (int)(unsigned int)stick_vertical;
-
-		jc->battery = (stick_data[1] & 0xF0) >> 4;
-
-	}
 }
 
 
@@ -816,18 +546,11 @@ void joycon_rumble(Joycon *jc, int frequency, int intensity) {
 	buf[1 + 4 + intensity] = 0x1;
 
 	// Set frequency to increase
-	//if (jc->left_right == 1) {
+	if (jc->left_right == 1) {
 		buf[1 + 0] = frequency;// (0, 255)
-	//} else {
+	} else {
 		buf[1 + 4] = frequency;// (0, 255)
-	//}
-
-	//if (i > 3) {
-	//	continue;
-	//}
-	//if (k > 200) {
-	//	continue;
-	//}
+	}
 
 	// set non-blocking:
 	hid_set_nonblocking(jc->handle, 1);
@@ -841,24 +564,9 @@ void joycon_init_usb(Joycon *jc) {
 	unsigned char buf[0x400];
 	memset(buf, 0, 0x400);
 
-
-	// USB:
-	//	80 01 (Handled elsewhere ? Returns MAC packet)
-	//	80 02 (Do two handshakes 19 01 03 07 00 91 10 00, 19 01 03 0B 00 91 12 04)
-	//	80 03 (Do baud switch)
-	//	80 04 (Set something to 1)
-	//	80 05 (Set something to 0)
-	//	80 06 (Something with sending post - handshake command 01 00 00 00 00 00 00 00 01 06 00 00, maybe baud related as well ? )
-	//	80 91 ... (Send pre - handshake command ? Has some weird lookup table stuff)
-	//	80 92 ... (Something with pre - handshake commands ? )
-	//	01 ... (Send post - handshake command ? Sends 0x31 - large UART starting with 19 01 03 07 00 92 00 00 with checksum edited in and the rest of the HID request pinned on)
-	//	10 ... (Same as above)
-
 	// set blocking:
 	// this insures we get the MAC Address
 	hid_set_nonblocking(jc->handle, 0);
-
-	// USB:
 
 	//Get MAC Left
 	printf("Getting MAC...\n");
@@ -945,11 +653,11 @@ int joycon_init_bt(Joycon *jc) {
 	// Increase data rate for Bluetooth
 	printf("Increase data rate for Bluetooth...\n");
 	// just to be sure...
-	for (int i = 0; i < 10; ++i) {
-		memset(buf, 0x00, 0x400);
-		buf[0] = 0x31; // Enabled
-		joycon_send_subcommand(jc, 0x01, 0x03, buf, 1);
-	}
+	//for (int i = 0; i < 10; ++i) {
+	memset(buf, 0x00, 0x400);
+	buf[0] = 0x31; // Enabled
+	joycon_send_subcommand(jc, 0x01, 0x03, buf, 1);
+	//}
 
 
 	printf("Successfully initialized %s!\n", jc->name.c_str());
@@ -1328,45 +1036,18 @@ init_start:
 
 	// use stick data to calibrate:
 	if (settings.autoCenterSticks) {
-
 		printf("Auto centering sticks...\n");
-
-	
 		// do a few polls to get stick data:
 		for (int j = 0; j < 10; ++j) {
 			for (int i = 0; i < joycons.size(); ++i) {
-
 				Joycon *jc = &joycons[i];
 				if (!jc->handle) {
 					continue;
 				}
-
-				if (settings.usingGrip) {
-					memset(buf, 0, 65);
-					buf[0] = 0x80; // 80     Do custom command
-					buf[1] = 0x92; // 92     Post-handshake type command
-					buf[2] = 0x00; // 0001   u16 second part size
-					buf[3] = 0x01;
-					buf[8] = 0x1F; // 1F     Get input command
-				} else {
-					buf[0] = 0x1;// HID get input
-					buf[1] = 0x0;
-					buf[2] = 0x0;
-				}
-
-
-
 				// set to be blocking:
 				hid_set_nonblocking(jc->handle, 0);
 
-				// send data:
-				hid_write(jc->handle, buf, 9);
-
-				// read response:
-				res = hid_read(jc->handle, buf, 65);// returns length of actual bytes read
-
-				// set to be blocking:
-				hid_set_nonblocking(jc->handle, 0);
+				joycon_send_command(jc, 0x01, buf, 0);
 
 				handle_input(jc, buf, res);
 
@@ -1664,51 +1345,12 @@ init_start:
 
 
 	
-	
+	int counter = 0;
 
 	while(true) {
 
 		//auto start = std::chrono::steady_clock::now();
 		//std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
-
-
-		#ifdef VIBRATION_TEST
-
-		Joycon *jc = &joycons[0];
-
-		for (int l = 0x10; l < 0x20; l++) {
-			for (int i = 1; i < 8; i++) {
-				for (int k = 0; k < 256; k++) {
-					memset(buf, 0, 0x40);
-					for (int j = 0; j <= 8; j++) {
-						buf[1 + i] = 0x1;//(i + j) & 0xFF;
-					}
-
-					// Set frequency to increase
-					buf[1 + 0] = k;
-					buf[1 + 4] = k;
-
-					//if (buf) {
-					//	memcpy(buf[1], buf[0], 0x400);
-					//}
-
-					if (i > 3) continue;
-					if (k > 200) continue;
-
-					// set non-blocking:
-					//hid_set_nonblocking(jc->handle, 1);
-
-					joycon_send_command(jc, 0x10, (uint8_t*)buf, 0x9);
-
-					//joycon_send_command(handle_r, 0x10, (uint8_t*)buf, 0x9);
-					printf("Sent %x %x %u\n", i & 0xFF, l, k);
-
-					Sleep(15);
-				}
-			}
-		}
-
-		#endif
 
 		
 
@@ -1742,6 +1384,7 @@ init_start:
 		#endif
 		
 
+		counter++;
 		
 
 		// input poll loop:
@@ -1762,72 +1405,59 @@ init_start:
 
 			memset(buf, 0, 65);
 
-			if (settings.usingGrip) {
-				buf[0] = 0x80; // 80     Do custom command
-				buf[1] = 0x92; // 92     Post-handshake type command
-				buf[2] = 0x00; // 0001   u16 second part size
-				buf[3] = 0x01;
-				buf[8] = 0x1F; // 1F     Get input command
-			} else if(settings.enableGyro) {
-				buf[0] = 0x1F;// HID get input & gyro data
-				buf[1] = 0x0;
-			} else {
-				buf[0] = 0x01;// HID get input
-				buf[1] = 0x0;
-			}
-			
-
-
-
-
-			// send data:
-			written = hid_write(jc->handle, buf, 9);
-			// read response:
-			read = hid_read(jc->handle, buf, 65);// returns length of actual bytes read
-
-
-			if (read == 0) {
-				missedPollCount += 1;
-			} else if (read > 0) {
-				// handle input data
-				handle_input(jc, buf, res);	
-			}
-
-
-			
-
-			//// get gyro data:
-			//if (settings.usingBluetooth) {
-			//	
-			//	buf[0] = 0x1F;// HID get gyro data
+			//if (settings.usingGrip) {
+			//	buf[0] = 0x80; // 80     Do custom command
+			//	buf[1] = 0x92; // 92     Post-handshake type command
+			//	buf[2] = 0x00; // 0001   u16 second part size
+			//	buf[3] = 0x01;
+			//	buf[8] = 0x1F; // 1F     Get input command
+			//} else if(settings.enableGyro) {
+			//	buf[0] = 0x1F;// HID get input & gyro data
 			//	buf[1] = 0x0;
+			//} else {
+			//	buf[0] = 0x01;// HID get input
+			//	buf[1] = 0x0;
+			//}
+			//
+
+			//// send data:
+			//written = hid_write(jc->handle, buf, 9);
+			//// read response:
+			//read = hid_read(jc->handle, buf, 65);// returns length of actual bytes read
 
 
-			//	// send data:
-			//	written = hid_write(jc->handle, buf, 2);
-			//	// read response:
-			//	read = hid_read(jc->handle, buf, 65);// returns length of actual bytes read
+			//if (read == 0) {
+			//	missedPollCount += 1;
+			//} else if (read > 0) {
+			//	// handle input data
+			//	handle_input(jc, buf, res);	
+			//}
 
-			//	if (read > 0) {
-			//		// handle input data
-			//		handle_input(jc, buf, res);
-			//	}
+			//if (missedPollCount > 2000) {
+			//	//printf("Connection not stable, retrying\n", i);
+			//	missedPollCount = 0;
+
+			//	//goto init_start;
 			//}
 
 
+			//if (settings.usingGrip) {
+			//	joycon_send_command(jc, 0x1F, buf, 0);
+			//} else if(settings.enableGyro) {
+			//	joycon_send_command(jc, 0x1F, buf, 0);
+			//} else {
+			//	joycon_send_command(jc, 0x01, buf, 0);
+			//}
 
-
-
-
-
-
-
-			if (missedPollCount > 2000) {
-				//printf("Connection not stable, retrying\n", i);
-				missedPollCount = 0;
-
-				//goto init_start;
+			if (counter % 2) {
+				joycon_send_command(jc, 0x1F, buf, 0);
+			} else {
+				joycon_send_command(jc, 0x01, buf, 0);
 			}
+
+			//joycon_send_command(jc, 0x1, buf, 0);
+
+			handle_input(jc, buf, 0x40);
 
 
 			updatevJoyDevice(jc);
