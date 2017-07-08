@@ -1170,15 +1170,8 @@ init_start:
 
 			printf("Playing mario theme...\n");
 
-			int spd = 1.8;
-			int spd2 = 1.5;
-
-			//int n = ((i % 2) ? i : i-1);// always odd
-			//joycon_rumble(&joycons[0], (sin(i*0.01)*127)+127, 2);
-			//joycon_rumble(&joycons[0], n, 1);
-			//Sleep(200);
-			//joycon_rumble(&joycons[0], 1, 3);
-			//Sleep(100);
+			float spd = 1;
+			float spd2 = 1;
 
 			//goto N1;
 
