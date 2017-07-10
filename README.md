@@ -6,7 +6,7 @@ A vJoy feeder for the Nintendo Switch JoyCons with analog stick support and moti
 1. Install vJoy, found here: http://vjoystick.sourceforge.net/site/
 
 2. Setup your vJoy Devices to look like this:
-    * http://i.imgur.com/tRBtAWN.png
+    * http://i.imgur.com/nXQDFPK.png
     * http://i.imgur.com/bF1re0X.png
 
 3. Pair the JoyCon(s) to your PC
@@ -21,10 +21,9 @@ A vJoy feeder for the Nintendo Switch JoyCons with analog stick support and moti
 
 
 ## Important Notes
-* The JoyCons seem to need to be re-paired anytime after they've reconnected to the switch.
+* The JoyCons need to be re-paired anytime after they've reconnected to the switch.
 
-These are the settings you'll want to change:
-	* Command line arguments:
+* These are the command line arguments you may want to add:
 	* Run with "--combine" to combine the left and right joycons
 	* Run with "--auto-center" to automatically center the sticks
 	* Run with "--enable-gyro" to enable motion controls

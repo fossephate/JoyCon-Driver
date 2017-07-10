@@ -403,7 +403,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		if (jc->left_right == 1) {
 			gyro_data = packet + 13;// 13
 		} else if (jc->left_right == 2) {
-			gyro_data = packet + 13;// ?
+			gyro_data = packet + 13;// 13
 		}
 
 		//jc->gyro.relroll = (int)(unsigned int)((gyro_data[3] & 0x0F) << 4) | ((gyro_data[2] & 0xF0) >> 4) - jc->gyro.roll;
@@ -423,47 +423,59 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		jc->gyro.roll = (int)(unsigned int)((gyro_data[3] & 0x0F) << 4) | ((gyro_data[2] & 0xF0) >> 4);
 
 
-		//jc->gyro.relpitch = (int)(unsigned int)((gyro_data[9] & 0x0F) << 4);
 
-		int a, b;
 
 		// get relative roll:
-		// second nibble from first byte + first nibble from second byte
-		a = (((gyro_data[7] & 0x0F) << 4) | ((gyro_data[8] & 0xF0) >> 4));
-		b = 0xFF - a;
-		if (a < b) {
-			jc->gyro.relroll = a;
+		uint8_t rollA = (uint8_t)gyro_data[7];
+		uint8_t rollB = (uint8_t)gyro_data[8];
+		uint16_t relrollA = ((uint16_t)rollA << 8) | rollB;
+		uint16_t relrollB = 0xFFFF - relrollA;
+		if (relrollA < relrollB) {
+			jc->gyro.relroll = relrollA;
 		} else {
-			jc->gyro.relroll = -1 * b;
+			jc->gyro.relroll = -1 * relrollB;
 		}
-
-
+		jc->gyro.relroll /= 257;
 
 		// get relative pitch:
-		// second nibble from first byte + first nibble from second byte
-		a = (((gyro_data[9] & 0x0F) << 4) | ((gyro_data[10] & 0xF0) >> 4));
-		b = 0xFF - a;
-		if (a < b) {
-			jc->gyro.relpitch = a;
+		uint8_t pitchA = (uint8_t)gyro_data[9];
+		uint8_t pitchB = (uint8_t)gyro_data[10];
+		uint16_t relpitchA = ((uint16_t)pitchA << 8) | pitchB;
+		uint16_t relpitchB = 0xFFFF - relpitchA;
+		if (relpitchA < relpitchB) {
+			jc->gyro.relpitch = relpitchA;
 		} else {
-			jc->gyro.relpitch = -1 * b;
+			jc->gyro.relpitch = -1 * relpitchB;
 		}
+		jc->gyro.relpitch /= 257;
 
 
 		// get relative yaw:
-		// second nibble from first byte + first nibble from second byte
-		a = (((gyro_data[11] & 0x0F) << 4) | ((gyro_data[12] & 0xF0) >> 4));
-		b = 0xFF - a;
-		if (a < b) {
-			jc->gyro.relyaw = a;
-		} else {
-			jc->gyro.relyaw = -1 * b;
+		uint8_t yawA = (uint8_t)gyro_data[11];
+		uint8_t yawB = (uint8_t)gyro_data[12];
+		uint16_t relyawA = ((uint16_t)yawA << 8) | yawB;
+		uint16_t relyawB = 0xFFFF - relyawA;
+		if (relyawA < relyawB) {
+			jc->gyro.relyaw = relyawA;
 		}
+		else {
+			jc->gyro.relyaw = -1 * relyawB;
+		}
+		jc->gyro.relyaw /= 257;
+
+
+		
+
+
+
 
 		if (jc->left_right == 1) {
 			//hex_dump(gyro_data, 15);
-			//printf("%d\n", jc->gyro.roll);
-			//printf("%02x\n", jc->gyro.pitch);
+			//printf("%d\n", jc->gyro.relroll);
+			//printf("%02x\n", jc->gyro.relroll);
+			//printf("%04x\n", jc->gyro.relroll);
+
+			//printf("%02x %02x\n", rollA, rollB);
 		}
 		
 	}
@@ -850,8 +862,10 @@ void updatevJoyDevice(Joycon *jc) {
 		}
 	}
 
+
+
 	// gyro data:
-	if (jc->left_right == 2) {
+	if (jc->left_right == 1) {
 		//rz = jc->gyro.roll*240;
 		//iReport.wAxisZRot = jc->gyro.roll * 120;
 		//iReport.wSlider = jc->gyro.pitch * 120;
@@ -1500,55 +1514,14 @@ init_start:
 
 			memset(buf, 0, 65);
 
-			//if (settings.usingGrip) {
-			//	buf[0] = 0x80; // 80     Do custom command
-			//	buf[1] = 0x92; // 92     Post-handshake type command
-			//	buf[2] = 0x00; // 0001   u16 second part size
-			//	buf[3] = 0x01;
-			//	buf[8] = 0x1F; // 1F     Get input command
-			//} else if(settings.enableGyro) {
-			//	buf[0] = 0x1F;// HID get input & gyro data
-			//	buf[1] = 0x0;
-			//} else {
-			//	buf[0] = 0x01;// HID get input
-			//	buf[1] = 0x0;
-			//}
-			//
-
-			//// send data:
-			//written = hid_write(jc->handle, buf, 9);
-			//// read response:
-			//read = hid_read(jc->handle, buf, 65);// returns length of actual bytes read
-
-
-			//if (read == 0) {
-			//	missedPollCount += 1;
-			//} else if (read > 0) {
-			//	// handle input data
-			//	handle_input(jc, buf, res);	
-			//}
-
-			//if (missedPollCount > 2000) {
-			//	//printf("Connection not stable, retrying\n", i);
-			//	missedPollCount = 0;
-
-			//	//goto init_start;
-			//}
-
-
-			//if (settings.usingGrip) {
-			//	joycon_send_command(jc, 0x1F, buf, 0);
-			//} else if(settings.enableGyro) {
+			//if (counter % 2) {
 			//	joycon_send_command(jc, 0x1F, buf, 0);
 			//} else {
-			//	joycon_send_command(jc, 0x01, buf, 0);
+			//	//joycon_send_command(jc, 0x01, buf, 0);
 			//}
 
-			if (counter % 2) {
-				joycon_send_command(jc, 0x1F, buf, 0);
-			} else {
-				joycon_send_command(jc, 0x01, buf, 0);
-			}
+
+			joycon_send_command(jc, 0x1F, buf, 0);
 
 			//joycon_send_command(jc, 0x1, buf, 0);
 
