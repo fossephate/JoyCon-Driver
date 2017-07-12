@@ -1,5 +1,6 @@
 
-
+#include <Windows.h>
+#pragma comment(lib, "user32.lib")
 
 #include <bitset>
 #include <random>
@@ -568,8 +569,61 @@ void joycon_rumble(Joycon *jc, int frequency, int intensity) {
 	hid_set_nonblocking(jc->handle, 1);
 
 	joycon_send_command(jc, 0x10, (uint8_t*)buf, 0x9);
-	//joycon_send_subcommand(jc, 0x10, 0x01, (uint8_t*)buf, 9);
 }
+
+
+void joycon_rumble2(Joycon *jc, int HF, int HFA, int LF, int LFA) {
+	unsigned char buf[0x400];
+	memset(buf, 0, 0x40);
+
+
+	uint8_t hf		= HF;
+	uint8_t hf_amp	= HFA;
+	uint8_t lf		= LF;
+	uint8_t lf_amp	= LFA;
+
+	int off = 0;// offset
+	if (jc->left_right == 2) {
+		off = 4;
+	}
+
+	// Left/Right linear actuator
+	//hf = 0x01a8; //Set H.Frequency
+	//hf_amp = 0x88; //Set H.Frequency amplitude
+	
+	// Byte swapping
+	buf[0 + off] = hf & 0xFF;
+	buf[1 + off] = hf_amp + ((hf >> 8) & 0xFF); //Add amp + 1st byte of frequency to amplitude byte
+
+	//lf = 0x63; //Set L.Frequency
+	//lf_amp = 0x804d; //Set L.Frequency amplitude
+	
+	// Byte swapping
+	buf[2 + off] = lf + ((lf_amp >> 8) & 0xFF); //Add freq + 1st byte of LF amplitude to the frequency byte
+	buf[3 + off] = lf_amp & 0xFF;
+
+
+	// set non-blocking:
+	hid_set_nonblocking(jc->handle, 1);
+
+	joycon_send_command(jc, 0x10, (uint8_t*)buf, 0x9);
+}
+
+
+void joycon_rumble3(Joycon *jc, int frequency, int HFA, int LFA) {
+
+	//Float frequency to hex conversion
+	uint16_t encoded_hex_freq = (uint16_t)floor(-32 * (0.693147f - log(frequency / 5)) / 0.693147f + 0.5f);
+
+	//Convert to Joy-Con HF range. Range in big-endian: 0x0004-0x01FC with +0x0004 steps.
+	uint16_t hf = (encoded_hex_freq - 0x60) * 4;
+	//Convert to Joy-Con LF range. Range: 0x0100-0x7F00.
+	uint16_t lf = encoded_hex_freq - 0x40;
+
+	joycon_rumble2(jc, hf, HFA, lf, LFA);
+}
+
+
 
 
 void joycon_init_usb(Joycon *jc) {
@@ -662,14 +716,15 @@ int joycon_init_bt(Joycon *jc) {
 	joycon_send_subcommand(jc, 0x01, 0x40, buf, 1);
 
 
-	// Increase data rate for Bluetooth
+	// Set input report mode (to push at 60hz)
+	// 30	NPad standard mode. Pushes current state @60Hz. Default in SDK if arg is not in the list
+	// 31	NFC mode. Pushes large packets @60Hz
 	printf("Increase data rate for Bluetooth...\n");
-	// just to be sure...
-	//for (int i = 0; i < 10; ++i) {
 	memset(buf, 0x00, 0x400);
-	buf[0] = 0x31; // Enabled
+	buf[0] = 0x30; // Pushes current state @60Hz
 	joycon_send_subcommand(jc, 0x01, 0x03, buf, 1);
-	//}
+
+
 
 
 	printf("Successfully initialized %s!\n", jc->name.c_str());
@@ -865,16 +920,18 @@ void updatevJoyDevice(Joycon *jc) {
 
 
 	// gyro data:
-	if (jc->left_right == 1) {
+	if (jc->left_right == 2) {
 		//rz = jc->gyro.roll*240;
 		//iReport.wAxisZRot = jc->gyro.roll * 120;
 		//iReport.wSlider = jc->gyro.pitch * 120;
 
-		int multiplier = 240;
+		int multiplier = 300;
 
 		iReport.wAxisZRot = 16384 + (jc->gyro.relroll * multiplier);
 		iReport.wSlider = 16384 + (jc->gyro.relpitch * multiplier);
-		iReport.wDial = 16384 + (jc->gyro.relyaw * multiplier);
+		//iReport.wDial = 16384 + (jc->gyro.relyaw * multiplier);
+
+		iReport.wAxisZ = 16384 + (jc->gyro.relyaw * multiplier);
 
 
 		//multiplier = 200;
@@ -1149,7 +1206,12 @@ init_start:
 			joycon_rumble(&joycons[i], 10, 3);
 			//Sleep(100);
 		}
-		
+		//joycon_rumble2(&joycons[0], 0xBC01, 0x88, 0x63, 0x804d);
+
+		//int lower = 40;
+		//int higher = 1000;
+		//joycon_rumble3(&joycons[0], (sin(0.001*k)*(higher-lower))+lower, 0x8a, 0x8062);
+		//Sleep(10);
 	}
 
 	// Plays the Mario theme on the JoyCons:
@@ -1514,18 +1576,23 @@ init_start:
 
 			memset(buf, 0, 65);
 
-			//if (counter % 2) {
-			//	joycon_send_command(jc, 0x1F, buf, 0);
-			//} else {
+			//if (counter % 2 == 0) {
 			//	//joycon_send_command(jc, 0x01, buf, 0);
+
+			//} else {
+			//	joycon_send_command(jc, 0x1F, buf, 0);
 			//}
 
 
-			joycon_send_command(jc, 0x1F, buf, 0);
-
-			//joycon_send_command(jc, 0x1, buf, 0);
+			//joycon_send_command(jc, 0x1F, buf, 0);
+			joycon_send_command(jc, 0x01, buf, 0);
 
 			handle_input(jc, buf, 0x40);
+
+
+			//if (GetKeyState('A') & 0x8000/*check if high-order bit is set (1 << 15)*/){
+				//joycon_send_subcommand(jc, 0x01, 0x20, 0x0, 0);// reset MCU
+			//}
 
 
 			updatevJoyDevice(jc);
