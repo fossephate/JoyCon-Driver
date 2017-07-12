@@ -717,11 +717,16 @@ int joycon_init_bt(Joycon *jc) {
 
 
 	// Set input report mode (to push at 60hz)
+	// x00	Active polling mode for IR camera data. Answers with more than 300 bytes ID 31 packet
+	// x01	Active polling mode
+	// x02	Active polling mode for IR camera data.Special IR mode or before configuring it ?
+	// x21	Unknown.An input report with this ID has pairing or mcu data or serial flash data or device info
+	// x23	MCU update input report ?
 	// 30	NPad standard mode. Pushes current state @60Hz. Default in SDK if arg is not in the list
 	// 31	NFC mode. Pushes large packets @60Hz
 	printf("Increase data rate for Bluetooth...\n");
 	memset(buf, 0x00, 0x400);
-	buf[0] = 0x30; // Pushes current state @60Hz
+	buf[0] = 0x31;
 	joycon_send_subcommand(jc, 0x01, 0x03, buf, 1);
 
 
@@ -1214,9 +1219,23 @@ init_start:
 		//Sleep(10);
 	}
 
+	//for (int k = 0; k < 1000; ++k) {
+
+	//	int lower = 40;
+	//	int higher = 1000;
+	//	//joycon_rumble3(&joycons[0], (sin(0.001*k)*(higher-lower))+lower, 0x8a, 0x8062);
+	//	
+	//	//joycon_rumble2(&joycons[0], 0x0001, 0x88, 0x60, 0x804d);
+	//	//joycon_rumble3(&joycons[0], 320, 0x88, 0x804d);
+
+	//	//joycon_rumble3(&joycons[0], 200, 0x88, 0x804d);
+	//	
+	//	Sleep(1000);
+	//}
+
 	// Plays the Mario theme on the JoyCons:
-	// I'm bad with music I just did this by ear
-	// using a video of someone playing a piano version of the mario theme.
+	// I'm bad with music I just did this by
+	// using a video of a piano version of the mario theme.
 	// maybe eventually I'll be able to play something like sound files.
 
 
@@ -1522,37 +1541,6 @@ init_start:
 
 		//auto start = std::chrono::steady_clock::now();
 		//std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
-
-		
-
-		#ifdef LED_TEST
-		for (int r = 0; r < 10; ++r) {
-			for (int i = 0; i < joycons.size(); ++i) {
-
-				Joycon *jc = &joycons[i];
-
-				//hid_set_nonblocking(jc->handle, 1);
-
-				printf("Enabling some LEDs, sometimes this can fail and take a few times?\n");
-
-				// Player LED Enable
-				memset(buf, 0x00, 0x40);
-				//buf[0] = 0x80 | 0x40 | 0x2 | 0x1; // Flash top two, solid bottom two
-				//buf[0] = 0x8 | 0x4 | 0x2 | 0x1; // All solid
-				//buf[0] = 0x80 | 0x40 | 0x20 | 0x10; // All flashing
-				//buf[0] = 0x80 | 0x00 | 0x20 | 0x10; // All flashing except 3rd light (off)
-
-				joycon_send_subcommand(jc, 0x1, 0x30, buf, 1);
-
-				// Home LED Enable
-				memset(buf, 0x00, 0x40);
-				buf[0] = 0xFF; // Slowest pulse?
-				joycon_send_subcommand(jc, 0x1, 0x38, buf, 1);
-
-				Sleep(10);
-			}
-		}
-		#endif
 		
 
 		counter++;
@@ -1573,19 +1561,24 @@ init_start:
 			
 
 			// get input:
-
 			memset(buf, 0, 65);
 
 			//if (counter % 2 == 0) {
 			//	//joycon_send_command(jc, 0x01, buf, 0);
-
 			//} else {
 			//	joycon_send_command(jc, 0x1F, buf, 0);
 			//}
 
+			if (settings.enableGyro) {
+				// seems to have slower response time:
+				joycon_send_command(jc, 0x1F, buf, 0);
+			} else {
+				// may reset MCU data, not sure:
+				joycon_send_command(jc, 0x01, buf, 0);
+			}
 
 			//joycon_send_command(jc, 0x1F, buf, 0);
-			joycon_send_command(jc, 0x01, buf, 0);
+			//joycon_send_command(jc, 0x01, buf, 0);
 
 			handle_input(jc, buf, 0x40);
 
