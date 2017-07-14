@@ -80,11 +80,11 @@ struct Settings {
 
 	// multipliers to go from the range (-128,128) to (-32768, 32768)
 	// These shouldn't need to be changed too much, but the option is there
-	// I found that 240 works for me
-	int leftJoyConXMultiplier = 240;
-	int leftJoyConYMultiplier = 240;
-	int rightJoyConXMultiplier = 240;
-	int rightJoyConYMultiplier = 240;
+	// I found that 250 works for me
+	int leftJoyConXMultiplier = 250;
+	int leftJoyConYMultiplier = 250;
+	int rightJoyConXMultiplier = 250;
+	int rightJoyConYMultiplier = 250;
 
 	// Enabling this combines both JoyCons to a single vJoy Device(#1)
 	// when combineJoyCons == false:
@@ -112,6 +112,9 @@ struct Settings {
 	// plays a version of the mario theme by vibrating
 	// the first JoyCon connected.
 	bool marioTheme = false;
+
+	// bool to restart the program
+	bool restart = false;
 
 } settings;
 
@@ -374,6 +377,14 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		}
 
 
+		//int mask = (1111 << 12);
+		//int mask = 0b1111000000000000;
+		if (jc->left_right == 1) {
+			if (jc->buttons == 207) {
+				settings.restart = true;
+				//goto init_start;
+			}
+		}
 
 		// get stick data:
 
@@ -1000,7 +1011,7 @@ void updatevJoyDevice(Joycon *jc) {
 
 
 	// gyro data:
-	if (jc->left_right == 2) {
+	if ((joycons.size() > 1 && jc->left_right == 2) || (joycons.size() == 1 && jc->left_right == 1)) {
 		//rz = jc->gyro.roll*240;
 		//iReport.wAxisZRot = jc->gyro.roll * 120;
 		//iReport.wSlider = jc->gyro.pitch * 120;
@@ -1107,6 +1118,7 @@ void parseSettings(int length, char *args[]) {
 		}
 	}
 }
+
 
 
 
@@ -1821,10 +1833,12 @@ init_start:
 
 		//printf("time: %d\n", duration);
 
-		//if (disconnect) {
-		//	printf("DISCONNECTED\n");
-		//	goto init_start;
-		//}
+		if (settings.restart) {
+			settings.restart = false;
+			goto init_start;
+		}
+
+
 	}
 
 	RelinquishVJD(1);

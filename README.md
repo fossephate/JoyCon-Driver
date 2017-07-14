@@ -48,11 +48,11 @@ int rightJoyConYOffset = 19000;
 
 // multipliers to go from the range (-128,128) to (-32768, 32768)
 // These shouldn't need to be changed too much, but the option is there
-// I found that 240 works for me
-int leftJoyConXMultiplier = 240;
-int leftJoyConYMultiplier = 240;
-int rightJoyConXMultiplier = 240;
-int rightJoyConYMultiplier = 240;
+// I found that 250 works for me
+int leftJoyConXMultiplier = 250;
+int leftJoyConYMultiplier = 250;
+int rightJoyConXMultiplier = 250;
+int rightJoyConYMultiplier = 250;
 
 // Enabling this combines both JoyCons to a single vJoy Device(#1)
 // when combineJoyCons == false:
