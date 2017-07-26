@@ -1014,50 +1014,50 @@ void updatevJoyDevice(Joycon *jc) {
 
 
 	// gyro data:
-	//if ((joycons.size() > 1 && jc->left_right == 2) || (joycons.size() == 1 && jc->left_right == 1)) {
-		
-	if(jc->left_right == 2) {
-		//rz = jc->gyro.roll*240;
-		//iReport.wAxisZRot = jc->gyro.roll * 120;
-		//iReport.wSlider = jc->gyro.pitch * 120;
+	if (settings.enableGyro) {
+		if ((joycons.size() > 1 && jc->left_right == 2) || (joycons.size() == 1 && jc->left_right == 1)) {
+		//if (jc->left_right == 2) {
+			//rz = jc->gyro.roll*240;
+			//iReport.wAxisZRot = jc->gyro.roll * 120;
+			//iReport.wSlider = jc->gyro.pitch * 120;
 
-		int multiplier;
-
-
-		// Gyroscope (roll, pitch, yaw):
-		multiplier = 1000;
-		
-		//iReport.wAxisZRot = 16384 + (jc->gyro.relroll * multiplier);
-		//iReport.wSlider = 16384 + (jc->gyro.relpitch * multiplier);
-		//iReport.wDial = 16384 + (jc->gyro.relyaw * multiplier);
-
-		//iReport.wAxisZ = 16384 + (jc->gyro.relyaw * multiplier);
+			int multiplier;
 
 
+			// Gyroscope (roll, pitch, yaw):
+			multiplier = 1000;
+
+			//iReport.wAxisZRot = 16384 + (jc->gyro.relroll * multiplier);
+			//iReport.wSlider = 16384 + (jc->gyro.relpitch * multiplier);
+			//iReport.wDial = 16384 + (jc->gyro.relyaw * multiplier);
+
+			//iReport.wAxisZ = 16384 + (jc->gyro.relyaw * multiplier);
 
 
 
 
-		// Accelerometer (x, y, z):
-
-		multiplier = 10;
-		iReport.wAxisZRot = 16384 + (jc->accel.x * multiplier);
-		iReport.wSlider = 16384 + (jc->accel.y * multiplier);
-		iReport.wDial = 16384 + (jc->accel.z * multiplier);
 
 
-		MC.moveRel(jc->gyro.relyaw-jc->gyro.relroll, -jc->gyro.relpitch);
+			// Accelerometer (x, y, z):
+
+			multiplier = 10;
+			iReport.wAxisZRot = 16384 + (jc->accel.x * multiplier);
+			iReport.wSlider = 16384 + (jc->accel.y * multiplier);
+			iReport.wDial = 16384 + (jc->accel.z * multiplier);
+
+
+			MC.moveRel(jc->gyro.relyaw - jc->gyro.relroll, -jc->gyro.relpitch);
 
 
 
-		//multiplier = 200;
+			//multiplier = 200;
 
-		//iReport.wAxisZRot = (jc->gyro.roll * multiplier);
-		//iReport.wSlider = (jc->gyro.pitch * multiplier);
-		//iReport.wDial = (jc->gyro.yaw * multiplier);
+			//iReport.wAxisZRot = (jc->gyro.roll * multiplier);
+			//iReport.wSlider = (jc->gyro.pitch * multiplier);
+			//iReport.wDial = (jc->gyro.yaw * multiplier);
 
+		}
 	}
-	
 
 
 
@@ -1269,9 +1269,7 @@ init_start:
 
 
 		}
-
-
-		printf("Done centering sticks.\n");
+		//printf("Done centering sticks.\n");
 	}
 
 
@@ -1311,7 +1309,7 @@ init_start:
 			joycon_send_subcommand(jc, 0x1, 0x30, buf, 1);
 		}
 	}
-	printf("LEDs should be set.\n");
+	//printf("LEDs should be set.\n");
 
 
 	printf("vibrating JoyCon(s).\n");
@@ -1763,7 +1761,6 @@ init_start:
 			Sleep(1000);
 		}
 	}
-
 
 
 	printf("Done.\n");
