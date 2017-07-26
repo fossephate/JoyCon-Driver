@@ -17,6 +17,7 @@
 
 #include "packet.h"
 #include "joycon.h"
+#include "MouseController.hpp"
 
 
 #pragma warning(disable:4996)
@@ -61,6 +62,8 @@ float rand0t1() {
 
 
 std::vector<Joycon> joycons;
+
+MouseController MC;
 
 JOYSTICK_POSITION_V2 iReport; // The structure that holds the full position data
 uint8_t global_count = 0;
@@ -1011,7 +1014,9 @@ void updatevJoyDevice(Joycon *jc) {
 
 
 	// gyro data:
-	if ((joycons.size() > 1 && jc->left_right == 2) || (joycons.size() == 1 && jc->left_right == 1)) {
+	//if ((joycons.size() > 1 && jc->left_right == 2) || (joycons.size() == 1 && jc->left_right == 1)) {
+		
+	if(jc->left_right == 2) {
 		//rz = jc->gyro.roll*240;
 		//iReport.wAxisZRot = jc->gyro.roll * 120;
 		//iReport.wSlider = jc->gyro.pitch * 120;
@@ -1039,6 +1044,9 @@ void updatevJoyDevice(Joycon *jc) {
 		iReport.wAxisZRot = 16384 + (jc->accel.x * multiplier);
 		iReport.wSlider = 16384 + (jc->accel.y * multiplier);
 		iReport.wDial = 16384 + (jc->accel.z * multiplier);
+
+
+		MC.moveRel(jc->gyro.relyaw-jc->gyro.relroll, -jc->gyro.relpitch);
 
 
 
@@ -1153,7 +1161,7 @@ int main(int argc, char *argv[]) {
 	res = hid_init();
 
 	
-
+	//MC.moveRel(5, 0);
 
 
 

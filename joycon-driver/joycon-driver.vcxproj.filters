@@ -27,10 +27,13 @@
     <ClInclude Include="include\stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\joycon.h">
+    <ClInclude Include="include\packet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\packet.h">
+    <ClInclude Include="include\MouseController.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Joycon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
