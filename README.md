@@ -82,11 +82,12 @@ bool marioTheme = false;
 
 
 
-
+## Donate
+  * If you like the project and would like to donate I have a paypal at matt.cfosse@gmail.com
 
 
 
 
 ## Credits
-  * To everyone who helped at: https://github.com/dekuNukem/Nintendo_Switch_Reverse_Engineering/
+  * Thanks to everyone at: https://github.com/dekuNukem/Nintendo_Switch_Reverse_Engineering/
 
