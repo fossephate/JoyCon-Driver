@@ -449,82 +449,100 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 		
 
+		// Gyroscope:
+		{
+			// get relative roll:
+			uint16_t relrollA = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
+			uint16_t relrollB = 0xFFFF - relrollA;
+			if (relrollA < relrollB) {
+				jc->gyro.relroll = relrollA;
+			} else {
+				jc->gyro.relroll = -1 * relrollB;
+			}
+			
+
+			// get relative pitch:
+			uint16_t relpitchA = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
+			uint16_t relpitchB = 0xFFFF - relpitchA;
+			if (relpitchA < relpitchB) {
+				jc->gyro.relpitch = relpitchA;
+			} else {
+				jc->gyro.relpitch = -1 * relpitchB;
+			}
 
 
 
-		// get relative roll:
-		uint16_t relrollA = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
-		uint16_t relrollB = 0xFFFF - relrollA;
-		if (relrollA < relrollB) {
-			jc->gyro.relroll = relrollA;
-		} else {
-			jc->gyro.relroll = -1 * relrollB;
+			// get relative yaw:
+			uint16_t relyawA = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
+			uint16_t relyawB = 0xFFFF - relyawA;
+			if (relyawA < relyawB) {
+				jc->gyro.relyaw = relyawA;
+			} else {
+				jc->gyro.relyaw = -1 * relyawB;
+			}
+
+			// adjust:
+			float div = 257.0f;// 257.0f
+			jc->gyro.relroll	/= div;
+			jc->gyro.relpitch	/= div;
+			jc->gyro.relyaw		/= div;
 		}
-		jc->gyro.relroll /= 257;
 
-		// get relative pitch:
-		uint16_t relpitchA = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
-		uint16_t relpitchB = 0xFFFF - relpitchA;
-		if (relpitchA < relpitchB) {
-			jc->gyro.relpitch = relpitchA;
-		} else {
-			jc->gyro.relpitch = -1 * relpitchB;
+
+		// Accelerometer:
+		{
+			// get Accelerometer X:
+			uint16_t accelXA = ((uint16_t)gyro_data[1] << 8) | gyro_data[2];
+			uint16_t accelXB = 0xFFFF - accelXA;
+			if (accelXA < accelXB) {
+				jc->accel.x = accelXA;
+			} else {
+				jc->accel.x = -1 * accelXB;
+			}
+			//jc->accel.x /= 257;
+
+
+			// get Accelerometer Y:
+			uint16_t accelYA = ((uint16_t)gyro_data[3] << 8) | gyro_data[4];
+			uint16_t accelYB = 0xFFFF - accelYA;
+			if (accelYA < accelYB) {
+				jc->accel.y = accelYA;
+			} else {
+				jc->accel.y = -1 * accelYB;
+			}
+			//jc->accel.y /= 257;
+
+
+			// get Accelerometer Z:
+			uint16_t accelZA = ((uint16_t)gyro_data[5] << 8) | gyro_data[6];
+			uint16_t accelZB = 0xFFFF - accelZA;
+			if (accelZA < accelZB) {
+				jc->accel.z = accelZA;
+			} else {
+				jc->accel.z = -1 * accelZB;
+			}
+			//jc->accel.z /= 257;
 		}
-		jc->gyro.relpitch /= 257;
 
 
-		// get relative yaw:
-		uint16_t relyawA = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
-		uint16_t relyawB = 0xFFFF - relyawA;
-		if (relyawA < relyawB) {
-			jc->gyro.relyaw = relyawA;
-		} else {
-			jc->gyro.relyaw = -1 * relyawB;
-		}
-		jc->gyro.relyaw /= 257;
+		float m = 10.0f;
 
-
-
-
-		// get accelerometer X:
-		uint16_t accelXA = ((uint16_t)gyro_data[1] << 8) | gyro_data[2];
-		uint16_t accelXB = 0xFFFF - accelXA;
-		if (accelXA < accelXB) {
-			jc->accel.x = accelXA;
-		} else {
-			jc->accel.x = -1 * accelXB;
-		}
-		//jc->accel.x /= 257;
+		// track gyro movements:
+		//jc->gyro.roll	+= jc->gyro.relroll		/m;
+		//jc->gyro.pitch	+= jc->gyro.relpitch	/m;
+		//jc->gyro.yaw	+= jc->gyro.relyaw		/m;
 		
-
-		// get accelerometer Y:
-		uint16_t accelYA = ((uint16_t)gyro_data[3] << 8) | gyro_data[4];
-		uint16_t accelYB = 0xFFFF - accelYA;
-		if (accelYA < accelYB) {
-			jc->accel.y = accelYA;
-		} else {
-			jc->accel.y = -1 * accelYB;
-		}
-		//jc->accel.y /= 257;
-
-
-		// get accelerometer Z:
-		uint16_t accelZA = ((uint16_t)gyro_data[5] << 8) | gyro_data[6];
-		uint16_t accelZB = 0xFFFF - accelZA;
-		if (accelZA < accelZB) {
-			jc->accel.z = accelZA;
-		} else {
-			jc->accel.z = -1 * accelZB;
-		}
-		//jc->accel.z /= 257;
 
 
 
 		if (jc->left_right == 2) {
 			//hex_dump(gyro_data, 20);
-			//printf("%d\n", jc->gyro.relroll);
+			//hex_dump(gyro_data+10, 6);
+			//printf("%d\n", jc->gyro.relyaw);
 			//printf("%02x\n", jc->gyro.relroll);
-			//printf("%04x\n", jc->gyro.relroll);
+			//printf("%04x\n", jc->gyro.relyaw);
+
+			printf("%.4f\n", jc->gyro.relyaw);
 
 			//printf("%04x\n", absRollA);
 			//printf("%02x %02x\n", rollA, rollB);
@@ -1046,8 +1064,17 @@ void updatevJoyDevice(Joycon *jc) {
 			iReport.wDial = 16384 + (jc->accel.z * multiplier);
 
 
-			MC.moveRel(jc->gyro.relyaw - jc->gyro.relroll, -jc->gyro.relpitch);
+			// move with relative gyro:
+			
+			MC.moveRel2((jc->gyro.relyaw - jc->gyro.relroll)+(jc->stick.horizontal/10.0f), -jc->gyro.relpitch);
+			//MC.moveRel2(jc->gyro.relyaw, 0);
 
+			// move with absolute (tracked) gyro:
+			// todo: add a reset button
+			//MC.moveRel(jc->gyro.yaw, -jc->gyro.relpitch);
+			//MC.moveRel(jc->gyro.yaw, -jc->gyro.pitch);
+
+			//printf("%.5f\n", jc->gyro.pitch);
 
 
 			//multiplier = 200;

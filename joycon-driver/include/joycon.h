@@ -31,20 +31,20 @@ typedef struct {
 
 	struct Gyroscope {
 		// absolute:
-		int pitch;
-		int yaw;
-		int roll;
+		float pitch		= 0;
+		float yaw		= 0;
+		float roll		= 0;
 
 		// relative:
-		int relpitch;
-		int relyaw;
-		int relroll;
+		float relpitch	= 0;
+		float relyaw	= 0;
+		float relroll	= 0;
 	} gyro;
 
 	struct Accelerometer {
-		int x;
-		int y;
-		int z;
+		float x = 0;
+		float y = 0;
+		float z = 0;
 	} accel;
 
 
