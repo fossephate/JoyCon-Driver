@@ -30,7 +30,14 @@ public:
 	// move relative:
 	void moveRel(int x, int y) {
 		getPos();
-		SetCursorPos(pos.x + x, pos.y + y);
+		INPUT input;
+		input.type = INPUT_MOUSE;
+		input.mi.mouseData = 0;
+		input.mi.time = 0;
+		input.mi.dx = x;
+		input.mi.dy = y;
+		input.mi.dwFlags = MOUSEEVENTF_MOVE;
+		SendInput(1, &input, sizeof(input));
 		getPos();
 	}
 
@@ -46,6 +53,9 @@ public:
 
 		relPos.x += extraX;
 		relPos.y += extraY;
+
+		relPos.x *= 0.8f;
+		relPos.y *= 0.8f;
 
 		if (relPos.x > 1) {
 			relPos.x -= 1;
@@ -65,14 +75,28 @@ public:
 		}
 
 
-		getPos();
-		SetCursorPos(pos.x + fx, pos.y + fy);
-		getPos();
+		// move relative:
+		INPUT input;
+		input.type = INPUT_MOUSE;
+		input.mi.mouseData = 0;
+		input.mi.time = 0;
+		input.mi.dx = fx;
+		input.mi.dy = fy;
+		input.mi.dwFlags = MOUSEEVENTF_MOVE;
+		SendInput(1, &input, sizeof(input));
+		//ZeroMemory(&input, sizeof(input));
 	}
 
 	// move absolute:
 	void moveAbs(int x, int y) {
-		SetCursorPos(x, y);
+		INPUT input;
+		input.type = INPUT_MOUSE;
+		input.mi.mouseData = 0;
+		input.mi.time = 0;
+		input.mi.dx = x*(65536 / GetSystemMetrics(SM_CXSCREEN));
+		input.mi.dy = y*(65536 / GetSystemMetrics(SM_CYSCREEN));
+		input.mi.dwFlags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE;
+		SendInput(1, &input, sizeof(input));
 		getPos();
 	}
 

@@ -7,6 +7,7 @@
 #include <stdafx.h>
 #include <string.h>
 #include <chrono>
+#include <iomanip>      // std::setprecision
 
 #include <hidapi.h>
 
@@ -482,10 +483,19 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			}
 
 			// adjust:
-			float div = 257.0f;// 257.0f
+			float div = 600.0f;// 257.0f
+			int precision = 3;
 			jc->gyro.relroll	/= div;
 			jc->gyro.relpitch	/= div;
 			jc->gyro.relyaw		/= div;
+
+
+			//jc->gyro.relroll	= floorf(jc->gyro.relroll * 100) / 100;
+			//jc->gyro.relpitch	= floorf(jc->gyro.relpitch * 100) / 100;
+			//jc->gyro.relyaw		= floorf(jc->gyro.relyaw * 100) / 100;
+
+			//jc->gyro.relyaw -= 0.2f;
+			//jc->gyro.relpitch += 0.55f;
 		}
 
 
@@ -542,7 +552,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			//printf("%02x\n", jc->gyro.relroll);
 			//printf("%04x\n", jc->gyro.relyaw);
 
-			printf("%.4f\n", jc->gyro.relyaw);
+			printf("%.4f\n", jc->gyro.relpitch);
 
 			//printf("%04x\n", absRollA);
 			//printf("%02x %02x\n", rollA, rollB);
@@ -1066,8 +1076,14 @@ void updatevJoyDevice(Joycon *jc) {
 
 			// move with relative gyro:
 			
-			MC.moveRel2((jc->gyro.relyaw - jc->gyro.relroll)+(jc->stick.horizontal/10.0f), -jc->gyro.relpitch);
+			//MC.moveRel2((jc->gyro.relyaw - jc->gyro.relroll)+(jc->stick.horizontal/10.0f), -jc->gyro.relpitch);
 			//MC.moveRel2(jc->gyro.relyaw, 0);
+
+			float relX = (jc->gyro.relyaw /*- jc->gyro.relroll*/) + (jc->stick.horizontal / 20.0f);
+			float relY = -jc->gyro.relpitch -(jc->stick.vertical / 40.0f);
+
+			MC.moveRel2(relX, relY);
+
 
 			// move with absolute (tracked) gyro:
 			// todo: add a reset button
