@@ -43,7 +43,7 @@ public:
 
 	// move relative:
 	// allow for sub pixel mouse movements
-	void moveRel2(float x, float y) {
+	void moveRel2(float x, float y/*, float thresholdX = 0.02, float thresholdY = 0.02*/) {
 
 		int fx = (int)x;
 		int fy = (int)y;
@@ -51,8 +51,12 @@ public:
 		float extraX = x - (int)x;
 		float extraY = y - (int)y;
 
-		relPos.x += extraX;
-		relPos.y += extraY;
+		//if (abs(extraX) > thresholdX) {
+		//	relPos.x += extraX;
+		//}
+		//if (abs(extraY) > thresholdY) {
+		//	relPos.y += extraY;
+		//}
 
 		relPos.x *= 0.8f;
 		relPos.y *= 0.8f;

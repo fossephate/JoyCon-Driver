@@ -1,36 +1,33 @@
 ﻿  main.cpp
-src\main.cpp(59): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-src\main.cpp(461): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-src\main.cpp(471): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-src\main.cpp(482): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-src\main.cpp(510): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-src\main.cpp(521): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-src\main.cpp(532): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-src\main.cpp(599): warning C4838: conversion from 'int' to 'uint8_t' requires a narrowing conversion
-src\main.cpp(1072): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
-src\main.cpp(1073): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
-src\main.cpp(1074): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
-src\main.cpp(992): warning C4101: 'z': unreferenced local variable
-src\main.cpp(1254): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1258): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1273): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1292): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1331): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1361): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1427): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1428): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1429): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1430): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1431): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1432): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1433): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1434): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1435): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1436): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1437): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1438): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(60): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+src\main.cpp(437): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+src\main.cpp(447): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+src\main.cpp(458): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+src\main.cpp(486): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+src\main.cpp(497): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+src\main.cpp(508): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+src\main.cpp(590): warning C4838: conversion from 'int' to 'uint8_t' requires a narrowing conversion
+src\main.cpp(1063): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
+src\main.cpp(1064): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
+src\main.cpp(1065): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
+src\main.cpp(1079): warning C4305: 'initializing': truncation from 'double' to 'float'
+src\main.cpp(1080): warning C4305: 'initializing': truncation from 'double' to 'float'
+src\main.cpp(1085): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+src\main.cpp(1086): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+src\main.cpp(1087): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+src\main.cpp(1091): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+src\main.cpp(1092): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+src\main.cpp(983): warning C4101: 'z': unreferenced local variable
+src\main.cpp(1266): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1270): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1285): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1304): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1343): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1373): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1439): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1440): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1441): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1442): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1443): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1444): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1445): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
@@ -38,48 +35,48 @@ src\main.cpp(1446): warning C4244: 'argument': conversion from 'float' to 'DWORD
 src\main.cpp(1447): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1448): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1449): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1451): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1450): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1452): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1454): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1453): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1455): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1456): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1457): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1458): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1459): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1462): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1460): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1461): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1463): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1464): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1465): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1466): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1467): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1468): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1469): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1470): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1471): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1472): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1473): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1474): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1475): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1476): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1477): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1478): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1479): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1480): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1481): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1482): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1483): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1484): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1487): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1485): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1486): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1488): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1489): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1490): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1491): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1492): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1493): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1494): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1495): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1496): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1497): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1498): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1499): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1500): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1501): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1502): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1503): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1504): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1506): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1507): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1508): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
@@ -90,168 +87,168 @@ src\main.cpp(1512): warning C4244: 'argument': conversion from 'float' to 'DWORD
 src\main.cpp(1513): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1514): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1515): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1516): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1517): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1518): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1519): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1520): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1521): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1522): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1523): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1524): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1525): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1526): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1527): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1528): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1529): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1531): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1532): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1533): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1534): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1535): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1536): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1537): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1538): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1539): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1541): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1543): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1544): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1545): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1546): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1547): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1548): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1549): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1550): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1551): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1552): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1553): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1554): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1555): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1556): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1557): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1558): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1560): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1561): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1559): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1562): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1563): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1564): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1565): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1566): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1567): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1568): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1570): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1572): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1573): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1574): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1575): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1576): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1577): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1583): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1578): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1579): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1580): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1584): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1585): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1586): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1587): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1588): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1590): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1591): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1593): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1594): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1589): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1595): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1596): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1597): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1598): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1599): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1601): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1600): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1602): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1603): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1604): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1605): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1606): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1607): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1608): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1609): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1610): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1611): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1613): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1614): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1615): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1616): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1617): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1618): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1619): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1620): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1621): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1624): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1622): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1625): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1626): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1627): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1628): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1629): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1630): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1631): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1632): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1634): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1633): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1636): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1637): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1638): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1639): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1640): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1641): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1642): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1643): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1645): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1644): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1646): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1647): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1648): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1649): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1650): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1651): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1654): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1652): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1653): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1655): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1656): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1657): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1658): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1659): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1660): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1661): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1662): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1663): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1664): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1666): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1667): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1668): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1669): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1670): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1671): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1672): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1673): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1674): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1675): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1691): warning C4005: 'C3': macro redefinition
-  src\main.cpp(1393): note: see previous definition of 'C3'
-src\main.cpp(1692): warning C4005: 'D3': macro redefinition
-  src\main.cpp(1394): note: see previous definition of 'D3'
-src\main.cpp(1693): warning C4005: 'E3': macro redefinition
-  src\main.cpp(1395): note: see previous definition of 'E3'
-src\main.cpp(1694): warning C4005: 'F3': macro redefinition
-  src\main.cpp(1396): note: see previous definition of 'F3'
-src\main.cpp(1695): warning C4005: 'G3': macro redefinition
-  src\main.cpp(1397): note: see previous definition of 'G3'
-src\main.cpp(1696): warning C4005: 'G3A4': macro redefinition
-  src\main.cpp(1398): note: see previous definition of 'G3A4'
-src\main.cpp(1697): warning C4005: 'A4': macro redefinition
-  src\main.cpp(1399): note: see previous definition of 'A4'
-src\main.cpp(1698): warning C4005: 'A4B4': macro redefinition
-  src\main.cpp(1400): note: see previous definition of 'A4B4'
-src\main.cpp(1699): warning C4005: 'B4': macro redefinition
-  src\main.cpp(1401): note: see previous definition of 'B4'
-src\main.cpp(1700): warning C4005: 'C4': macro redefinition
-  src\main.cpp(1402): note: see previous definition of 'C4'
-src\main.cpp(1701): warning C4005: 'D4': macro redefinition
-  src\main.cpp(1403): note: see previous definition of 'D4'
-src\main.cpp(1702): warning C4005: 'D4E4': macro redefinition
-  src\main.cpp(1404): note: see previous definition of 'D4E4'
-src\main.cpp(1703): warning C4005: 'E4': macro redefinition
-  src\main.cpp(1405): note: see previous definition of 'E4'
-src\main.cpp(1704): warning C4005: 'F4': macro redefinition
-  src\main.cpp(1406): note: see previous definition of 'F4'
-src\main.cpp(1706): warning C4005: 'G4': macro redefinition
-  src\main.cpp(1408): note: see previous definition of 'G4'
-src\main.cpp(1707): warning C4005: 'A5': macro redefinition
-  src\main.cpp(1409): note: see previous definition of 'A5'
-src\main.cpp(1708): warning C4005: 'B5': macro redefinition
-  src\main.cpp(1410): note: see previous definition of 'B5'
-src\main.cpp(1709): warning C4005: 'C5': macro redefinition
-  src\main.cpp(1411): note: see previous definition of 'C5'
-src\main.cpp(1725): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1726): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1727): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1728): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1729): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1730): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1731): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1732): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1733): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1734): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1735): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1736): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1676): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1682): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1683): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1684): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1685): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1686): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1687): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1703): warning C4005: 'C3': macro redefinition
+  src\main.cpp(1405): note: see previous definition of 'C3'
+src\main.cpp(1704): warning C4005: 'D3': macro redefinition
+  src\main.cpp(1406): note: see previous definition of 'D3'
+src\main.cpp(1705): warning C4005: 'E3': macro redefinition
+  src\main.cpp(1407): note: see previous definition of 'E3'
+src\main.cpp(1706): warning C4005: 'F3': macro redefinition
+  src\main.cpp(1408): note: see previous definition of 'F3'
+src\main.cpp(1707): warning C4005: 'G3': macro redefinition
+  src\main.cpp(1409): note: see previous definition of 'G3'
+src\main.cpp(1708): warning C4005: 'G3A4': macro redefinition
+  src\main.cpp(1410): note: see previous definition of 'G3A4'
+src\main.cpp(1709): warning C4005: 'A4': macro redefinition
+  src\main.cpp(1411): note: see previous definition of 'A4'
+src\main.cpp(1710): warning C4005: 'A4B4': macro redefinition
+  src\main.cpp(1412): note: see previous definition of 'A4B4'
+src\main.cpp(1711): warning C4005: 'B4': macro redefinition
+  src\main.cpp(1413): note: see previous definition of 'B4'
+src\main.cpp(1712): warning C4005: 'C4': macro redefinition
+  src\main.cpp(1414): note: see previous definition of 'C4'
+src\main.cpp(1713): warning C4005: 'D4': macro redefinition
+  src\main.cpp(1415): note: see previous definition of 'D4'
+src\main.cpp(1714): warning C4005: 'D4E4': macro redefinition
+  src\main.cpp(1416): note: see previous definition of 'D4E4'
+src\main.cpp(1715): warning C4005: 'E4': macro redefinition
+  src\main.cpp(1417): note: see previous definition of 'E4'
+src\main.cpp(1716): warning C4005: 'F4': macro redefinition
+  src\main.cpp(1418): note: see previous definition of 'F4'
+src\main.cpp(1718): warning C4005: 'G4': macro redefinition
+  src\main.cpp(1420): note: see previous definition of 'G4'
+src\main.cpp(1719): warning C4005: 'A5': macro redefinition
+  src\main.cpp(1421): note: see previous definition of 'A5'
+src\main.cpp(1720): warning C4005: 'B5': macro redefinition
+  src\main.cpp(1422): note: see previous definition of 'B5'
+src\main.cpp(1721): warning C4005: 'C5': macro redefinition
+  src\main.cpp(1423): note: see previous definition of 'C5'
+src\main.cpp(1737): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1738): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1739): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1740): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1741): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1742): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1743): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
@@ -259,59 +256,69 @@ src\main.cpp(1744): warning C4244: 'argument': conversion from 'float' to 'DWORD
 src\main.cpp(1745): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1746): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1747): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1749): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1748): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1750): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1752): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1751): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1753): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1754): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1755): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1756): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1757): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1760): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1758): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1759): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1761): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1762): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1763): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1764): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1765): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1766): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1767): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1768): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1769): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1770): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1771): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1772): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1773): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1774): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1775): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1776): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1777): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1778): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1779): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1780): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1781): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1782): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1785): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1783): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1784): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1786): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1787): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1788): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1789): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1790): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1791): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1792): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1793): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1794): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1795): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1796): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1797): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1798): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1799): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1800): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
 src\main.cpp(1801): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
-src\main.cpp(1828): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1896): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1580): warning C4102: 'N1': unreferenced label
-src\main.cpp(1198): warning C4101: 'device_name': unreferenced local variable
-src\main.cpp(1192): warning C4101: 'buf2': unreferenced local variable
-src\main.cpp(1190): warning C4101: 'i': unreferenced local variable
-src\main.cpp(1195): warning C4101: 'written': unreferenced local variable
-src\main.cpp(1194): warning C4101: 'read': unreferenced local variable
+src\main.cpp(1802): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1804): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1805): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1806): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1807): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1808): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1809): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1810): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1811): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1812): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1813): warning C4244: 'argument': conversion from 'float' to 'DWORD', possible loss of data
+src\main.cpp(1840): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1908): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1592): warning C4102: 'N1': unreferenced label
+src\main.cpp(1210): warning C4101: 'device_name': unreferenced local variable
+src\main.cpp(1204): warning C4101: 'buf2': unreferenced local variable
+src\main.cpp(1202): warning C4101: 'i': unreferenced local variable
+src\main.cpp(1207): warning C4101: 'written': unreferenced local variable
+src\main.cpp(1206): warning C4101: 'read': unreferenced local variable
   Generating code
-  1 of 203 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
+  2 of 205 functions ( 1.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Release\joycon-driver.exe

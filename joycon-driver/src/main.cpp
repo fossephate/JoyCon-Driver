@@ -19,6 +19,7 @@
 #include "packet.h"
 #include "joycon.h"
 #include "MouseController.hpp"
+#include "tools.hpp"
 
 
 #pragma warning(disable:4996)
@@ -121,6 +122,13 @@ struct Settings {
 	bool restart = false;
 
 } settings;
+
+
+struct Tracker {
+	int var1 = 0;
+	int var2 = 0;
+	int counter1 = 0;
+};
 
 
 
@@ -348,13 +356,15 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 	// Upright: LDUR
 	// Sideways: DRLU
 	// bluetooth button pressed packet:
-	if (packet[0] == 0x3F/*63*/) {
+	if (packet[0] == 0x3F) {
 
 		uint16_t old_buttons = jc->buttons;
 		int8_t old_dstick = jc->dstick;
 
 		jc->dstick = packet[3];
 	}
+
+	//printf("%02x\n", packet[0]);
 
 	// input update packet:
 	if (packet[0] == 0x21 || packet[0] == 0x31) {
@@ -380,29 +390,12 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			jc->buttons = states;
 		}
 
-
-		//int mask = (1111 << 12);
-		//int mask = 0b1111000000000000;
-		if (jc->left_right == 1) {
-			if (jc->buttons == 207) {
-				settings.restart = true;
-				//goto init_start;
-			}
-		}
-
 		// get stick data:
-
-		//uint8_t *stick_data = nullptr;
-		//if (jc->left_right == 1) {
-		//	stick_data = packet + 6 + offset;
-		//} else if(jc->left_right == 2) {
-		//	stick_data = packet + 9 + offset;
-		//}
 		uint8_t *stick_data = packet + offset;
 		if (jc->left_right == 1) {
-			stick_data = stick_data + 6;
+			stick_data += 6;
 		} else if (jc->left_right == 2) {
-			stick_data = stick_data + 9;
+			stick_data += 9;
 		}
 
 		
@@ -432,23 +425,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			gyro_data = packet + 13;// 13
 		}
 
-		//gyro_data[7] + gyro_data[8]	= relative roll
-		//gyro_data[9] + gyro_data[10]	= relative pitch
-		//gyro_data[11] + gyro_data[12] = relative yaw
-
-		//gyro_data[7] + gyro_data[8]	= relative roll
-		//gyro_data[9] + gyro_data[10]	= relative pitch
-		//gyro_data[11] + gyro_data[12] = relative yaw
-		//
-
-		// second nibble from first byte + first nibble from 0th byte
-		//jc->gyro.pitch = (int)(unsigned int) ((gyro_data[1] & 0x0F) << 4) | ((gyro_data[4] & 0xF0) >> 4);
-		//jc->gyro.pitch = (int)(unsigned int)((gyro_data[1] & 0x0F) << 4) | ((gyro_data[0] & 0xF0) >> 4);
-
-		// second nibble from second byte + first nibble from first byte
-		//jc->gyro.roll = (int)(unsigned int)((gyro_data[3] & 0x0F) << 4) | ((gyro_data[2] & 0xF0) >> 4);
-
-		
 
 		// Gyroscope:
 		{
@@ -483,11 +459,11 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			}
 
 			// adjust:
-			float div = 600.0f;// 257.0f
-			int precision = 3;
-			jc->gyro.relroll	/= div;
-			jc->gyro.relpitch	/= div;
-			jc->gyro.relyaw		/= div;
+			//float div = 600.0f;// 257.0f
+			//int precision = 3;
+			//jc->gyro.relroll	/= div;
+			//jc->gyro.relpitch	/= div;
+			//jc->gyro.relyaw		/= div;
 
 
 			//jc->gyro.relroll	= floorf(jc->gyro.relroll * 100) / 100;
@@ -552,7 +528,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			//printf("%02x\n", jc->gyro.relroll);
 			//printf("%04x\n", jc->gyro.relyaw);
 
-			printf("%.4f\n", jc->gyro.relpitch);
+			//printf("%.4f\n", jc->gyro.relpitch);
 
 			//printf("%04x\n", absRollA);
 			//printf("%02x %02x\n", rollA, rollB);
@@ -562,6 +538,21 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 
 
+
+
+
+	// handle button combos:
+	{
+
+		// press up, down, left, right, L, ZL to restart:
+		if (jc->left_right == 1) {
+			if (jc->buttons == 207) {
+				settings.restart = true;
+				//goto init_start;
+			}
+		}
+
+	}
 }
 
 
@@ -1079,8 +1070,29 @@ void updatevJoyDevice(Joycon *jc) {
 			//MC.moveRel2((jc->gyro.relyaw - jc->gyro.relroll)+(jc->stick.horizontal/10.0f), -jc->gyro.relpitch);
 			//MC.moveRel2(jc->gyro.relyaw, 0);
 
-			float relX = (jc->gyro.relyaw /*- jc->gyro.relroll*/) + (jc->stick.horizontal / 20.0f);
-			float relY = -jc->gyro.relpitch -(jc->stick.vertical / 40.0f);
+			//float relX = (jc->gyro.relyaw /*- jc->gyro.relroll*/) + (jc->stick.horizontal / 20.0f);
+			//float relY = -jc->gyro.relpitch -(jc->stick.vertical / 40.0f);
+
+			//float relX = (jc->gyro.relyaw / 600.0f) - (jc->gyro.relroll / 600.0f) + (jc->stick.horizontal / 20.0f);
+			//float relY = (-jc->gyro.relpitch / 600.0f) - (jc->stick.vertical / 40.0f);
+
+			float thresX = 0.45;
+			float thresY = 0.45;
+
+
+			
+
+			float A = threshold(jc->gyro.relyaw, 252) / 600.0f;
+			float B = threshold(jc->gyro.relroll, 252) / 600.0f;
+			float C = threshold(jc->stick.horizontal, 20) * 0.05;
+
+			float relX = A - B + C;
+
+			A = threshold(jc->gyro.relpitch, 252) / 600.0f;
+			B = threshold(jc->stick.vertical, 20) * 0.025;
+
+			float relY = -A - B;
+			
 
 			MC.moveRel2(relX, relY);
 

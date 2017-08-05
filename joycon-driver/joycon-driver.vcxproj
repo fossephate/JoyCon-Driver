@@ -25,6 +25,7 @@
     <ClInclude Include="include\packet.h" />
     <ClInclude Include="include\public.h" />
     <ClInclude Include="include\stdafx.h" />
+    <ClInclude Include="include\tools.hpp" />
     <ClInclude Include="include\vjoyinterface.h" />
   </ItemGroup>
   <ItemGroup>
