@@ -427,6 +427,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 
 		// Gyroscope:
+		// Gyroscope data is relative
 		{
 			// get relative roll:
 			uint16_t relrollA = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
@@ -436,7 +437,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			} else {
 				jc->gyro.relroll = -1 * relrollB;
 			}
-			
 
 			// get relative pitch:
 			uint16_t relpitchA = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
@@ -447,8 +447,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 				jc->gyro.relpitch = -1 * relpitchB;
 			}
 
-
-
 			// get relative yaw:
 			uint16_t relyawA = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
 			uint16_t relyawB = 0xFFFF - relyawA;
@@ -457,25 +455,11 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			} else {
 				jc->gyro.relyaw = -1 * relyawB;
 			}
-
-			// adjust:
-			//float div = 600.0f;// 257.0f
-			//int precision = 3;
-			//jc->gyro.relroll	/= div;
-			//jc->gyro.relpitch	/= div;
-			//jc->gyro.relyaw		/= div;
-
-
-			//jc->gyro.relroll	= floorf(jc->gyro.relroll * 100) / 100;
-			//jc->gyro.relpitch	= floorf(jc->gyro.relpitch * 100) / 100;
-			//jc->gyro.relyaw		= floorf(jc->gyro.relyaw * 100) / 100;
-
-			//jc->gyro.relyaw -= 0.2f;
-			//jc->gyro.relpitch += 0.55f;
 		}
 
 
 		// Accelerometer:
+		// Accelerometer data is absolute
 		{
 			// get Accelerometer X:
 			uint16_t accelXA = ((uint16_t)gyro_data[1] << 8) | gyro_data[2];
@@ -485,8 +469,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			} else {
 				jc->accel.x = -1 * accelXB;
 			}
-			//jc->accel.x /= 257;
-
 
 			// get Accelerometer Y:
 			uint16_t accelYA = ((uint16_t)gyro_data[3] << 8) | gyro_data[4];
@@ -496,8 +478,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			} else {
 				jc->accel.y = -1 * accelYB;
 			}
-			//jc->accel.y /= 257;
-
 
 			// get Accelerometer Z:
 			uint16_t accelZA = ((uint16_t)gyro_data[5] << 8) | gyro_data[6];
@@ -507,16 +487,11 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			} else {
 				jc->accel.z = -1 * accelZB;
 			}
+
+			//jc->accel.x /= 257;
+			//jc->accel.y /= 257;
 			//jc->accel.z /= 257;
 		}
-
-
-		float m = 10.0f;
-
-		// track gyro movements:
-		//jc->gyro.roll	+= jc->gyro.relroll		/m;
-		//jc->gyro.pitch	+= jc->gyro.relpitch	/m;
-		//jc->gyro.yaw	+= jc->gyro.relyaw		/m;
 		
 
 
@@ -1034,7 +1009,7 @@ void updatevJoyDevice(Joycon *jc) {
 
 	// gyro data:
 	if (settings.enableGyro) {
-		if ((joycons.size() > 1 && jc->left_right == 2) || (joycons.size() == 1 && jc->left_right == 1)) {
+		if ((jc->left_right == 2) || (joycons.size() == 1 && jc->left_right == 1)) {
 		//if (jc->left_right == 2) {
 			//rz = jc->gyro.roll*240;
 			//iReport.wAxisZRot = jc->gyro.roll * 120;
@@ -1084,12 +1059,12 @@ void updatevJoyDevice(Joycon *jc) {
 
 			float A = threshold(jc->gyro.relyaw, 252) / 600.0f;
 			float B = threshold(jc->gyro.relroll, 252) / 600.0f;
-			float C = threshold(jc->stick.horizontal, 20) * 0.05;
+			float C = threshold(jc->stick.horizontal, 20) * 0.1;
 
 			float relX = A - B + C;
 
 			A = threshold(jc->gyro.relpitch, 252) / 600.0f;
-			B = threshold(jc->stick.vertical, 20) * 0.025;
+			B = threshold(jc->stick.vertical, 20) * 0.1;
 
 			float relY = -A - B;
 			
@@ -1117,19 +1092,21 @@ void updatevJoyDevice(Joycon *jc) {
 
 
 	// Set button data
+	// JoyCon(L) is the first 16 bits
+	// JoyCon(R) is the last 16 bits
 
 	long btns = 0;
 	if (!combineJoyCons) {
 		btns = jc->buttons;
 	} else {
 
-		if (jc->left_right == 2) {
+		if (jc->left_right == 1) {
+			btns = ((iReport.lButtons >> 16) << 16) | (jc->buttons);
 
+		} else if (jc->left_right == 2) {
 			unsigned r = createMask(0, 15);// 15
 			btns = ((jc->buttons) << 16) | (r & iReport.lButtons);
 
-		} else if(jc->left_right == 1) {
-			btns = ((iReport.lButtons >> 16) << 16) | (jc->buttons);
 		}
 	}
 
@@ -1835,9 +1812,10 @@ init_start:
 		counter++;
 		
 
-		// input poll loop:
+		// poll joycons:
 
 		for (int i = 0; i < joycons.size(); ++i) {
+		//for (int i = joycons.size()-1; i > -1; --i) {
 
 			Joycon *jc = &joycons[i];
 
@@ -1852,12 +1830,6 @@ init_start:
 			// get input:
 			memset(buf, 0, 65);
 
-			//if (counter % 2 == 0) {
-			//	//joycon_send_command(jc, 0x01, buf, 0);
-			//} else {
-			//	joycon_send_command(jc, 0x1F, buf, 0);
-			//}
-
 			if (settings.enableGyro) {
 				// seems to have slower response time:
 				joycon_send_command(jc, 0x1F, buf, 0);
@@ -1865,9 +1837,6 @@ init_start:
 				// may reset MCU data, not sure:
 				joycon_send_command(jc, 0x01, buf, 0);
 			}
-
-			//joycon_send_command(jc, 0x1F, buf, 0);
-			//joycon_send_command(jc, 0x01, buf, 0);
 
 			handle_input(jc, buf, 0x40);
 
@@ -1877,21 +1846,24 @@ init_start:
 			//}
 
 
-			updatevJoyDevice(jc);
+			
 
 		}
 
+		// update vjoy:
+		for (int i = 0; i < joycons.size(); ++i) {
+		//for (int i = joycons.size() - 1; i > -1; --i) {
+			updatevJoyDevice(&joycons[i]);
+		}
 
 		// sleep:
 		//Sleep(5);
-		Sleep(1);
+		//Sleep(1);
 
+		// sleep 8ms:
+		accurateSleep(8.00);
 
-		//auto end = std::chrono::steady_clock::now();
-		//std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
-		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-
-		//printf("time: %d\n", duration);
+		//Sleep(1000);
 
 		if (settings.restart) {
 			settings.restart = false;
