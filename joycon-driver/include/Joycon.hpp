@@ -240,6 +240,65 @@ public:
 	}
 
 
+	int init_bt() {
+
+		this->bluetooth = true;
+
+		unsigned char buf[0x400];
+		memset(buf, 0, 0x400);
+
+		// set non-blocking:
+		hid_set_nonblocking(this->handle, 1);
+
+		// Enable vibration
+		printf("Enabling vibration...\n");
+		memset(buf, 0x00, 0x400);
+		buf[0] = 0x01; // Enabled
+		send_subcommand(0x1, 0x48, buf, 1);
+
+		// Enable IMU data
+		printf("Enabling IMU data...\n");
+		memset(buf, 0x00, 0x400);
+		buf[0] = 0x01; // Enabled
+		send_subcommand(0x01, 0x40, buf, 1);
+
+
+		// Set input report mode (to push at 60hz)
+		// x00	Active polling mode for IR camera data. Answers with more than 300 bytes ID 31 packet
+		// x01	Active polling mode
+		// x02	Active polling mode for IR camera data.Special IR mode or before configuring it ?
+		// x21	Unknown.An input report with this ID has pairing or mcu data or serial flash data or device info
+		// x23	MCU update input report ?
+		// 30	NPad standard mode. Pushes current state @60Hz. Default in SDK if arg is not in the list
+		// 31	NFC mode. Pushes large packets @60Hz
+		printf("Increase data rate for Bluetooth...\n");
+		memset(buf, 0x00, 0x400);
+		buf[0] = 0x31;
+		send_subcommand(0x01, 0x03, buf, 1);
+
+
+		printf("Pairing1?...\n");
+		memset(buf, 0x00, 0x400);
+		buf[0] = 0x01;
+		send_subcommand(0x01, 0x01, buf, 1);
+
+		printf("Pairing2?...\n");
+		memset(buf, 0x00, 0x400);
+		buf[0] = 0x02;
+		send_subcommand(0x01, 0x01, buf, 1);
+
+		printf("Pairing3?...\n");
+		memset(buf, 0x00, 0x400);
+		buf[0] = 0x03;
+		send_subcommand(0x01, 0x01, buf, 1);
+
+
+
+		printf("Successfully initialized %s!\n", this->name.c_str());
+
+		return 0;
+	}
+
 	void init_usb() {
 
 		this->bluetooth = false;
@@ -308,66 +367,6 @@ public:
 		send_subcommand(0x1, 0x40, buf, 1);
 
 		printf("Successfully initialized %s!\n", this->name.c_str());
-	}
-
-
-	int init_bt() {
-
-		this->bluetooth = true;
-
-		unsigned char buf[0x400];
-		memset(buf, 0, 0x400);
-
-		// set non-blocking:
-		hid_set_nonblocking(this->handle, 1);
-
-		// Enable vibration
-		printf("Enabling vibration...\n");
-		memset(buf, 0x00, 0x400);
-		buf[0] = 0x01; // Enabled
-		send_subcommand(0x1, 0x48, buf, 1);
-
-		// Enable IMU data
-		printf("Enabling IMU data...\n");
-		memset(buf, 0x00, 0x400);
-		buf[0] = 0x01; // Enabled
-		send_subcommand(0x01, 0x40, buf, 1);
-
-
-		// Set input report mode (to push at 60hz)
-		// x00	Active polling mode for IR camera data. Answers with more than 300 bytes ID 31 packet
-		// x01	Active polling mode
-		// x02	Active polling mode for IR camera data.Special IR mode or before configuring it ?
-		// x21	Unknown.An input report with this ID has pairing or mcu data or serial flash data or device info
-		// x23	MCU update input report ?
-		// 30	NPad standard mode. Pushes current state @60Hz. Default in SDK if arg is not in the list
-		// 31	NFC mode. Pushes large packets @60Hz
-		printf("Increase data rate for Bluetooth...\n");
-		memset(buf, 0x00, 0x400);
-		buf[0] = 0x31;
-		send_subcommand(0x01, 0x03, buf, 1);
-
-
-		printf("Pairing1?...\n");
-		memset(buf, 0x00, 0x400);
-		buf[0] = 0x01;
-		send_subcommand(0x01, 0x01, buf, 1);
-
-		printf("Pairing2?...\n");
-		memset(buf, 0x00, 0x400);
-		buf[0] = 0x02;
-		send_subcommand(0x01, 0x01, buf, 1);
-
-		printf("Pairing3?...\n");
-		memset(buf, 0x00, 0x400);
-		buf[0] = 0x03;
-		send_subcommand(0x01, 0x01, buf, 1);
-
-
-
-		printf("Successfully initialized %s!\n", jc->name.c_str());
-
-		return 0;
 	}
 
 	void deinit_usb() {

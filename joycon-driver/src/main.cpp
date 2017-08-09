@@ -2,6 +2,7 @@
 #include <Windows.h>
 #pragma comment(lib, "user32.lib")
 
+
 #include <bitset>
 #include <random>
 #include <stdafx.h>
@@ -22,7 +23,7 @@
 #include "tools.hpp"
 
 // wxWidgets:
-//#include <wx/wx.h>
+#include <wx/wx.h>
 
 
 #pragma warning(disable:4996)
@@ -560,14 +561,14 @@ int acquirevJoyDevice(int deviceID) {
 
 	// Get the driver attributes (Vendor ID, Product ID, Version Number)
 	if (!vJoyEnabled()) {
-		_tprintf("Function vJoyEnabled Failed - make sure that vJoy is installed and enabled\n");
+		printf("Function vJoyEnabled Failed - make sure that vJoy is installed and enabled\n");
 		int dummy = getchar();
 		stat = -2;
 		throw;
 		//goto Exit;
 	} else {
-		//wprintf(L"Vendor: %s\nProduct :%s\nVersion Number:%s\n", static_cast<TCHAR *> (GetvJoyManufacturerString()), static_cast<TCHAR *>(GetvJoyProductString()), static_cast<TCHAR *>(GetvJoySerialNumberString()));
-		//wprintf(L"Product :%s\n", static_cast<TCHAR *>(GetvJoyProductString()));
+		wprintf(L"Vendor: %s\nProduct :%s\nVersion Number:%s\n", static_cast<TCHAR *> (GetvJoyManufacturerString()), static_cast<TCHAR *>(GetvJoyProductString()), static_cast<TCHAR *>(GetvJoySerialNumberString()));
+		wprintf(L"Product :%s\n", static_cast<TCHAR *>(GetvJoyProductString()));
 	};
 
 	// Get the status of the vJoy device before trying to acquire it
@@ -575,31 +576,31 @@ int acquirevJoyDevice(int deviceID) {
 
 	switch (status) {
 		case VJD_STAT_OWN:
-			_tprintf("vJoy device %d is already owned by this feeder\n", deviceID);
+			printf("vJoy device %d is already owned by this feeder\n", deviceID);
 			break;
 		case VJD_STAT_FREE:
-			_tprintf("vJoy device %d is free\n", deviceID);
+			printf("vJoy device %d is free\n", deviceID);
 			break;
 		case VJD_STAT_BUSY:
-			_tprintf("vJoy device %d is already owned by another feeder\nCannot continue\n", deviceID);
+			printf("vJoy device %d is already owned by another feeder\nCannot continue\n", deviceID);
 			return -3;
 		case VJD_STAT_MISS:
-			_tprintf("vJoy device %d is not installed or disabled\nCannot continue\n", deviceID);
+			printf("vJoy device %d is not installed or disabled\nCannot continue\n", deviceID);
 			return -4;
 		default:
-			_tprintf("vJoy device %d general error\nCannot continue\n", deviceID);
+			printf("vJoy device %d general error\nCannot continue\n", deviceID);
 			return -1;
 	};
 
 	// Acquire the vJoy device
 	if (!AcquireVJD(deviceID)) {
-		_tprintf("Failed to acquire vJoy device number %d.\n", deviceID);
+		printf("Failed to acquire vJoy device number %d.\n", deviceID);
 		int dummy = getchar();
 		stat = -1;
 		//goto Exit;
 		throw;
 	} else {
-		_tprintf("Acquired device number %d - OK\n", deviceID);
+		printf("Acquired device number %d - OK\n", deviceID);
 	}
 }
 
@@ -858,12 +859,23 @@ void parseSettings(int length, char *args[]) {
 
 
 
+class app : public wxApp {
+public:
+	bool OnInit() {
+		wxFrame* window = new wxFrame(nullptr, -1, "test");
+		window->Show();
+		return true;
+	}
+};
+
+//IMPLEMENT_APP(app);
+wxIMPLEMENT_APP_NO_MAIN(app);
 
 
 
 
-
-int main(int argc, char *argv[]) {
+//int main(int argc, char *argv[]) {
+int wWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPWSTR cmdLine, int cmdShow) {
 
 	// get vJoy Device 1
 	acquirevJoyDevice(1);
@@ -878,20 +890,14 @@ int main(int argc, char *argv[]) {
 
 	int read;	// number of bytes read
 	int written;// number of bytes written
-
-
 	const char *device_name;
-	
 
 	// Enumerate and print the HID devices on the system
 	struct hid_device_info *devs, *cur_dev;
 
 	res = hid_init();
 
-	
-	//MC.moveRel(5, 0);
-
-
+	//parseSettings(argc, argv);
 
 
 init_start:
@@ -946,11 +952,6 @@ init_start:
 		}
 	}
 
-
-	parseSettings(argc, argv);
-
-	
-
 	// use stick data to calibrate:
 	if (settings.autoCenterSticks) {
 		printf("Auto centering sticks...\n");
@@ -1000,17 +1001,7 @@ init_start:
 		}
 		//printf("Done centering sticks.\n");
 	}
-
-
-
-
-
-
-
-
-
-
-
+	
 	// set lights:
 	printf("setting LEDs...\n");
 	for (int r = 0; r < 5; ++r) {
@@ -1361,11 +1352,6 @@ init_start:
 	}
 
 
-
-
-
-
-
 	//#define MusicOffset 300
 
 	// notes in hertz:
@@ -1491,35 +1477,24 @@ init_start:
 
 	printf("Done.\n");
 
+	wxEntry(hInstance);
 
-
-
-	
 	int counter = 0;
 
 	while(true) {
-
 		counter++;
 		
-
 		// poll joycons:
-
 		for (int i = 0; i < joycons.size(); ++i) {
-		//for (int i = joycons.size()-1; i > -1; --i) {
-
 			Joycon *jc = &joycons[i];
 
-			if (!jc->handle) {
-				continue;
-			}
+			if (!jc->handle) {continue;}
 
 			// set to be non-blocking:
 			hid_set_nonblocking(jc->handle, 1);
-			
 
 			// get input:
 			memset(buf, 0, 65);
-
 			if (settings.enableGyro) {
 				// seems to have slower response time:
 				jc->send_command(0x1F, buf, 0);
@@ -1527,33 +1502,22 @@ init_start:
 				// may reset MCU data, not sure:
 				jc->send_command(0x01, buf, 0);
 			}
-
 			handle_input(jc, buf, 0x40);
-
-
-			//if (GetKeyState('A') & 0x8000/*check if high-order bit is set (1 << 15)*/){
-				//joycon_send_subcommand(jc, 0x01, 0x20, 0x0, 0);// reset MCU
-			//}
 		}
 
 		// update vjoy:
 		for (int i = 0; i < joycons.size(); ++i) {
-		//for (int i = joycons.size() - 1; i > -1; --i) {
 			updatevJoyDevice(&joycons[i]);
 		}
 
 
 		// sleep:
-
-		// sleep 8ms:
 		accurateSleep(8.00);
 
 		if (settings.restart) {
 			settings.restart = false;
 			goto init_start;
 		}
-
-
 	}
 
 	RelinquishVJD(1);
