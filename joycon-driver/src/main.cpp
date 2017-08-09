@@ -863,8 +863,25 @@ class app : public wxApp {
 public:
 	bool OnInit() {
 		wxFrame* window = new wxFrame(nullptr, -1, "test");
+		//wxButton *button = new wxButton(window, -1, "button");
+		//button->Bind(wxEVT_BUTTON, &app::on_button_clicked, this);
+
+		wxButton *quitButton = new wxButton(window, -1, "quit");
+		quitButton->Bind(wxEVT_BUTTON, &app::quit, this);
+
+
+
 		window->Show();
 		return true;
+	}
+
+	void on_button_clicked(wxCommandEvent&) {
+		wxMessageBox("pressed.", "Info");
+	}
+
+	void quit(wxCommandEvent&) {
+		exit(0);
+		//close(true);
 	}
 };
 
