@@ -1038,8 +1038,8 @@ init_start:
 	}
 
 
-	printf("vibrating JoyCon(s).\n");
 	// give a small rumble to all joycons:
+	printf("vibrating JoyCon(s).\n");
 	for (int k = 0; k < 1; ++k) {
 		for (int i = 0; i < joycons.size(); ++i) {
 			joycons[i].rumble(100, 1);
@@ -1499,10 +1499,6 @@ init_start:
 
 	while(true) {
 
-		//auto start = std::chrono::steady_clock::now();
-		//std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
-		
-
 		counter++;
 		
 
@@ -1546,14 +1542,11 @@ init_start:
 			updatevJoyDevice(&joycons[i]);
 		}
 
+
 		// sleep:
-		//Sleep(5);
-		//Sleep(1);
 
 		// sleep 8ms:
 		accurateSleep(8.00);
-
-		//Sleep(1000);
 
 		if (settings.restart) {
 			settings.restart = false;

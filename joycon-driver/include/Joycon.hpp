@@ -241,6 +241,9 @@ public:
 
 
 	void init_usb() {
+
+		this->bluetooth = false;
+
 		unsigned char buf[0x400];
 		memset(buf, 0, 0x400);
 
@@ -310,11 +313,13 @@ public:
 
 	int init_bt() {
 
+		this->bluetooth = true;
+
 		unsigned char buf[0x400];
 		memset(buf, 0, 0x400);
 
 		// set non-blocking:
-		hid_set_nonblocking(jc->handle, 1);
+		hid_set_nonblocking(this->handle, 1);
 
 		// Enable vibration
 		printf("Enabling vibration...\n");
