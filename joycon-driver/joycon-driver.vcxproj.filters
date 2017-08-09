@@ -41,7 +41,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
+    <ClCompile Include="src\wxWidgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
