@@ -33,15 +33,15 @@
     <ClInclude Include="include\MouseController.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Joycon.h">
+    <ClInclude Include="include\tools.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\tools.hpp">
+    <ClInclude Include="include\Joycon.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\wxWidgets.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
