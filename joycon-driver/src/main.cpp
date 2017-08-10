@@ -844,11 +844,9 @@ void parseSettings(int length, char *args[]) {
 
 void parseSettings2() {
 
-	setupConsole("Debug");
+	//setupConsole("Debug");
 
 	std::map<std::string, std::string> cfg = LoadConfig("config.txt");
-
-	//std::cout << cfg["CombineJoyCons"] << std::endl;
 
 	settings.combineJoyCons = (bool)stoi(cfg["CombineJoyCons"]);
 	settings.autoCenterSticks = (bool)stoi(cfg["AutoCenterSticks"]);
@@ -872,81 +870,8 @@ void parseSettings2() {
 }
 
 
+void start() {
 
-
-class app : public wxApp {
-public:
-
-	wxCheckBox *CB1;
-	wxCheckBox *CB2;
-	wxCheckBox *CB3;
-	wxCheckBox *CB4;
-
-	bool OnInit() {
-		wxFrame* frame = new wxFrame(nullptr, -1, "test");
-		//wxButton *button = new wxButton(window, -1, "button");
-		//button->Bind(wxEVT_BUTTON, &app::on_button_clicked, this);
-
-		wxPanel *panel = new wxPanel(frame, wxID_ANY);
-
-		wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(200, 20));
-		quitButton->Bind(wxEVT_BUTTON, &app::quit, this);
-
-
-		//wxString title = "Icon";
-		//wxFrame* icon = new wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(250, 150));
-		//icon->SetIcon(wxIcon(wxT("test.xpm")));
-		//icon->Centre();
-		//icon->Show();
-
-		//Connect(wxID_EXIT, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(app::quit));
-
-
-
-		CB1 = new wxCheckBox(panel, wxID_ANY, wxT("Combine JoyCons"), wxPoint(20, 20));
-		CB1->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::handleSettings, this);
-		CB1->SetValue(settings.combineJoyCons);
-
-		CB2 = new wxCheckBox(panel, wxID_ANY, wxT("Auto Center Sticks"), wxPoint(20, 40));
-		CB2->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::handleSettings, this);
-		CB2->SetValue(settings.autoCenterSticks);
-
-		CB3 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Controls"), wxPoint(20, 60));
-		CB3->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::handleSettings, this);
-		CB3->SetValue(settings.enableGyro);
-
-		CB4 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 80));
-		CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::handleSettings, this);
-		CB4->SetValue(settings.marioTheme);
-		//CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &[](wxCommandEvent&){}, this);
-
-		frame->Show();
-		return true;
-	}
-
-	void on_button_clicked(wxCommandEvent&) {
-		wxMessageBox("pressed.", "Info");
-	}
-
-	void handleSettings(wxCommandEvent&) {
-		//wxMessageBox("pressed.", "Info");
-		settings.combineJoyCons = !settings.combineJoyCons;
-	}
-
-	void quit(wxCommandEvent&) {
-		exit(0);
-		//close(true);
-	}
-};
-
-//IMPLEMENT_APP(app);
-wxIMPLEMENT_APP_NO_MAIN(app);
-
-
-
-
-//int main(int argc, char *argv[]) {
-int wWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPWSTR cmdLine, int cmdShow) {
 
 	// get vJoy Device 1
 	acquirevJoyDevice(1);
@@ -1059,7 +984,7 @@ init_start:
 				int y = (settings.leftJoyConYMultiplier * (jc->stick.vertical));
 				settings.leftJoyConYOffset = -y + (16384);
 
-			// right joycon:
+				// right joycon:
 			} else if (jc->left_right == 2) {
 
 				int x = (settings.rightJoyConXMultiplier * (jc->stick.horizontal));
@@ -1073,7 +998,7 @@ init_start:
 		}
 		//printf("Done centering sticks.\n");
 	}
-	
+
 	// set lights:
 	printf("setting LEDs...\n");
 	for (int r = 0; r < 5; ++r) {
@@ -1220,7 +1145,7 @@ init_start:
 			joycon.rumble(mk_odd(G3), 1); Sleep(200 / spd); joycon.rumble(1, 3);	// G1
 			Sleep(200 / spd2);
 			joycon.rumble(mk_odd(E3), 2); Sleep(200 / spd); joycon.rumble(1, 3);	// E1
-			
+
 			Sleep(200 / spd2);
 			joycon.rumble(mk_odd(A4), 1); Sleep(200 / spd); joycon.rumble(1, 3);	// A2
 			Sleep(200 / spd2);
@@ -1254,7 +1179,7 @@ init_start:
 			Sleep(50 / spd2);
 			joycon.rumble(mk_odd(B4), 1); Sleep(200 / spd); joycon.rumble(1, 3);	// B2
 
-			// new:
+																					// new:
 
 			Sleep(500 / spd2);
 
@@ -1276,7 +1201,7 @@ init_start:
 			Sleep(50 / spd2);
 			joycon.rumble(mk_odd(C4), 1); Sleep(200 / spd); joycon.rumble(1, 3);	// C2
 
-			
+
 			Sleep(200 / spd2);
 			joycon.rumble(mk_odd(A4), 1); Sleep(200 / spd); joycon.rumble(1, 3);	// A2
 			Sleep(50 / spd2);
@@ -1298,7 +1223,7 @@ init_start:
 			joycon.rumble(mk_odd(E4), 1); Sleep(200 / spd); joycon.rumble(1, 3);	// E2
 
 
-			// three notes:
+																					// three notes:
 			Sleep(200 / spd2);
 			joycon.rumble(mk_odd(C5), 1); Sleep(200 / spd); joycon.rumble(1, 3);	// C3
 			Sleep(200 / spd2);
@@ -1307,7 +1232,7 @@ init_start:
 			joycon.rumble(mk_odd(C3), 1); Sleep(200 / spd); joycon.rumble(1, 3);	// C3
 
 
-			N1:
+		N1:
 
 
 			Sleep(500 / spd2);
@@ -1362,7 +1287,7 @@ init_start:
 			joycon.rumble(mk_odd(E4), 1); Sleep(200 / spd); joycon.rumble(1, 3);	// E2
 
 			Sleep(200 / spd2);
-			
+
 
 			joycon.rumble(mk_odd(G3A4), 1); Sleep(200 / spd); joycon.rumble(1, 3);// G1A2
 			Sleep(50 / spd2);
@@ -1393,9 +1318,9 @@ init_start:
 			Sleep(100 / spd2);
 			joycon.rumble(mk_odd(E4), 1); Sleep(200 / spd); joycon.rumble(1, 3);	// E2
 
-			// 30 second mark
-			
-			// three notes:
+																					// 30 second mark
+
+																					// three notes:
 
 			Sleep(300 / spd2);
 			joycon.rumble(mk_odd(C5), 1); Sleep(200 / spd); joycon.rumble(1, 3);	// C3
@@ -1532,21 +1457,18 @@ init_start:
 		}
 	}
 
-
 	printf("Done.\n");
-
-	wxEntry(hInstance);
 
 	int counter = 0;
 
-	while(true) {
+	while (true) {
 		counter++;
-		
+
 		// poll joycons:
 		for (int i = 0; i < joycons.size(); ++i) {
 			Joycon *jc = &joycons[i];
 
-			if (!jc->handle) {continue;}
+			if (!jc->handle) { continue; }
 
 			// set to be non-blocking:
 			hid_set_nonblocking(jc->handle, 1);
@@ -1586,9 +1508,98 @@ init_start:
 			joycons[i].deinit_usb();
 		}
 	}
-
 	// Finalize the hidapi library
 	res = hid_exit();
+
+}
+
+
+
+// wxWidgets / GUI:
+
+class app : public wxApp {
+public:
+
+	wxCheckBox *CB1;
+	wxCheckBox *CB2;
+	wxCheckBox *CB3;
+	wxCheckBox *CB4;
+
+	bool OnInit() {
+		wxFrame* frame = new wxFrame(nullptr, -1, "Joycon Driver by fosse");
+		//wxButton *button = new wxButton(window, -1, "button");
+		//button->Bind(wxEVT_BUTTON, &app::on_button_clicked, this);
+
+		wxPanel *panel = new wxPanel(frame, wxID_ANY);
+
+		wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 160));
+		quitButton->Bind(wxEVT_BUTTON, &app::onQuit, this);
+
+		wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 160));
+		startButton->Bind(wxEVT_BUTTON, &app::onStart, this);
+
+
+		//wxString title = "Icon";
+		//wxFrame* icon = new wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(250, 150));
+		//icon->SetIcon(wxIcon(wxT("test.xpm")));
+		//icon->Centre();
+		//icon->Show();
+
+		//Connect(wxID_EXIT, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(app::quit));
+
+
+
+		CB1 = new wxCheckBox(panel, wxID_ANY, wxT("Combine JoyCons"), wxPoint(20, 20));
+		CB1->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::handleSettings, this);
+		CB1->SetValue(settings.combineJoyCons);
+
+		CB2 = new wxCheckBox(panel, wxID_ANY, wxT("Auto Center Sticks"), wxPoint(20, 40));
+		CB2->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::handleSettings, this);
+		CB2->SetValue(settings.autoCenterSticks);
+
+		CB3 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Controls"), wxPoint(20, 60));
+		CB3->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::handleSettings, this);
+		CB3->SetValue(settings.enableGyro);
+
+		CB4 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 80));
+		CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::handleSettings, this);
+		CB4->SetValue(settings.marioTheme);
+		//CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &[](wxCommandEvent&){}, this);
+
+		frame->Show();
+		return true;
+	}
+
+	void on_button_clicked(wxCommandEvent&) {
+		wxMessageBox("pressed.", "Info");
+	}
+
+	void handleSettings(wxCommandEvent&) {
+		//wxMessageBox("pressed.", "Info");
+		settings.combineJoyCons = !settings.combineJoyCons;
+	}
+
+	void onStart(wxCommandEvent&) {
+		setupConsole("Debug");
+		start();
+	}
+
+	void onQuit(wxCommandEvent&) {
+		exit(0);
+		//close(true);
+	}
+};
+
+//IMPLEMENT_APP(app);
+wxIMPLEMENT_APP_NO_MAIN(app);
+
+
+//int main(int argc, char *argv[]) {
+int wWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPWSTR cmdLine, int cmdShow) {
+
+	parseSettings2();
+
+	wxEntry(hInstance);
 
 	return 0;
 }
