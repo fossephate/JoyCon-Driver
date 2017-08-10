@@ -862,21 +862,49 @@ void parseSettings(int length, char *args[]) {
 class app : public wxApp {
 public:
 	bool OnInit() {
-		wxFrame* window = new wxFrame(nullptr, -1, "test");
+		wxFrame* frame = new wxFrame(nullptr, -1, "test");
 		//wxButton *button = new wxButton(window, -1, "button");
 		//button->Bind(wxEVT_BUTTON, &app::on_button_clicked, this);
 
-		wxButton *quitButton = new wxButton(window, -1, "quit");
+		wxPanel *panel = new wxPanel(frame, wxID_ANY);
+
+		wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(200, 20));
 		quitButton->Bind(wxEVT_BUTTON, &app::quit, this);
 
 
+		//wxString title = "Icon";
+		//wxFrame* icon = new wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(250, 150));
+		//icon->SetIcon(wxIcon(wxT("test.xpm")));
+		//icon->Centre();
+		//icon->Show();
 
-		window->Show();
+		//Connect(wxID_EXIT, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(app::quit));
+
+
+
+		wxCheckBox *CB1 = new wxCheckBox(panel, wxID_ANY, wxT("Combine Mode"), wxPoint(20, 20));
+		CB1->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::checkBox, this);
+
+		wxCheckBox *CB2 = new wxCheckBox(panel, wxID_ANY, wxT("Auto Center Sticks"), wxPoint(20, 40));
+		CB2->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::checkBox, this);
+
+		wxCheckBox *CB3 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Controls"), wxPoint(20, 60));
+		CB3->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::checkBox, this);
+
+		wxCheckBox *CB4 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 80));
+		CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::checkBox, this);
+
+		frame->Show();
 		return true;
 	}
 
 	void on_button_clicked(wxCommandEvent&) {
 		wxMessageBox("pressed.", "Info");
+	}
+
+	void checkBox(wxCommandEvent&) {
+		//wxMessageBox("pressed.", "Info");
+		settings.combineJoyCons = !settings.combineJoyCons;
 	}
 
 	void quit(wxCommandEvent&) {
@@ -942,12 +970,12 @@ init_start:
 			}
 
 			// charging grip:
-			if (cur_dev->product_id == JOYCON_CHARGING_GRIP) {
-				settings.usingGrip = true;
-				settings.usingBluetooth = false;
-				settings.combineJoyCons = true;
-				found_joycon(cur_dev);
-			}
+			//if (cur_dev->product_id == JOYCON_CHARGING_GRIP) {
+			//	settings.usingGrip = true;
+			//	settings.usingBluetooth = false;
+			//	settings.combineJoyCons = true;
+			//	found_joycon(cur_dev);
+			//}
 		}
 
 

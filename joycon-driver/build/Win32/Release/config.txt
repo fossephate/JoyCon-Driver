@@ -1,0 +1,14 @@
+CombineJoyCons = 1
+AutoCenterSticks = 1
+GyroControls = 0
+MarioTheme = 0
+reverseX = 0
+reverseY = 0
+leftJoyConXOffset = 16000
+leftJoyConYOffset = 13000
+rightJoyConXOffset = 15000
+rightJoyConYOffset = 19000
+leftJoyConXMultiplier = 250
+leftJoyConYMultiplier = 250
+rightJoyConXMultiplier = 250
+rightJoyConYMultiplier = 250

@@ -4,60 +4,60 @@ C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\joycon-driver\include
 src\main.cpp(751): warning C4305: 'initializing': truncation from 'double' to 'float'
 src\main.cpp(752): warning C4305: 'initializing': truncation from 'double' to 'float'
 src\main.cpp(655): warning C4101: 'z': unreferenced local variable
-src\main.cpp(895): warning C4007: 'wWinMain': must be '__stdcall'
-src\main.cpp(962): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(967): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(977): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(996): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1025): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1052): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1375): warning C4005: 'C3': macro redefinition
-  src\main.cpp(1080): note: see previous definition of 'C3'
-src\main.cpp(1376): warning C4005: 'D3': macro redefinition
-  src\main.cpp(1081): note: see previous definition of 'D3'
-src\main.cpp(1377): warning C4005: 'E3': macro redefinition
-  src\main.cpp(1082): note: see previous definition of 'E3'
-src\main.cpp(1378): warning C4005: 'F3': macro redefinition
-  src\main.cpp(1083): note: see previous definition of 'F3'
-src\main.cpp(1379): warning C4005: 'G3': macro redefinition
-  src\main.cpp(1084): note: see previous definition of 'G3'
-src\main.cpp(1380): warning C4005: 'G3A4': macro redefinition
-  src\main.cpp(1085): note: see previous definition of 'G3A4'
-src\main.cpp(1381): warning C4005: 'A4': macro redefinition
-  src\main.cpp(1086): note: see previous definition of 'A4'
-src\main.cpp(1382): warning C4005: 'A4B4': macro redefinition
-  src\main.cpp(1087): note: see previous definition of 'A4B4'
-src\main.cpp(1383): warning C4005: 'B4': macro redefinition
-  src\main.cpp(1088): note: see previous definition of 'B4'
-src\main.cpp(1384): warning C4005: 'C4': macro redefinition
-  src\main.cpp(1089): note: see previous definition of 'C4'
-src\main.cpp(1385): warning C4005: 'D4': macro redefinition
-  src\main.cpp(1090): note: see previous definition of 'D4'
-src\main.cpp(1386): warning C4005: 'D4E4': macro redefinition
-  src\main.cpp(1091): note: see previous definition of 'D4E4'
-src\main.cpp(1387): warning C4005: 'E4': macro redefinition
-  src\main.cpp(1092): note: see previous definition of 'E4'
-src\main.cpp(1388): warning C4005: 'F4': macro redefinition
-  src\main.cpp(1093): note: see previous definition of 'F4'
-src\main.cpp(1390): warning C4005: 'G4': macro redefinition
-  src\main.cpp(1095): note: see previous definition of 'G4'
-src\main.cpp(1391): warning C4005: 'A5': macro redefinition
-  src\main.cpp(1096): note: see previous definition of 'A5'
-src\main.cpp(1392): warning C4005: 'B5': macro redefinition
-  src\main.cpp(1097): note: see previous definition of 'B5'
-src\main.cpp(1393): warning C4005: 'C5': macro redefinition
-  src\main.cpp(1098): note: see previous definition of 'C5'
-src\main.cpp(1505): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1526): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1544): warning C4018: '<': signed/unsigned mismatch
-src\main.cpp(1269): warning C4102: 'N1': unreferenced label
-src\main.cpp(910): warning C4101: 'device_name': unreferenced local variable
-src\main.cpp(906): warning C4101: 'buf2': unreferenced local variable
-src\main.cpp(904): warning C4101: 'i': unreferenced local variable
-src\main.cpp(909): warning C4101: 'written': unreferenced local variable
-src\main.cpp(908): warning C4101: 'read': unreferenced local variable
+src\main.cpp(923): warning C4007: 'wWinMain': must be '__stdcall'
+src\main.cpp(990): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(995): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1005): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1024): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1053): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1080): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1403): warning C4005: 'C3': macro redefinition
+  src\main.cpp(1108): note: see previous definition of 'C3'
+src\main.cpp(1404): warning C4005: 'D3': macro redefinition
+  src\main.cpp(1109): note: see previous definition of 'D3'
+src\main.cpp(1405): warning C4005: 'E3': macro redefinition
+  src\main.cpp(1110): note: see previous definition of 'E3'
+src\main.cpp(1406): warning C4005: 'F3': macro redefinition
+  src\main.cpp(1111): note: see previous definition of 'F3'
+src\main.cpp(1407): warning C4005: 'G3': macro redefinition
+  src\main.cpp(1112): note: see previous definition of 'G3'
+src\main.cpp(1408): warning C4005: 'G3A4': macro redefinition
+  src\main.cpp(1113): note: see previous definition of 'G3A4'
+src\main.cpp(1409): warning C4005: 'A4': macro redefinition
+  src\main.cpp(1114): note: see previous definition of 'A4'
+src\main.cpp(1410): warning C4005: 'A4B4': macro redefinition
+  src\main.cpp(1115): note: see previous definition of 'A4B4'
+src\main.cpp(1411): warning C4005: 'B4': macro redefinition
+  src\main.cpp(1116): note: see previous definition of 'B4'
+src\main.cpp(1412): warning C4005: 'C4': macro redefinition
+  src\main.cpp(1117): note: see previous definition of 'C4'
+src\main.cpp(1413): warning C4005: 'D4': macro redefinition
+  src\main.cpp(1118): note: see previous definition of 'D4'
+src\main.cpp(1414): warning C4005: 'D4E4': macro redefinition
+  src\main.cpp(1119): note: see previous definition of 'D4E4'
+src\main.cpp(1415): warning C4005: 'E4': macro redefinition
+  src\main.cpp(1120): note: see previous definition of 'E4'
+src\main.cpp(1416): warning C4005: 'F4': macro redefinition
+  src\main.cpp(1121): note: see previous definition of 'F4'
+src\main.cpp(1418): warning C4005: 'G4': macro redefinition
+  src\main.cpp(1123): note: see previous definition of 'G4'
+src\main.cpp(1419): warning C4005: 'A5': macro redefinition
+  src\main.cpp(1124): note: see previous definition of 'A5'
+src\main.cpp(1420): warning C4005: 'B5': macro redefinition
+  src\main.cpp(1125): note: see previous definition of 'B5'
+src\main.cpp(1421): warning C4005: 'C5': macro redefinition
+  src\main.cpp(1126): note: see previous definition of 'C5'
+src\main.cpp(1533): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1554): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1572): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1297): warning C4102: 'N1': unreferenced label
+src\main.cpp(938): warning C4101: 'device_name': unreferenced local variable
+src\main.cpp(934): warning C4101: 'buf2': unreferenced local variable
+src\main.cpp(932): warning C4101: 'i': unreferenced local variable
+src\main.cpp(937): warning C4101: 'written': unreferenced local variable
+src\main.cpp(936): warning C4101: 'read': unreferenced local variable
   Generating code
-  2 of 560 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+  1 of 629 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
