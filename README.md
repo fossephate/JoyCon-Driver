@@ -23,15 +23,7 @@ A vJoy feeder for the Nintendo Switch JoyCons with analog stick support and moti
 ## Important Notes
 * The JoyCons need to be re-paired anytime after they've reconnected to the switch.
 
-* These are the command line arguments you may want to add:
-	* Run with "--combine" to combine the left and right joycons
-	* Run with "--auto-center" to automatically center the sticks
-	* Run with "--enable-gyro" to enable motion controls
-	* Run with "--mario-theme" to play a (bad) version of the mario theme on the first JoyCon connected
-	* Run with "--LXO 16000" to add an X Offset to the Left JoyCon of 16000
-	* Run with "--LYO 16000" to add an Y Offset to the Left JoyCon of 16000
-	* Run with "--RYO 16000" to add an X Offset to the Right JoyCon of 16000
-	* Run with "--RYO 16000" to add an Y Offset to the Right JoyCon of 16000
+* There is now a config file, and a WIP GUI
 
 
 These are the default settings:

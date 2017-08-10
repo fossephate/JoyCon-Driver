@@ -1,0 +1,16 @@
+{
+	"CombineJoyCons": true
+	"AutoCenterSticks": true
+	"GyroControls": false
+	"MarioTheme": false
+	"reverseX": false
+	"reverseY": false
+	"leftJoyConXOffset": 16000
+	"leftJoyConYOffset": 13000
+	"rightJoyConXOffset": 15000
+	"rightJoyConYOffset": 19000
+	"leftJoyConXMultiplier": 250
+	"leftJoyConYMultiplier": 250
+	"rightJoyConXMultiplier": 250
+	"rightJoyConYMultiplier": 250
+}

@@ -9,6 +9,8 @@
 #include <string.h>
 #include <chrono>
 #include <iomanip>      // std::setprecision
+#include <iostream>
+#include <fstream>
 
 #include <hidapi.h>
 
@@ -512,23 +514,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void hid_dual_exchange(hid_device *handle_l, hid_device *handle_r, unsigned char *buf_l, unsigned char *buf_r, int len) {
 	if (handle_l && buf_l) {
 		hid_set_nonblocking(handle_l, 1);
@@ -857,10 +842,46 @@ void parseSettings(int length, char *args[]) {
 }
 
 
+void parseSettings2() {
+
+	setupConsole("Debug");
+
+	std::map<std::string, std::string> cfg = LoadConfig("config.txt");
+
+	//std::cout << cfg["CombineJoyCons"] << std::endl;
+
+	settings.combineJoyCons = (bool)stoi(cfg["CombineJoyCons"]);
+	settings.autoCenterSticks = (bool)stoi(cfg["AutoCenterSticks"]);
+	settings.enableGyro = (bool)stoi(cfg["GyroControls"]);
+	settings.marioTheme = (bool)stoi(cfg["MarioTheme"]);
+
+	settings.reverseX = (bool)stoi(cfg["reverseX"]);
+	settings.reverseY = (bool)stoi(cfg["reverseY"]);
+
+
+	settings.leftJoyConXOffset = stoi(cfg["leftJoyConXOffset"]);
+	settings.leftJoyConYOffset = stoi(cfg["leftJoyConYOffset"]);
+	settings.rightJoyConXOffset = stoi(cfg["rightJoyConXOffset"]);
+	settings.rightJoyConYOffset = stoi(cfg["rightJoyConYOffset"]);
+
+	settings.leftJoyConXMultiplier = stoi(cfg["leftJoyConXMultiplier"]);
+	settings.leftJoyConYMultiplier = stoi(cfg["leftJoyConYMultiplier"]);
+	settings.rightJoyConXMultiplier = stoi(cfg["rightJoyConXMultiplier"]);
+	settings.rightJoyConYMultiplier = stoi(cfg["rightJoyConYMultiplier"]);
+
+}
+
+
 
 
 class app : public wxApp {
 public:
+
+	wxCheckBox *CB1;
+	wxCheckBox *CB2;
+	wxCheckBox *CB3;
+	wxCheckBox *CB4;
+
 	bool OnInit() {
 		wxFrame* frame = new wxFrame(nullptr, -1, "test");
 		//wxButton *button = new wxButton(window, -1, "button");
@@ -882,17 +903,22 @@ public:
 
 
 
-		wxCheckBox *CB1 = new wxCheckBox(panel, wxID_ANY, wxT("Combine Mode"), wxPoint(20, 20));
-		CB1->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::checkBox, this);
+		CB1 = new wxCheckBox(panel, wxID_ANY, wxT("Combine JoyCons"), wxPoint(20, 20));
+		CB1->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::handleSettings, this);
+		CB1->SetValue(settings.combineJoyCons);
 
-		wxCheckBox *CB2 = new wxCheckBox(panel, wxID_ANY, wxT("Auto Center Sticks"), wxPoint(20, 40));
-		CB2->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::checkBox, this);
+		CB2 = new wxCheckBox(panel, wxID_ANY, wxT("Auto Center Sticks"), wxPoint(20, 40));
+		CB2->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::handleSettings, this);
+		CB2->SetValue(settings.autoCenterSticks);
 
-		wxCheckBox *CB3 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Controls"), wxPoint(20, 60));
-		CB3->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::checkBox, this);
+		CB3 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Controls"), wxPoint(20, 60));
+		CB3->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::handleSettings, this);
+		CB3->SetValue(settings.enableGyro);
 
-		wxCheckBox *CB4 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 80));
-		CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::checkBox, this);
+		CB4 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 80));
+		CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::handleSettings, this);
+		CB4->SetValue(settings.marioTheme);
+		//CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &[](wxCommandEvent&){}, this);
 
 		frame->Show();
 		return true;
@@ -902,7 +928,7 @@ public:
 		wxMessageBox("pressed.", "Info");
 	}
 
-	void checkBox(wxCommandEvent&) {
+	void handleSettings(wxCommandEvent&) {
 		//wxMessageBox("pressed.", "Info");
 		settings.combineJoyCons = !settings.combineJoyCons;
 	}
@@ -943,6 +969,7 @@ int wWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPWSTR cmdLine, int cm
 	res = hid_init();
 
 	//parseSettings(argc, argv);
+	parseSettings2();
 
 
 init_start:
@@ -1084,20 +1111,6 @@ init_start:
 			//Sleep(100);
 		}
 	}
-
-	//for (int k = 0; k < 10000; ++k) {
-	//	int lower = 40;
-	//	int higher = 1000;
-	//	float frequency = (sin(0.01*k)*(higher - lower)) + lower;
-	//	joycon.rumble3(frequency, 0x8a, 0x8062);
-	//	printf("frequency: %f\n", frequency);
-	//	//joycon_rumble2(&joycons[0], 0x0001, 0x88, 0x60, 0x804d);
-	//	//joycon.rumble3(320, 0x88, 0x804d);
-	//	//joycon.rumble3(40, 0x88, 0x804d);
-	//	//joycon.rumble(mk_odd((int)(sin(0.01*k)*(200 - 1)) + 1), 1);
-	//	
-	//	Sleep(100);
-	//}
 
 	// Plays the Mario theme on the JoyCons:
 	// I'm bad with music I just did this by
