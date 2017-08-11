@@ -55,10 +55,10 @@ src\main.cpp(885): warning C4101: 'buf2': unreferenced local variable
 src\main.cpp(883): warning C4101: 'i': unreferenced local variable
 src\main.cpp(888): warning C4101: 'written': unreferenced local variable
 src\main.cpp(887): warning C4101: 'read': unreferenced local variable
-src\main.cpp(1598): warning C4007: 'wWinMain': must be '__stdcall'
+src\main.cpp(1638): warning C4007: 'wWinMain': must be '__stdcall'
   Generating code
-  0 of 932 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  2 of 949 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    10 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Release\joycon-driver.exe

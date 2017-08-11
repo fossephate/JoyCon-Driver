@@ -894,7 +894,7 @@ void start() {
 	res = hid_init();
 
 	//parseSettings(argc, argv);
-	parseSettings2();
+	//parseSettings2();
 
 
 init_start:
@@ -1524,6 +1524,8 @@ public:
 	wxCheckBox *CB2;
 	wxCheckBox *CB3;
 	wxCheckBox *CB4;
+	wxCheckBox *CB5;
+	wxCheckBox *CB6;
 
 	bool OnInit() {
 		wxFrame* frame = new wxFrame(nullptr, -1, "Joycon Driver by fosse");
@@ -1532,11 +1534,13 @@ public:
 
 		wxPanel *panel = new wxPanel(frame, wxID_ANY);
 
+		wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 160));
+		startButton->Bind(wxEVT_BUTTON, &app::onStart, this);
+
 		wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 160));
 		quitButton->Bind(wxEVT_BUTTON, &app::onQuit, this);
 
-		wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 160));
-		startButton->Bind(wxEVT_BUTTON, &app::onStart, this);
+
 
 
 		//wxString title = "Icon";
@@ -1550,21 +1554,35 @@ public:
 
 
 		CB1 = new wxCheckBox(panel, wxID_ANY, wxT("Combine JoyCons"), wxPoint(20, 20));
-		CB1->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::handleSettings, this);
+		CB1->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::toggleCombine, this);
 		CB1->SetValue(settings.combineJoyCons);
 
 		CB2 = new wxCheckBox(panel, wxID_ANY, wxT("Auto Center Sticks"), wxPoint(20, 40));
-		CB2->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::handleSettings, this);
+		CB2->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::toggleCenter, this);
 		CB2->SetValue(settings.autoCenterSticks);
 
 		CB3 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Controls"), wxPoint(20, 60));
-		CB3->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::handleSettings, this);
+		CB3->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::toggleGyro, this);
 		CB3->SetValue(settings.enableGyro);
 
 		CB4 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 80));
-		CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::handleSettings, this);
+		CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::toggleMario, this);
 		CB4->SetValue(settings.marioTheme);
 		//CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &[](wxCommandEvent&){}, this);
+
+
+
+		CB5 = new wxCheckBox(panel, wxID_ANY, wxT("Reverse X"), wxPoint(20, 100));
+		CB5->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::toggleReverseX, this);
+		CB5->SetValue(settings.reverseX);
+
+		CB6 = new wxCheckBox(panel, wxID_ANY, wxT("Reverse Y"), wxPoint(20, 120));
+		CB6->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &app::toggleReverseY, this);
+		CB6->SetValue(settings.reverseY);
+
+
+		wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 140));
+
 
 		frame->Show();
 		return true;
@@ -1572,11 +1590,6 @@ public:
 
 	void on_button_clicked(wxCommandEvent&) {
 		wxMessageBox("pressed.", "Info");
-	}
-
-	void handleSettings(wxCommandEvent&) {
-		//wxMessageBox("pressed.", "Info");
-		settings.combineJoyCons = !settings.combineJoyCons;
 	}
 
 	void onStart(wxCommandEvent&) {
@@ -1588,6 +1601,33 @@ public:
 		exit(0);
 		//close(true);
 	}
+
+	void toggleCombine(wxCommandEvent&) {
+		settings.combineJoyCons = !settings.combineJoyCons;
+	}
+
+	void toggleCenter(wxCommandEvent&) {
+		settings.autoCenterSticks = !settings.autoCenterSticks;
+	}
+
+	void toggleGyro(wxCommandEvent&) {
+		settings.enableGyro = !settings.enableGyro;
+	}
+
+	void toggleMario(wxCommandEvent&) {
+		settings.marioTheme = !settings.marioTheme;
+	}
+
+	void toggleReverseX(wxCommandEvent&) {
+		settings.reverseX = !settings.reverseX;
+	}
+
+	void toggleReverseY(wxCommandEvent&) {
+		settings.reverseY = !settings.reverseY;
+	}
+
+
+
 };
 
 //IMPLEMENT_APP(app);
