@@ -1528,7 +1528,7 @@ public:
 	wxCheckBox *CB6;
 
 	bool OnInit() {
-		wxFrame* frame = new wxFrame(nullptr, -1, "Joycon Driver by fosse");
+		wxFrame* frame = new wxFrame(nullptr, -1, "Joycon Driver by fosse ©2017");
 		//wxButton *button = new wxButton(window, -1, "button");
 		//button->Bind(wxEVT_BUTTON, &app::on_button_clicked, this);
 
