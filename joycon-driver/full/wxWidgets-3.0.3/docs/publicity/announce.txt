@@ -1,0 +1,74 @@
+May 2, 2017 -- The wxWidgets team is pleased to announce a
+major new release of our open source framework for the development
+of native cross-platform applications in C++.
+
+wxWidgets 3.0.3 is a stable bug fix release in 3.0 branch and is
+available at
+
+	https://github.com/wxWidgets/wxWidgets/releases/tag/v3.0.3/
+
+Please choose the archive format suitable for your platform, i.e. 7z
+or ZIP for Windows platforms and tar.bz2 for the Unix systems
+including OS X (all archives contain sources for all wxWidgets ports
+but they use different line endings) and follow the instructions in
+readme.txt file for installing it. Notice that if you decide to use
+the Windows installer (.exe file) you still need to build wxWidgets
+as only sources, not binaries, are installed.
+
+We also provide the pre-built versions of wxMSW libraries for the
+selected compilers.
+
+
+This is a bug fix release with no significant new features compared to
+the previous 3.0.x releases and compatible with them at both the API
+and the ABI level (i.e. all applications linked against earlier 3.0.x
+DLLs or shared libraries will continue to work when using 3.0.3
+libraries).
+
+The full list of changes in this release is available at
+
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.0.3/docs/changes.txt
+
+(starting from the line 583, or search for "3.0.3" in this file), here are
+some selected ones:
+
+* In all ports:
+ - Support requestion modern (3.x+) OpenGL version in wxGLCanvas.
+ - Fix using wxHTTP and wxFTP from worker thread.
+
+* In wxGTK:
+ - Support for Gstreamer 1.0 in wxMediaCtrl, in addition to obsolete 0.x.
+ - Several fatal bug fixes for GTK+ 3.
+
+* In wxMSW:
+ - Build fixes for MinGW 4.9.
+ - Improve wxSearchCtrl appearance.
+ - Fix creating or modifying file associations under recent Windows versions.
+
+* In wxOSX:
+ - Build fixes for wxWebView and wxMediaCtrl when using 10.10 or later SDK.
+ - Implement wxTE_{RIGHT,CENTER} support in multiline wxTextCtrl.
+ - Generate wxEVT_TEXT_ENTER for wxTE_PASSWORD controls.
+ - Fix handling of WXK_NUMPAD_ENTER.
+ - Fix length of text in wxTextDataObject.
+ - Fix wxDatePickerCtrl appearance.
+
+
+If you are upgrading from wxWidgets 2.8 or earlier, please read the
+"INCOMPATIBLE CHANGES" section in the beginning of this file and the
+corresponding part of the manual at
+
+    http://docs.wxwidgets.org/3.0.3/overview_changes_since28.html
+
+
+
+We recommend that you upgrade to wxWidgets 3.0.3 if you already use an
+earlier wxWidgets 3.0.x release, the upgrade is completely transparent
+and doesn't require any changes in the existing code. If you are still
+using wxWidgets 2.8 or earlier, please consider updating to wxWidgets
+3.0 to profit from all the new functionality.
+
+
+We hope that you will enjoy using the new release!
+
+Vadim Zeitlin, on behalf of wxWidgets development team.
