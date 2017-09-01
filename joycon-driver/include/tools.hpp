@@ -14,7 +14,7 @@ double threshold(double a, double thresh) {
 }
 
 // sleeps accurately:
-void accurateSleep(double durationMS) {
+void accurateSleep(double durationMS, double sleepThreshold = 1.8) {
 
 	// get current time
 	auto tNow = std::chrono::high_resolution_clock::now();
@@ -33,8 +33,7 @@ void accurateSleep(double durationMS) {
 	double tSleepTimeMS = tSleepDuration.count() / 1000.0;
 
 	//float lowerThres = 0.2;
-
-	float sleepThreshold = 1.8;//1.4
+	//float sleepThreshold = 1.8;//1.4
 
 	// run cpu in circles
 	while (tSleepTimeMS < durationMS) {

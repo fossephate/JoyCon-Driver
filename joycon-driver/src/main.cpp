@@ -92,10 +92,10 @@ struct Settings {
 	// multipliers to go from the range (-128,128) to (-32768, 32768)
 	// These shouldn't need to be changed too much, but the option is there
 	// I found that 250 works for me
-	int leftJoyConXMultiplier = 250;
-	int leftJoyConYMultiplier = 250;
-	int rightJoyConXMultiplier = 250;
-	int rightJoyConYMultiplier = 250;
+	float leftJoyConXMultiplier = 10.0f;
+	float leftJoyConYMultiplier = 10.0f;
+	float rightJoyConXMultiplier = 10.0f;
+	float rightJoyConYMultiplier = 10.0f;
 
 	// Enabling this combines both JoyCons to a single vJoy Device(#1)
 	// when combineJoyCons == false:
@@ -134,7 +134,8 @@ struct Tracker {
 	int var1 = 0;
 	int var2 = 0;
 	int counter1 = 0;
-};
+	float frequency = 500.0f;
+} tracker;
 
 
 
@@ -381,15 +382,17 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		// it appears that the X component of the stick data isn't just nibble reversed,
 		// specifically, the second nibble of second byte is combined with the first nibble of the first byte
 		// to get the correct X stick value:
-		uint8_t stick_horizontal = ((stick_data[1] & 0x0F) << 4) | ((stick_data[0] & 0xF0) >> 4);// horizontal axis is reversed / combined with byte 0
-		
-		uint8_t stick_vertical = stick_data[2];
+		//uint8_t stick_horizontal = ((stick_data[1] & 0x0F) << 4) | ((stick_data[0] & 0xF0) >> 4);// horizontal axis is reversed / combined with byte 0
+		//uint8_t stick_vertical = stick_data[2];
 
-		jc->stick.horizontal2 = stick_horizontal;
-		jc->stick.vertical2 = stick_vertical;
+		//jc->stick.horizontal = -128 + (int)(unsigned int)stick_horizontal;
+		//jc->stick.vertical = -128 + (int)(unsigned int)stick_vertical;
 
-		jc->stick.horizontal = -128 + (int)(unsigned int)stick_horizontal;
-		jc->stick.vertical = -128 + (int)(unsigned int)stick_vertical;
+
+		uint16_t stick_horizontal = stick_data[0] | ((stick_data[1] & 0xF) << 8);
+		uint16_t stick_vertical = (stick_data[1] >> 4) | (stick_data[2] << 4);
+		jc->stick.horizontal = (int)(unsigned int)stick_horizontal;
+		jc->stick.vertical = (int)(unsigned int)stick_vertical;
 
 		jc->battery = (stick_data[1] & 0xF0) >> 4;
 
@@ -474,12 +477,16 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 
 
-		if (jc->left_right == 2) {
+		if (jc->left_right == 1) {
 			//hex_dump(gyro_data, 20);
 			//hex_dump(gyro_data+10, 6);
 			//printf("%d\n", jc->gyro.relyaw);
 			//printf("%02x\n", jc->gyro.relroll);
 			//printf("%04x\n", jc->gyro.relyaw);
+
+			//printf("%d\n", jc->stick.horizontal);
+
+			/*printf("%d\n", jc->buttons);*/
 
 			//printf("%.4f\n", jc->gyro.relpitch);
 
@@ -503,6 +510,20 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 				settings.restart = true;
 				//goto init_start;
 			}
+
+
+			// remove this, it's just for rumble testing
+			//uint8_t hfa2 = 0x88;
+			//uint16_t lfa2 = 0x804d;
+			//if (jc->buttons == 1) {
+			//	tracker.frequency -= 1;
+			//	jc->rumble3(tracker.frequency, hfa2, lfa2);
+			//}
+			//if (jc->buttons == 2) {
+			//	tracker.frequency += 1;
+			//	jc->rumble3(tracker.frequency, hfa2, lfa2);
+			//}
+			//printf("%f\n", tracker.frequency);
 		}
 
 	}
@@ -601,10 +622,10 @@ void updatevJoyDevice(Joycon *jc) {
 	// multipliers, these shouldn't really be different from one another
 	// but are there anyways
 	// todo: add a logarithmic multiplier? it's already doable in x360ce though
-	int leftJoyConXMultiplier = settings.leftJoyConXMultiplier;
-	int leftJoyConYMultiplier = settings.leftJoyConYMultiplier;
-	int rightJoyConXMultiplier = settings.rightJoyConXMultiplier;
-	int rightJoyConYMultiplier = settings.rightJoyConYMultiplier;
+	float leftJoyConXMultiplier = settings.leftJoyConXMultiplier;
+	float leftJoyConYMultiplier = settings.leftJoyConYMultiplier;
+	float rightJoyConXMultiplier = settings.rightJoyConXMultiplier;
+	float rightJoyConYMultiplier = settings.rightJoyConYMultiplier;
 
 	bool combineJoyCons = settings.combineJoyCons;
 
@@ -857,15 +878,15 @@ void parseSettings2() {
 	settings.reverseY = (bool)stoi(cfg["reverseY"]);
 
 
-	settings.leftJoyConXOffset = stoi(cfg["leftJoyConXOffset"]);
-	settings.leftJoyConYOffset = stoi(cfg["leftJoyConYOffset"]);
-	settings.rightJoyConXOffset = stoi(cfg["rightJoyConXOffset"]);
-	settings.rightJoyConYOffset = stoi(cfg["rightJoyConYOffset"]);
+	settings.leftJoyConXOffset = stof(cfg["leftJoyConXOffset"]);
+	settings.leftJoyConYOffset = stof(cfg["leftJoyConYOffset"]);
+	settings.rightJoyConXOffset = stof(cfg["rightJoyConXOffset"]);
+	settings.rightJoyConYOffset = stof(cfg["rightJoyConYOffset"]);
 
-	settings.leftJoyConXMultiplier = stoi(cfg["leftJoyConXMultiplier"]);
-	settings.leftJoyConYMultiplier = stoi(cfg["leftJoyConYMultiplier"]);
-	settings.rightJoyConXMultiplier = stoi(cfg["rightJoyConXMultiplier"]);
-	settings.rightJoyConYMultiplier = stoi(cfg["rightJoyConYMultiplier"]);
+	settings.leftJoyConXMultiplier = stof(cfg["leftJoyConXMultiplier"]);
+	settings.leftJoyConYMultiplier = stof(cfg["leftJoyConYMultiplier"]);
+	settings.rightJoyConXMultiplier = stof(cfg["rightJoyConXMultiplier"]);
+	settings.rightJoyConYMultiplier = stof(cfg["rightJoyConYMultiplier"]);
 
 }
 
@@ -940,7 +961,6 @@ init_start:
 	// init joycons:
 	if (settings.usingGrip) {
 		for (int i = 0; i < joycons.size(); ++i) {
-			//joycon_init_usb(&joycons[i]);
 			joycons[i].init_usb();
 		}
 	} else {
@@ -1003,7 +1023,6 @@ init_start:
 	printf("setting LEDs...\n");
 	for (int r = 0; r < 5; ++r) {
 		for (int i = 0; i < joycons.size(); ++i) {
-
 			Joycon *jc = &joycons[i];
 			// Player LED Enable
 			memset(buf, 0x00, 0x40);
@@ -1021,7 +1040,7 @@ init_start:
 			//buf[0] = 0x8 | 0x4 | 0x2 | 0x1; // All solid
 			//buf[0] = 0x80 | 0x40 | 0x20 | 0x10; // All flashing
 			//buf[0] = 0x80 | 0x00 | 0x20 | 0x10; // All flashing except 3rd light (off)
-			jc->send_subcommand(0x1, 0x30, buf, 1);
+			jc->send_subcommand(0x01, 0x30, buf, 1);
 		}
 	}
 
@@ -1335,28 +1354,50 @@ init_start:
 	}
 
 
-	//#define MusicOffset 300
+
+
+
+
+
+
+	//Joycon *jc = &joycons[0];
+	//for (int i = 40; i < 1000; ++i) {
+
+
+
+	//	uint8_t hfa2 = 0x88;
+	//	uint16_t lfa2 = 0x804d;
+
+	//	jc->rumble3(i, hfa2, lfa2);
+	//	
+	//	
+	//}
+
+
+
+
+	#define MusicOffset 600
 
 	// notes in hertz:
-	#define C3 131
-	#define D3 146
-	#define E3 165
-	#define F3 175
-	#define G3 196
-	#define G3A4 208
-	#define A4 440
-	#define A4B4 466
-	#define B4 494
-	#define C4 262
-	#define D4 294
-	#define D4E4 311
-	#define E4 329
-	#define F4 349
-	#define F4G4 215
-	#define G4 392
-	#define A5 880
-	#define B5 988
-	#define C5 523
+	#define C3 131 + MusicOffset
+	#define D3 146 + MusicOffset
+	#define E3 165 + MusicOffset
+	#define F3 175 + MusicOffset
+	#define G3 196 + MusicOffset
+	#define G3A4 208 + MusicOffset
+	#define A4 440 + MusicOffset
+	#define A4B4 466 + MusicOffset
+	#define B4 494 + MusicOffset
+	#define C4 262 + MusicOffset
+	#define D4 294 + MusicOffset
+	#define D4E4 311 + MusicOffset
+	#define E4 329 + MusicOffset
+	#define F4 349 + MusicOffset
+	#define F4G4 215 + MusicOffset
+	#define G4 392 + MusicOffset
+	#define A5 880 + MusicOffset
+	#define B5 988 + MusicOffset
+	#define C5 523 + MusicOffset
 
 	#define hfa 0xb0	// 8a
 	#define lfa 0x006c	// 8062
@@ -1492,7 +1533,7 @@ init_start:
 
 
 		// sleep:
-		accurateSleep(8.00);
+		accurateSleep(2.00);// 8.00
 
 		if (settings.restart) {
 			settings.restart = false;

@@ -166,15 +166,15 @@ public:
 		send_command(0x10, (uint8_t*)buf, 0x9);
 	}
 
-	void rumble2(int HF, int HFA, int LF, int LFA) {
+	void rumble2(uint16_t hf, uint8_t hfa, uint8_t lf, uint16_t lfa) {
 		unsigned char buf[0x400];
 		memset(buf, 0, 0x40);
 
 
-		int hf = HF;
-		int hf_amp = HFA;
-		int lf = LF;
-		int lf_amp = LFA;
+		//int hf		= HF;
+		//int hf_amp	= HFA;
+		//int lf		= LF;
+		//int lf_amp	= LFA;
 		// maybe:
 		//int hf_band = hf + hf_amp;
 
@@ -183,28 +183,14 @@ public:
 			off = 4;
 		}
 
-		// Left/Right linear actuator
-		//hf = 0x01a8; //Set H.Frequency
-		//hf_amp = 0x88; //Set H.Frequency amplitude
-
-		//lf = 0x63; //Set L.Frequency
-		//lf_amp = 0x804d; //Set L.Frequency amplitude
-
-
-
-		//Byte swapping
-		//buf[0] = hf_band & 0xFF;
-		//buf[1] = (hf_band >> 8) & 0xFF;
-
-		//buf[2] = 0x1;
 
 		// Byte swapping
 		buf[0 + off] = hf & 0xFF;
-		buf[1 + off] = hf_amp + ((hf >> 8) & 0xFF); //Add amp + 1st byte of frequency to amplitude byte
+		buf[1 + off] = hfa + ((hf >> 8) & 0xFF); //Add amp + 1st byte of frequency to amplitude byte
 
-													// Byte swapping
-		buf[2 + off] = lf + ((lf_amp >> 8) & 0xFF); //Add freq + 1st byte of LF amplitude to the frequency byte
-		buf[3 + off] = lf_amp & 0xFF;
+												 // Byte swapping
+		buf[2 + off] = lf + ((lfa >> 8) & 0xFF); //Add freq + 1st byte of LF amplitude to the frequency byte
+		buf[3 + off] = lfa & 0xFF;
 
 
 		// set non-blocking:
@@ -213,30 +199,59 @@ public:
 		send_command(0x10, (uint8_t*)buf, 0x9);
 	}
 
-	void rumble3(int frequency, int HFA, int LFA) {
+	void rumble3(float frequency, uint8_t hfa, uint16_t lfa) {
 
 		//Float frequency to hex conversion
-		uint16_t encoded_hex_freq = (uint16_t)floor(-32 * (0.693147f - log(frequency / 5)) / 0.693147f + 0.5f);
+		if (frequency < 0.0f) {
+			frequency = 0.0f;
+		} else if (frequency > 1252.0f) {
+			frequency = 1252.0f;
+		}
+		uint8_t encoded_hex_freq = (uint8_t)round(log2((double)frequency / 10.0)*32.0);
+
+		//uint16_t encoded_hex_freq = (uint16_t)floor(-32 * (0.693147f - log(frequency / 5)) / 0.693147f + 0.5f); // old
 
 		//Convert to Joy-Con HF range. Range in big-endian: 0x0004-0x01FC with +0x0004 steps.
 		uint16_t hf = (encoded_hex_freq - 0x60) * 4;
-		//Convert to Joy-Con LF range. Range: 0x0100-0x7F00.
-		uint16_t lf = encoded_hex_freq - 0x40;
+		//Convert to Joy-Con LF range. Range: 0x01-0x7F.
+		uint8_t lf = encoded_hex_freq - 0x40;
 
-		rumble2(hf, HFA, lf, LFA);
+		rumble2(hf, hfa, lf, lfa);
 	}
 
-	void rumble4(int frequency, int HFA, int LFA) {
 
-		//Float frequency to hex conversion
-		uint16_t encoded_hex_freq = (uint16_t)floor(-32 * (0.693147f - log(frequency / 5)) / 0.693147f + 0.5f);
 
-		//Convert to Joy-Con HF range. Range in big-endian: 0x0004-0x01FC with +0x0004 steps.
-		uint16_t hf = (encoded_hex_freq - 0x60) * 4;
-		//Convert to Joy-Con LF range. Range: 0x0100-0x7F00.
-		uint16_t lf = encoded_hex_freq - 0x40;
+	void rumble_freq(uint16_t hf, uint8_t hfa, uint8_t lf, uint16_t lfa) {
+		unsigned char buf[0x400];
+		memset(buf, 0, 0x40);
 
-		rumble2(hf, HFA, lf, LFA);
+
+		//int hf		= HF;
+		//int hf_amp	= HFA;
+		//int lf		= LF;
+		//int lf_amp	= LFA;
+		// maybe:
+		//int hf_band = hf + hf_amp;
+
+		int off = 0;// offset
+		if (this->left_right == 2) {
+			off = 4;
+		}
+
+
+		// Byte swapping
+		buf[0 + off] = hf & 0xFF;
+		buf[1 + off] = hfa + ((hf >> 8) & 0xFF); //Add amp + 1st byte of frequency to amplitude byte
+
+		// Byte swapping
+		buf[2 + off] = lf + ((lfa >> 8) & 0xFF); //Add freq + 1st byte of LF amplitude to the frequency byte
+		buf[3 + off] = lfa & 0xFF;
+
+
+		// set non-blocking:
+		hid_set_nonblocking(this->handle, 1);
+
+		send_command(0x10, (uint8_t*)buf, 0x9);
 	}
 
 
