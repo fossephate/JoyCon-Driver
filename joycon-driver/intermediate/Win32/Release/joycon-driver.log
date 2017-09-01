@@ -56,9 +56,4 @@ src\main.cpp(883): warning C4101: 'i': unreferenced local variable
 src\main.cpp(888): warning C4101: 'written': unreferenced local variable
 src\main.cpp(887): warning C4101: 'read': unreferenced local variable
 src\main.cpp(1638): warning C4007: 'wWinMain': must be '__stdcall'
-  Generating code
-  1 of 944 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Release\joycon-driver.exe
+LINK : fatal error LNK1181: cannot open input file 'wxmsw30u_core.lib'
