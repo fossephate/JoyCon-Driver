@@ -346,7 +346,8 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 	//printf("%02x\n", packet[0]);
 
 	// input update packet:
-	if (packet[0] == 0x21 || packet[0] == 0x31) {
+	// 0x21 is just buttons, 0x30 includes gyro, 0x31 includes NFC (large packet size)
+	if (packet[0] == 0x21 || packet[0] == 0x30 || packet[0] == 0x31) {
 		
 		// offset for usb or bluetooth data:
 		int offset = settings.usingBluetooth ? 0 : 10;
@@ -407,38 +408,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		}
 
 
-		// Gyroscope:
-		// Gyroscope data is relative
-		{
-			// get relative roll:
-			uint16_t relrollA = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
-			uint16_t relrollB = 0xFFFF - relrollA;
-			if (relrollA < relrollB) {
-				jc->gyro.relroll = relrollA;
-			} else {
-				jc->gyro.relroll = -1 * relrollB;
-			}
-
-			// get relative pitch:
-			uint16_t relpitchA = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
-			uint16_t relpitchB = 0xFFFF - relpitchA;
-			if (relpitchA < relpitchB) {
-				jc->gyro.relpitch = relpitchA;
-			} else {
-				jc->gyro.relpitch = -1 * relpitchB;
-			}
-
-			// get relative yaw:
-			uint16_t relyawA = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
-			uint16_t relyawB = 0xFFFF - relyawA;
-			if (relyawA < relyawB) {
-				jc->gyro.relyaw = relyawA;
-			} else {
-				jc->gyro.relyaw = -1 * relyawB;
-			}
-		}
-
-
 		// Accelerometer:
 		// Accelerometer data is absolute
 		{
@@ -473,9 +442,42 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			//jc->accel.y /= 257;
 			//jc->accel.z /= 257;
 		}
+
+
+
+		// Gyroscope:
+		// Gyroscope data is relative
+		{
+			// get relative roll:
+			uint16_t relrollA = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
+			uint16_t relrollB = 0xFFFF - relrollA;
+			if (relrollA < relrollB) {
+				jc->gyro.relroll = relrollA;
+			} else {
+				jc->gyro.relroll = -1 * relrollB;
+			}
+
+			// get relative pitch:
+			uint16_t relpitchA = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
+			uint16_t relpitchB = 0xFFFF - relpitchA;
+			if (relpitchA < relpitchB) {
+				jc->gyro.relpitch = relpitchA;
+			} else {
+				jc->gyro.relpitch = -1 * relpitchB;
+			}
+
+			// get relative yaw:
+			uint16_t relyawA = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
+			uint16_t relyawB = 0xFFFF - relyawA;
+			if (relyawA < relyawB) {
+				jc->gyro.relyaw = relyawA;
+			} else {
+				jc->gyro.relyaw = -1 * relyawB;
+			}
+		}
 		
 
-
+		//hex_dump(gyro_data, 20);
 
 		if (jc->left_right == 1) {
 			//hex_dump(gyro_data, 20);
@@ -772,7 +774,7 @@ void updatevJoyDevice(Joycon *jc) {
 			float relY = -A - B;
 			
 
-			MC.moveRel2(relX, relY);
+			//MC.moveRel2(relX, relY);
 
 
 			// move with absolute (tracked) gyro:
@@ -1512,7 +1514,10 @@ init_start:
 			if (!jc->handle) { continue; }
 
 			// set to be non-blocking:
-			hid_set_nonblocking(jc->handle, 1);
+			//hid_set_nonblocking(jc->handle, 1);
+
+			// set to be blocking:
+			hid_set_nonblocking(jc->handle, 0);
 
 			// get input:
 			memset(buf, 0, 65);

@@ -79,16 +79,12 @@ public:
 		//} else {
 		//	printf("%d bytes read.\n", res);
 		//}
-
-		#ifdef DEBUG_PRINT
-		hex_dump(buf, 0x40);
-		#endif
 	}
 
 
 	void send_command(int command, uint8_t *data, int len) {
-		unsigned char buf[0x400];
-		memset(buf, 0, 0x400);
+		unsigned char buf[0x40];
+		memset(buf, 0, 0x40);
 
 		if (!bluetooth) {
 			buf[0x00] = 0x80;
@@ -109,8 +105,8 @@ public:
 	}
 
 	void send_subcommand(int command, int subcommand, uint8_t *data, int len) {
-		unsigned char buf[0x400];
-		memset(buf, 0, 0x400);
+		unsigned char buf[0x40];
+		memset(buf, 0, 0x40);
 
 		uint8_t rumble_base[9] = { (++global_count) & 0xF, 0x00, 0x01, 0x40, 0x40, 0x00, 0x01, 0x40, 0x40 };
 		memcpy(buf, rumble_base, 9);
@@ -259,21 +255,19 @@ public:
 
 		this->bluetooth = true;
 
-		unsigned char buf[0x400];
-		memset(buf, 0, 0x400);
+		unsigned char buf[0x40];
+		memset(buf, 0, 0x40);
 
 		// set non-blocking:
 		hid_set_nonblocking(this->handle, 1);
 
 		// Enable vibration
 		printf("Enabling vibration...\n");
-		memset(buf, 0x00, 0x400);
 		buf[0] = 0x01; // Enabled
 		send_subcommand(0x1, 0x48, buf, 1);
 
 		// Enable IMU data
 		printf("Enabling IMU data...\n");
-		memset(buf, 0x00, 0x400);
 		buf[0] = 0x01; // Enabled
 		send_subcommand(0x01, 0x40, buf, 1);
 
@@ -287,25 +281,21 @@ public:
 		// 30	NPad standard mode. Pushes current state @60Hz. Default in SDK if arg is not in the list
 		// 31	NFC mode. Pushes large packets @60Hz
 		printf("Increase data rate for Bluetooth...\n");
-		memset(buf, 0x00, 0x400);
-		buf[0] = 0x31;
+		buf[0] = 0x30;
 		send_subcommand(0x01, 0x03, buf, 1);
 
 
-		printf("Pairing1?...\n");
-		memset(buf, 0x00, 0x400);
-		buf[0] = 0x01;
-		send_subcommand(0x01, 0x01, buf, 1);
+		//printf("Pairing1?...\n");
+		//buf[0] = 0x01;
+		//send_subcommand(0x01, 0x01, buf, 1);
 
-		printf("Pairing2?...\n");
-		memset(buf, 0x00, 0x400);
-		buf[0] = 0x02;
-		send_subcommand(0x01, 0x01, buf, 1);
+		//printf("Pairing2?...\n");
+		//buf[0] = 0x02;
+		//send_subcommand(0x01, 0x01, buf, 1);
 
-		printf("Pairing3?...\n");
-		memset(buf, 0x00, 0x400);
-		buf[0] = 0x03;
-		send_subcommand(0x01, 0x01, buf, 1);
+		//printf("Pairing3?...\n");
+		//buf[0] = 0x03;
+		//send_subcommand(0x01, 0x01, buf, 1);
 
 
 
