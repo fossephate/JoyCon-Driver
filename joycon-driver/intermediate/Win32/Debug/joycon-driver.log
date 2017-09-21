@@ -1,2 +1,1477 @@
-﻿  joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Debug\joycon-driver.exe
-  joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Debug\joycon-driver.pdb (Partial PDB)
+﻿  cube.cpp
+c:\users\matt\documents\visual studio 2017\projects\joycon\joycon-driver\src\cube.cpp(521): warning C4007: 'wWinMain': must be '__stdcall'
+wxmsw30u_core.lib(frame.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(frame.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(gdicmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(gdicmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(gdiimage.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(gdiimage.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(wincmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(wincmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(window.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(window.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(nativdlg.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(nativdlg.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(main.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(main.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(appcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(appcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(icon.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(icon.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(app.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(app.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(nonownedwnd.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(nonownedwnd.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(toplvcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(toplvcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(toplevel.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(toplevel.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(framecmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(framecmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(image.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(image.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(bitmap.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(bitmap.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(dc.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(dc.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(dcbase.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(dcbase.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(menuitem.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(menuitem.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(menucmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(menucmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_menu.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_menu.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(event.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(event.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(dummy.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(dummy.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(font.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(font.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_accel.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_accel.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(settings.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(settings.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(ctrlcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(ctrlcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_control.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_control.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(statbar.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(statbar.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(statusbar.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(statusbar.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(pen.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(pen.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(tbarbase.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(tbarbase.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(generic_statusbr.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(generic_statusbr.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(fontcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(fontcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(colourcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(colourcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(colour.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(colour.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(palette.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(palette.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(utilsgui.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(utilsgui.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(display.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(display.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(cursor.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(cursor.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(iconbndl.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(iconbndl.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(brush.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(brush.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(bmpbase.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(bmpbase.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(dib.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(dib.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(windowid.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(windowid.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(utilscmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(utilscmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(rgncmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(rgncmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(region.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(region.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(tooltip.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(tooltip.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(layout.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(layout.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(sizer.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(sizer.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(cshelp.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(cshelp.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_radiobox.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_radiobox.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(evtloop.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(evtloop.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(droptgt.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(droptgt.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(dcclient.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(dcclient.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(textmeasurecmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(textmeasurecmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_textmeasure.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_textmeasure.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(spinctrl.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(spinctrl.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(uxtheme.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(uxtheme.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(validate.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(validate.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(btncmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(btncmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(dlgcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(dlgcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(statboxcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(statboxcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(containr.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(containr.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(anybutton.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(anybutton.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_button.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_button.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(ctrlsub.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(ctrlsub.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_bmpbuttn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_bmpbuttn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(bmpbtncmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(bmpbtncmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_checkbox.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_checkbox.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(checkboxcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(checkboxcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(lboxcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(lboxcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_listbox.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_listbox.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(choiccmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(choiccmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_choice.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_choice.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_scrolbar.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_scrolbar.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(scrolbarcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(scrolbarcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(stattextcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(stattextcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_stattext.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_stattext.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_statbmp.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_statbmp.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(statbmpcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(statbmpcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_statbox.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_statbox.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_radiobut.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_radiobut.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(radiobtncmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(radiobtncmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(textentrycmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(textentrycmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(textentry.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(textentry.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(textcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(textcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_textctrl.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_textctrl.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_slider.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_slider.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(slidercmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(slidercmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_combobox.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_combobox.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(combocmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(combocmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_spinbutt.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_spinbutt.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(spinbtncmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(spinbtncmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(logg.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(logg.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(fontmap.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(fontmap.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_dialog.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_dialog.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(gdiplus.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(gdiplus.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(graphcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(graphcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(dpycmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(dpycmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_toolbar.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_toolbar.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(imagbmp.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(imagbmp.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(xpmdecod.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(xpmdecod.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(affinematrix2d.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(affinematrix2d.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(cmndata.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(cmndata.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(prntbase.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(prntbase.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(dcmemory.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(dcmemory.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(dcscreen.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(dcscreen.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(ownerdrwcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(ownerdrwcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(ownerdrw.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(ownerdrw.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(accelcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(accelcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(stockitem.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(stockitem.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(fontutil.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(fontutil.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(fontenumcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(fontenumcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(markupparser.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(markupparser.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(listctrlcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(listctrlcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(treebase.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(treebase.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msgdlg.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msgdlg.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(textdlgg.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(textdlgg.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(utilswin.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(utilswin.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(nbkbase.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(nbkbase.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(settcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(settcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(tipwin.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(tipwin.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(helpchm.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(helpchm.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(radiocmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(radiocmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(dataobj.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(dataobj.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(dndcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(dndcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(oleutils.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(oleutils.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(dobjcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(dobjcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(spinctrlcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(spinctrlcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(panelcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(panelcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(panel.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(panel.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(scrlwing.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(scrlwing.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_statline.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_statline.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(statlinecmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(statlinecmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(bookctrl.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(bookctrl.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(imaglist.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(imaglist.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(markuptext.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(markuptext.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(artprov.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(artprov.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(rendcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(rendcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(clipcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(clipcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(popupcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(popupcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(popupwin.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(popupwin.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(combo.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(combo.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(fldlgcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(fldlgcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(collpaneg.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(collpaneg.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_listctrl.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_listctrl.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(choicdgg.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(choicdgg.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(fontdata.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(fontdata.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(fontdlg.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(fontdlg.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(modalhook.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(modalhook.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(geometry.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(geometry.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(graphics.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(graphics.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(imagpng.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(imagpng.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(quantize.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(quantize.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(anidecod.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(anidecod.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(paper.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(paper.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(valtext.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(valtext.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(printwin.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(printwin.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(printdlg.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(printdlg.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(dcprint.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(dcprint.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(fontenum.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(fontenum.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(treectrl.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(treectrl.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_notebook.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_notebook.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(helpbase.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(helpbase.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(uuid.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(uuid.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(safearray.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(safearray.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(artmsw.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(artmsw.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(artstd.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(artstd.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(arttango.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(arttango.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(renderer.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(renderer.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(clipbrd.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(clipbrd.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(dcbufcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(dcbufcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(filedlg.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(filedlg.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(msw_checklst.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(msw_checklst.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(checklstcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(checklstcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(enhmeta.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(enhmeta.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(dragimag.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(dragimag.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(volume.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(volume.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30u_core.lib(renderg.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxmsw30u_core.lib(renderg.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(appbase.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(appbase.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(string.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(string.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(strconv.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(strconv.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(strvararg.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(strvararg.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(dynarray.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(dynarray.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(hashmap.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(hashmap.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(thread.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(thread.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(log.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(log.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(object.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(object.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(list.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(list.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(event.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(event.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(timercmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(timercmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(stringimpl.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(stringimpl.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(utils.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(utils.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(main.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(main.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(translation.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(translation.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(sysopt.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(sysopt.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(module.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(module.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(arrstr.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(arrstr.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(powercmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(powercmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(dynlib.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(dynlib.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(dlmsw.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(dlmsw.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(init.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(init.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(cmdline.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(cmdline.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(msgout.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(msgout.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(intl.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(intl.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(config.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(config.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(stdpbase.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(stdpbase.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(evtloopcmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(evtloopcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(basemsw.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(basemsw.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(evtloopconsole.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(evtloopconsole.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(timerimpl.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(timerimpl.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(timer.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(timer.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(unichar.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(unichar.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(variant.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(variant.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(hash.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(hash.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(stream.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(stream.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(wfstream.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(wfstream.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(time.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(time.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(tokenzr.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(tokenzr.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(fmapbase.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(fmapbase.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(mstream.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(mstream.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(file.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(file.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(filefn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(filefn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(platinfo.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(platinfo.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(uri.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(uri.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(filename.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(filename.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(filesys.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(filesys.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(clntdata.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(clntdata.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(convauto.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(convauto.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(ffile.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(ffile.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(textbuf.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(textbuf.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(encconv.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(encconv.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(utilsexc.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(utilsexc.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(registry.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(registry.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(wxcrt.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(wxcrt.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(any.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(any.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(datetime.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(datetime.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(stopwatch.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(stopwatch.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(datstrm.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(datstrm.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(volume.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(volume.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(dummy.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(dummy.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(stackwalk.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(stackwalk.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(xlocale.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(xlocale.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(threadinfo.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(threadinfo.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(datetimefmt.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(datetimefmt.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(utilscmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(utilscmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(crashrpt.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(crashrpt.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(dir.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(dir.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(debughlp.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(debughlp.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(languageinfo.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(languageinfo.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(regconf.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(regconf.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(stdpaths.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(stdpaths.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(txtstrm.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(txtstrm.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(fileconf.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(fileconf.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(longlong.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(longlong.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(mimecmn.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(mimecmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(fileback.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(fileback.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(process.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(process.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(dde.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(dde.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(textfile.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(textfile.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(base64.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(base64.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(mimetype.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(mimetype.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxbase30u.lib(ipcbase.obj) : error LNK2038: mismatch detected for '_ITERATOR_DEBUG_LEVEL': value '0' doesn't match value '2' in cube.obj
+wxbase30u.lib(ipcbase.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MD_DynamicRelease' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30ud_gl.lib(glcanvas.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30ud_gl.lib(dummy.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MTd_StaticDebug' in cube.obj
+wxmsw30ud_gl.lib(glcmn.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MDd_DynamicDebug' doesn't match value 'MTd_StaticDebug' in cube.obj
+msvcprt.lib(MSVCP140.dll) : error LNK2005: "protected: __thiscall std::basic_streambuf<char,struct std::char_traits<char> >::basic_streambuf<char,struct std::char_traits<char> >(void)" (??0?$basic_streambuf@DU?$char_traits@D@std@@@std@@IAE@XZ) already defined in libcpmtd.lib(cout.obj)
+msvcprt.lib(MSVCP140.dll) : error LNK2005: "public: virtual __thiscall std::basic_streambuf<char,struct std::char_traits<char> >::~basic_streambuf<char,struct std::char_traits<char> >(void)" (??1?$basic_streambuf@DU?$char_traits@D@std@@@std@@UAE@XZ) already defined in libcpmtd.lib(cout.obj)
+msvcprt.lib(MSVCP140.dll) : error LNK2005: "public: int __thiscall std::ios_base::flags(void)const " (?flags@ios_base@std@@QBEHXZ) already defined in libcpmtd.lib(locale.obj)
+msvcprt.lib(MSVCP140.dll) : error LNK2005: "public: __int64 __thiscall std::ios_base::width(void)const " (?width@ios_base@std@@QBE_JXZ) already defined in libcpmtd.lib(locale.obj)
+msvcprt.lib(MSVCP140.dll) : error LNK2005: "public: __int64 __thiscall std::ios_base::width(__int64)" (?width@ios_base@std@@QAE_J_J@Z) already defined in libcpmtd.lib(locale.obj)
+msvcprt.lib(MSVCP140.dll) : error LNK2005: "public: int __thiscall std::basic_streambuf<char,struct std::char_traits<char> >::sputc(char)" (?sputc@?$basic_streambuf@DU?$char_traits@D@std@@@std@@QAEHD@Z) already defined in libcpmtd.lib(locale.obj)
+msvcprt.lib(MSVCP140.dll) : error LNK2005: "public: unsigned short __thiscall std::basic_streambuf<wchar_t,struct std::char_traits<wchar_t> >::sputc(wchar_t)" (?sputc@?$basic_streambuf@_WU?$char_traits@_W@std@@@std@@QAEG_W@Z) already defined in libcpmtd.lib(wlocale.obj)
+msvcprt.lib(MSVCP140.dll) : error LNK2005: "public: void __thiscall std::basic_ios<char,struct std::char_traits<char> >::clear(int,bool)" (?clear@?$basic_ios@DU?$char_traits@D@std@@@std@@QAEXH_N@Z) already defined in libcpmtd.lib(cout.obj)
+msvcprt.lib(MSVCP140.dll) : error LNK2005: "public: void __thiscall std::basic_ios<char,struct std::char_traits<char> >::setstate(int,bool)" (?setstate@?$basic_ios@DU?$char_traits@D@std@@@std@@QAEXH_N@Z) already defined in libcpmtd.lib(cout.obj)
+msvcprt.lib(MSVCP140.dll) : error LNK2005: "public: char __thiscall std::basic_ios<char,struct std::char_traits<char> >::widen(char)const " (?widen@?$basic_ios@DU?$char_traits@D@std@@@std@@QBEDD@Z) already defined in libcpmtd.lib(cout.obj)
+msvcprt.lib(MSVCP140.dll) : error LNK2005: "public: __thiscall std::_Lockit::_Lockit(int)" (??0_Lockit@std@@QAE@H@Z) already defined in libcpmtd.lib(xlock.obj)
+msvcprt.lib(MSVCP140.dll) : error LNK2005: "public: __thiscall std::_Lockit::~_Lockit(void)" (??1_Lockit@std@@QAE@XZ) already defined in libcpmtd.lib(xlock.obj)
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+LINK : warning LNK4098: defaultlib 'MSVCRTD' conflicts with use of other libs; use /NODEFAULTLIB:library
+wxbase30u.lib(ipcbase.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(fileback.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(dde.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(textfile.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(mimetype.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "public: class wxFileType * __thiscall wxMimeTypesManagerImpl::Associate(class wxFileTypeInfo const &)" (?Associate@wxMimeTypesManagerImpl@@QAEPAVwxFileType@@ABVwxFileTypeInfo@@@Z)
+wxbase30u.lib(txtstrm.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(fileconf.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(longlong.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(mimecmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(debughlp.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(languageinfo.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(regconf.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(stdpaths.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(datetimefmt.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(utilscmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(crashrpt.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(dir.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(dummy.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(stackwalk.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(xlocale.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(threadinfo.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(datetime.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(stopwatch.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(datstrm.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(volume.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(utilsexc.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(registry.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(wxcrt.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(any.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(filesys.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(ffile.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(textbuf.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(encconv.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(filefn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(platinfo.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(uri.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(filename.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(time.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(tokenzr.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(fmapbase.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(file.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(variant.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(hash.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(stream.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(wfstream.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(stdpbase.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(basemsw.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(evtloopconsole.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(timer.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(cmdline.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(msgout.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(intl.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(config.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(arrstr.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(dynlib.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(dlmsw.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(init.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(main.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(translation.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "public: __thiscall wxArrayClassInfo::~wxArrayClassInfo(void)" (??1wxArrayClassInfo@@QAE@XZ)
+wxbase30u.lib(sysopt.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(module.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(object.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(list.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(event.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function __ehhandler$??1wxEvtHandler@@UAE@XZ
+wxbase30u.lib(utils.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "long __cdecl wxEncodingToCharset(enum wxFontEncoding)" (?wxEncodingToCharset@@YAJW4wxFontEncoding@@@Z)
+wxbase30u.lib(strconv.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(strvararg.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(thread.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(log.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "public: static void __cdecl wxLog::SetComponentLevel(class wxString const &,unsigned long)" (?SetComponentLevel@wxLog@@SAXABVwxString@@K@Z)
+wxmsw30u_core.lib(volume.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(renderg.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxbase30u.lib(appbase.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "public: int __thiscall wxString::Printf<class wxCStrData,class wxCStrData,class wxCStrData>(class wxFormatString const &,class wxCStrData,class wxCStrData,class wxCStrData)" (??$Printf@VwxCStrData@@V1@V1@@wxString@@QAEHABVwxFormatString@@VwxCStrData@@11@Z)
+wxbase30u.lib(string.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(filedlg.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_checklst.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(enhmeta.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(dragimag.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(artmsw.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(artstd.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(arttango.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(clipbrd.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(fontenum.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(treectrl.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_notebook.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(safearray.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(valtext.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(printwin.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(printdlg.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(dcprint.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(graphics.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(imagpng.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(anidecod.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(paper.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_listctrl.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(choicdgg.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(fontdata.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(fontdlg.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(popupwin.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(combo.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(fldlgcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(collpaneg.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(markuptext.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(artprov.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function __unwindfunclet$??AwxArtProviderBitmapsHash@@QAEAAVwxBitmap@@ABVwxString@@@Z$13
+wxmsw30u_core.lib(rendcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(popupcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_statline.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(statlinecmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(bookctrl.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(imaglist.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(dobjcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(spinctrlcmn.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function __ehhandler$??1wxColourBase@@UAE@XZ
+wxmsw30u_core.lib(panelcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(scrlwing.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(helpchm.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(radiocmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(dataobj.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(oleutils.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function __unwindfunclet$??$Log@PBDHPB_WJPB_W@wxLogger@@QAEXABVwxFormatString@@PBDHPB_WJ2@Z$0
+wxmsw30u_core.lib(textdlgg.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(utilswin.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(nbkbase.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(tipwin.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(markupparser.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "private: class wxString __thiscall wxMarkupParser::ParseAttrs(class wxString,struct wxMarkupParser::TagAndAttrs &)" (?ParseAttrs@wxMarkupParser@@AAE?AVwxString@@V2@AAUTagAndAttrs@1@@Z)
+wxmsw30u_core.lib(listctrlcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(treebase.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msgdlg.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(accelcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(stockitem.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "class wxString __cdecl wxGetStockLabel(int,long)" (?wxGetStockLabel@@YA?AVwxString@@HJ@Z)
+wxmsw30u_core.lib(fontutil.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(fontenumcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(prntbase.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(dcmemory.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(ownerdrwcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(ownerdrw.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_toolbar.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(imagbmp.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(xpmdecod.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(cmndata.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_dialog.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(gdiplus.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(graphcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(dpycmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_spinbutt.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "public: virtual __thiscall wxObject::~wxObject(void)" (??1wxObject@@UAE@XZ)
+wxmsw30u_core.lib(spinbtncmn.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function __unwindfunclet$?Clone@wxCommandEvent@@UBEPAVwxEvent@@XZ$0
+wxmsw30u_core.lib(logg.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(fontmap.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_slider.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "public: __thiscall wxWindowIDRef::~wxWindowIDRef(void)" (??1wxWindowIDRef@@QAE@XZ)
+wxmsw30u_core.lib(slidercmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_combobox.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(combocmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(textentrycmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(textentry.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "public: __thiscall wxTextEntry::wxTextEntry(void)" (??0wxTextEntry@@QAE@XZ)
+wxmsw30u_core.lib(textcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_textctrl.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(statbmpcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_statbox.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_radiobut.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(radiobtncmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(scrolbarcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(stattextcmn.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "public: virtual __thiscall wxObject::~wxObject(void)" (??1wxObject@@UAE@XZ)
+wxmsw30u_core.lib(msw_stattext.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_statbmp.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_listbox.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(choiccmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_choice.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_scrolbar.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(bmpbtncmn.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "public: virtual void __thiscall wxControlBase::SetLabelText(class wxString const &)" (?SetLabelText@wxControlBase@@UAEXABVwxString@@@Z)
+wxmsw30u_core.lib(msw_checkbox.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(checkboxcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(lboxcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(anybutton.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_button.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(ctrlsub.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_bmpbuttn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(btncmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(dlgcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(statboxcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(containr.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(textmeasurecmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_textmeasure.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(spinctrl.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(uxtheme.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(sizer.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(cshelp.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_radiobox.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(droptgt.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(windowid.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(utilscmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(region.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(tooltip.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(iconbndl.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "protected: virtual class wxGDIRefData * __thiscall wxGDIImage::CloneGDIRefData(class wxGDIRefData const *)const " (?CloneGDIRefData@wxGDIImage@@MBEPAVwxGDIRefData@@PBV2@@Z)
+wxmsw30u_core.lib(brush.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(bmpbase.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(dib.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "public: void __thiscall wxLogger::Log<char const *,int,wchar_t const *,long,wchar_t const *>(class wxFormatString const &,char const *,int,wchar_t const *,long,wchar_t const *)" (??$Log@PBDHPB_WJPB_W@wxLogger@@QAEXABVwxFormatString@@PBDHPB_WJ2@Z)
+wxmsw30u_core.lib(colourcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(utilsgui.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(display.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(cursor.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(statusbar.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "public: __thiscall wxStatusBar::wxStatusBar(void)" (??0wxStatusBar@@QAE@XZ)
+wxmsw30u_core.lib(tbarbase.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(generic_statusbr.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(fontcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(settings.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(ctrlcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_control.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(statbar.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(msw_menu.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "public: virtual __thiscall wxMenuItemList::~wxMenuItemList(void)" (??1wxMenuItemList@@UAE@XZ)
+wxmsw30u_core.lib(event.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(dummy.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(font.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(dc.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(dcbase.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(menuitem.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "public: virtual __thiscall wxImage::~wxImage(void)" (??1wxImage@@UAE@XZ)
+wxmsw30u_core.lib(menucmn.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function __unwindfunclet$??0wxMenuItemBase@@IAE@PAVwxMenu@@HABVwxString@@1W4wxItemKind@@0@Z$0
+wxmsw30u_core.lib(toplevel.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(framecmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(image.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(bitmap.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(icon.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(app.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(nonownedwnd.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(toplvcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(window.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(nativdlg.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(main.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(appcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(frame.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "public: void __thiscall std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >::_Tidy_deallocate(void)" (?_Tidy_deallocate@?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@QAEXXZ)
+wxmsw30u_core.lib(gdicmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxmsw30u_core.lib(gdiimage.obj) : warning LNK4217: locally defined symbol __invalid_parameter_noinfo_noreturn imported in function "public: __thiscall wxDIB::~wxDIB(void)" (??1wxDIB@@QAE@XZ)
+wxmsw30u_core.lib(wincmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter_noinfo_noreturn imported
+wxzlib.lib(zutil.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30ud_gl.lib(glcanvas.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30ud_gl.lib(dummy.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30ud_gl.lib(glcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(mimetype.obj) : warning LNK4217: locally defined symbol _free imported in function "public: class wxFileType * __thiscall wxMimeTypesManagerImpl::CreateFileType(class wxString const &,class wxString const &)" (?CreateFileType@wxMimeTypesManagerImpl@@QAEPAVwxFileType@@ABVwxString@@0@Z)
+wxbase30u.lib(ipcbase.obj) : warning LNK4049: locally defined symbol _free imported
+wxpng.lib(png.obj) : warning LNK4049: locally defined symbol _free imported
+wxpng.lib(pngmem.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(fileback.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(dde.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(textfile.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(base64.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(txtstrm.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(fileconf.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(longlong.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(mimecmn.obj) : warning LNK4217: locally defined symbol _free imported in function __unwindfunclet$?Insert@wxArrayFileTypeInfo@@QAEXABVwxFileTypeInfo@@II@Z$7
+wxbase30u.lib(debughlp.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(languageinfo.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(regconf.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(stdpaths.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(datetimefmt.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(utilscmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(crashrpt.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(dir.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(dummy.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(stackwalk.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(xlocale.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(threadinfo.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(datetime.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(stopwatch.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(datstrm.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(volume.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(utilsexc.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(registry.obj) : warning LNK4217: locally defined symbol _free imported in function "public: bool __thiscall wxRegKey::GetKeyInfo(unsigned int *,unsigned int *,unsigned int *,unsigned int *)const " (?GetKeyInfo@wxRegKey@@QBE_NPAI000@Z)
+wxbase30u.lib(wxcrt.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(any.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(filesys.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(ffile.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(textbuf.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(encconv.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(filefn.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(platinfo.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(uri.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(filename.obj) : warning LNK4217: locally defined symbol _free imported in function "public: bool __thiscall wxFileName::InsertDir(unsigned int,class wxString const &)" (?InsertDir@wxFileName@@QAE_NIABVwxString@@@Z)
+wxbase30u.lib(time.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(tokenzr.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(fmapbase.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(file.obj) : warning LNK4217: locally defined symbol _free imported in function "public: void __thiscall wxLogRecordInfo::StoreValue(class wxString const &,unsigned long)" (?StoreValue@wxLogRecordInfo@@QAEXABVwxString@@K@Z)
+wxbase30u.lib(variant.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(hash.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(stream.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(wfstream.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(stdpbase.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(basemsw.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(evtloopconsole.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(timer.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(cmdline.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(msgout.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(intl.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(config.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(arrstr.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(dynlib.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(dlmsw.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(init.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(main.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(translation.obj) : warning LNK4217: locally defined symbol _free imported in function "public: class wxString & __thiscall wxStringToStringHashMap::operator[](class wxString const &)" (??AwxStringToStringHashMap@@QAEAAVwxString@@ABV1@@Z)
+wxbase30u.lib(sysopt.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(module.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(object.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(list.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(event.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(utils.obj) : warning LNK4217: locally defined symbol _free imported in function "long __cdecl wxEncodingToCharset(enum wxFontEncoding)" (?wxEncodingToCharset@@YAJW4wxFontEncoding@@@Z)
+wxbase30u.lib(strconv.obj) : warning LNK4217: locally defined symbol _free imported in function "void __cdecl `dynamic initializer for 'wxConvUTF32BE''(void)" (??__EwxConvUTF32BE@@YAXXZ)
+wxbase30u.lib(strvararg.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(thread.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(log.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(volume.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(renderg.obj) : warning LNK4049: locally defined symbol _free imported
+wxbase30u.lib(appbase.obj) : warning LNK4217: locally defined symbol _free imported in function "void __cdecl wxDefaultAssertHandler(class wxString const &,int,class wxString const &,class wxString const &,class wxString const &)" (?wxDefaultAssertHandler@@YAXABVwxString@@H000@Z)
+wxbase30u.lib(string.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(filedlg.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_checklst.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(enhmeta.obj) : warning LNK4217: locally defined symbol _free imported in function "public: virtual bool __thiscall wxEnhMetaFileDataObject::GetDataHere(class wxDataFormat const &,void *)const " (?GetDataHere@wxEnhMetaFileDataObject@@UBE_NABVwxDataFormat@@PAX@Z)
+wxmsw30u_core.lib(dragimag.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(artmsw.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(artstd.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(arttango.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(clipbrd.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(fontenum.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(treectrl.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_notebook.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(safearray.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(valtext.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(printwin.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(printdlg.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(dcprint.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(imagpng.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(quantize.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(anidecod.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(paper.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(fontdata.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(fontdlg.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(modalhook.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(graphics.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(fldlgcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(collpaneg.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_listctrl.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(choicdgg.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(rendcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(popupcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(popupwin.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(combo.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(bookctrl.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(imaglist.obj) : warning LNK4217: locally defined symbol _free imported in function __ehhandler$??1wxLogRecordInfo@@QAE@XZ
+wxmsw30u_core.lib(markuptext.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(artprov.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(panelcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(scrlwing.obj) : warning LNK4217: locally defined symbol _free imported in function "public: virtual void __thiscall wxNavigationEnabled<class wxWindow>::AddChild(class wxWindowBase *)" (?AddChild@?$wxNavigationEnabled@VwxWindow@@@@UAEXPAVwxWindowBase@@@Z)
+wxmsw30u_core.lib(msw_statline.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(statlinecmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(dataobj.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(oleutils.obj) : warning LNK4217: locally defined symbol _free imported in function "public: bool __thiscall wxSafeArray<12>::CreateFromListVariant(class wxVariant const &)" (?CreateFromListVariant@?$wxSafeArray@$0M@@@QAE_NABVwxVariant@@@Z)
+wxmsw30u_core.lib(dobjcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(spinctrlcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(nbkbase.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(tipwin.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(helpchm.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(radiocmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(treebase.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msgdlg.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(textdlgg.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(utilswin.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(fontutil.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(fontenumcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(markupparser.obj) : warning LNK4217: locally defined symbol _free imported in function "private: class wxString __thiscall wxMarkupParser::ParseAttrs(class wxString,struct wxMarkupParser::TagAndAttrs &)" (?ParseAttrs@wxMarkupParser@@AAE?AVwxString@@V2@AAUTagAndAttrs@1@@Z)
+wxmsw30u_core.lib(listctrlcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(ownerdrwcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(ownerdrw.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(accelcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(stockitem.obj) : warning LNK4217: locally defined symbol _free imported in function "class wxString __cdecl wxGetStockLabel(int,long)" (?wxGetStockLabel@@YA?AVwxString@@HJ@Z)
+wxmsw30u_core.lib(xpmdecod.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(cmndata.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(prntbase.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(dcmemory.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(graphcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(dpycmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_toolbar.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(imagbmp.obj) : warning LNK4217: locally defined symbol _free imported in function "public: virtual bool __thiscall wxICOHandler::DoLoadFile(class wxImage *,class wxInputStream &,bool,int)" (?DoLoadFile@wxICOHandler@@UAE_NPAVwxImage@@AAVwxInputStream@@_NH@Z)
+wxmsw30u_core.lib(logg.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(fontmap.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_dialog.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(gdiplus.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_combobox.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(combocmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_spinbutt.obj) : warning LNK4217: locally defined symbol _free imported in function "public: virtual void * __thiscall wxCommandEvent::`scalar deleting destructor'(unsigned int)" (??_GwxCommandEvent@@UAEPAXI@Z)
+wxmsw30u_core.lib(spinbtncmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(textcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_textctrl.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_slider.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(slidercmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_radiobut.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(radiobtncmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(textentrycmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(textentry.obj) : warning LNK4217: locally defined symbol _free imported in function "public: void __thiscall wxLogger::Log<char const *,int,wchar_t const *,long,wchar_t const *>(class wxFormatString const &,char const *,int,wchar_t const *,long,wchar_t const *)" (??$Log@PBDHPB_WJPB_W@wxLogger@@QAEXABVwxFormatString@@PBDHPB_WJ2@Z)
+wxmsw30u_core.lib(msw_stattext.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_statbmp.obj) : warning LNK4217: locally defined symbol _free imported in function __unwindfunclet$?SetImageNoCopy@wxStaticBitmap@@IAEXPAVwxGDIImage@@@Z$1
+wxmsw30u_core.lib(statbmpcmn.obj) : warning LNK4217: locally defined symbol _free imported in function "public: virtual void __thiscall wxControlBase::SetLabelText(class wxString const &)" (?SetLabelText@wxControlBase@@UAEXABVwxString@@@Z)
+wxmsw30u_core.lib(msw_statbox.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_choice.obj) : warning LNK4217: locally defined symbol _free imported in function "protected: virtual void __thiscall wxChoice::DoSetSize(int,int,int,int,int)" (?DoSetSize@wxChoice@@MAEXHHHHH@Z)
+wxmsw30u_core.lib(msw_scrolbar.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(scrolbarcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(stattextcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(checkboxcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(lboxcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_listbox.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(choiccmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(ctrlsub.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_bmpbuttn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(bmpbtncmn.obj) : warning LNK4217: locally defined symbol _free imported in function "public: virtual struct wxVisualAttributes __thiscall wxControl::GetDefaultAttributes(void)const " (?GetDefaultAttributes@wxControl@@UBE?AUwxVisualAttributes@@XZ)
+wxmsw30u_core.lib(msw_checkbox.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(statboxcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(containr.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(anybutton.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_button.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(spinctrl.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(uxtheme.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(btncmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(dlgcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(droptgt.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(dcclient.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(textmeasurecmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_textmeasure.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(tooltip.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(sizer.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(cshelp.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_radiobox.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(dib.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(windowid.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(utilscmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(region.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(cursor.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(iconbndl.obj) : warning LNK4217: locally defined symbol _free imported in function "public: void __thiscall wxIconArray::Add(class wxIcon const &,unsigned int)" (?Add@wxIconArray@@QAEXABVwxIcon@@I@Z)
+wxmsw30u_core.lib(brush.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(bmpbase.obj) : warning LNK4217: locally defined symbol _free imported in function "public: virtual __thiscall wxColourBase::~wxColourBase(void)" (??1wxColourBase@@UAE@XZ)
+wxmsw30u_core.lib(colourcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(palette.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(utilsgui.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(display.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(statusbar.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(tbarbase.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(generic_statusbr.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(fontcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(settings.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(ctrlcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_control.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(statbar.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(msw_menu.obj) : warning LNK4217: locally defined symbol _free imported in function "private: bool __thiscall wxMenu::DoInsertOrAppend(class wxMenuItem *,unsigned int)" (?DoInsertOrAppend@wxMenu@@AAE_NPAVwxMenuItem@@I@Z)
+wxmsw30u_core.lib(event.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(dummy.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(font.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(dc.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(dcbase.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(menuitem.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(menucmn.obj) : warning LNK4217: locally defined symbol _free imported in function "public: virtual void * __thiscall wxwxMenuItemListNode::`scalar deleting destructor'(unsigned int)" (??_GwxwxMenuItemListNode@@UAEPAXI@Z)
+wxmsw30u_core.lib(toplevel.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(framecmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(image.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(bitmap.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(icon.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(app.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(nonownedwnd.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(toplvcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(window.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(nativdlg.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(main.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(appcmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(frame.obj) : warning LNK4217: locally defined symbol _free imported in function "public: void __thiscall wxLogger::Log<char const *,int,wchar_t const *,long,wchar_t const *>(class wxFormatString const &,char const *,int,wchar_t const *,long,wchar_t const *)" (??$Log@PBDHPB_WJPB_W@wxLogger@@QAEXABVwxFormatString@@PBDHPB_WJ2@Z)
+wxmsw30u_core.lib(gdicmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(gdiimage.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30u_core.lib(wincmn.obj) : warning LNK4049: locally defined symbol _free imported
+wxmsw30ud_gl.lib(glcanvas.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30ud_gl.lib(glcmn.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(mimecmn.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(dde.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(textfile.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(mimetype.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(dir.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(regconf.obj) : warning LNK4217: locally defined symbol __time64 imported in function "protected: virtual bool __thiscall wxRegConfig::DoReadBinary(class wxString const &,class wxMemoryBuffer *)const " (?DoReadBinary@wxRegConfig@@MBE_NABVwxString@@PAVwxMemoryBuffer@@@Z)
+wxbase30u.lib(stdpaths.obj) : warning LNK4217: locally defined symbol __time64 imported in function "protected: __thiscall wxStandardPaths::wxStandardPaths(void)" (??0wxStandardPaths@@IAE@XZ)
+wxbase30u.lib(fileconf.obj) : warning LNK4217: locally defined symbol __time64 imported in function "class wxString __cdecl wxBase64Encode(void const *,unsigned int)" (?wxBase64Encode@@YA?AVwxString@@PBXI@Z)
+wxbase30u.lib(stopwatch.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(volume.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(stackwalk.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(utilscmn.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(textbuf.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(utilsexc.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(registry.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(datetime.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(file.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(filefn.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(filename.obj) : warning LNK4217: locally defined symbol __time64 imported in function "public: bool __thiscall wxFileName::MakeRelativeTo(class wxString const &,enum wxPathFormat)" (?MakeRelativeTo@wxFileName@@QAE_NABVwxString@@W4wxPathFormat@@@Z)
+wxbase30u.lib(ffile.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(timer.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(stream.obj) : warning LNK4217: locally defined symbol __time64 imported in function "public: virtual __thiscall wxBufferedInputStream::~wxBufferedInputStream(void)" (??1wxBufferedInputStream@@UAE@XZ)
+wxbase30u.lib(time.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(fmapbase.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(msgout.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(intl.obj) : warning LNK4217: locally defined symbol __time64 imported in function __ehhandler$??1wxObject@@UAE@XZ
+wxbase30u.lib(config.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(evtloopconsole.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(module.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(dynlib.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(dlmsw.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(init.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(event.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(utils.obj) : warning LNK4217: locally defined symbol __time64 imported in function "long __cdecl wxEncodingToCharset(enum wxFontEncoding)" (?wxEncodingToCharset@@YAJW4wxFontEncoding@@@Z)
+wxbase30u.lib(main.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(translation.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(appbase.obj) : warning LNK4217: locally defined symbol __time64 imported in function "public: static bool __cdecl wxAppConsoleBase::CheckBuildOptions(char const *,char const *)" (?CheckBuildOptions@wxAppConsoleBase@@SA_NPBD0@Z)
+wxbase30u.lib(strconv.obj) : warning LNK4217: locally defined symbol __time64 imported in function "private: class wxMBConv * __thiscall wxCSConv::DoCreate(void)const " (?DoCreate@wxCSConv@@ABEPAVwxMBConv@@XZ)
+wxbase30u.lib(strvararg.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(thread.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(filedlg.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(enhmeta.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(dragimag.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(volume.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(msw_notebook.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(safearray.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(arttango.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(clipbrd.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(printwin.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(printdlg.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(dcprint.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(treectrl.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(msw_listctrl.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(fontdlg.obj) : warning LNK4217: locally defined symbol __time64 imported in function __ehhandler$??1?$wxScopedCharTypeBuffer@D@@QAE@XZ
+wxmsw30u_core.lib(graphics.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(imagpng.obj) : warning LNK4217: locally defined symbol __time64 imported in function "void __cdecl CopyDataFromPNG(class wxImage *,unsigned char * *,unsigned int,unsigned int,int)" (?CopyDataFromPNG@@YAXPAVwxImage@@PAPAEIIH@Z)
+wxmsw30u_core.lib(oleutils.obj) : warning LNK4217: locally defined symbol __time64 imported in function "public: virtual bool __thiscall wxVariantDataSafeArray::Write(class wxString &)const " (?Write@wxVariantDataSafeArray@@UBE_NAAVwxString@@@Z)
+wxmsw30u_core.lib(imaglist.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(rendcmn.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(popupwin.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(markupparser.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(msgdlg.obj) : warning LNK4217: locally defined symbol __time64 imported in function __ehhandler$??1wxObject@@UAE@XZ
+wxmsw30u_core.lib(helpchm.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(dataobj.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(xpmdecod.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(dcmemory.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(ownerdrw.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(accelcmn.obj) : warning LNK4217: locally defined symbol __time64 imported in function "private: class wxString __thiscall wxAcceleratorEntry::AsPossiblyLocalizedString(bool)const " (?AsPossiblyLocalizedString@wxAcceleratorEntry@@ABE?AVwxString@@_N@Z)
+wxmsw30u_core.lib(msw_dialog.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(graphcmn.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(msw_toolbar.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(imagbmp.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(msw_textctrl.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(msw_spinbutt.obj) : warning LNK4217: locally defined symbol __time64 imported in function "public: virtual class wxEvent * __thiscall wxNotifyEvent::Clone(void)const " (?Clone@wxNotifyEvent@@UBEPAVwxEvent@@XZ)
+wxmsw30u_core.lib(logg.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(fontmap.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(msw_statbmp.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(msw_statbox.obj) : warning LNK4217: locally defined symbol __time64 imported in function "public: __thiscall HDCClipper::HDCClipper(struct HDC__ *,struct HRGN__ *)" (??0HDCClipper@@QAE@PAUHDC__@@PAUHRGN__@@@Z)
+wxmsw30u_core.lib(textentry.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(textcmn.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(msw_checkbox.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(msw_listbox.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(msw_choice.obj) : warning LNK4217: locally defined symbol __time64 imported in function "protected: virtual void __thiscall wxChoice::DoClear(void)" (?DoClear@wxChoice@@MAEXXZ)
+wxmsw30u_core.lib(msw_scrolbar.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(msw_textmeasure.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(spinctrl.obj) : warning LNK4217: locally defined symbol __time64 imported in function "public: void __thiscall std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >::_Tidy_deallocate(void)" (?_Tidy_deallocate@?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@QAEXXZ)
+wxmsw30u_core.lib(containr.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(anybutton.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(region.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(tooltip.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(msw_radiobox.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(droptgt.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(brush.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(dib.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(windowid.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(utilscmn.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(utilsgui.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(display.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(cursor.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(iconbndl.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(msw_control.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(statusbar.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(fontcmn.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(colourcmn.obj) : warning LNK4217: locally defined symbol __time64 imported in function __ehhandler$??1?$wxScopedCharTypeBuffer@D@@QAE@XZ
+wxmsw30u_core.lib(menuitem.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(msw_menu.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(font.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(settings.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(toplevel.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(image.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(bitmap.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(dc.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(nativdlg.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(icon.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(app.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(nonownedwnd.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(frame.obj) : warning LNK4217: locally defined symbol __time64 imported in function "protected: virtual void __thiscall wxFrame::InternalSetMenuBar(void)" (?InternalSetMenuBar@wxFrame@@MAEXXZ)
+wxmsw30u_core.lib(gdiimage.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(wincmn.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxmsw30u_core.lib(window.obj) : warning LNK4049: locally defined symbol __time64 imported
+wxbase30u.lib(dde.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(utilscmn.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(dir.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(stdpaths.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(fileconf.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(registry.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(any.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(volume.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(threadinfo.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(filename.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(filesys.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(ffile.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(utilsexc.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(timer.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(time.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(file.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(filefn.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(utils.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(translation.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(module.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(dynlib.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(enhmeta.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(strconv.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxbase30u.lib(thread.obj) : warning LNK4217: locally defined symbol _calloc imported in function "public: enum wxSemaError __thiscall wxSemaphoreInternal::WaitTimeout(unsigned long)" (?WaitTimeout@wxSemaphoreInternal@@QAE?AW4wxSemaError@@K@Z)
+wxbase30u.lib(log.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(imagpng.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(paper.obj) : warning LNK4217: locally defined symbol _calloc imported in function "public: void __thiscall wxPrintPaperDatabase::CreateDatabase(void)" (?CreateDatabase@wxPrintPaperDatabase@@QAEXXZ)
+wxmsw30u_core.lib(treectrl.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(clipbrd.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(dataobj.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(oleutils.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(artprov.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(graphics.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(logg.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(xpmdecod.obj) : warning LNK4217: locally defined symbol _calloc imported in function "public: class wxImage __thiscall wxXPMDecoder::ReadData(char const * const *)" (?ReadData@wxXPMDecoder@@QAE?AVwxImage@@PBQBD@Z)
+wxmsw30u_core.lib(treebase.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(msgdlg.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(dcclient.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(spinctrl.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(containr.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(msw_slider.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(utilscmn.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(cshelp.obj) : warning LNK4217: locally defined symbol _calloc imported in function __unwindfunclet$??0wxCommandEvent@@QAE@ABV0@@Z$1
+wxmsw30u_core.lib(msw_radiobox.obj) : warning LNK4217: locally defined symbol _calloc imported in function "public: virtual void __thiscall wxControlBase::SetLabelText(class wxString const &)" (?SetLabelText@wxControlBase@@UAEXABVwxString@@@Z)
+wxmsw30u_core.lib(droptgt.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(toplevel.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(image.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(fontcmn.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(windowid.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(gdicmn.obj) : warning LNK4217: locally defined symbol _calloc imported in function "public: class wxColour * & __thiscall wxStringToColourHashMap::operator[](class wxString const &)" (??AwxStringToColourHashMap@@QAEAAPAVwxColour@@ABVwxString@@@Z)
+wxmsw30u_core.lib(gdiimage.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(wincmn.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(window.obj) : warning LNK4049: locally defined symbol _calloc imported
+wxmsw30u_core.lib(gdiimage.obj) : warning LNK4217: locally defined symbol __wtoi imported in function "protected: virtual bool __thiscall wxICOFileHandler::LoadIcon(class wxIcon *,class wxString const &,enum wxBitmapType,int,int)" (?LoadIcon@wxICOFileHandler@@MAE_NPAVwxIcon@@ABVwxString@@W4wxBitmapType@@HH@Z)
+wxmsw30u_core.lib(image.obj) : warning LNK4049: locally defined symbol __wtoi imported
+wxbase30u.lib(sysopt.obj) : warning LNK4049: locally defined symbol __wtoi imported
+wxbase30u.lib(mimetype.obj) : warning LNK4049: locally defined symbol __wtoi imported
+wxmsw30u_core.lib(window.obj) : warning LNK4217: locally defined symbol _toupper imported in function "public: virtual bool __thiscall wxWindow::MSWHandleMessage(long *,unsigned int,unsigned int,long)" (?MSWHandleMessage@wxWindow@@UAE_NPAJIIJ@Z)
+wxzlib.lib(zutil.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30ud_gl.lib(glcanvas.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(dde.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(textfile.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(base64.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxpng.lib(pngmem.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(regconf.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(stdpaths.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(txtstrm.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(fileconf.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(volume.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(utilscmn.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(crashrpt.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(debughlp.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(utilsexc.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(registry.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(wxcrt.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(datstrm.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(filefn.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(uri.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(filename.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(ffile.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(msgout.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(stream.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(tokenzr.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(file.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(strvararg.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(utils.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(translation.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(dlmsw.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(clipbrd.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(enhmeta.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(string.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxbase30u.lib(strconv.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(combo.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(graphics.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(imagpng.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(quantize.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(msw_choice.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(msw_textctrl.obj) : warning LNK4217: locally defined symbol _malloc imported in function "public: virtual bool __thiscall wxTextCtrl::SetFont(class wxFont const &)" (?SetFont@wxTextCtrl@@UAE_NABVwxFont@@@Z)
+wxmsw30u_core.lib(xpmdecod.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(dataobj.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(palette.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(utilsgui.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(dib.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(msw_listbox.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(bitmap.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(dc.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(font.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(colourcmn.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(window.obj) : warning LNK4217: locally defined symbol _malloc imported in function "public: class wxCharTypeBuffer<wchar_t> __thiscall wxString::tchar_str<wchar_t>(unsigned int *,wchar_t *)const " (??$tchar_str@_W@wxString@@QBE?AV?$wxCharTypeBuffer@_W@@PAIPA_W@Z)
+wxmsw30u_core.lib(app.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(toplevel.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(image.obj) : warning LNK4049: locally defined symbol _malloc imported
+wxmsw30u_core.lib(main.obj) : warning LNK4217: locally defined symbol __wcsdup imported in function "bool __cdecl wxMSWEntryCommon(struct HINSTANCE__ *,int)" (?wxMSWEntryCommon@@YA_NPAUHINSTANCE__@@H@Z)
+wxbase30u.lib(init.obj) : warning LNK4049: locally defined symbol __wcsdup imported
+wxbase30u.lib(basemsw.obj) : warning LNK4049: locally defined symbol ___acrt_iob_func imported
+wxpng.lib(pngerror.obj) : warning LNK4049: locally defined symbol ___acrt_iob_func imported
+wxmsw30u_core.lib(appcmn.obj) : warning LNK4217: locally defined symbol ___acrt_iob_func imported in function "public: virtual class wxMessageOutput * __thiscall wxGUIAppTraitsBase::CreateMessageOutput(void)" (?CreateMessageOutput@wxGUIAppTraitsBase@@UAEPAVwxMessageOutput@@XZ)
+wxbase30u.lib(appbase.obj) : warning LNK4049: locally defined symbol ___acrt_iob_func imported
+wxbase30u.lib(thread.obj) : warning LNK4049: locally defined symbol ___acrt_iob_func imported
+wxbase30u.lib(log.obj) : warning LNK4049: locally defined symbol ___acrt_iob_func imported
+wxmsw30u_core.lib(app.obj) : warning LNK4217: locally defined symbol _exit imported in function "public: void __thiscall wxApp::OnEndSession(class wxCloseEvent &)" (?OnEndSession@wxApp@@QAEXAAVwxCloseEvent@@@Z)
+wxbase30u.lib(appbase.obj) : warning LNK4049: locally defined symbol _exit imported
+wxmsw30u_core.lib(logg.obj) : warning LNK4217: locally defined symbol _wcsftime imported in function "class wxString __cdecl TimeStamp(class wxString const &,__int64)" (?TimeStamp@@YA?AVwxString@@ABV1@_J@Z)
+wxbase30u.lib(datetime.obj) : warning LNK4049: locally defined symbol _wcsftime imported
+wxmsw30u_core.lib(xpmdecod.obj) : warning LNK4217: locally defined symbol _isspace imported in function "public: class wxImage __thiscall wxXPMDecoder::ReadData(char const * const *)" (?ReadData@wxXPMDecoder@@QAE?AVwxImage@@PBQBD@Z)
+wxbase30u.lib(translation.obj) : warning LNK4049: locally defined symbol _isspace imported
+wxmsw30u_core.lib(xpmdecod.obj) : warning LNK4217: locally defined symbol _tolower imported in function "bool __cdecl GetRGBFromName(char const *,bool *,unsigned char *,unsigned char *,unsigned char *)" (?GetRGBFromName@@YA_NPBDPA_NPAE22@Z)
+wxmsw30u_core.lib(accelcmn.obj) : warning LNK4217: locally defined symbol _iswprint imported in function "private: class wxString __thiscall wxAcceleratorEntry::AsPossiblyLocalizedString(bool)const " (?AsPossiblyLocalizedString@wxAcceleratorEntry@@ABE?AVwxString@@_N@Z)
+wxbase30u.lib(filefn.obj) : warning LNK4049: locally defined symbol _towlower imported
+wxmsw30u_core.lib(accelcmn.obj) : warning LNK4217: locally defined symbol _towlower imported in function "private: static bool __cdecl wxAcceleratorEntry::ParseAccel(class wxString const &,int *,int *)" (?ParseAccel@wxAcceleratorEntry@@CA_NABVwxString@@PAH1@Z)
+wxbase30u.lib(string.obj) : warning LNK4049: locally defined symbol _towlower imported
+wxbase30u.lib(log.obj) : warning LNK4049: locally defined symbol _towlower imported
+wxbase30u.lib(intl.obj) : warning LNK4049: locally defined symbol _towlower imported
+wxmsw30u_core.lib(dobjcmn.obj) : warning LNK4217: locally defined symbol ___stdio_common_vsprintf imported in function _sprintf
+wxmsw30u_core.lib(clipbrd.obj) : warning LNK4217: locally defined symbol ___stdio_common_vsprintf imported in function "public: void __thiscall wxLogger::Log<char const *,int,wchar_t const *,long,wchar_t const *>(class wxFormatString const &,char const *,int,wchar_t const *,long,wchar_t const *)" (??$Log@PBDHPB_WJPB_W@wxLogger@@QAEXABVwxFormatString@@PBDHPB_WJ2@Z)
+wxbase30u.lib(fileconf.obj) : warning LNK4049: locally defined symbol _iswalnum imported
+wxmsw30u_core.lib(valtext.obj) : warning LNK4217: locally defined symbol _iswalnum imported in function "bool __cdecl wxIsalnum(class wxUniChar const &)" (?wxIsalnum@@YA_NABVwxUniChar@@@Z)
+wxbase30u.lib(cmdline.obj) : warning LNK4049: locally defined symbol _iswalnum imported
+wxbase30u.lib(config.obj) : warning LNK4049: locally defined symbol _iswalnum imported
+wxbase30u.lib(filefn.obj) : warning LNK4049: locally defined symbol _iswalnum imported
+wxmsw30u_core.lib(valtext.obj) : warning LNK4217: locally defined symbol _iswalpha imported in function "bool __cdecl wxIsalpha(class wxUniChar const &)" (?wxIsalpha@@YA_NABVwxUniChar@@@Z)
+wxbase30u.lib(string.obj) : warning LNK4049: locally defined symbol _iswalpha imported
+wxbase30u.lib(filefn.obj) : warning LNK4049: locally defined symbol _iswalpha imported
+wxbase30u.lib(datetimefmt.obj) : warning LNK4049: locally defined symbol _iswalpha imported
+wxmsw30u_core.lib(valtext.obj) : warning LNK4217: locally defined symbol _iswdigit imported in function "protected: virtual class wxString __thiscall wxTextValidator::IsValid(class wxString const &)const " (?IsValid@wxTextValidator@@MBE?AVwxString@@ABV2@@Z)
+wxbase30u.lib(string.obj) : warning LNK4049: locally defined symbol _iswdigit imported
+wxbase30u.lib(datetimefmt.obj) : warning LNK4049: locally defined symbol _iswdigit imported
+wxbase30u.lib(appbase.obj) : warning LNK4217: locally defined symbol _abort imported in function "void __cdecl wxAbort(void)" (?wxAbort@@YAXXZ)
+wxpng.lib(pngerror.obj) : warning LNK4049: locally defined symbol _abort imported
+wxbase30u.lib(string.obj) : warning LNK4217: locally defined symbol __errno imported in function "int __cdecl DoStringPrintfV(class wxString &,class wxString const &,char *)" (?DoStringPrintfV@@YAHAAVwxString@@ABV1@PAD@Z)
+wxbase30u.lib(file.obj) : warning LNK4049: locally defined symbol __errno imported
+wxpng.lib(pngread.obj) : warning LNK4049: locally defined symbol __errno imported
+wxpng.lib(pngwrite.obj) : warning LNK4049: locally defined symbol __errno imported
+wxbase30u.lib(string.obj) : warning LNK4217: locally defined symbol _iswspace imported in function "public: class wxString & __thiscall wxString::Trim(bool)" (?Trim@wxString@@QAEAAV1@_N@Z)
+wxbase30u.lib(tokenzr.obj) : warning LNK4049: locally defined symbol _iswspace imported
+wxbase30u.lib(datetimefmt.obj) : warning LNK4049: locally defined symbol _iswspace imported
+wxbase30u.lib(fileconf.obj) : warning LNK4049: locally defined symbol _iswspace imported
+wxbase30u.lib(string.obj) : warning LNK4217: locally defined symbol _wcstod imported in function "public: bool __thiscall wxString::ToDouble(double *)const " (?ToDouble@wxString@@QBE_NPAN@Z)
+wxbase30u.lib(txtstrm.obj) : warning LNK4049: locally defined symbol _wcstod imported
+wxbase30u.lib(string.obj) : warning LNK4217: locally defined symbol __wcstod_l imported in function "public: bool __thiscall wxString::ToCDouble(double *)const " (?ToCDouble@wxString@@QBE_NPAN@Z)
+wxbase30u.lib(string.obj) : warning LNK4217: locally defined symbol _wcstol imported in function "public: bool __thiscall wxString::ToLong(long *,int)const " (?ToLong@wxString@@QBE_NPAJH@Z)
+wxbase30u.lib(txtstrm.obj) : warning LNK4049: locally defined symbol _wcstol imported
+wxbase30u.lib(string.obj) : warning LNK4217: locally defined symbol __wcstol_l imported in function "public: bool __thiscall wxString::ToCLong(long *,int)const " (?ToCLong@wxString@@QBE_NPAJH@Z)
+wxbase30u.lib(string.obj) : warning LNK4217: locally defined symbol _wcstoul imported in function "public: bool __thiscall wxString::ToULong(unsigned long *,int)const " (?ToULong@wxString@@QBE_NPAKH@Z)
+wxbase30u.lib(txtstrm.obj) : warning LNK4049: locally defined symbol _wcstoul imported
+wxbase30u.lib(string.obj) : warning LNK4217: locally defined symbol __wcstoul_l imported in function "public: bool __thiscall wxString::ToCULong(unsigned long *,int)const " (?ToCULong@wxString@@QBE_NPAKH@Z)
+wxbase30u.lib(string.obj) : warning LNK4217: locally defined symbol __wcstoi64 imported in function "public: bool __thiscall wxString::ToLongLong(__int64 *,int)const " (?ToLongLong@wxString@@QBE_NPA_JH@Z)
+wxbase30u.lib(string.obj) : warning LNK4217: locally defined symbol __wcstoui64 imported in function "public: bool __thiscall wxString::ToULongLong(unsigned __int64 *,int)const " (?ToULongLong@wxString@@QBE_NPA_KH@Z)
+wxbase30u.lib(string.obj) : warning LNK4217: locally defined symbol _wcspbrk imported in function "public: bool __thiscall wxString::Matches(class wxString const &)const " (?Matches@wxString@@QBE_NABV1@@Z)
+wxbase30u.lib(wxcrt.obj) : warning LNK4049: locally defined symbol _wcspbrk imported
+wxbase30u.lib(string.obj) : warning LNK4217: locally defined symbol __wcsicmp imported in function "public: int __thiscall wxString::CmpNoCase(class wxString const &)const " (?CmpNoCase@wxString@@QBEHABV1@@Z)
+wxbase30u.lib(dynarray.obj) : warning LNK4217: locally defined symbol _qsort imported in function "protected: void __thiscall wxBaseArrayChar::Sort(int (__cdecl*)(void const *,void const *))" (?Sort@wxBaseArrayChar@@IAEXP6AHPBX0@Z@Z)
+wxbase30u.lib(list.obj) : warning LNK4049: locally defined symbol _qsort imported
+wxbase30u.lib(encconv.obj) : warning LNK4049: locally defined symbol _qsort imported
+wxbase30u.lib(utils.obj) : warning LNK4217: locally defined symbol __wgetenv imported in function "wchar_t const * __cdecl wxGetHomeDir(class wxString *)" (?wxGetHomeDir@@YAPB_WPAVwxString@@@Z)
+wxbase30u.lib(filefn.obj) : warning LNK4049: locally defined symbol __wgetenv imported
+wxbase30u.lib(utilscmn.obj) : warning LNK4049: locally defined symbol __wgetenv imported
+wxbase30u.lib(translation.obj) : warning LNK4217: locally defined symbol _isalpha imported in function "public: bool __thiscall wxPluralFormsScanner::nextToken(void)" (?nextToken@wxPluralFormsScanner@@QAE_NXZ)
+wxbase30u.lib(translation.obj) : warning LNK4217: locally defined symbol _isdigit imported in function "public: bool __thiscall wxPluralFormsScanner::nextToken(void)" (?nextToken@wxPluralFormsScanner@@QAE_NXZ)
+wxbase30u.lib(translation.obj) : warning LNK4217: locally defined symbol _isalnum imported in function "public: bool __thiscall wxPluralFormsScanner::nextToken(void)" (?nextToken@wxPluralFormsScanner@@QAE_NXZ)
+wxbase30u.lib(translation.obj) : warning LNK4217: locally defined symbol _strnlen imported in function "public: bool __thiscall wxMsgCatalogFile::FillHash(class wxStringToStringHashMap &,class wxString const &)const " (?FillHash@wxMsgCatalogFile@@QBE_NAAVwxStringToStringHashMap@@ABVwxString@@@Z)
+wxbase30u.lib(sysopt.obj) : warning LNK4217: locally defined symbol _getenv imported in function "char * __cdecl wxGetenv(class wxString const &)" (?wxGetenv@@YAPADABVwxString@@@Z)
+wxbase30u.lib(filefn.obj) : warning LNK4049: locally defined symbol _getenv imported
+wxbase30u.lib(filename.obj) : warning LNK4049: locally defined symbol _getenv imported
+wxbase30u.lib(msgout.obj) : warning LNK4217: locally defined symbol _fflush imported in function "public: virtual void __thiscall wxMessageOutputStderr::Output(class wxString const &)" (?Output@wxMessageOutputStderr@@UAEXABVwxString@@@Z)
+wxbase30u.lib(ffile.obj) : warning LNK4049: locally defined symbol _fflush imported
+wxpng.lib(pngwrite.obj) : warning LNK4217: locally defined symbol _fflush imported in function _png_image_write_main
+wxpng.lib(pngwio.obj) : warning LNK4049: locally defined symbol _fflush imported
+wxbase30u.lib(msgout.obj) : warning LNK4217: locally defined symbol ___stdio_common_vfprintf imported in function _fprintf
+wxpng.lib(pngerror.obj) : warning LNK4049: locally defined symbol ___stdio_common_vfprintf imported
+wxbase30u.lib(intl.obj) : warning LNK4217: locally defined symbol _setlocale imported in function "public: static class wxString __cdecl wxLocale::GetInfo(enum wxLocaleInfo,enum wxLocaleCategory)" (?GetInfo@wxLocale@@SA?AVwxString@@W4wxLocaleInfo@@W4wxLocaleCategory@@@Z)
+wxbase30u.lib(wxcrt.obj) : warning LNK4049: locally defined symbol _setlocale imported
+wxbase30u.lib(basemsw.obj) : warning LNK4217: locally defined symbol ___stdio_common_vfwprintf imported in function _fwprintf
+wxbase30u.lib(variant.obj) : warning LNK4217: locally defined symbol __wtol imported in function "public: bool __thiscall wxVariant::Convert(long *)const " (?Convert@wxVariant@@QBE_NPAJ@Z)
+wxbase30u.lib(time.obj) : warning LNK4217: locally defined symbol __get_timezone imported in function "class wxLongLongNative __cdecl wxGetLocalTimeMillis(void)" (?wxGetLocalTimeMillis@@YA?AVwxLongLongNative@@XZ)
+wxbase30u.lib(time.obj) : warning LNK4217: locally defined symbol __tzset imported in function "class wxLongLongNative __cdecl wxGetLocalTimeMillis(void)" (?wxGetLocalTimeMillis@@YA?AVwxLongLongNative@@XZ)
+wxbase30u.lib(file.obj) : warning LNK4217: locally defined symbol __close imported in function "public: bool __thiscall wxFile::Close(void)" (?Close@wxFile@@QAE_NXZ)
+wxbase30u.lib(file.obj) : warning LNK4217: locally defined symbol __commit imported in function "public: bool __thiscall wxFile::Flush(void)" (?Flush@wxFile@@QAE_NXZ)
+wxbase30u.lib(file.obj) : warning LNK4217: locally defined symbol __read imported in function "public: int __thiscall wxFile::Read(void *,unsigned int)" (?Read@wxFile@@QAEHPAXI@Z)
+wxbase30u.lib(file.obj) : warning LNK4217: locally defined symbol __write imported in function "public: unsigned int __thiscall wxFile::Write(void const *,unsigned int)" (?Write@wxFile@@QAEIPBXI@Z)
+wxbase30u.lib(file.obj) : warning LNK4217: locally defined symbol __lseeki64 imported in function "public: __int64 __thiscall wxFile::Seek(__int64,enum wxSeekMode)" (?Seek@wxFile@@QAE_J_JW4wxSeekMode@@@Z)
+wxbase30u.lib(filefn.obj) : warning LNK4217: locally defined symbol __fileno imported in function "enum wxFileKind __cdecl wxGetFileKind(struct _iobuf *)" (?wxGetFileKind@@YA?AW4wxFileKind@@PAU_iobuf@@@Z)
+wxbase30u.lib(filefn.obj) : warning LNK4217: locally defined symbol __get_osfhandle imported in function "enum wxFileKind __cdecl wxGetFileKind(int)" (?wxGetFileKind@@YA?AW4wxFileKind@@H@Z)
+wxbase30u.lib(filename.obj) : warning LNK4217: locally defined symbol __open_osfhandle imported in function "int __cdecl wxTempOpen(class wxString const &,bool *)" (?wxTempOpen@@YAHABVwxString@@PA_N@Z)
+wxbase30u.lib(ffile.obj) : warning LNK4217: locally defined symbol _fclose imported in function "public: bool __thiscall wxFFile::Close(void)" (?Close@wxFFile@@QAE_NXZ)
+wxpng.lib(pngread.obj) : warning LNK4217: locally defined symbol _fclose imported in function _png_image_read_init
+wxpng.lib(pngwrite.obj) : warning LNK4217: locally defined symbol _fclose imported in function _wx_png_write_info
+wxpng.lib(png.obj) : warning LNK4049: locally defined symbol _fclose imported
+wxbase30u.lib(ffile.obj) : warning LNK4217: locally defined symbol __fseeki64 imported in function "public: bool __thiscall wxFFile::Seek(__int64,enum wxSeekMode)" (?Seek@wxFFile@@QAE_N_JW4wxSeekMode@@@Z)
+wxbase30u.lib(ffile.obj) : warning LNK4217: locally defined symbol __ftelli64 imported in function "public: __int64 __thiscall wxFFile::Tell(void)const " (?Tell@wxFFile@@QBE_JXZ)
+wxbase30u.lib(ffile.obj) : warning LNK4217: locally defined symbol _fwrite imported in function "public: unsigned int __thiscall wxFFile::Write(void const *,unsigned int)" (?Write@wxFFile@@QAEIPBXI@Z)
+wxpng.lib(pngwio.obj) : warning LNK4049: locally defined symbol _fwrite imported
+wxbase30u.lib(wxcrt.obj) : warning LNK4217: locally defined symbol _fputwc imported in function "int __cdecl wxFputc(class wxUniChar const &,struct _iobuf *)" (?wxFputc@@YAHABVwxUniChar@@PAU_iobuf@@@Z)
+wxbase30u.lib(wxcrt.obj) : warning LNK4217: locally defined symbol ___stdio_common_vswprintf imported in function "int __cdecl wxDoSprintfWchar(wchar_t *,wchar_t const *,...)" (?wxDoSprintfWchar@@YAHPA_WPB_WZZ)
+wxbase30u.lib(wxcrt.obj) : warning LNK4217: locally defined symbol ___stdio_common_vswprintf_p imported in function "int __cdecl wxDoSnprintfWchar(wchar_t *,unsigned int,wchar_t const *,...)" (?wxDoSnprintfWchar@@YAHPA_WIPB_WZZ)
+wxbase30u.lib(wxcrt.obj) : warning LNK4217: locally defined symbol _strpbrk imported in function "char * __cdecl wxCRT_StrtokA(char *,char const *,char * *)" (?wxCRT_StrtokA@@YAPADPADPBDPAPAD@Z)
+wxbase30u.lib(wxcrt.obj) : warning LNK4217: locally defined symbol _mbstowcs imported in function "unsigned int __cdecl wxMB2WC(wchar_t *,char const *,unsigned int)" (?wxMB2WC@@YAIPA_WPBDI@Z)
+wxbase30u.lib(wxcrt.obj) : warning LNK4217: locally defined symbol _wcstombs imported in function "unsigned int __cdecl wxWC2MB(char *,wchar_t const *,unsigned int)" (?wxWC2MB@@YAIPADPB_WI@Z)
+wxbase30u.lib(xlocale.obj) : warning LNK4217: locally defined symbol __create_locale imported in function "public: __thiscall wxXLocale::wxXLocale(enum wxLanguage)" (??0wxXLocale@@QAE@W4wxLanguage@@@Z)
+wxbase30u.lib(xlocale.obj) : warning LNK4217: locally defined symbol __free_locale imported in function "void __cdecl `dynamic atexit destructor for 'wxNullXLocale''(void)" (??__FwxNullXLocale@@YAXXZ)
+wxbase30u.lib(utilscmn.obj) : warning LNK4217: locally defined symbol ___p__wenviron imported in function "bool __cdecl wxGetEnvMap(class wxStringToStringHashMap *)" (?wxGetEnvMap@@YA_NPAVwxStringToStringHashMap@@@Z)
+wxbase30u.lib(txtstrm.obj) : warning LNK4049: locally defined symbol _strtod imported
+wxbase30u.lib(txtstrm.obj) : warning LNK4049: locally defined symbol _strtol imported
+wxbase30u.lib(txtstrm.obj) : warning LNK4049: locally defined symbol _strtoul imported
+wxbase30u.lib(extended.obj) : warning LNK4217: locally defined symbol _frexp imported in function _ConvertToIeeeExtended
+wxpng.lib(png.obj) : warning LNK4049: locally defined symbol _frexp imported
+wxbase30u.lib(extended.obj) : warning LNK4217: locally defined symbol _ldexp imported in function _ConvertFromIeeeExtended
+wxmsw30ud_gl.lib(glcanvas.obj) : warning LNK4217: locally defined symbol __invalid_parameter imported in function "void * __cdecl std::_Allocate(unsigned int,unsigned int,bool)" (?_Allocate@std@@YAPAXII_N@Z)
+wxmsw30ud_gl.lib(dummy.obj) : warning LNK4049: locally defined symbol __invalid_parameter imported
+wxmsw30ud_gl.lib(glcmn.obj) : warning LNK4049: locally defined symbol __invalid_parameter imported
+wxmsw30ud_gl.lib(glcanvas.obj) : warning LNK4217: locally defined symbol _wcslen imported in function "public: static unsigned int __cdecl std::char_traits<wchar_t>::length(wchar_t const * const)" (?length@?$char_traits@_W@std@@SAIQB_W@Z)
+wxmsw30ud_gl.lib(glcmn.obj) : warning LNK4049: locally defined symbol _wcslen imported
+wxmsw30ud_gl.lib(glcanvas.obj) : warning LNK4217: locally defined symbol __CrtDbgReportW imported in function "void * __cdecl std::_Allocate(unsigned int,unsigned int,bool)" (?_Allocate@std@@YAPAXII_N@Z)
+wxmsw30ud_gl.lib(glcmn.obj) : warning LNK4049: locally defined symbol __CrtDbgReportW imported
+wxbase30u.lib(dde.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxbase30u.lib(textfile.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxbase30u.lib(base64.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxbase30u.lib(registry.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxbase30u.lib(any.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxbase30u.lib(volume.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxbase30u.lib(fileconf.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxbase30u.lib(strvararg.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxbase30u.lib(translation.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxbase30u.lib(stream.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxbase30u.lib(utilsexc.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxmsw30u_core.lib(msw_listctrl.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxmsw30u_core.lib(modalhook.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxmsw30u_core.lib(graphics.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxbase30u.lib(string.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxmsw30u_core.lib(sizer.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxmsw30u_core.lib(msw_textctrl.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxmsw30u_core.lib(dataobj.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxmsw30u_core.lib(scrlwing.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxmsw30u_core.lib(wincmn.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxmsw30u_core.lib(app.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxmsw30u_core.lib(statusbar.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxmsw30u_core.lib(tooltip.obj) : error LNK2001: unresolved external symbol __imp__realloc
+wxmsw30u_core.lib(window.obj) : error LNK2019: unresolved external symbol __imp__towupper referenced in function "public: int __thiscall wxWindow::HandleMenuChar(int,long)" (?HandleMenuChar@wxWindow@@QAEHHJ@Z)
+wxmsw30u_core.lib(accelcmn.obj) : error LNK2001: unresolved external symbol __imp__towupper
+wxbase30u.lib(string.obj) : error LNK2001: unresolved external symbol __imp__towupper
+wxbase30u.lib(crashrpt.obj) : error LNK2001: unresolved external symbol __imp__wcsncpy
+wxbase30u.lib(strvararg.obj) : error LNK2001: unresolved external symbol __imp__wcsncpy
+wxbase30u.lib(log.obj) : error LNK2001: unresolved external symbol __imp__wcsncpy
+wxbase30u.lib(utils.obj) : error LNK2001: unresolved external symbol __imp__wcsncpy
+wxbase30u.lib(utilscmn.obj) : error LNK2001: unresolved external symbol __imp__wcsncpy
+wxmsw30u_core.lib(msw_listctrl.obj) : error LNK2001: unresolved external symbol __imp__wcsncpy
+wxmsw30u_core.lib(printdlg.obj) : error LNK2001: unresolved external symbol __imp__wcsncpy
+wxmsw30u_core.lib(fontenum.obj) : error LNK2001: unresolved external symbol __imp__wcsncpy
+wxmsw30u_core.lib(filedlg.obj) : error LNK2001: unresolved external symbol __imp__wcsncpy
+wxmsw30u_core.lib(window.obj) : error LNK2001: unresolved external symbol __imp__wcsncpy
+wxmsw30u_core.lib(font.obj) : error LNK2001: unresolved external symbol __imp__wcsncpy
+wxmsw30u_core.lib(msw_textctrl.obj) : error LNK2001: unresolved external symbol __imp__wcsncpy
+wxmsw30u_core.lib(fontutil.obj) : error LNK2001: unresolved external symbol __imp__wcsncpy
+wxmsw30u_core.lib(app.obj) : error LNK2019: unresolved external symbol __imp__strncmp referenced in function "private: bool __thiscall `anonymous namespace'::wxConsoleStderr::DoInit(void)" (?DoInit@wxConsoleStderr@?A0x52d20838@@AAE_NXZ)
+wxmsw30u_core.lib(fontcmn.obj) : error LNK2019: unresolved external symbol __imp__strncpy referenced in function "char const * __cdecl wxDumpFont(class wxFont const *)" (?wxDumpFont@@YAPBDPBVwxFont@@@Z)
+wxmsw30u_core.lib(xpmdecod.obj) : error LNK2001: unresolved external symbol __imp__strncpy
+wxbase30u.lib(translation.obj) : error LNK2001: unresolved external symbol __imp__strncpy
+wxbase30u.lib(datetime.obj) : error LNK2001: unresolved external symbol __imp__strncpy
+wxbase30u.lib(crashrpt.obj) : error LNK2001: unresolved external symbol __imp____stdio_common_vswscanf
+wxmsw30u_core.lib(colourcmn.obj) : error LNK2001: unresolved external symbol __imp____stdio_common_vswscanf
+wxmsw30u_core.lib(msw_textctrl.obj) : error LNK2001: unresolved external symbol __imp____stdio_common_vswscanf
+wxmsw30u_core.lib(fontutil.obj) : error LNK2001: unresolved external symbol __imp____stdio_common_vswscanf
+wxbase30u.lib(fmapbase.obj) : error LNK2001: unresolved external symbol __imp____stdio_common_vswscanf
+wxmsw30u_core.lib(colourcmn.obj) : error LNK2019: unresolved external symbol __imp____stdio_common_vsscanf referenced in function _sscanf
+wxmsw30u_core.lib(xpmdecod.obj) : error LNK2001: unresolved external symbol __imp____stdio_common_vsscanf
+wxmsw30u_core.lib(xpmdecod.obj) : error LNK2019: unresolved external symbol __imp___strdup referenced in function "bool __cdecl GetRGBFromName(char const *,bool *,unsigned char *,unsigned char *,unsigned char *)" (?GetRGBFromName@@YA_NPBDPA_NPAE22@Z)
+wxbase30u.lib(strconv.obj) : error LNK2001: unresolved external symbol __imp___strdup
+wxbase30u.lib(intl.obj) : error LNK2001: unresolved external symbol __imp___strdup
+wxbase30u.lib(thread.obj) : error LNK2019: unresolved external symbol __imp___beginthreadex referenced in function "public: bool __thiscall wxThreadInternal::Create(class wxThread *,unsigned int)" (?Create@wxThreadInternal@@QAE_NPAVwxThread@@I@Z)
+wxbase30u.lib(thread.obj) : error LNK2019: unresolved external symbol __imp___endthreadex referenced in function "protected: void __thiscall wxThread::Exit(void *)" (?Exit@wxThread@@IAEXPAX@Z)
+wxbase30u.lib(utils.obj) : error LNK2019: unresolved external symbol __imp___wputenv referenced in function "bool __cdecl wxDoSetEnv(class wxString const &,wchar_t const *)" (?wxDoSetEnv@@YA_NABVwxString@@PB_W@Z)
+wxbase30u.lib(main.obj) : error LNK2019: unresolved external symbol __imp__wcsncat referenced in function "bool __cdecl wxHandleFatalExceptions(bool)" (?wxHandleFatalExceptions@@YA_N_N@Z)
+wxbase30u.lib(variant.obj) : error LNK2019: unresolved external symbol __imp__atof referenced in function "double __cdecl wxAtof(class wxString const &)" (?wxAtof@@YANABVwxString@@@Z)
+wxpng.lib(pngget.obj) : error LNK2001: unresolved external symbol __imp__atof
+wxbase30u.lib(wfstream.obj) : error LNK2019: unresolved external symbol __imp__feof referenced in function "protected: virtual unsigned int __thiscall wxFFileInputStream::OnSysRead(void *,unsigned int)" (?OnSysRead@wxFFileInputStream@@MAEIPAXI@Z)
+wxbase30u.lib(wfstream.obj) : error LNK2019: unresolved external symbol __imp__ferror referenced in function "public: __thiscall wxFFileOutputStream::wxFFileOutputStream(class wxString const &,class wxString const &)" (??0wxFFileOutputStream@@QAE@ABVwxString@@0@Z)
+wxbase30u.lib(ffile.obj) : error LNK2001: unresolved external symbol __imp__ferror
+wxpng.lib(pngwrite.obj) : error LNK2001: unresolved external symbol __imp__ferror
+wxbase30u.lib(time.obj) : error LNK2019: unresolved external symbol __imp___difftime64 referenced in function "long __cdecl wxGetLocalTime(void)" (?wxGetLocalTime@@YAJXZ)
+wxbase30u.lib(time.obj) : error LNK2019: unresolved external symbol __imp___gmtime64 referenced in function "struct tm * __cdecl wxGmtime_r(__int64 const *,struct tm *)" (?wxGmtime_r@@YAPAUtm@@PB_JPAU1@@Z)
+wxpng.lib(pngwrite.obj) : error LNK2001: unresolved external symbol __imp___gmtime64
+wxbase30u.lib(time.obj) : error LNK2019: unresolved external symbol __imp___localtime64 referenced in function "struct tm * __cdecl wxLocaltime_r(__int64 const *,struct tm *)" (?wxLocaltime_r@@YAPAUtm@@PB_JPAU1@@Z)
+wxbase30u.lib(time.obj) : error LNK2019: unresolved external symbol __imp___mktime64 referenced in function "long __cdecl wxGetLocalTime(void)" (?wxGetLocalTime@@YAJXZ)
+wxbase30u.lib(datetime.obj) : error LNK2001: unresolved external symbol __imp___mktime64
+wxbase30u.lib(file.obj) : error LNK2019: unresolved external symbol __imp___waccess referenced in function "public: static bool __cdecl wxFile::Access(class wxString const &,enum wxFile::OpenMode)" (?Access@wxFile@@SA_NABVwxString@@W4OpenMode@1@@Z)
+wxbase30u.lib(file.obj) : error LNK2019: unresolved external symbol __imp___wsopen_dispatch referenced in function "public: bool __thiscall wxFile::Create(class wxString const &,bool,int)" (?Create@wxFile@@QAE_NABVwxString@@_NH@Z)
+wxbase30u.lib(filename.obj) : error LNK2001: unresolved external symbol __imp___wsopen_dispatch
+wxbase30u.lib(file.obj) : error LNK2019: unresolved external symbol __imp___wremove referenced in function "public: bool __thiscall wxTempFile::Commit(void)" (?Commit@wxTempFile@@QAE_NXZ)
+wxbase30u.lib(filefn.obj) : error LNK2001: unresolved external symbol __imp___wremove
+wxbase30u.lib(file.obj) : error LNK2019: unresolved external symbol __imp___eof referenced in function "public: bool __thiscall wxFile::Eof(void)const " (?Eof@wxFile@@QBE_NXZ)
+wxbase30u.lib(file.obj) : error LNK2019: unresolved external symbol __imp___telli64 referenced in function "public: __int64 __thiscall wxFile::Tell(void)const " (?Tell@wxFile@@QBE_JXZ)
+wxbase30u.lib(filefn.obj) : error LNK2019: unresolved external symbol __imp___wgetcwd referenced in function "wchar_t * __cdecl wxDoGetCwd(wchar_t *,int)" (?wxDoGetCwd@@YAPA_WPA_WH@Z)
+wxbase30u.lib(filefn.obj) : error LNK2019: unresolved external symbol __imp___wmkdir referenced in function "bool __cdecl wxMkdir(class wxString const &,int)" (?wxMkdir@@YA_NABVwxString@@H@Z)
+wxbase30u.lib(filefn.obj) : error LNK2019: unresolved external symbol __imp___wrmdir referenced in function "bool __cdecl wxRmdir(class wxString const &,int)" (?wxRmdir@@YA_NABVwxString@@H@Z)
+wxbase30u.lib(filefn.obj) : error LNK2019: unresolved external symbol __imp___wrename referenced in function "bool __cdecl wxRenameFile(class wxString const &,class wxString const &,bool)" (?wxRenameFile@@YA_NABVwxString@@0_N@Z)
+wxbase30u.lib(filename.obj) : error LNK2019: unresolved external symbol __imp___wchmod referenced in function "public: bool __thiscall wxFileName::SetPermissions(int)" (?SetPermissions@wxFileName@@QAE_NH@Z)
+wxbase30u.lib(filename.obj) : error LNK2019: unresolved external symbol __imp___fdopen referenced in function "class wxString __cdecl wxCreateTempImpl(class wxString const &,class wxFile *,class wxFFile *,bool *)" (?wxCreateTempImpl@@YA?AVwxString@@ABV1@PAVwxFile@@PAVwxFFile@@PA_N@Z)
+wxbase30u.lib(ffile.obj) : error LNK2019: unresolved external symbol __imp___wfopen referenced in function "public: bool __thiscall wxFFile::Open(class wxString const &,class wxString const &)" (?Open@wxFFile@@QAE_NABVwxString@@0@Z)
+wxbase30u.lib(ffile.obj) : error LNK2019: unresolved external symbol __imp__clearerr referenced in function "public: bool __thiscall wxFFile::ReadAll(class wxString *,class wxMBConv const &)" (?ReadAll@wxFFile@@QAE_NPAVwxString@@ABVwxMBConv@@@Z)
+wxbase30u.lib(ffile.obj) : error LNK2019: unresolved external symbol __imp__fread referenced in function "public: unsigned int __thiscall wxFFile::Read(void *,unsigned int)" (?Read@wxFFile@@QAEIPAXI@Z)
+wxpng.lib(pngrio.obj) : error LNK2001: unresolved external symbol __imp__fread
+wxbase30u.lib(encconv.obj) : error LNK2019: unresolved external symbol __imp__bsearch referenced in function "public: bool __thiscall wxEncodingConverter::Init(enum wxFontEncoding,enum wxFontEncoding,int)" (?Init@wxEncodingConverter@@QAE_NW4wxFontEncoding@@0H@Z)
+wxbase30u.lib(wxcrt.obj) : error LNK2019: unresolved external symbol __imp__fputws referenced in function "int __cdecl wxFputs(class wxString const &,struct _iobuf *)" (?wxFputs@@YAHABVwxString@@PAU_iobuf@@@Z)
+wxbase30u.lib(wxcrt.obj) : error LNK2019: unresolved external symbol __imp___putws referenced in function "int __cdecl wxPuts(class wxString const &)" (?wxPuts@@YAHABVwxString@@@Z)
+wxbase30u.lib(wxcrt.obj) : error LNK2019: unresolved external symbol __imp___wperror referenced in function "void __cdecl wxPerror(class wxString const &)" (?wxPerror@@YAXABVwxString@@@Z)
+wxbase30u.lib(wxcrt.obj) : error LNK2019: unresolved external symbol __imp__wcsspn referenced in function "wchar_t * __cdecl wxCRT_StrtokW(wchar_t *,wchar_t const *,wchar_t * *)" (?wxCRT_StrtokW@@YAPA_WPA_WPB_WPAPA_W@Z)
+wxbase30u.lib(wxcrt.obj) : error LNK2019: unresolved external symbol __imp__strspn referenced in function "char * __cdecl wxCRT_StrtokA(char *,char const *,char * *)" (?wxCRT_StrtokA@@YAPADPADPBDPAPAD@Z)
+wxbase30u.lib(wxcrt.obj) : error LNK2019: unresolved external symbol __imp__fgets referenced in function "wchar_t * __cdecl wxFgets(wchar_t *,int,struct _iobuf *)" (?wxFgets@@YAPA_WPA_WHPAU_iobuf@@@Z)
+wxbase30u.lib(utilscmn.obj) : error LNK2019: unresolved external symbol __imp___ctime64 referenced in function "class wxString __cdecl wxNow(void)" (?wxNow@@YA?AVwxString@@XZ)
+wxpng.lib(pngread.obj) : error LNK2019: unresolved external symbol __imp__strerror referenced in function _wx_png_image_begin_read_from_file
+wxpng.lib(pngwrite.obj) : error LNK2001: unresolved external symbol __imp__strerror
+wxpng.lib(pngread.obj) : error LNK2019: unresolved external symbol __imp__fopen referenced in function _wx_png_image_begin_read_from_file
+wxpng.lib(pngwrite.obj) : error LNK2001: unresolved external symbol __imp__fopen
+wxpng.lib(pngwrite.obj) : error LNK2019: unresolved external symbol __imp__remove referenced in function _wx_png_image_write_to_file
+wxpng.lib(png.obj) : error LNK2019: unresolved external symbol __imp__modf referenced in function _wx_png_ascii_from_fp
+MSVCRT.lib(_chandler4gs_.obj) : error LNK2019: unresolved external symbol __except_handler4_common referenced in function __except_handler4
+C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Debug\joycon-driver.exe : fatal error LNK1120: 46 unresolved externals

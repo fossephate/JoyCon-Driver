@@ -341,6 +341,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		int8_t old_dstick = jc->dstick;
 
 		jc->dstick = packet[3];
+		// todo: get button states here aswell:
 	}
 
 	//printf("%02x\n", packet[0]);
@@ -448,32 +449,36 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		// Gyroscope:
 		// Gyroscope data is relative
 		{
-			// get relative roll:
+			//// get relative roll:
+			//uint16_t relrollA = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
+			//uint16_t relrollB = 0xFFFF - relrollA;
+			//if (relrollA < relrollB) {
+			//	jc->gyro.relroll = relrollA;
+			//} else {
+			//	jc->gyro.relroll = -1 * relrollB;
+			//}
+
+			//// get relative pitch:
+			//uint16_t relpitchA = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
+			//uint16_t relpitchB = 0xFFFF - relpitchA;
+			//if (relpitchA < relpitchB) {
+			//	jc->gyro.relpitch = relpitchA;
+			//} else {
+			//	jc->gyro.relpitch = -1 * relpitchB;
+			//}
+
+			//// get relative yaw:
+			//uint16_t relyawA = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
+			//uint16_t relyawB = 0xFFFF - relyawA;
+			//if (relyawA < relyawB) {
+			//	jc->gyro.relyaw = relyawA;
+			//} else {
+			//	jc->gyro.relyaw = -1 * relyawB;
+			//}
+
+
 			uint16_t relrollA = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
-			uint16_t relrollB = 0xFFFF - relrollA;
-			if (relrollA < relrollB) {
-				jc->gyro.relroll = relrollA;
-			} else {
-				jc->gyro.relroll = -1 * relrollB;
-			}
-
-			// get relative pitch:
-			uint16_t relpitchA = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
-			uint16_t relpitchB = 0xFFFF - relpitchA;
-			if (relpitchA < relpitchB) {
-				jc->gyro.relpitch = relpitchA;
-			} else {
-				jc->gyro.relpitch = -1 * relpitchB;
-			}
-
-			// get relative yaw:
-			uint16_t relyawA = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
-			uint16_t relyawB = 0xFFFF - relyawA;
-			if (relyawA < relyawB) {
-				jc->gyro.relyaw = relyawA;
-			} else {
-				jc->gyro.relyaw = -1 * relyawB;
-			}
+			jc->gyro.relroll = relrollA;
 		}
 		
 
@@ -481,10 +486,13 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 		if (jc->left_right == 1) {
 			//hex_dump(gyro_data, 20);
-			//hex_dump(gyro_data+10, 6);
+			hex_dump(packet+10, 6);
+
 			//printf("%d\n", jc->gyro.relyaw);
 			//printf("%02x\n", jc->gyro.relroll);
 			//printf("%04x\n", jc->gyro.relyaw);
+
+			//printf("%04x\n", jc->gyro.relroll);
 
 			//printf("%d\n", jc->stick.horizontal);
 
