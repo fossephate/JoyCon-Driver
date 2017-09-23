@@ -26,6 +26,7 @@
 
 // wxWidgets:
 #include <wx/wx.h>
+#include <cube.h>
 
 
 #pragma warning(disable:4996)
@@ -1569,6 +1570,32 @@ init_start:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // wxWidgets / GUI:
 
 class app : public wxApp {
@@ -1638,7 +1665,18 @@ public:
 		wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 140));
 
 
+
 		frame->Show();
+
+
+
+
+
+		wxFrame* frame2 = new wxFrame(nullptr, -1, "test");
+
+		frame2->Show();
+
+
 		return true;
 	}
 
@@ -1683,6 +1721,7 @@ public:
 
 
 };
+
 
 //IMPLEMENT_APP(app);
 wxIMPLEMENT_APP_NO_MAIN(app);

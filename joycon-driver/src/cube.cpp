@@ -486,32 +486,27 @@ MyFrame::MyFrame(bool stereoWindow)
 
 	// test IsDisplaySupported() function:
 	static const int attribs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, 0 };
-	wxLogStatus("Double-buffered display %s supported",
-		wxGLCanvas::IsDisplaySupported(attribs) ? "is" : "not");
+	wxLogStatus("Double-buffered display %s supported", wxGLCanvas::IsDisplaySupported(attribs) ? "is" : "not");
 
-	if (stereoWindow)
-	{
+	if (stereoWindow) {
 		const wxString vendor = glGetwxString(GL_VENDOR).Lower();
 		const wxString renderer = glGetwxString(GL_RENDERER).Lower();
-		if (vendor.find("nvidia") != wxString::npos &&
-			renderer.find("quadro") == wxString::npos)
+		if (vendor.find("nvidia") != wxString::npos && renderer.find("quadro") == wxString::npos) {
 			ShowFullScreen(true);
+		}
 	}
 }
 
-void MyFrame::OnClose(wxCommandEvent& WXUNUSED(event))
-{
+void MyFrame::OnClose(wxCommandEvent& WXUNUSED(event)) {
 	// true is to force the frame to close
 	Close(true);
 }
 
-void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event))
-{
+void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event)) {
 	new MyFrame();
 }
 
-void MyFrame::OnNewStereoWindow(wxCommandEvent& WXUNUSED(event))
-{
+void MyFrame::OnNewStereoWindow(wxCommandEvent& WXUNUSED(event)) {
 	new MyFrame(true);
 }
 
