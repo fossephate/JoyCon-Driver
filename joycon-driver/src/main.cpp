@@ -126,6 +126,9 @@ struct Settings {
 	// enables motion controls
 	bool enableGyro = false;
 
+	// enables gyroscope viewing window
+	bool gyroWindow = false;
+
 	// plays a version of the mario theme by vibrating
 	// the first JoyCon connected.
 	bool marioTheme = false;
@@ -508,7 +511,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 			//printf("%04x\n", jc->gyro.relroll);
 
-			printf("%f\n", jc->gyro.relroll/1000.0);
+			//printf("%f\n", jc->gyro.relroll/1000.0);
 
 			//printf("%d\n", accelXA);
 
