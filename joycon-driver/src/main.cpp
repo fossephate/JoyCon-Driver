@@ -79,6 +79,8 @@ MouseController MC;
 
 JOYSTICK_POSITION_V2 iReport; // The structure that holds the full position data
 uint8_t global_count = 0;
+unsigned char buf[65];
+int res = 0;
 
 
 struct Settings {
@@ -139,6 +141,8 @@ struct Tracker {
 	int var2 = 0;
 	int counter1 = 0;
 	float frequency = 500.0f;
+	float relX = 0;
+	float relY = 0;
 } tracker;
 
 
@@ -453,44 +457,50 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		// Gyroscope:
 		// Gyroscope data is relative
 		{
-			//// get relative roll:
-			//uint16_t relrollA = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
-			//uint16_t relrollB = 0xFFFF - relrollA;
-			//if (relrollA < relrollB) {
-			//	jc->gyro.relroll = relrollA;
-			//} else {
-			//	jc->gyro.relroll = -1 * relrollB;
-			//}
-
-			//// get relative pitch:
-			//uint16_t relpitchA = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
-			//uint16_t relpitchB = 0xFFFF - relpitchA;
-			//if (relpitchA < relpitchB) {
-			//	jc->gyro.relpitch = relpitchA;
-			//} else {
-			//	jc->gyro.relpitch = -1 * relpitchB;
-			//}
-
-			//// get relative yaw:
-			//uint16_t relyawA = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
-			//uint16_t relyawB = 0xFFFF - relyawA;
-			//if (relyawA < relyawB) {
-			//	jc->gyro.relyaw = relyawA;
-			//} else {
-			//	jc->gyro.relyaw = -1 * relyawB;
-			//}
-
-
+			// get relative roll:
 			uint16_t relrollA = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
-			jc->gyro.relroll = relrollA;
+			uint16_t relrollB = 0xFFFF - relrollA;
+			if (relrollA < relrollB) {
+				jc->gyro.relroll = relrollA;
+			} else {
+				jc->gyro.relroll = -1 * relrollB;
+			}
+
+			// get relative pitch:
+			uint16_t relpitchA = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
+			uint16_t relpitchB = 0xFFFF - relpitchA;
+			if (relpitchA < relpitchB) {
+				jc->gyro.relpitch = relpitchA;
+			} else {
+				jc->gyro.relpitch = -1 * relpitchB;
+			}
+
+			// get relative yaw:
+			uint16_t relyawA = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
+			uint16_t relyawB = 0xFFFF - relyawA;
+			if (relyawA < relyawB) {
+				jc->gyro.relyaw = relyawA;
+			} else {
+				jc->gyro.relyaw = -1 * relyawB;
+			}
+
+
+			//uint16_t relrollA = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
+			//jc->gyro.relroll = relrollA;
+
+			//uint16_t relpitchA = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
+			//jc->gyro.relpitch = relpitchA;
+
+			//uint16_t relyawA = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
+			//jc->gyro.relyaw = relyawA;
 		}
 		
 
 		//hex_dump(gyro_data, 20);
 
-		if (jc->left_right == 1) {
+		if (jc->left_right == 2) {
 			//hex_dump(gyro_data, 20);
-			hex_dump(packet+10, 6);
+			//hex_dump(packet+12, 10);
 
 			//printf("%d\n", jc->gyro.relyaw);
 			//printf("%02x\n", jc->gyro.relroll);
@@ -498,7 +508,9 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 			//printf("%04x\n", jc->gyro.relroll);
 
-			//printf("%d\n", jc->stick.horizontal);
+			printf("%f\n", jc->gyro.relroll/1000.0);
+
+			//printf("%d\n", accelXA);
 
 			/*printf("%d\n", jc->buttons);*/
 
@@ -787,6 +799,12 @@ void updatevJoyDevice(Joycon *jc) {
 			
 
 			//MC.moveRel2(relX, relY);
+			//Spin(relX, relY);
+			//tracker.relX = relX/1000.0;
+			//tracker.relY = relY/1000.0;
+
+			tracker.relX = jc->gyro.relpitch/1000.0;
+			tracker.relY = -jc->gyro.relyaw/1000.0;
 
 
 			// move with absolute (tracked) gyro:
@@ -1516,8 +1534,16 @@ init_start:
 
 	int counter = 0;
 
-	while (true) {
-		counter++;
+
+
+
+}
+
+
+
+void pollLoop() {
+	//while (true) {
+		//counter++;
 
 		// poll joycons:
 		for (int i = 0; i < joycons.size(); ++i) {
@@ -1554,9 +1580,12 @@ init_start:
 
 		if (settings.restart) {
 			settings.restart = false;
-			goto init_start;
+			//goto init_start;
 		}
-	}
+	//}
+}
+
+void exit() {
 
 	RelinquishVJD(1);
 	RelinquishVJD(2);
@@ -1568,7 +1597,6 @@ init_start:
 	}
 	// Finalize the hidapi library
 	res = hid_exit();
-
 }
 
 
@@ -1580,478 +1608,6 @@ init_start:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//TestGLContext& MyApp::GetContext(wxGLCanvas *canvas, bool useStereo)
-//{
-//	TestGLContext *glContext;
-//	if (useStereo)
-//	{
-//		if (!m_glStereoContext)
-//		{
-//			// Create the OpenGL context for the first stereo window which needs it:
-//			// subsequently created windows will all share the same context.
-//			m_glStereoContext = new TestGLContext(canvas);
-//		}
-//		glContext = m_glStereoContext;
-//	} else
-//	{
-//		if (!m_glContext)
-//		{
-//			// Create the OpenGL context for the first mono window which needs it:
-//			// subsequently created windows will all share the same context.
-//			m_glContext = new TestGLContext(canvas);
-//		}
-//		glContext = m_glContext;
-//	}
-//
-//	glContext->SetCurrent(*canvas);
-//
-//	return *glContext;
-//}
-//
-//
-//
-//MainFrame::MainFrame()
-//	: wxFrame(NULL, wxID_ANY, wxT("wxWidgets OpenGL Cube Sample"))
-//{
-//	//int stereoAttribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_STEREO, 0 };
-//
-//	//new TestGLCanvas(this, stereoWindow ? stereoAttribList : NULL);
-//
-//	//SetIcon(wxICON(sample));
-//
-//	//// Make a menubar
-//	//wxMenu *menu = new wxMenu;
-//	//menu->Append(wxID_NEW);
-//	//menu->Append(NEW_STEREO_WINDOW, "New Stereo Window");
-//	//menu->AppendSeparator();
-//	//menu->Append(wxID_CLOSE);
-//	//wxMenuBar *menuBar = new wxMenuBar;
-//	//menuBar->Append(menu, wxT("&Cube"));
-//
-//	//SetMenuBar(menuBar);
-//
-//	//CreateStatusBar();
-//
-//	SetClientSize(400, 400);
-//	Show();
-//
-//	//// test IsDisplaySupported() function:
-//	//static const int attribs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, 0 };
-//	//wxLogStatus("Double-buffered display %s supported", wxGLCanvas::IsDisplaySupported(attribs) ? "is" : "not");
-//
-//	//if (stereoWindow) {
-//	//	const wxString vendor = glGetwxString(GL_VENDOR).Lower();
-//	//	const wxString renderer = glGetwxString(GL_RENDERER).Lower();
-//	//	if (vendor.find("nvidia") != wxString::npos && renderer.find("quadro") == wxString::npos) {
-//	//		ShowFullScreen(true);
-//	//	}
-//	//}
-//}
-//
-//// control ids
-//enum
-//{
-//	SpinTimer = wxID_HIGHEST + 1
-//};
-//
-//// ----------------------------------------------------------------------------
-//// helper functions
-//// ----------------------------------------------------------------------------
-//
-//static void CheckGLError()
-//{
-//	GLenum errLast = GL_NO_ERROR;
-//
-//	for (;; )
-//	{
-//		GLenum err = glGetError();
-//		if (err == GL_NO_ERROR)
-//			return;
-//
-//		// normally the error is reset by the call to glGetError() but if
-//		// glGetError() itself returns an error, we risk looping forever here
-//		// so check that we get a different error than the last time
-//		if (err == errLast)
-//		{
-//			wxLogError(wxT("OpenGL error state couldn't be reset."));
-//			return;
-//		}
-//
-//		errLast = err;
-//
-//		wxLogError(wxT("OpenGL error %d"), err);
-//	}
-//}
-//
-//// ----------------------------------------------------------------------------
-//// TestGLCanvas
-//// ----------------------------------------------------------------------------
-//
-//wxBEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
-//EVT_PAINT(TestGLCanvas::OnPaint)
-//EVT_KEY_DOWN(TestGLCanvas::OnKeyDown)
-//EVT_TIMER(SpinTimer, TestGLCanvas::OnSpinTimer)
-//wxEND_EVENT_TABLE()
-//
-//TestGLCanvas::TestGLCanvas(wxWindow *parent, int *attribList)
-//// With perspective OpenGL graphics, the wxFULL_REPAINT_ON_RESIZE style
-//// flag should always be set, because even making the canvas smaller should
-//// be followed by a paint event that updates the entire canvas with new
-//// viewport settings.
-//	: wxGLCanvas(parent, wxID_ANY, attribList,
-//		wxDefaultPosition, wxDefaultSize,
-//		wxFULL_REPAINT_ON_RESIZE),
-//	m_xangle(30.0),
-//	m_yangle(30.0),
-//	m_spinTimer(this, SpinTimer),
-//	m_useStereo(false),
-//	m_stereoWarningAlreadyDisplayed(false)
-//{
-//	if (attribList)
-//	{
-//		int i = 0;
-//		while (attribList[i] != 0)
-//		{
-//			if (attribList[i] == WX_GL_STEREO)
-//				m_useStereo = true;
-//			++i;
-//		}
-//	}
-//}
-//
-////IMPLEMENT_APP(app);
-//wxIMPLEMENT_APP_NO_MAIN(MyApp);
-//
-//void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
-//{
-//	// This is required even though dc is not used otherwise.
-//	wxPaintDC dc(this);
-//
-//	// Set the OpenGL viewport according to the client size of this canvas.
-//	// This is done here rather than in a wxSizeEvent handler because our
-//	// OpenGL rendering context (and thus viewport setting) is used with
-//	// multiple canvases: If we updated the viewport in the wxSizeEvent
-//	// handler, changing the size of one canvas causes a viewport setting that
-//	// is wrong when next another canvas is repainted.
-//	const wxSize ClientSize = GetClientSize();
-//
-//	TestGLContext& canvas = wxGetApp().GetContext(this, m_useStereo);
-//	glViewport(0, 0, ClientSize.x, ClientSize.y);
-//
-//	// Render the graphics and swap the buffers.
-//	GLboolean quadStereoSupported;
-//	glGetBooleanv(GL_STEREO, &quadStereoSupported);
-//	if (quadStereoSupported)
-//	{
-//		glDrawBuffer(GL_BACK_LEFT);
-//		glMatrixMode(GL_PROJECTION);
-//		glLoadIdentity();
-//		glFrustum(-0.47f, 0.53f, -0.5f, 0.5f, 1.0f, 3.0f);
-//		canvas.DrawRotatedCube(m_xangle, m_yangle);
-//		CheckGLError();
-//		glDrawBuffer(GL_BACK_RIGHT);
-//		glMatrixMode(GL_PROJECTION);
-//		glLoadIdentity();
-//		glFrustum(-0.53f, 0.47f, -0.5f, 0.5f, 1.0f, 3.0f);
-//		canvas.DrawRotatedCube(m_xangle, m_yangle);
-//		CheckGLError();
-//	} else
-//	{
-//		canvas.DrawRotatedCube(m_xangle, m_yangle);
-//		if (m_useStereo && !m_stereoWarningAlreadyDisplayed)
-//		{
-//			m_stereoWarningAlreadyDisplayed = true;
-//			wxLogError("Stereo not supported by the graphics card.");
-//		}
-//	}
-//	SwapBuffers();
-//}
-//
-//void TestGLCanvas::Spin(float xSpin, float ySpin)
-//{
-//	m_xangle += xSpin;
-//	m_yangle += ySpin;
-//
-//	Refresh(false);
-//}
-//
-//void TestGLCanvas::OnKeyDown(wxKeyEvent& event)
-//{
-//	float angle = 5.0;
-//
-//	switch (event.GetKeyCode())
-//	{
-//	case WXK_RIGHT:
-//		Spin(0.0, -angle);
-//		break;
-//
-//	case WXK_LEFT:
-//		Spin(0.0, angle);
-//		break;
-//
-//	case WXK_DOWN:
-//		Spin(-angle, 0.0);
-//		break;
-//
-//	case WXK_UP:
-//		Spin(angle, 0.0);
-//		break;
-//
-//	case WXK_SPACE:
-//		if (m_spinTimer.IsRunning())
-//			m_spinTimer.Stop();
-//		else
-//			m_spinTimer.Start(25);
-//		break;
-//
-//	default:
-//		event.Skip();
-//		return;
-//	}
-//}
-//
-//void TestGLCanvas::OnSpinTimer(wxTimerEvent& WXUNUSED(event))
-//{
-//	Spin(0.0, 4.0);
-//}
-//
-//wxString glGetwxString(GLenum name)
-//{
-//	const GLubyte *v = glGetString(name);
-//	if (v == 0)
-//	{
-//		// The error is not important. It is GL_INVALID_ENUM.
-//		// We just want to clear the error stack.
-//		glGetError();
-//
-//		return wxString();
-//	}
-//
-//	return wxString((const char*)v);
-//}
-//
-//
-//// ----------------------------------------------------------------------------
-//// MyFrame: main application window
-//// ----------------------------------------------------------------------------
-//
-//wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-//EVT_MENU(wxID_NEW, MyFrame::OnNewWindow)
-//EVT_MENU(NEW_STEREO_WINDOW, MyFrame::OnNewStereoWindow)
-//EVT_MENU(wxID_CLOSE, MyFrame::OnClose)
-//wxEND_EVENT_TABLE()
-//
-//MyFrame::MyFrame(bool stereoWindow)
-//	: wxFrame(NULL, wxID_ANY, wxT("wxWidgets OpenGL Cube Sample"))
-//{
-//	int stereoAttribList[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_STEREO, 0 };
-//
-//	new TestGLCanvas(this, stereoWindow ? stereoAttribList : NULL);
-//
-//	SetIcon(wxICON(sample));
-//
-//	// Make a menubar
-//	wxMenu *menu = new wxMenu;
-//	menu->Append(wxID_NEW);
-//	menu->Append(NEW_STEREO_WINDOW, "New Stereo Window");
-//	menu->AppendSeparator();
-//	menu->Append(wxID_CLOSE);
-//	wxMenuBar *menuBar = new wxMenuBar;
-//	menuBar->Append(menu, wxT("&Cube"));
-//
-//	SetMenuBar(menuBar);
-//
-//	CreateStatusBar();
-//
-//	SetClientSize(400, 400);
-//	Show();
-//
-//	// test IsDisplaySupported() function:
-//	static const int attribs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, 0 };
-//	wxLogStatus("Double-buffered display %s supported", wxGLCanvas::IsDisplaySupported(attribs) ? "is" : "not");
-//
-//	if (stereoWindow) {
-//		const wxString vendor = glGetwxString(GL_VENDOR).Lower();
-//		const wxString renderer = glGetwxString(GL_RENDERER).Lower();
-//		if (vendor.find("nvidia") != wxString::npos && renderer.find("quadro") == wxString::npos) {
-//			ShowFullScreen(true);
-//		}
-//	}
-//}
-//
-//void MyFrame::OnClose(wxCommandEvent& WXUNUSED(event)) {
-//	// true is to force the frame to close
-//	Close(true);
-//}
-//
-//void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event)) {
-//	new MyFrame();
-//}
-//
-//void MyFrame::OnNewStereoWindow(wxCommandEvent& WXUNUSED(event)) {
-//	new MyFrame(true);
-//}
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("Joycon Driver by fosse ©2017")) {
-//
-//	wxPanel *panel = new wxPanel(this, wxID_ANY);
-//
-//	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 160));
-//	startButton->Bind(wxEVT_BUTTON, &MainFrame::onStart, this);
-//
-//	wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 160));
-//	quitButton->Bind(wxEVT_BUTTON, &MainFrame::onQuit, this);
-//
-//
-//	CB1 = new wxCheckBox(panel, wxID_ANY, wxT("Combine JoyCons"), wxPoint(20, 20));
-//	CB1->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleCombine, this);
-//	CB1->SetValue(settings.combineJoyCons);
-//
-//	CB2 = new wxCheckBox(panel, wxID_ANY, wxT("Auto Center Sticks"), wxPoint(20, 40));
-//	CB2->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleCenter, this);
-//	CB2->SetValue(settings.autoCenterSticks);
-//
-//	CB3 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Controls"), wxPoint(20, 60));
-//	CB3->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleGyro, this);
-//	CB3->SetValue(settings.enableGyro);
-//
-//	CB4 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 80));
-//	CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleMario, this);
-//	CB4->SetValue(settings.marioTheme);
-//	//CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &[](wxCommandEvent&){}, this);
-//
-//
-//
-//	CB5 = new wxCheckBox(panel, wxID_ANY, wxT("Reverse X"), wxPoint(20, 100));
-//	CB5->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleReverseX, this);
-//	CB5->SetValue(settings.reverseX);
-//
-//	CB6 = new wxCheckBox(panel, wxID_ANY, wxT("Reverse Y"), wxPoint(20, 120));
-//	CB6->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleReverseY, this);
-//	CB6->SetValue(settings.reverseY);
-//
-//	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 140));
-//}
-//
-//void MainFrame::on_button_clicked(wxCommandEvent&) {
-//	wxMessageBox("pressed.", "Info");
-//}
-//
-//void MainFrame::onStart(wxCommandEvent&) {
-//	setupConsole("Debug");
-//	start();
-//}
-//
-//void MainFrame::onQuit(wxCommandEvent&) {
-//	exit(0);
-//	//close(true);
-//}
-//
-//void MainFrame::toggleCombine(wxCommandEvent&) {
-//	settings.combineJoyCons = !settings.combineJoyCons;
-//}
-//
-//void MainFrame::toggleCenter(wxCommandEvent&) {
-//	settings.autoCenterSticks = !settings.autoCenterSticks;
-//}
-//
-//void MainFrame::toggleGyro(wxCommandEvent&) {
-//	settings.enableGyro = !settings.enableGyro;
-//}
-//
-//void MainFrame::toggleMario(wxCommandEvent&) {
-//	settings.marioTheme = !settings.marioTheme;
-//}
-//
-//void MainFrame::toggleReverseX(wxCommandEvent&) {
-//	settings.reverseX = !settings.reverseX;
-//}
-//
-//void MainFrame::toggleReverseY(wxCommandEvent&) {
-//	settings.reverseY = !settings.reverseY;
-//}
-//
-//
-//
-//
-//
-//
-//
-//// wxWidgets / GUI:
-//
-//bool MyApp::OnInit() {
-//
-//	auto mainFrame = new MainFrame();
-//	auto mainFrame2 = new MainFrame();
-//	
-//	//wxPanel *panel = new wxPanel(mainFrame, wxID_ANY);
-//	
-//
-//	mainFrame->Show();
-//
-//	
-//
-//	return true;
-//}
 
 
 
@@ -2292,6 +1848,8 @@ bool MyApp::OnInit() {
 		return false;
 	}
 
+	Connect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(MyApp::onIdle));
+
 
 	new MainFrame();
 	new MyFrame();
@@ -2304,6 +1862,10 @@ int MyApp::OnExit() {
 	delete m_glStereoContext;
 
 	return wxApp::OnExit();
+}
+
+void MyApp::onIdle(wxIdleEvent& evt) {
+	pollLoop();
 }
 
 TestGLContext& MyApp::GetContext(wxGLCanvas *canvas, bool useStereo) {
@@ -2431,8 +1993,8 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent, int *attribList)
 	: wxGLCanvas(parent, wxID_ANY, attribList,
 		wxDefaultPosition, wxDefaultSize,
 		wxFULL_REPAINT_ON_RESIZE),
-	m_xangle(30.0),
-	m_yangle(30.0),
+	m_xangle(0.0),
+	m_yangle(0.0),
 	m_spinTimer(this, SpinTimer),
 	m_useStereo(false),
 	m_stereoWarningAlreadyDisplayed(false)
@@ -2446,6 +2008,7 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent, int *attribList)
 			++i;
 		}
 	}
+	m_spinTimer.Start(0);
 }
 
 void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event)) {
@@ -2529,9 +2092,10 @@ void TestGLCanvas::OnKeyDown(wxKeyEvent& event) {
 	}
 }
 
-void TestGLCanvas::OnSpinTimer(wxTimerEvent& WXUNUSED(event))
-{
-	Spin(0.0, 4.0);
+void TestGLCanvas::OnSpinTimer(wxTimerEvent& WXUNUSED(event)) {
+	Spin(tracker.relX, tracker.relY);
+	//Spin(0.0, 4.0);
+	pollLoop();
 }
 
 wxString glGetwxString(GLenum name)

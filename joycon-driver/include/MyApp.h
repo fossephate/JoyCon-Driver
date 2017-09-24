@@ -24,15 +24,17 @@ class TestGLCanvas : public wxGLCanvas
 public:
 	TestGLCanvas(wxWindow *parent, int *attribList = NULL);
 
+	// angles of rotation around x- and y- axis
+	float m_xangle;
+	float m_yangle;
+
 private:
 	void OnPaint(wxPaintEvent& event);
 	void Spin(float xSpin, float ySpin);
 	void OnKeyDown(wxKeyEvent& event);
 	void OnSpinTimer(wxTimerEvent& WXUNUSED(event));
 
-	// angles of rotation around x- and y- axis
-	float m_xangle,
-		m_yangle;
+
 
 	wxTimer m_spinTimer;
 	bool m_useStereo,
@@ -57,6 +59,8 @@ public:
     virtual bool OnInit();
 
 	virtual int OnExit();
+
+	void onIdle(wxIdleEvent &evt);
 
 	// Returns the shared context used by all frames and sets it as current for
 	// the given canvas.

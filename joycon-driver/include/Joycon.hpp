@@ -34,20 +34,20 @@ public:
 
 	struct Gyroscope {
 		// absolute:
-		float pitch		= 0;
-		float yaw		= 0;
-		float roll		= 0;
+		double pitch		= 0;
+		double yaw		= 0;
+		double roll		= 0;
 
 		// relative:
-		float relpitch	= 0;
-		float relyaw	= 0;
-		float relroll	= 0;
+		double relpitch	= 0;
+		double relyaw	= 0;
+		double relroll	= 0;
 	} gyro;
 
 	struct Accelerometer {
-		float x = 0;
-		float y = 0;
-		float z = 0;
+		double x = 0;
+		double y = 0;
+		double z = 0;
 	} accel;
 
 
