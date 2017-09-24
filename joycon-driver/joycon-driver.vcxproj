@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\MyApp.h" />
     <ClInclude Include="include\cube.h" />
     <ClInclude Include="include\hidapi.h" />
     <ClInclude Include="include\Joycon.hpp" />
@@ -39,6 +40,7 @@
     <ClInclude Include="three\visitor.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\MyApp.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
