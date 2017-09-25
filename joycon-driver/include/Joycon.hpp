@@ -258,8 +258,8 @@ public:
 		unsigned char buf[0x40];
 		memset(buf, 0, 0x40);
 
-		// set non-blocking:
-		hid_set_nonblocking(this->handle, 1);
+		// set blocking to ensure command is recieved:
+		hid_set_nonblocking(this->handle, 0);
 
 		// Enable vibration
 		printf("Enabling vibration...\n");

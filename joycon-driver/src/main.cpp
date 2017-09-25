@@ -30,6 +30,14 @@
 #include <cube.h>
 #include <MyApp.h>
 
+// glm:
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtc/matrix_projection.hpp>
+//#include <glm/gtc/matrix_transform.hpp>
+//#include <glm/gtx/type_ptr.hpp>
 
 
 #pragma warning(disable:4996)
@@ -146,6 +154,12 @@ struct Tracker {
 	float frequency = 500.0f;
 	float relX = 0;
 	float relY = 0;
+
+	float anglex = 0;
+	float angley = 0;
+	float anglez = 0;
+	//glm::qauternion q;
+	glm::fquat quat;
 } tracker;
 
 
@@ -501,9 +515,11 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 		//hex_dump(gyro_data, 20);
 
-		if (jc->left_right == 2) {
+		if (jc->left_right == 1) {
 			//hex_dump(gyro_data, 20);
-			hex_dump(packet+12, 10);
+			//hex_dump(packet+12, 20);
+
+			printf("x: %f, y: %f, z: %f\n", tracker.anglex, tracker.angley, tracker.anglez);
 
 			//printf("%d\n", jc->gyro.relyaw);
 			//printf("%02x\n", jc->gyro.relroll);
@@ -806,8 +822,13 @@ void updatevJoyDevice(Joycon *jc) {
 			//tracker.relX = relX/1000.0;
 			//tracker.relY = relY/1000.0;
 
-			tracker.relX = jc->gyro.relpitch/1000.0;
-			tracker.relY = -jc->gyro.relyaw/1000.0;
+			//tracker.relX = jc->gyro.relpitch/1000.0;
+			//tracker.relY = -jc->gyro.relyaw/1000.0;
+
+			float div = 1000.0;
+			tracker.anglex += -jc->gyro.relpitch / div;
+			tracker.angley += jc->gyro.relyaw/ div;
+			tracker.anglez += -jc->gyro.relroll / div;
 
 
 			// move with absolute (tracked) gyro:
@@ -1840,6 +1861,158 @@ void TestGLContext::DrawRotatedCube(float xangle, float yangle) {
 }
 
 
+void TestGLContext::DrawRotatedCube(glm::fquat q) {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+
+	glTranslatef(0.0f, 0.0f, -2.0f);
+
+
+	glm::vec3 eulerAngles = glm::eulerAngles(q);
+
+	glRotatef(glm::degrees(eulerAngles.x), 1.0f, 0.0f, 0.0f);
+	glRotatef(glm::degrees(eulerAngles.y), 0.0f, 1.0f, 0.0f);
+	glRotatef(glm::degrees(eulerAngles.z), 0.0f, 0.0f, 1.0f);
+
+
+	//glm::mat4 m = glm::toMat4(q);
+	//m = glm::translate(m, glm::vec3(0.0f,0.0f,-2.0f));
+	//glm::translate(m, glm::vec3(0.0, 0.0, -2.0));
+	//glLoadMatrixf(&m[0][0]);
+
+	// draw six faces of a cube of size 1 centered at (0, 0, 0)
+	glBindTexture(GL_TEXTURE_2D, m_textures[0]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, 1.0f);
+	glTexCoord2f(0, 0); glVertex3f(0.5f, 0.5f, 0.5f);
+	glTexCoord2f(1, 0); glVertex3f(-0.5f, 0.5f, 0.5f);
+	glTexCoord2f(1, 1); glVertex3f(-0.5f, -0.5f, 0.5f);
+	glTexCoord2f(0, 1); glVertex3f(0.5f, -0.5f, 0.5f);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, m_textures[1]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, -1.0f);
+	glTexCoord2f(0, 0); glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(1, 0); glVertex3f(-0.5f, 0.5f, -0.5f);
+	glTexCoord2f(1, 1); glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0, 1); glVertex3f(0.5f, -0.5f, -0.5f);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, m_textures[2]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 1.0f, 0.0f);
+	glTexCoord2f(0, 0); glVertex3f(0.5f, 0.5f, 0.5f);
+	glTexCoord2f(1, 0); glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(1, 1); glVertex3f(-0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0, 1); glVertex3f(-0.5f, 0.5f, 0.5f);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, m_textures[3]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, -1.0f, 0.0f);
+	glTexCoord2f(0, 0); glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(1, 0); glVertex3f(0.5f, -0.5f, -0.5f);
+	glTexCoord2f(1, 1); glVertex3f(0.5f, -0.5f, 0.5f);
+	glTexCoord2f(0, 1); glVertex3f(-0.5f, -0.5f, 0.5f);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, m_textures[4]);
+	glBegin(GL_QUADS);
+	glNormal3f(1.0f, 0.0f, 0.0f);
+	glTexCoord2f(0, 0); glVertex3f(0.5f, 0.5f, 0.5f);
+	glTexCoord2f(1, 0); glVertex3f(0.5f, -0.5f, 0.5f);
+	glTexCoord2f(1, 1); glVertex3f(0.5f, -0.5f, -0.5f);
+	glTexCoord2f(0, 1); glVertex3f(0.5f, 0.5f, -0.5f);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, m_textures[5]);
+	glBegin(GL_QUADS);
+	glNormal3f(-1.0f, 0.0f, 0.0f);
+	glTexCoord2f(0, 0); glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(1, 0); glVertex3f(-0.5f, -0.5f, 0.5f);
+	glTexCoord2f(1, 1); glVertex3f(-0.5f, 0.5f, 0.5f);
+	glTexCoord2f(0, 1); glVertex3f(-0.5f, 0.5f, -0.5f);
+	glEnd();
+
+	glFlush();
+
+	CheckGLError();
+}
+
+void TestGLContext::DrawRotatedCube(float xangle, float yangle, float zangle) {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(0.0f, 0.0f, -2.0f);
+	glRotatef(xangle, 1.0f, 0.0f, 0.0f);
+	glRotatef(yangle, 0.0f, 1.0f, 0.0f);
+	glRotatef(zangle, 0.0f, 0.0f, 1.0f);
+
+	// draw six faces of a cube of size 1 centered at (0, 0, 0)
+	glBindTexture(GL_TEXTURE_2D, m_textures[0]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, 1.0f);
+	glTexCoord2f(0, 0); glVertex3f(0.5f, 0.5f, 0.5f);
+	glTexCoord2f(1, 0); glVertex3f(-0.5f, 0.5f, 0.5f);
+	glTexCoord2f(1, 1); glVertex3f(-0.5f, -0.5f, 0.5f);
+	glTexCoord2f(0, 1); glVertex3f(0.5f, -0.5f, 0.5f);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, m_textures[1]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, -1.0f);
+	glTexCoord2f(0, 0); glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(1, 0); glVertex3f(-0.5f, 0.5f, -0.5f);
+	glTexCoord2f(1, 1); glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0, 1); glVertex3f(0.5f, -0.5f, -0.5f);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, m_textures[2]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 1.0f, 0.0f);
+	glTexCoord2f(0, 0); glVertex3f(0.5f, 0.5f, 0.5f);
+	glTexCoord2f(1, 0); glVertex3f(0.5f, 0.5f, -0.5f);
+	glTexCoord2f(1, 1); glVertex3f(-0.5f, 0.5f, -0.5f);
+	glTexCoord2f(0, 1); glVertex3f(-0.5f, 0.5f, 0.5f);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, m_textures[3]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, -1.0f, 0.0f);
+	glTexCoord2f(0, 0); glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(1, 0); glVertex3f(0.5f, -0.5f, -0.5f);
+	glTexCoord2f(1, 1); glVertex3f(0.5f, -0.5f, 0.5f);
+	glTexCoord2f(0, 1); glVertex3f(-0.5f, -0.5f, 0.5f);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, m_textures[4]);
+	glBegin(GL_QUADS);
+	glNormal3f(1.0f, 0.0f, 0.0f);
+	glTexCoord2f(0, 0); glVertex3f(0.5f, 0.5f, 0.5f);
+	glTexCoord2f(1, 0); glVertex3f(0.5f, -0.5f, 0.5f);
+	glTexCoord2f(1, 1); glVertex3f(0.5f, -0.5f, -0.5f);
+	glTexCoord2f(0, 1); glVertex3f(0.5f, 0.5f, -0.5f);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, m_textures[5]);
+	glBegin(GL_QUADS);
+	glNormal3f(-1.0f, 0.0f, 0.0f);
+	glTexCoord2f(0, 0); glVertex3f(-0.5f, -0.5f, -0.5f);
+	glTexCoord2f(1, 0); glVertex3f(-0.5f, -0.5f, 0.5f);
+	glTexCoord2f(1, 1); glVertex3f(-0.5f, 0.5f, 0.5f);
+	glTexCoord2f(0, 1); glVertex3f(-0.5f, 0.5f, -0.5f);
+	glEnd();
+
+	glFlush();
+
+	CheckGLError();
+}
+
 // ----------------------------------------------------------------------------
 // MyApp: the application object
 // ----------------------------------------------------------------------------
@@ -2050,16 +2223,22 @@ void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glFrustum(-0.47f, 0.53f, -0.5f, 0.5f, 1.0f, 3.0f);
-		canvas.DrawRotatedCube(m_xangle, m_yangle);
+		//canvas.DrawRotatedCube(m_xangle, m_yangle);
+		//canvas.DrawRotatedCube(tracker.quat);
+		canvas.DrawRotatedCube(tracker.anglex, tracker.angley, tracker.anglez);
 		CheckGLError();
 		glDrawBuffer(GL_BACK_RIGHT);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glFrustum(-0.53f, 0.47f, -0.5f, 0.5f, 1.0f, 3.0f);
-		canvas.DrawRotatedCube(m_xangle, m_yangle);
+		//canvas.DrawRotatedCube(m_xangle, m_yangle);
+		//canvas.DrawRotatedCube(tracker.quat);
+		canvas.DrawRotatedCube(tracker.anglex, tracker.angley, tracker.anglez);
 		CheckGLError();
 	} else {
-		canvas.DrawRotatedCube(m_xangle, m_yangle);
+		//canvas.DrawRotatedCube(m_xangle, m_yangle);
+		//canvas.DrawRotatedCube(tracker.quat);
+		canvas.DrawRotatedCube(tracker.anglex, tracker.angley, tracker.anglez);
 		if (m_useStereo && !m_stereoWarningAlreadyDisplayed) {
 			m_stereoWarningAlreadyDisplayed = true;
 			wxLogError("Stereo not supported by the graphics card.");
@@ -2069,37 +2248,30 @@ void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 }
 
 void TestGLCanvas::Spin(float xSpin, float ySpin) {
-	m_xangle += xSpin;
-	m_yangle += ySpin;
-
+	//m_xangle += xSpin;
+	//m_yangle += ySpin;
 	Refresh(false);
 }
 
 void TestGLCanvas::OnKeyDown(wxKeyEvent& event) {
-	float angle = 5.0;
 
 	switch (event.GetKeyCode()) {
 	case WXK_RIGHT:
-		Spin(0.0, -angle);
 		break;
 
 	case WXK_LEFT:
-		Spin(0.0, angle);
 		break;
 
 	case WXK_DOWN:
-		Spin(-angle, 0.0);
 		break;
 
 	case WXK_UP:
-		Spin(angle, 0.0);
 		break;
 
 	case WXK_SPACE:
-		if (m_spinTimer.IsRunning())
-			m_spinTimer.Stop();
-		else
-			m_spinTimer.Start(25);
+		tracker.anglex = 0;
+		tracker.angley = 0;
+		tracker.anglez = 0;
 		break;
 
 	default:
@@ -2109,8 +2281,8 @@ void TestGLCanvas::OnKeyDown(wxKeyEvent& event) {
 }
 
 void TestGLCanvas::OnSpinTimer(wxTimerEvent& WXUNUSED(event)) {
-	Spin(tracker.relX, tracker.relY);
-	//Spin(0.0, 4.0);
+	//Spin(tracker.relX, tracker.relY);
+	Refresh(false);
 	pollLoop();
 }
 
