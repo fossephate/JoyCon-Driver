@@ -90,6 +90,9 @@ public:
 	wxCheckBox *CB4;
 	wxCheckBox *CB5;
 	wxCheckBox *CB6;
+	wxCheckBox *CB7;
+	wxCheckBox *CB8;
+	wxCheckBox *CB9;
 
 	MainFrame();
 
@@ -105,6 +108,7 @@ public:
 	void toggleCenter(wxCommandEvent&);
 
 	void toggleGyro(wxCommandEvent&);
+	void toggleGyroWindow(wxCommandEvent &);
 	void toggleMario(wxCommandEvent&);
 
 	void toggleReverseX(wxCommandEvent&);

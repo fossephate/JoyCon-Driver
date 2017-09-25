@@ -503,7 +503,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 		if (jc->left_right == 2) {
 			//hex_dump(gyro_data, 20);
-			//hex_dump(packet+12, 10);
+			hex_dump(packet+12, 10);
 
 			//printf("%d\n", jc->gyro.relyaw);
 			//printf("%02x\n", jc->gyro.relroll);
@@ -907,6 +907,7 @@ void parseSettings2() {
 	settings.combineJoyCons = (bool)stoi(cfg["CombineJoyCons"]);
 	settings.autoCenterSticks = (bool)stoi(cfg["AutoCenterSticks"]);
 	settings.enableGyro = (bool)stoi(cfg["GyroControls"]);
+	settings.gyroWindow = (bool)stoi(cfg["GyroWindow"]);
 	settings.marioTheme = (bool)stoi(cfg["MarioTheme"]);
 
 	settings.reverseX = (bool)stoi(cfg["reverseX"]);
@@ -1855,7 +1856,7 @@ bool MyApp::OnInit() {
 
 
 	new MainFrame();
-	new MyFrame();
+	//new MyFrame();
 
 	return true;
 }
@@ -1900,12 +1901,6 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("Joycon Driver by fosse ©20
 
 	wxPanel *panel = new wxPanel(this, wxID_ANY);
 
-	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 160));
-	startButton->Bind(wxEVT_BUTTON, &MainFrame::onStart, this);
-
-	wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 160));
-	quitButton->Bind(wxEVT_BUTTON, &MainFrame::onQuit, this);
-
 
 	CB1 = new wxCheckBox(panel, wxID_ANY, wxT("Combine JoyCons"), wxPoint(20, 20));
 	CB1->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleCombine, this);
@@ -1919,22 +1914,33 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("Joycon Driver by fosse ©20
 	CB3->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleGyro, this);
 	CB3->SetValue(settings.enableGyro);
 
-	CB4 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 80));
-	CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleMario, this);
-	CB4->SetValue(settings.marioTheme);
+	CB4 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Window"), wxPoint(20, 80));
+	CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleGyroWindow, this);
+	CB4->SetValue(settings.enableGyro);
+
+	CB5 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 100));
+	CB5->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleMario, this);
+	CB5->SetValue(settings.marioTheme);
 	//CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &[](wxCommandEvent&){}, this);
 
 
 
-	CB5 = new wxCheckBox(panel, wxID_ANY, wxT("Reverse X"), wxPoint(20, 100));
-	CB5->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleReverseX, this);
-	CB5->SetValue(settings.reverseX);
+	CB6 = new wxCheckBox(panel, wxID_ANY, wxT("Reverse X"), wxPoint(20, 120));
+	CB6->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleReverseX, this);
+	CB6->SetValue(settings.reverseX);
 
-	CB6 = new wxCheckBox(panel, wxID_ANY, wxT("Reverse Y"), wxPoint(20, 120));
-	CB6->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleReverseY, this);
-	CB6->SetValue(settings.reverseY);
+	CB7 = new wxCheckBox(panel, wxID_ANY, wxT("Reverse Y"), wxPoint(20, 140));
+	CB7->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleReverseY, this);
+	CB7->SetValue(settings.reverseY);
 
-	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 140));
+	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 160));
+
+
+	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 180));
+	startButton->Bind(wxEVT_BUTTON, &MainFrame::onStart, this);
+
+	wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 180));
+	quitButton->Bind(wxEVT_BUTTON, &MainFrame::onQuit, this);
 
 	//SetClientSize(400, 400);
 	Show();
@@ -1946,6 +1952,9 @@ void MainFrame::on_button_clicked(wxCommandEvent&) {
 
 void MainFrame::onStart(wxCommandEvent&) {
 	setupConsole("Debug");
+	if (settings.gyroWindow) {
+		new MyFrame();
+	}
 	start();
 }
 
@@ -1964,6 +1973,10 @@ void MainFrame::toggleCenter(wxCommandEvent&) {
 
 void MainFrame::toggleGyro(wxCommandEvent&) {
 	settings.enableGyro = !settings.enableGyro;
+}
+
+void MainFrame::toggleGyroWindow(wxCommandEvent&) {
+	settings.gyroWindow = !settings.gyroWindow;
 }
 
 void MainFrame::toggleMario(wxCommandEvent&) {
@@ -2133,17 +2146,17 @@ MyFrame::MyFrame(bool stereoWindow) : wxFrame(NULL, wxID_ANY, wxT("3D JoyCon gyr
 	SetIcon(wxICON(sample));
 
 	// Make a menubar
-	wxMenu *menu = new wxMenu;
-	menu->Append(wxID_NEW);
-	menu->Append(NEW_STEREO_WINDOW, "New Stereo Window");
-	menu->AppendSeparator();
-	menu->Append(wxID_CLOSE);
-	wxMenuBar *menuBar = new wxMenuBar;
-	menuBar->Append(menu, wxT("&Cube"));
+	//wxMenu *menu = new wxMenu;
+	//menu->Append(wxID_NEW);
+	//menu->Append(NEW_STEREO_WINDOW, "New Stereo Window");
+	//menu->AppendSeparator();
+	//menu->Append(wxID_CLOSE);
+	//wxMenuBar *menuBar = new wxMenuBar;
+	//menuBar->Append(menu, wxT("&Cube"));
 
-	SetMenuBar(menuBar);
+	//SetMenuBar(menuBar);
 
-	CreateStatusBar();
+	//CreateStatusBar();
 
 	SetClientSize(400, 400);
 	Show();
