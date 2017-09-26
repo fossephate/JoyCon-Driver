@@ -524,7 +524,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			//hex_dump(gyro_data, 20);
 			//hex_dump(packet+12, 20);
 
-			printf("x: %f, y: %f, z: %f\n", tracker.anglex, tracker.angley, tracker.anglez);
+			//printf("x: %f, y: %f, z: %f\n", tracker.anglex, tracker.angley, tracker.anglez);
 
 			//printf("%d\n", jc->gyro.relyaw);
 			//printf("%02x\n", jc->gyro.relroll);
@@ -965,6 +965,51 @@ void parseSettings2() {
 
 }
 
+void pollLoop() {
+	//while (true) {
+		//counter++;
+
+		// poll joycons:
+		for (int i = 0; i < joycons.size(); ++i) {
+			Joycon *jc = &joycons[i];
+
+			if (!jc->handle) { continue; }
+
+			// set to be non-blocking:
+			//hid_set_nonblocking(jc->handle, 1);
+
+			// set to be blocking:
+			hid_set_nonblocking(jc->handle, 0);
+
+			// get input:
+			memset(buf, 0, 65);
+			if (settings.enableGyro) {
+				// seems to have slower response time:
+				jc->send_command(0x1F, buf, 0);
+			} else {
+				// may reset MCU data, not sure:
+				jc->send_command(0x01, buf, 0);
+			}
+			handle_input(jc, buf, 0x40);
+		}
+
+		// update vjoy:
+		for (int i = 0; i < joycons.size(); ++i) {
+			updatevJoyDevice(&joycons[i]);
+		}
+
+
+		// sleep:
+		accurateSleep(2.00);// 8.00
+
+		if (settings.restart) {
+			settings.restart = false;
+			//goto init_start;
+		}
+	//}
+}
+
+
 
 void start() {
 
@@ -1049,50 +1094,36 @@ init_start:
 		printf("Auto centering sticks...\n");
 		// do a few polls to get stick data:
 		for (int j = 0; j < 10; ++j) {
-			for (int i = 0; i < joycons.size(); ++i) {
-				Joycon *jc = &joycons[i];
-				if (!jc->handle) {
-					continue;
-				}
-				// set to be blocking:
-				hid_set_nonblocking(jc->handle, 0);
-
-				jc->send_command(0x01, buf, 0);
-
-				handle_input(jc, buf, res);
-
-				updatevJoyDevice(jc);
-			}
+			pollLoop();
 		}
-
-
-
 
 		for (int i = 0; i < joycons.size(); ++i) {
 			Joycon *jc = &joycons[i];
-
 			// left joycon:
 			if (jc->left_right == 1) {
 				int x = (settings.leftJoyConXMultiplier * (jc->stick.horizontal));
 				settings.leftJoyConXOffset = -x + (16384);
-
 				int y = (settings.leftJoyConYMultiplier * (jc->stick.vertical));
 				settings.leftJoyConYOffset = -y + (16384);
 
-				// right joycon:
+			// right joycon:
 			} else if (jc->left_right == 2) {
-
 				int x = (settings.rightJoyConXMultiplier * (jc->stick.horizontal));
 				settings.rightJoyConXOffset = -x + (16384);
-
 				int y = (settings.rightJoyConYMultiplier * (jc->stick.vertical));
 				settings.rightJoyConYOffset = -y + (16384);
 			}
-
-
 		}
 		//printf("Done centering sticks.\n");
 	}
+
+
+	pollLoop();
+	for (int i = 0; i < joycons.size(); ++i) {
+		printf("battery level: %u\n", joycons[i].battery);
+	}
+	
+
 
 	// set lights:
 	printf("setting LEDs...\n");
@@ -1583,50 +1614,6 @@ init_start:
 }
 
 
-
-void pollLoop() {
-	//while (true) {
-		//counter++;
-
-		// poll joycons:
-		for (int i = 0; i < joycons.size(); ++i) {
-			Joycon *jc = &joycons[i];
-
-			if (!jc->handle) { continue; }
-
-			// set to be non-blocking:
-			//hid_set_nonblocking(jc->handle, 1);
-
-			// set to be blocking:
-			hid_set_nonblocking(jc->handle, 0);
-
-			// get input:
-			memset(buf, 0, 65);
-			if (settings.enableGyro) {
-				// seems to have slower response time:
-				jc->send_command(0x1F, buf, 0);
-			} else {
-				// may reset MCU data, not sure:
-				jc->send_command(0x01, buf, 0);
-			}
-			handle_input(jc, buf, 0x40);
-		}
-
-		// update vjoy:
-		for (int i = 0; i < joycons.size(); ++i) {
-			updatevJoyDevice(&joycons[i]);
-		}
-
-
-		// sleep:
-		accurateSleep(2.00);// 8.00
-
-		if (settings.restart) {
-			settings.restart = false;
-			//goto init_start;
-		}
-	//}
-}
 
 void exit() {
 
