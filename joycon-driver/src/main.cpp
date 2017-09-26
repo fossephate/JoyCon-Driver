@@ -510,6 +510,11 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 			//uint16_t relyawA = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
 			//jc->gyro.relyaw = relyawA;
+
+			// to degrees/second;
+			//jc->gyro.relroll = jc->gyro.relroll * 0.070f;
+			//jc->gyro.relpitch = jc->gyro.relpitch * 0.070f;
+			//jc->gyro.relyaw = jc->gyro.relyaw * 0.070f;
 		}
 		
 
@@ -825,10 +830,23 @@ void updatevJoyDevice(Joycon *jc) {
 			//tracker.relX = jc->gyro.relpitch/1000.0;
 			//tracker.relY = -jc->gyro.relyaw/1000.0;
 
+			
+
 			float div = 1000.0;
-			tracker.anglex += -jc->gyro.relpitch / div;
-			tracker.angley += jc->gyro.relyaw/ div;
-			tracker.anglez += -jc->gyro.relroll / div;
+			float dx = -jc->gyro.relpitch / div;
+			float dy = jc->gyro.relyaw / div;
+			float dz = -jc->gyro.relroll / div;
+
+			float smallest = 0.25f;
+			if (abs(dx) > smallest) {
+				tracker.anglex += dx;
+			}
+			if (abs(dy) > smallest) {
+				tracker.angley += dy;
+			}
+			if (abs(dz) > smallest) {
+				tracker.anglez += dz;
+			}
 
 
 			// move with absolute (tracked) gyro:
