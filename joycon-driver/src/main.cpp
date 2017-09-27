@@ -831,7 +831,7 @@ void updatevJoyDevice(Joycon *jc) {
 			//tracker.relY = -jc->gyro.relyaw/1000.0;
 			
 
-			float div = 58000.0;// 1000.0
+			float div = 54000.0;// 1000.0
 			float dx = -jc->gyro.relpitch / div;
 			float dy = jc->gyro.relyaw / div;
 			float dz = -jc->gyro.relroll / div;
