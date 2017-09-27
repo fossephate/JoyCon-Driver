@@ -23,7 +23,7 @@ A vJoy feeder for the Nintendo Switch JoyCons with analog stick support and moti
 ## Important Notes
 * The JoyCons need to be re-paired anytime after they've reconnected to the switch.
 
-* There is now a config file, and a WIP GUI
+* There is now a config file, and a GUI
 
 
 These are the default settings:
@@ -31,7 +31,6 @@ These are the default settings:
 // there appears to be a good amount of variance between JoyCons,
 // but they work well once you find the right offsets
 // these are the values that worked well for my JoyCons:
-// alternatively just use --auto-center, it overrides these settings
 int leftJoyConXOffset = 16000;
 int leftJoyConYOffset = 13000;
 
@@ -41,10 +40,10 @@ int rightJoyConYOffset = 19000;
 // multipliers to go from the range (-128,128) to (-32768, 32768)
 // These shouldn't need to be changed too much, but the option is there
 // I found that 250 works for me
-int leftJoyConXMultiplier = 250;
-int leftJoyConYMultiplier = 250;
-int rightJoyConXMultiplier = 250;
-int rightJoyConYMultiplier = 250;
+int leftJoyConXMultiplier = 10;
+int leftJoyConYMultiplier = 10;
+int rightJoyConXMultiplier = 10;
+int rightJoyConYMultiplier = 10;
 
 // Enabling this combines both JoyCons to a single vJoy Device(#1)
 // when combineJoyCons == false:
@@ -64,7 +63,10 @@ bool autoCenterSticks = false;
 
 
 // enables motion controls
-bool enableGyro = false;
+bool enableGyro = true;
+
+// enables 3D gyroscope visualizer
+bool gyroWindow = true;
 
 // plays a version of the mario theme by vibrating
 // the first JoyCon connected.
@@ -76,10 +78,11 @@ bool marioTheme = false;
 
 ## Donate
   * If you like the project and would like to donate I have a paypal at matt.cfosse@gmail.com
+  * BTC Address: 17hDC2X7a1SWjsqBJRt9mJb9fJjqLCwgzG
+  * ETH Address: 0xFdcA914e1213af24fD20fB6855E89141DF8caF96
 
 
 
 
-## Credits
+## Thanks
   * Thanks to everyone at: https://github.com/dekuNukem/Nintendo_Switch_Reverse_Engineering/
-

@@ -1034,9 +1034,6 @@ void start() {
 
 	res = hid_init();
 
-	//parseSettings(argc, argv);
-	//parseSettings2();
-
 
 init_start:
 
@@ -2223,24 +2220,24 @@ void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	// Render the graphics and swap the buffers.
 	GLboolean quadStereoSupported;
 	glGetBooleanv(GL_STEREO, &quadStereoSupported);
-	if (quadStereoSupported) {
-		glDrawBuffer(GL_BACK_LEFT);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glFrustum(-0.47f, 0.53f, -0.5f, 0.5f, 1.0f, 3.0f);
-		//canvas.DrawRotatedCube(m_xangle, m_yangle);
-		//canvas.DrawRotatedCube(tracker.quat);
-		canvas.DrawRotatedCube(tracker.anglex, tracker.angley, tracker.anglez);
-		CheckGLError();
-		glDrawBuffer(GL_BACK_RIGHT);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glFrustum(-0.53f, 0.47f, -0.5f, 0.5f, 1.0f, 3.0f);
-		//canvas.DrawRotatedCube(m_xangle, m_yangle);
-		//canvas.DrawRotatedCube(tracker.quat);
-		canvas.DrawRotatedCube(tracker.anglex, tracker.angley, tracker.anglez);
-		CheckGLError();
-	} else {
+	//if (quadStereoSupported) {
+	//	glDrawBuffer(GL_BACK_LEFT);
+	//	glMatrixMode(GL_PROJECTION);
+	//	glLoadIdentity();
+	//	glFrustum(-0.47f, 0.53f, -0.5f, 0.5f, 1.0f, 3.0f);
+	//	//canvas.DrawRotatedCube(m_xangle, m_yangle);
+	//	//canvas.DrawRotatedCube(tracker.quat);
+	//	canvas.DrawRotatedCube(tracker.anglex, tracker.angley, tracker.anglez);
+	//	CheckGLError();
+	//	glDrawBuffer(GL_BACK_RIGHT);
+	//	glMatrixMode(GL_PROJECTION);
+	//	glLoadIdentity();
+	//	glFrustum(-0.53f, 0.47f, -0.5f, 0.5f, 1.0f, 3.0f);
+	//	//canvas.DrawRotatedCube(m_xangle, m_yangle);
+	//	//canvas.DrawRotatedCube(tracker.quat);
+	//	canvas.DrawRotatedCube(tracker.anglex, tracker.angley, tracker.anglez);
+	//	CheckGLError();
+	//} else {
 		//canvas.DrawRotatedCube(m_xangle, m_yangle);
 		//canvas.DrawRotatedCube(tracker.quat);
 		canvas.DrawRotatedCube(tracker.anglex, tracker.angley, tracker.anglez);
@@ -2248,7 +2245,7 @@ void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 			m_stereoWarningAlreadyDisplayed = true;
 			wxLogError("Stereo not supported by the graphics card.");
 		}
-	}
+	//}
 	SwapBuffers();
 }
 
