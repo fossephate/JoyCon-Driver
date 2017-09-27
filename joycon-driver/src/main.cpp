@@ -134,7 +134,7 @@ struct Settings {
 	// enables motion controls
 	bool enableGyro = false;
 
-	// enables gyroscope viewing window
+	// enables 3D gyroscope visualizer
 	bool gyroWindow = false;
 
 	// plays a version of the mario theme by vibrating
@@ -159,7 +159,7 @@ struct Tracker {
 	float angley = 0;
 	float anglez = 0;
 	//glm::qauternion q;
-	glm::fquat quat;
+	glm::fquat quat = glm::angleAxis(0.0f, glm::vec3(1.0, 0.0, 0.0));
 } tracker;
 
 
@@ -829,24 +829,34 @@ void updatevJoyDevice(Joycon *jc) {
 
 			//tracker.relX = jc->gyro.relpitch/1000.0;
 			//tracker.relY = -jc->gyro.relyaw/1000.0;
-
 			
 
-			float div = 1000.0;
+			float div = 58000.0;// 1000.0
 			float dx = -jc->gyro.relpitch / div;
 			float dy = jc->gyro.relyaw / div;
 			float dz = -jc->gyro.relroll / div;
 
-			float smallest = 0.25f;
+			glm::fquat delx = glm::angleAxis(dx, glm::vec3(1.0, 0.0, 0.0));
+			glm::fquat dely = glm::angleAxis(dy, glm::vec3(0.0, 1.0, 0.0));
+			glm::fquat delz = glm::angleAxis(dz, glm::vec3(0.0, 0.0, 1.0));
+
+			float smallest = glm::radians(0.25f);// 0.25
 			if (abs(dx) > smallest) {
-				tracker.anglex += dx;
+				//tracker.anglex += dx;
+				tracker.quat = tracker.quat*delx;
 			}
 			if (abs(dy) > smallest) {
-				tracker.angley += dy;
+				//tracker.angley += dy;
+				tracker.quat = tracker.quat*dely;
 			}
 			if (abs(dz) > smallest) {
-				tracker.anglez += dz;
+				//tracker.anglez += dz;
+				tracker.quat = tracker.quat*delz;
 			}
+
+
+			//glm::toQuat(glm::vec3(0.0, 0.0, 0.0));
+
 
 
 			// move with absolute (tracked) gyro:
@@ -1870,20 +1880,23 @@ void TestGLContext::DrawRotatedCube(glm::fquat q) {
 	glLoadIdentity();
 
 
-	glTranslatef(0.0f, 0.0f, -2.0f);
+	//glTranslatef(0.0f, 0.0f, -2.0f);
 
 
-	glm::vec3 eulerAngles = glm::eulerAngles(q);
+	//glm::vec3 eulerAngles = glm::eulerAngles(q);
 
-	glRotatef(glm::degrees(eulerAngles.x), 1.0f, 0.0f, 0.0f);
-	glRotatef(glm::degrees(eulerAngles.y), 0.0f, 1.0f, 0.0f);
-	glRotatef(glm::degrees(eulerAngles.z), 0.0f, 0.0f, 1.0f);
+	//glRotatef(glm::degrees(eulerAngles.x), 1.0f, 0.0f, 0.0f);
+	//glRotatef(glm::degrees(eulerAngles.y), 0.0f, 1.0f, 0.0f);
+	//glRotatef(glm::degrees(eulerAngles.z), 0.0f, 0.0f, 1.0f);
+
+	
 
 
 	//glm::mat4 m = glm::toMat4(q);
-	//m = glm::translate(m, glm::vec3(0.0f,0.0f,-2.0f));
-	//glm::translate(m, glm::vec3(0.0, 0.0, -2.0));
-	//glLoadMatrixf(&m[0][0]);
+	glm::mat4 m = glm::mat4(1.0);
+	m = glm::translate(m, glm::vec3(0.0f, 0.0f, -2.0f));
+	m = m * glm::toMat4(q);
+	glLoadMatrixf(&m[0][0]);
 
 	// draw six faces of a cube of size 1 centered at (0, 0, 0)
 	glBindTexture(GL_TEXTURE_2D, m_textures[0]);
@@ -2220,32 +2233,14 @@ void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	// Render the graphics and swap the buffers.
 	GLboolean quadStereoSupported;
 	glGetBooleanv(GL_STEREO, &quadStereoSupported);
-	//if (quadStereoSupported) {
-	//	glDrawBuffer(GL_BACK_LEFT);
-	//	glMatrixMode(GL_PROJECTION);
-	//	glLoadIdentity();
-	//	glFrustum(-0.47f, 0.53f, -0.5f, 0.5f, 1.0f, 3.0f);
-	//	//canvas.DrawRotatedCube(m_xangle, m_yangle);
-	//	//canvas.DrawRotatedCube(tracker.quat);
-	//	canvas.DrawRotatedCube(tracker.anglex, tracker.angley, tracker.anglez);
-	//	CheckGLError();
-	//	glDrawBuffer(GL_BACK_RIGHT);
-	//	glMatrixMode(GL_PROJECTION);
-	//	glLoadIdentity();
-	//	glFrustum(-0.53f, 0.47f, -0.5f, 0.5f, 1.0f, 3.0f);
-	//	//canvas.DrawRotatedCube(m_xangle, m_yangle);
-	//	//canvas.DrawRotatedCube(tracker.quat);
-	//	canvas.DrawRotatedCube(tracker.anglex, tracker.angley, tracker.anglez);
-	//	CheckGLError();
-	//} else {
-		//canvas.DrawRotatedCube(m_xangle, m_yangle);
-		//canvas.DrawRotatedCube(tracker.quat);
-		canvas.DrawRotatedCube(tracker.anglex, tracker.angley, tracker.anglez);
-		if (m_useStereo && !m_stereoWarningAlreadyDisplayed) {
-			m_stereoWarningAlreadyDisplayed = true;
-			wxLogError("Stereo not supported by the graphics card.");
-		}
-	//}
+
+	canvas.DrawRotatedCube(tracker.quat);
+	//canvas.DrawRotatedCube(tracker.anglex, tracker.angley, tracker.anglez);
+	if (m_useStereo && !m_stereoWarningAlreadyDisplayed) {
+		m_stereoWarningAlreadyDisplayed = true;
+		wxLogError("Stereo not supported by the graphics card.");
+	}
+
 	SwapBuffers();
 }
 
@@ -2257,23 +2252,39 @@ void TestGLCanvas::Spin(float xSpin, float ySpin) {
 
 void TestGLCanvas::OnKeyDown(wxKeyEvent& event) {
 
+	glm::fquat del;
+	float angle = 0.25f;
+
 	switch (event.GetKeyCode()) {
 	case WXK_RIGHT:
+		del = glm::angleAxis(-angle, glm::vec3(0.0, 0.0, 1.0));
+		tracker.quat = tracker.quat*del;
+		//tracker.quat = glm::normalize(del*tracker.quat);
 		break;
 
 	case WXK_LEFT:
+		del = glm::angleAxis(angle, glm::vec3(0.0, 0.0, 1.0));
+		tracker.quat = tracker.quat*del;
+		//tracker.quat = glm::normalize(del*tracker.quat);
 		break;
 
 	case WXK_DOWN:
+		del = glm::angleAxis(angle, glm::vec3(1.0, 0.0, 0.0));
+		tracker.quat = tracker.quat*del;
+		//tracker.quat = glm::normalize(del*tracker.quat);
 		break;
 
 	case WXK_UP:
+		del = glm::angleAxis(-angle, glm::vec3(1.0, 0.0, 0.0));
+		tracker.quat = tracker.quat*del;
+		//tracker.quat = glm::normalize(del*tracker.quat);
 		break;
 
 	case WXK_SPACE:
 		tracker.anglex = 0;
 		tracker.angley = 0;
 		tracker.anglez = 0;
+		tracker.quat = glm::angleAxis(0.0f, glm::vec3(1.0, 0.0, 0.0));
 		break;
 
 	default:
