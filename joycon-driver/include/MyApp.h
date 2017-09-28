@@ -59,7 +59,7 @@ enum
 class MyApp : public wxApp
 {
 public:
-    MyApp() {}
+	MyApp() {};
 
     // virtual wxApp methods
     virtual bool OnInit();
@@ -67,6 +67,8 @@ public:
 	virtual int OnExit();
 
 	void onIdle(wxIdleEvent &evt);
+
+	void OnMyTimer(wxTimerEvent& WXUNUSED(event));
 
 	// Returns the shared context used by all frames and sets it as current for
 	// the given canvas.
@@ -77,6 +79,8 @@ private:
 	TestGLContext *m_glContext;
 	// the GL context we use for all our stereo rendering windows
 	TestGLContext *m_glStereoContext;
+
+	wxTimer m_myTimer;
 };
 
 

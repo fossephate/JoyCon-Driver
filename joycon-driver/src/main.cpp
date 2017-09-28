@@ -761,120 +761,130 @@ void updatevJoyDevice(Joycon *jc) {
 
 
 	// gyro data:
-	if (settings.enableGyro) {
-		if ((jc->left_right == 2) || (joycons.size() == 1 && jc->left_right == 1)) {
-		//if (jc->left_right == 2) {
-			//rz = jc->gyro.roll*240;
-			//iReport.wAxisZRot = jc->gyro.roll * 120;
-			//iReport.wSlider = jc->gyro.pitch * 120;
+	//if (settings.enableGyro) {
+	if ((jc->left_right == 2) || (joycons.size() == 1 && jc->left_right == 1)) {
+	//if (jc->left_right == 2) {
+		//rz = jc->gyro.roll*240;
+		//iReport.wAxisZRot = jc->gyro.roll * 120;
+		//iReport.wSlider = jc->gyro.pitch * 120;
 
-			int multiplier;
-
-
-			// Gyroscope (roll, pitch, yaw):
-			multiplier = 1000;
-
-			//iReport.wAxisZRot = 16384 + (jc->gyro.relroll * multiplier);
-			//iReport.wSlider = 16384 + (jc->gyro.relpitch * multiplier);
-			//iReport.wDial = 16384 + (jc->gyro.relyaw * multiplier);
-
-			//iReport.wAxisZ = 16384 + (jc->gyro.relyaw * multiplier);
+		int multiplier;
 
 
+		// Gyroscope (roll, pitch, yaw):
+		multiplier = 1000;
+
+		//iReport.wAxisZRot = 16384 + (jc->gyro.relroll * multiplier);
+		//iReport.wSlider = 16384 + (jc->gyro.relpitch * multiplier);
+		//iReport.wDial = 16384 + (jc->gyro.relyaw * multiplier);
+
+		//iReport.wAxisZ = 16384 + (jc->gyro.relyaw * multiplier);
 
 
 
 
-			// Accelerometer (x, y, z):
-
-			multiplier = 10;
-			iReport.wAxisZRot = 16384 + (jc->accel.x * multiplier);
-			iReport.wSlider = 16384 + (jc->accel.y * multiplier);
-			iReport.wDial = 16384 + (jc->accel.z * multiplier);
 
 
-			// move with relative gyro:
+		// Accelerometer (x, y, z):
+
+		multiplier = 10;
+		iReport.wAxisZRot = 16384 + (jc->accel.x * multiplier);
+		iReport.wSlider = 16384 + (jc->accel.y * multiplier);
+		iReport.wDial = 16384 + (jc->accel.z * multiplier);
+
+
+		// move with relative gyro:
 			
-			//MC.moveRel2((jc->gyro.relyaw - jc->gyro.relroll)+(jc->stick.horizontal/10.0f), -jc->gyro.relpitch);
-			//MC.moveRel2(jc->gyro.relyaw, 0);
+		//MC.moveRel2((jc->gyro.relyaw - jc->gyro.relroll)+(jc->stick.horizontal/10.0f), -jc->gyro.relpitch);
+		//MC.moveRel2(jc->gyro.relyaw, 0);
 
-			//float relX = (jc->gyro.relyaw /*- jc->gyro.relroll*/) + (jc->stick.horizontal / 20.0f);
-			//float relY = -jc->gyro.relpitch -(jc->stick.vertical / 40.0f);
+		//float relX = (jc->gyro.relyaw /*- jc->gyro.relroll*/) + (jc->stick.horizontal / 20.0f);
+		//float relY = -jc->gyro.relpitch -(jc->stick.vertical / 40.0f);
 
-			//float relX = (jc->gyro.relyaw / 600.0f) - (jc->gyro.relroll / 600.0f) + (jc->stick.horizontal / 20.0f);
-			//float relY = (-jc->gyro.relpitch / 600.0f) - (jc->stick.vertical / 40.0f);
+		//float relX = (jc->gyro.relyaw / 600.0f) - (jc->gyro.relroll / 600.0f) + (jc->stick.horizontal / 20.0f);
+		//float relY = (-jc->gyro.relpitch / 600.0f) - (jc->stick.vertical / 40.0f);
 
-			float thresX = 0.45;
-			float thresY = 0.45;
+		float thresX = 0.45;
+		float thresY = 0.45;
 
 
-			
-
-			float A = threshold(jc->gyro.relyaw, 252) / 600.0f;
-			float B = threshold(jc->gyro.relroll, 252) / 600.0f;
-			float C = threshold(jc->stick.horizontal, 20) * 0.1;
-
-			float relX = A - B + C;
-
-			A = threshold(jc->gyro.relpitch, 252) / 600.0f;
-			B = threshold(jc->stick.vertical, 20) * 0.1;
-
-			float relY = -A - B;
 			
 
-			//MC.moveRel2(relX, relY);
-			//Spin(relX, relY);
-			//tracker.relX = relX/1000.0;
-			//tracker.relY = relY/1000.0;
+		float A = threshold(jc->gyro.relyaw, 252) / 600.0f;
+		float B = threshold(jc->gyro.relroll, 252) / 600.0f;
+		float C = threshold(jc->stick.horizontal, 20) * 0.1;
 
-			//tracker.relX = jc->gyro.relpitch/1000.0;
-			//tracker.relY = -jc->gyro.relyaw/1000.0;
+		float relX = A - B + C;
+
+		A = threshold(jc->gyro.relpitch, 252) / 600.0f;
+		B = threshold(jc->stick.vertical, 20) * 0.1;
+
+		float relY = -A - B;
+
+		//relX = relX / 100.0;
+		//relY = relY / 100.0;
 			
 
-			float div = 54000.0;// 1000.0
-			float dx = -jc->gyro.relpitch / div;
-			float dy = jc->gyro.relyaw / div;
-			float dz = -jc->gyro.relroll / div;
+		//MC.moveRel2(relX, relY);
 
-			glm::fquat delx = glm::angleAxis(dx, glm::vec3(1.0, 0.0, 0.0));
-			glm::fquat dely = glm::angleAxis(dy, glm::vec3(0.0, 1.0, 0.0));
-			glm::fquat delz = glm::angleAxis(dz, glm::vec3(0.0, 0.0, 1.0));
+		//Spin(relX, relY);
+		//tracker.relX = relX/1000.0;
+		//tracker.relY = relY/1000.0;
 
-			float smallest = glm::radians(0.25f);// 0.25
-			if (abs(dx) > smallest) {
-				//tracker.anglex += dx;
-				tracker.quat = tracker.quat*delx;
-			}
-			if (abs(dy) > smallest) {
-				//tracker.angley += dy;
-				tracker.quat = tracker.quat*dely;
-			}
-			if (abs(dz) > smallest) {
-				//tracker.anglez += dz;
-				tracker.quat = tracker.quat*delz;
-			}
+		//tracker.relX = jc->gyro.relpitch/1000.0;
+		//tracker.relY = -jc->gyro.relyaw/1000.0;
+			
 
+		float div = 54000.0;// 1000.0
+		float dx = -jc->gyro.relpitch / div;
+		float dy = jc->gyro.relyaw / div;
+		float dz = -jc->gyro.relroll / div;
 
-			//glm::toQuat(glm::vec3(0.0, 0.0, 0.0));
+		glm::fquat delx = glm::angleAxis(dx, glm::vec3(1.0, 0.0, 0.0));
+		glm::fquat dely = glm::angleAxis(dy, glm::vec3(0.0, 1.0, 0.0));
+		glm::fquat delz = glm::angleAxis(dz, glm::vec3(0.0, 0.0, 1.0));
 
-
-
-			// move with absolute (tracked) gyro:
-			// todo: add a reset button
-			//MC.moveRel(jc->gyro.yaw, -jc->gyro.relpitch);
-			//MC.moveRel(jc->gyro.yaw, -jc->gyro.pitch);
-
-			//printf("%.5f\n", jc->gyro.pitch);
-
-
-			//multiplier = 200;
-
-			//iReport.wAxisZRot = (jc->gyro.roll * multiplier);
-			//iReport.wSlider = (jc->gyro.pitch * multiplier);
-			//iReport.wDial = (jc->gyro.yaw * multiplier);
-
+		float smallest = glm::radians(0.25f);// 0.25
+		if (abs(dx) > smallest) {
+			//tracker.anglex += dx;
+			tracker.quat = tracker.quat*delx;
 		}
+		if (abs(dy) > smallest) {
+			//tracker.angley += dy;
+			tracker.quat = tracker.quat*dely;
+		}
+		if (abs(dz) > smallest) {
+			//tracker.anglez += dz;
+			tracker.quat = tracker.quat*delz;
+		}
+
+
+		//glm::toQuat(glm::vec3(0.0, 0.0, 0.0));
+
+
+
+		// move with absolute (tracked) gyro:
+		// todo: add a reset button
+		//MC.moveRel(jc->gyro.yaw, -jc->gyro.relpitch);
+		//MC.moveRel(jc->gyro.yaw, -jc->gyro.pitch);
+
+		//printf("%.5f\n", jc->gyro.pitch);
+
+		float relX2 = -jc->gyro.relyaw / 100.0;
+		float relY2 = jc->gyro.relpitch / 100.0;
+
+		if (settings.enableGyro) {
+			MC.moveRel2(relX2, relY2);
+		}
+
+		//multiplier = 200;
+
+		//iReport.wAxisZRot = (jc->gyro.roll * multiplier);
+		//iReport.wSlider = (jc->gyro.pitch * multiplier);
+		//iReport.wDial = (jc->gyro.yaw * multiplier);
+
 	}
+	//}
 
 
 
@@ -1475,15 +1485,9 @@ init_start:
 
 	//Joycon *jc = &joycons[0];
 	//for (int i = 40; i < 1000; ++i) {
-
-
-
 	//	uint8_t hfa2 = 0x88;
 	//	uint16_t lfa2 = 0x804d;
-
 	//	jc->rumble3(i, hfa2, lfa2);
-	//	
-	//	
 	//}
 
 
@@ -1681,6 +1685,7 @@ void exit() {
 // control ids
 enum {
 	SpinTimer = wxID_HIGHEST + 1
+	//MyTimer = wxID_HIGHEST + 1,
 };
 
 // ----------------------------------------------------------------------------
@@ -2035,6 +2040,15 @@ void TestGLContext::DrawRotatedCube(float xangle, float yangle, float zangle) {
 //IMPLEMENT_APP(app);
 wxIMPLEMENT_APP_NO_MAIN(MyApp);
 
+//wxBEGIN_EVENT_TABLE(MyApp)
+//EVT_TIMER(MyTimer, MyApp::OnMyTimer)
+//wxEND_EVENT_TABLE()
+
+//MyApp::MyApp()
+//	: m_myTimer(this, MyTimer) {
+//
+//}
+
 bool MyApp::OnInit() {
 	if (!wxApp::OnInit()) {
 		return false;
@@ -2044,7 +2058,10 @@ bool MyApp::OnInit() {
 
 
 	new MainFrame();
+
 	//new MyFrame();
+
+	//m_myTimer.Start(0);
 
 	return true;
 }
@@ -2057,6 +2074,10 @@ int MyApp::OnExit() {
 }
 
 void MyApp::onIdle(wxIdleEvent& evt) {
+	pollLoop();
+}
+
+void MyApp::OnMyTimer(wxTimerEvent & WXUNUSED) {
 	pollLoop();
 }
 
@@ -2144,6 +2165,11 @@ void MainFrame::onStart(wxCommandEvent&) {
 		new MyFrame();
 	}
 	start();
+	if (!settings.gyroWindow) {
+		while (true) {
+			pollLoop();
+		}
+	}
 }
 
 void MainFrame::onQuit(wxCommandEvent&) {
