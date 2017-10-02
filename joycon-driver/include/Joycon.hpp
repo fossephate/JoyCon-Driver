@@ -1,5 +1,6 @@
 #include <bitset>
 #include <hidapi.h>
+#include "tools.hpp"
 
 class Joycon {
 
@@ -280,9 +281,14 @@ public:
 		// x23	MCU update input report ?
 		// 30	NPad standard mode. Pushes current state @60Hz. Default in SDK if arg is not in the list
 		// 31	NFC mode. Pushes large packets @60Hz
+
+		// sometimes gets stuck at 0x21 mode until set to 0x31, so do that and then set to 0x30 mode?
+		// I don't understand why this happens, but it prevents gyro data from being polled
 		printf("Increase data rate for Bluetooth...\n");
 		buf[0] = 0x30;
 		send_subcommand(0x01, 0x03, buf, 1);
+		//buf[0] = 0x30;
+		//send_subcommand(0x01, 0x03, buf, 1);
 
 
 		//printf("Pairing1?...\n");

@@ -472,15 +472,15 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			jc->gyro.relyaw = unsignedToSigned16(relyaw);
 
 			// to degrees/second;
-			jc->gyro.relroll = jc->gyro.relroll * 0.070f;
-			jc->gyro.relpitch = jc->gyro.relpitch * 0.070f;
-			jc->gyro.relyaw = jc->gyro.relyaw * 0.070f;
+			//jc->gyro.relroll = jc->gyro.relroll * 0.070f;
+			//jc->gyro.relpitch = jc->gyro.relpitch * 0.070f;
+			//jc->gyro.relyaw = jc->gyro.relyaw * 0.070f;
 		}
 		
 
 		//hex_dump(gyro_data, 20);
 
-		if (jc->left_right == 1) {
+		if (jc->left_right == 2) {
 			//hex_dump(gyro_data, 20);
 			//hex_dump(packet+12, 20);
 
@@ -492,7 +492,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 			//printf("%04x\n", jc->gyro.relroll);
 
-			//printf("%f\n", jc->gyro.relroll/1000.0);
+			printf("%f\n", jc->gyro.relroll);
 
 			//printf("%d\n", accelXA);
 
@@ -795,7 +795,7 @@ void updatevJoyDevice(Joycon *jc) {
 		//tracker.relY = -jc->gyro.relyaw/1000.0;
 			
 
-		float div = 54000.0;// 1000.0
+		float div = 100000;//54000.0;// 1000.0
 		float dx = -jc->gyro.relpitch / div;
 		float dy = jc->gyro.relyaw / div;
 		float dz = -jc->gyro.relroll / div;
@@ -806,22 +806,17 @@ void updatevJoyDevice(Joycon *jc) {
 
 		float smallest = glm::radians(0.25f);// 0.25
 		if (abs(dx) > smallest) {
-			//tracker.anglex += dx;
 			tracker.quat = tracker.quat*delx;
 		}
 		if (abs(dy) > smallest) {
-			//tracker.angley += dy;
 			tracker.quat = tracker.quat*dely;
 		}
 		if (abs(dz) > smallest) {
-			//tracker.anglez += dz;
 			tracker.quat = tracker.quat*delz;
 		}
 
 
 		//glm::toQuat(glm::vec3(0.0, 0.0, 0.0));
-
-
 
 		// move with absolute (tracked) gyro:
 		// todo: add a reset button
@@ -834,7 +829,7 @@ void updatevJoyDevice(Joycon *jc) {
 		float relY2 = jc->gyro.relpitch / 100.0;
 
 		if (settings.enableGyro) {
-			MC.moveRel2(relX2, relY2);
+			//MC.moveRel2(relX2, relY2);
 		}
 
 		//multiplier = 200;
@@ -961,13 +956,16 @@ void pollLoop() {
 
 		// get input:
 		memset(buf, 0, 65);
-		if (settings.enableGyro) {
-			// seems to have slower response time:
-			jc->send_command(0x1F, buf, 0);
-		} else {
-			// may reset MCU data, not sure:
-			jc->send_command(0x01, buf, 0);
-		}
+		//if (settings.enableGyro) {
+		//	// seems to have slower response time:
+		//	jc->send_command(0x1F, buf, 0);
+		//} else {
+		//	// may reset MCU data, not sure:
+		//	jc->send_command(0x01, buf, 0);
+		//}
+		//jc->send_command(0x1F, buf, 0);
+
+		jc->send_command(0x1E, buf, 0);
 		handle_input(jc, buf, 0x40);
 	}
 
@@ -2082,7 +2080,7 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("Joycon Driver by fosse ©20
 
 	CB4 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Window"), wxPoint(20, 80));
 	CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleGyroWindow, this);
-	CB4->SetValue(settings.enableGyro);
+	CB4->SetValue(settings.gyroWindow);
 
 	CB5 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 100));
 	CB5->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleMario, this);
