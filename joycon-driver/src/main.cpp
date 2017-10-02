@@ -438,31 +438,16 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		// Accelerometer data is absolute
 		{
 			// get Accelerometer X:
-			uint16_t accelXA = ((uint16_t)gyro_data[1] << 8) | gyro_data[2];
-			uint16_t accelXB = 0xFFFF - accelXA;
-			if (accelXA < accelXB) {
-				jc->accel.x = accelXA;
-			} else {
-				jc->accel.x = -1 * accelXB;
-			}
+			uint16_t accelX = ((uint16_t)gyro_data[1] << 8) | gyro_data[2];
+			jc->accel.x = unsignedToSigned16(accelX);
 
 			// get Accelerometer Y:
-			uint16_t accelYA = ((uint16_t)gyro_data[3] << 8) | gyro_data[4];
-			uint16_t accelYB = 0xFFFF - accelYA;
-			if (accelYA < accelYB) {
-				jc->accel.y = accelYA;
-			} else {
-				jc->accel.y = -1 * accelYB;
-			}
+			uint16_t accelY = ((uint16_t)gyro_data[3] << 8) | gyro_data[4];
+			jc->accel.y = unsignedToSigned16(accelY);
 
 			// get Accelerometer Z:
-			uint16_t accelZA = ((uint16_t)gyro_data[5] << 8) | gyro_data[6];
-			uint16_t accelZB = 0xFFFF - accelZA;
-			if (accelZA < accelZB) {
-				jc->accel.z = accelZA;
-			} else {
-				jc->accel.z = -1 * accelZB;
-			}
+			uint16_t accelZ = ((uint16_t)gyro_data[5] << 8) | gyro_data[6];
+			jc->accel.z = unsignedToSigned16(accelZ);
 
 			//jc->accel.x /= 257;
 			//jc->accel.y /= 257;
@@ -475,46 +460,21 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		// Gyroscope data is relative
 		{
 			// get relative roll:
-			uint16_t relrollA = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
-			uint16_t relrollB = 0xFFFF - relrollA;
-			if (relrollA < relrollB) {
-				jc->gyro.relroll = relrollA;
-			} else {
-				jc->gyro.relroll = -1 * relrollB;
-			}
+			uint16_t relroll = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
+			jc->gyro.relroll = unsignedToSigned16(relroll);
 
 			// get relative pitch:
-			uint16_t relpitchA = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
-			uint16_t relpitchB = 0xFFFF - relpitchA;
-			if (relpitchA < relpitchB) {
-				jc->gyro.relpitch = relpitchA;
-			} else {
-				jc->gyro.relpitch = -1 * relpitchB;
-			}
+			uint16_t relpitch = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
+			jc->gyro.relpitch = unsignedToSigned16(relpitch);
 
 			// get relative yaw:
-			uint16_t relyawA = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
-			uint16_t relyawB = 0xFFFF - relyawA;
-			if (relyawA < relyawB) {
-				jc->gyro.relyaw = relyawA;
-			} else {
-				jc->gyro.relyaw = -1 * relyawB;
-			}
-
-
-			//uint16_t relrollA = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
-			//jc->gyro.relroll = relrollA;
-
-			//uint16_t relpitchA = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
-			//jc->gyro.relpitch = relpitchA;
-
-			//uint16_t relyawA = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
-			//jc->gyro.relyaw = relyawA;
+			uint16_t relyaw = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
+			jc->gyro.relyaw = unsignedToSigned16(relyaw);
 
 			// to degrees/second;
-			//jc->gyro.relroll = jc->gyro.relroll * 0.070f;
-			//jc->gyro.relpitch = jc->gyro.relpitch * 0.070f;
-			//jc->gyro.relyaw = jc->gyro.relyaw * 0.070f;
+			jc->gyro.relroll = jc->gyro.relroll * 0.070f;
+			jc->gyro.relpitch = jc->gyro.relpitch * 0.070f;
+			jc->gyro.relyaw = jc->gyro.relyaw * 0.070f;
 		}
 		
 
@@ -986,47 +946,44 @@ void parseSettings2() {
 }
 
 void pollLoop() {
-	//while (true) {
-		//counter++;
 
-		// poll joycons:
-		for (int i = 0; i < joycons.size(); ++i) {
-			Joycon *jc = &joycons[i];
+	// poll joycons:
+	for (int i = 0; i < joycons.size(); ++i) {
+		Joycon *jc = &joycons[i];
 
-			if (!jc->handle) { continue; }
+		if (!jc->handle) { continue; }
 
-			// set to be non-blocking:
-			//hid_set_nonblocking(jc->handle, 1);
+		// set to be non-blocking:
+		//hid_set_nonblocking(jc->handle, 1);
 
-			// set to be blocking:
-			hid_set_nonblocking(jc->handle, 0);
+		// set to be blocking:
+		hid_set_nonblocking(jc->handle, 0);
 
-			// get input:
-			memset(buf, 0, 65);
-			if (settings.enableGyro) {
-				// seems to have slower response time:
-				jc->send_command(0x1F, buf, 0);
-			} else {
-				// may reset MCU data, not sure:
-				jc->send_command(0x01, buf, 0);
-			}
-			handle_input(jc, buf, 0x40);
+		// get input:
+		memset(buf, 0, 65);
+		if (settings.enableGyro) {
+			// seems to have slower response time:
+			jc->send_command(0x1F, buf, 0);
+		} else {
+			// may reset MCU data, not sure:
+			jc->send_command(0x01, buf, 0);
 		}
+		handle_input(jc, buf, 0x40);
+	}
 
-		// update vjoy:
-		for (int i = 0; i < joycons.size(); ++i) {
-			updatevJoyDevice(&joycons[i]);
-		}
+	// update vjoy:
+	for (int i = 0; i < joycons.size(); ++i) {
+		updatevJoyDevice(&joycons[i]);
+	}
 
 
-		// sleep:
-		accurateSleep(2.00);// 8.00
+	// sleep:
+	accurateSleep(2.00);// 8.00
 
-		if (settings.restart) {
-			settings.restart = false;
-			//goto init_start;
-		}
-	//}
+	if (settings.restart) {
+		settings.restart = false;
+		//goto init_start;
+	}
 }
 
 
@@ -2285,25 +2242,21 @@ void TestGLCanvas::OnKeyDown(wxKeyEvent& event) {
 	case WXK_RIGHT:
 		del = glm::angleAxis(-angle, glm::vec3(0.0, 0.0, 1.0));
 		tracker.quat = tracker.quat*del;
-		//tracker.quat = glm::normalize(del*tracker.quat);
 		break;
 
 	case WXK_LEFT:
 		del = glm::angleAxis(angle, glm::vec3(0.0, 0.0, 1.0));
 		tracker.quat = tracker.quat*del;
-		//tracker.quat = glm::normalize(del*tracker.quat);
 		break;
 
 	case WXK_DOWN:
 		del = glm::angleAxis(angle, glm::vec3(1.0, 0.0, 0.0));
 		tracker.quat = tracker.quat*del;
-		//tracker.quat = glm::normalize(del*tracker.quat);
 		break;
 
 	case WXK_UP:
 		del = glm::angleAxis(-angle, glm::vec3(1.0, 0.0, 0.0));
 		tracker.quat = tracker.quat*del;
-		//tracker.quat = glm::normalize(del*tracker.quat);
 		break;
 
 	case WXK_SPACE:
@@ -2325,8 +2278,7 @@ void TestGLCanvas::OnSpinTimer(wxTimerEvent& WXUNUSED(event)) {
 	pollLoop();
 }
 
-wxString glGetwxString(GLenum name)
-{
+wxString glGetwxString(GLenum name) {
 	const GLubyte *v = glGetString(name);
 	if (v == 0) {
 		// The error is not important. It is GL_INVALID_ENUM.
@@ -2384,24 +2336,6 @@ MyFrame::MyFrame(bool stereoWindow) : wxFrame(NULL, wxID_ANY, wxT("3D JoyCon gyr
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //int main(int argc, char *argv[]) {

@@ -86,3 +86,14 @@ void setupConsole(std::string title) {
 	freopen("conout$", "w", stderr);
 	printf("Debugging Window:\n");
 }
+
+
+uint16_t unsignedToSigned16(uint16_t n) {
+	uint16_t A = n;
+	uint16_t B = 0xFFFF - A;
+	if (A < B) {
+		return A;
+	} else {
+		return -1 * B;
+	}
+}

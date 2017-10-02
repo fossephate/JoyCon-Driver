@@ -1,1 +1,66 @@
-﻿  joycon-driver.vcxproj -> C:\Users\Matt\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Release\joycon-driver.exe
+﻿  main.cpp
+C:\Users\mattc\Documents\Visual Studio 2017\Projects\joycon\joycon-driver\include\joycon.hpp(111): warning C4838: conversion from 'int' to 'uint8_t' requires a narrowing conversion
+src\main.cpp(807): warning C4305: 'initializing': truncation from 'double' to 'float'
+src\main.cpp(808): warning C4305: 'initializing': truncation from 'double' to 'float'
+src\main.cpp(711): warning C4101: 'z': unreferenced local variable
+src\main.cpp(993): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1017): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1100): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1104): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1117): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1139): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1148): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1174): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(1499): warning C4005: 'C3': macro redefinition
+  src\main.cpp(1188): note: see previous definition of 'C3'
+src\main.cpp(1500): warning C4005: 'D3': macro redefinition
+  src\main.cpp(1189): note: see previous definition of 'D3'
+src\main.cpp(1501): warning C4005: 'E3': macro redefinition
+  src\main.cpp(1190): note: see previous definition of 'E3'
+src\main.cpp(1502): warning C4005: 'F3': macro redefinition
+  src\main.cpp(1191): note: see previous definition of 'F3'
+src\main.cpp(1503): warning C4005: 'G3': macro redefinition
+  src\main.cpp(1192): note: see previous definition of 'G3'
+src\main.cpp(1504): warning C4005: 'G3A4': macro redefinition
+  src\main.cpp(1193): note: see previous definition of 'G3A4'
+src\main.cpp(1505): warning C4005: 'A4': macro redefinition
+  src\main.cpp(1194): note: see previous definition of 'A4'
+src\main.cpp(1506): warning C4005: 'A4B4': macro redefinition
+  src\main.cpp(1195): note: see previous definition of 'A4B4'
+src\main.cpp(1507): warning C4005: 'B4': macro redefinition
+  src\main.cpp(1196): note: see previous definition of 'B4'
+src\main.cpp(1508): warning C4005: 'C4': macro redefinition
+  src\main.cpp(1197): note: see previous definition of 'C4'
+src\main.cpp(1509): warning C4005: 'D4': macro redefinition
+  src\main.cpp(1198): note: see previous definition of 'D4'
+src\main.cpp(1510): warning C4005: 'D4E4': macro redefinition
+  src\main.cpp(1199): note: see previous definition of 'D4E4'
+src\main.cpp(1511): warning C4005: 'E4': macro redefinition
+  src\main.cpp(1200): note: see previous definition of 'E4'
+src\main.cpp(1512): warning C4005: 'F4': macro redefinition
+  src\main.cpp(1201): note: see previous definition of 'F4'
+src\main.cpp(1513): warning C4005: 'F4G4': macro redefinition
+  src\main.cpp(1202): note: see previous definition of 'F4G4'
+src\main.cpp(1514): warning C4005: 'G4': macro redefinition
+  src\main.cpp(1203): note: see previous definition of 'G4'
+src\main.cpp(1515): warning C4005: 'A5': macro redefinition
+  src\main.cpp(1204): note: see previous definition of 'A5'
+src\main.cpp(1516): warning C4005: 'B5': macro redefinition
+  src\main.cpp(1205): note: see previous definition of 'B5'
+src\main.cpp(1517): warning C4005: 'C5': macro redefinition
+  src\main.cpp(1206): note: see previous definition of 'C5'
+src\main.cpp(1058): warning C4102: 'init_start': unreferenced label
+src\main.cpp(1377): warning C4102: 'N1': unreferenced label
+src\main.cpp(1050): warning C4101: 'device_name': unreferenced local variable
+src\main.cpp(1046): warning C4101: 'buf2': unreferenced local variable
+src\main.cpp(1044): warning C4101: 'i': unreferenced local variable
+src\main.cpp(1049): warning C4101: 'written': unreferenced local variable
+src\main.cpp(1048): warning C4101: 'read': unreferenced local variable
+src\main.cpp(1635): warning C4018: '<': signed/unsigned mismatch
+src\main.cpp(2408): warning C4007: 'wWinMain': must be '__stdcall'
+  Generating code
+  0 of 1139 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    23 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  joycon-driver.vcxproj -> C:\Users\mattc\Documents\Visual Studio 2017\Projects\joycon\\joycon-driver\build\Win32\Release\joycon-driver.exe

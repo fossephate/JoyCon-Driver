@@ -40,7 +40,6 @@
     <ClInclude Include="three\visitor.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="include\MyApp.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
