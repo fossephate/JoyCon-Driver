@@ -88,12 +88,12 @@ void setupConsole(std::string title) {
 }
 
 
-uint16_t unsignedToSigned16(uint16_t n) {
+int16_t unsignedToSigned16(uint16_t n) {
 	uint16_t A = n;
 	uint16_t B = 0xFFFF - A;
 	if (A < B) {
-		return A;
+		return (int16_t)A;
 	} else {
-		return -1 * B;
+		return (int16_t)(-1 * B);
 	}
 }

@@ -461,15 +461,20 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		{
 			// get relative roll:
 			uint16_t relroll = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
-			jc->gyro.relroll = unsignedToSigned16(relroll);
+			jc->gyro.relroll = (double)unsignedToSigned16(relroll);
 
 			// get relative pitch:
 			uint16_t relpitch = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
-			jc->gyro.relpitch = unsignedToSigned16(relpitch);
+			jc->gyro.relpitch = (double)unsignedToSigned16(relpitch);
 
 			// get relative yaw:
 			uint16_t relyaw = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
-			jc->gyro.relyaw = unsignedToSigned16(relyaw);
+			jc->gyro.relyaw = (double)unsignedToSigned16(relyaw);
+
+			jc->gyro.rawrelyaw = relyaw;
+			jc->gyro.rawrelpitch = relpitch;
+			jc->gyro.rawrelroll = relroll;
+
 
 			// to degrees/second;
 			//jc->gyro.relroll = jc->gyro.relroll * 0.070f;
@@ -492,7 +497,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 			//printf("%04x\n", jc->gyro.relroll);
 
-			printf("%f\n", jc->gyro.relroll);
+			//printf("%f\n", jc->gyro.relroll);
 
 			//printf("%d\n", accelXA);
 
@@ -816,6 +821,21 @@ void updatevJoyDevice(Joycon *jc) {
 		}
 
 
+
+		//float gyro_cal_coeff = (float)(936.0 / (float)(13371 - unsignedToSigned16(16)));
+		float gyro_cal_coeff = 0.00007f;
+		//float div2 = 100000;//54000.0;// 1000.0
+		float dx2 = -jc->gyro.relpitch * gyro_cal_coeff;
+		float dy2 = jc->gyro.relyaw * gyro_cal_coeff;
+		float dz2 = -jc->gyro.relroll * gyro_cal_coeff;
+		tracker.anglex += dx2;
+		tracker.angley += dy2;
+		tracker.anglez += dz2+0.01;
+
+		//printf("%f\n", tracker.anglez);
+		//printf("%f\n", (float)unsignedToSigned16(jc->gyro.rawrelroll) * 0.07f);
+
+
 		//glm::toQuat(glm::vec3(0.0, 0.0, 0.0));
 
 		// move with absolute (tracked) gyro:
@@ -829,7 +849,7 @@ void updatevJoyDevice(Joycon *jc) {
 		float relY2 = jc->gyro.relpitch / 100.0;
 
 		if (settings.enableGyro) {
-			//MC.moveRel2(relX2, relY2);
+			MC.moveRel2(relX2, relY2);
 		}
 
 		//multiplier = 200;
@@ -1125,14 +1145,14 @@ init_start:
 
 	// give a small rumble to all joycons:
 	printf("vibrating JoyCon(s).\n");
-	for (int k = 0; k < 1; ++k) {
-		for (int i = 0; i < joycons.size(); ++i) {
-			joycons[i].rumble(100, 1);
-			Sleep(20);
-			joycons[i].rumble(10, 3);
-			//Sleep(100);
-		}
-	}
+	//for (int k = 0; k < 1; ++k) {
+	//	for (int i = 0; i < joycons.size(); ++i) {
+	//		joycons[i].rumble(100, 1);
+	//		Sleep(20);
+	//		joycons[i].rumble(10, 3);
+	//		//Sleep(100);
+	//	}
+	//}
 
 	// Plays the Mario theme on the JoyCons:
 	// I'm bad with music I just did this by
