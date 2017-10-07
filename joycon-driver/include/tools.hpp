@@ -97,3 +97,24 @@ int16_t unsignedToSigned16(uint16_t n) {
 		return (int16_t)(-1 * B);
 	}
 }
+
+
+float comp_filter(float newAngle, float newRate, float filterAngle) {
+
+	float filterTerm0;
+	float filterTerm1;
+	float filterTerm2;
+	float timeConstant;
+	float finalAngle;
+	float dt = 0.015;
+
+	timeConstant = 0.5; // default 1.0
+
+	filterTerm0 = (newAngle - filterAngle) * timeConstant * timeConstant;
+	filterTerm2 += filterTerm0 * dt;
+	filterTerm1 = filterTerm2 + ((newAngle - filterAngle) * 2 * timeConstant) + newRate;
+	finalAngle = (filterTerm1 * dt) + filterAngle;
+
+	//return previousAngle; // This is actually the current angle, but is stored for the next iteration
+	return finalAngle;
+}

@@ -1,6 +1,6 @@
 CombineJoyCons: "1"
 AutoCenterSticks: "1"
-GyroControls: "1"
+GyroControls: "0"
 GyroWindow: "1"
 MarioTheme: "0"
 reverseX: "0"

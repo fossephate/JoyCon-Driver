@@ -53,6 +53,8 @@
 
 #define SERIAL_LEN 18
 
+#define PI 3.14159265359
+
 
 //#define DEBUG_PRINT
 //#define LED_TEST
@@ -436,23 +438,26 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 		// Accelerometer:
 		// Accelerometer data is absolute
-		{
+		//{
 			// get Accelerometer X:
 			uint16_t accelX = ((uint16_t)gyro_data[1] << 8) | gyro_data[2];
-			jc->accel.x = unsignedToSigned16(accelX);
+			jc->accel.x = (double)unsignedToSigned16(accelX);
+			//jc->accel.x = accelX;
 
 			// get Accelerometer Y:
 			uint16_t accelY = ((uint16_t)gyro_data[3] << 8) | gyro_data[4];
-			jc->accel.y = unsignedToSigned16(accelY);
+			jc->accel.y = (double)unsignedToSigned16(accelY);
+			//jc->accel.y = accelY;
 
 			// get Accelerometer Z:
 			uint16_t accelZ = ((uint16_t)gyro_data[5] << 8) | gyro_data[6];
-			jc->accel.z = unsignedToSigned16(accelZ);
+			jc->accel.z = (double)unsignedToSigned16(accelZ);
+			//jc->accel.z = accelZ;
 
 			//jc->accel.x /= 257;
 			//jc->accel.y /= 257;
 			//jc->accel.z /= 257;
-		}
+		//}
 
 
 
@@ -485,7 +490,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 		//hex_dump(gyro_data, 20);
 
-		if (jc->left_right == 2) {
+		if (jc->left_right == 1) {
 			//hex_dump(gyro_data, 20);
 			//hex_dump(packet+12, 20);
 
@@ -505,7 +510,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 			//printf("%.4f\n", jc->gyro.relpitch);
 
-			//printf("%04x\n", absRollA);
+			//printf("%04x\n", accelX);
 			//printf("%02x %02x\n", rollA, rollB);
 		}
 		
@@ -800,7 +805,7 @@ void updatevJoyDevice(Joycon *jc) {
 		//tracker.relY = -jc->gyro.relyaw/1000.0;
 			
 
-		float div = 100000;//54000.0;// 1000.0
+		float div = 54000;//54000.0;// 1000.0
 		float dx = -jc->gyro.relpitch / div;
 		float dy = jc->gyro.relyaw / div;
 		float dz = -jc->gyro.relroll / div;
@@ -822,15 +827,52 @@ void updatevJoyDevice(Joycon *jc) {
 
 
 
-		//float gyro_cal_coeff = (float)(936.0 / (float)(13371 - unsignedToSigned16(16)));
-		float gyro_cal_coeff = 0.00007f;
-		//float div2 = 100000;//54000.0;// 1000.0
-		float dx2 = -jc->gyro.relpitch * gyro_cal_coeff;
-		float dy2 = jc->gyro.relyaw * gyro_cal_coeff;
-		float dz2 = -jc->gyro.relroll * gyro_cal_coeff;
-		tracker.anglex += dx2;
-		tracker.angley += dy2;
-		tracker.anglez += dz2+0.01;
+		////float gyro_cal_coeff = (float)(936.0 / (float)(13371 - unsignedToSigned16(16)));
+		//float gyro_cal_coeff = 0.00007f;
+		////float div2 = 100000;//54000.0;// 1000.0
+		//float dx2 = -jc->gyro.relpitch * gyro_cal_coeff;
+		//float dy2 = jc->gyro.relyaw * gyro_cal_coeff;
+		//float dz2 = -jc->gyro.relroll * gyro_cal_coeff;
+		//tracker.anglex += dx2;
+		//tracker.angley += dy2;
+		//tracker.anglez += dz2+0.01;
+
+
+
+
+		
+		// complimentary filtered output:
+		// (absolute)
+		{
+			//float ax = jc->accel.x*0.00039f;// radians
+			//float ax = jc->accel.x*0.0221f;// degrees
+			//float ax = glm::radians(jc->accel.x*0.000244f);
+
+			float ax = glm::degrees((atan2(-jc->accel.x, -jc->accel.z) + PI));
+			float ay = glm::degrees((atan2(-jc->accel.y, -jc->accel.z) + PI));
+			//float az = glm::degrees((atan2(-jc->accel.x, -jc->accel.z) + PI));
+
+			// set to 0:
+			tracker.quat = glm::angleAxis(0.0f, glm::vec3(1.0, 0.0, 0.0));
+
+			// x:
+			glm::fquat delx = glm::angleAxis(glm::radians(ax), glm::vec3(1.0, 0.0, 0.0));
+			tracker.quat = tracker.quat*delx;
+
+			// y:
+			glm::fquat dely = glm::angleAxis(glm::radians(-ay), glm::vec3(0.0, 0.0, 1.0));
+			tracker.quat = tracker.quat*dely;
+
+			// z:
+			//glm::fquat delz = glm::angleAxis(glm::radians(az), glm::vec3(0.0, 0.0, 1.0));
+			//tracker.quat = tracker.quat*delz;
+
+			//printf("%f   %f\n", jc->accel.x*0.0221f, jc->accel.z*0.0221f);
+			//printf("%f\n", ax);
+			//printf("%f\n", -ay);
+		}
+
+
 
 		//printf("%f\n", tracker.anglez);
 		//printf("%f\n", (float)unsignedToSigned16(jc->gyro.rawrelroll) * 0.07f);
