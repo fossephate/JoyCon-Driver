@@ -885,9 +885,12 @@ void updatevJoyDevice(Joycon *jc) {
 
 		float gyroCoeff = 0.001;
 
+
+
+
+		// x:
 		float pitchInDegreesAccel = glm::degrees((atan2(-jc->accel.x, -jc->accel.z) + PI));
 		float relPitchDegreesGyro = -jc->gyro.relpitch * gyroCoeff;
-		//float pitch = comp_filter(pitchInDegreesAccel, relPitchDegreesGyro, prevPitch);
 		float pitch = 0;
 
 		tracker.anglex += relPitchDegreesGyro;
@@ -899,7 +902,6 @@ void updatevJoyDevice(Joycon *jc) {
 		tracker.anglex = (tracker.anglex * 0.98) + (pitchInDegreesAccel * 0.02);
 		pitch = tracker.anglex;
 
-		// x:
 		glm::fquat delx = glm::angleAxis(glm::radians(pitch), glm::vec3(1.0, 0.0, 0.0));
 		tracker.quat = tracker.quat*delx;
 
@@ -914,12 +916,9 @@ void updatevJoyDevice(Joycon *jc) {
 
 
 		// y:
-		float rollInDegreesAccel = glm::degrees((atan2(-jc->accel.y, -jc->accel.z) + PI));
+		float rollInDegreesAccel = -glm::degrees((atan2(-jc->accel.y, -jc->accel.z) + PI));
 		float relRollDegreesGyro = -jc->gyro.relroll * gyroCoeff;
-		//float pitch = comp_filter(pitchInDegreesAccel, relPitchDegreesGyro, prevPitch);
 		float roll = 0;
-
-		//tracker.previousPitch = pitch;
 
 		tracker.angley += relRollDegreesGyro;
 		if ((rollInDegreesAccel - tracker.angley) > 180) {
@@ -928,12 +927,14 @@ void updatevJoyDevice(Joycon *jc) {
 			tracker.angley -= 360;
 		}
 		tracker.angley = (tracker.angley * 0.98) + (rollInDegreesAccel * 0.02);
+		//tracker.angley = -rollInDegreesAccel;
 		roll = tracker.angley;
 
 		
 		glm::fquat dely = glm::angleAxis(glm::radians(roll), glm::vec3(0.0, 0.0, 1.0));
 		tracker.quat = tracker.quat*dely;
 
+		printf("%f\n", roll);
 
 
 
@@ -942,21 +943,17 @@ void updatevJoyDevice(Joycon *jc) {
 
 
 
-
-		// y:
+		// z:
 		float yawInDegreesAccel = glm::degrees((atan2(-jc->accel.y, -jc->accel.x) + PI));
 		float relyawDegreesGyro = -jc->gyro.relyaw * gyroCoeff;
-		//float pitch = comp_filter(pitchInDegreesAccel, relPitchDegreesGyro, prevPitch);
 		float yaw = 0;
 
-		//tracker.previousPitch = pitch;
-
 		tracker.anglez += relyawDegreesGyro;
-		if ((yawInDegreesAccel - tracker.anglez) > 180) {
-			tracker.anglez += 360;
-		} else if ((tracker.anglez - yawInDegreesAccel) > 180) {
-			tracker.anglez -= 360;
-		}
+		//if ((yawInDegreesAccel - tracker.anglez) > 180) {
+		//	tracker.anglez += 360;
+		//} else if ((tracker.anglez - yawInDegreesAccel) > 180) {
+		//	tracker.anglez -= 360;
+		//}
 		//tracker.anglez = (tracker.anglez * 0.98) + (yawInDegreesAccel * 0.02);
 		yaw = tracker.anglez;
 
