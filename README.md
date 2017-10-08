@@ -38,12 +38,12 @@ int rightJoyConXOffset = 15000;
 int rightJoyConYOffset = 19000;
 
 // multipliers to go from the range (-128,128) to (-32768, 32768)
-// These shouldn't need to be changed too much, but the option is there
-// I found that 250 works for me
-int leftJoyConXMultiplier = 10;
-int leftJoyConYMultiplier = 10;
-int rightJoyConXMultiplier = 10;
-int rightJoyConYMultiplier = 10;
+// These shouldn't need to be changed,
+// but the option is there if you find the joysticks aren't reaching their max values, or hit the max too early
+float leftJoyConXMultiplier = 10.0f;
+float leftJoyConYMultiplier = 10.0f;
+float rightJoyConXMultiplier = 10.0f;
+float rightJoyConYMultiplier = 10.0f;
 
 // Enabling this combines both JoyCons to a single vJoy Device(#1)
 // when combineJoyCons == false:
@@ -61,16 +61,26 @@ bool reverseY = false;// reverses joystick y (both sticks)
 // and assumes that to be (0,0), and uses that to calculate the offsets
 bool autoCenterSticks = false;
 
+bool usingGrip = false;
+bool usingBluetooth = true;
+bool disconnect = false;
 
 // enables motion controls
-bool enableGyro = true;
+bool enableGyro = false;
+
+// gyroscope (mouse) sensitivity:
+float gyroSensitivityX = 100.0f;
+float gyroSensitivityY = 100.0f;
 
 // enables 3D gyroscope visualizer
-bool gyroWindow = true;
+bool gyroWindow = false;
 
 // plays a version of the mario theme by vibrating
 // the first JoyCon connected.
 bool marioTheme = false;
+
+// bool to restart the program
+bool restart = false;
 
 ```
 

@@ -5,7 +5,7 @@
 #include <string>
 
 
-double threshold(double a, double thresh) {
+double lowpassFilter(double a, double thresh) {
 	if (abs(a) > thresh) {
 		return a;
 	} else {
@@ -98,24 +98,35 @@ int16_t unsignedToSigned16(uint16_t n) {
 	}
 }
 
-float filterTerm2 = 0;
+//float filterTerm2 = 0;
+//
+//float comp_filter(float newAngle, float newRate, float previousAngle) {
+//
+//	float filterTerm0;
+//	float filterTerm1;
+//	
+//	float timeConstant;
+//	float finalAngle;
+//	float dt = 0.015;
+//
+//	timeConstant = 0.5; // default 1.0
+//
+//	filterTerm0 = (newAngle - previousAngle) * timeConstant * timeConstant;
+//	filterTerm2 += filterTerm0 * dt;
+//	filterTerm1 = filterTerm2 + ((newAngle - previousAngle) * 2 * timeConstant) + newRate;
+//	finalAngle = (filterTerm1 * dt) + previousAngle;
+//
+//	//return previousAngle; // This is actually the current angle, but is stored for the next iteration
+//	return finalAngle;
+//}
 
-float comp_filter(float newAngle, float newRate, float previousAngle) {
 
-	float filterTerm0;
-	float filterTerm1;
-	
-	float timeConstant;
-	float finalAngle;
-	float dt = 0.015;
-
-	timeConstant = 0.5; // default 1.0
-
-	filterTerm0 = (newAngle - previousAngle) * timeConstant * timeConstant;
-	filterTerm2 += filterTerm0 * dt;
-	filterTerm1 = filterTerm2 + ((newAngle - previousAngle) * 2 * timeConstant) + newRate;
-	finalAngle = (filterTerm1 * dt) + previousAngle;
-
-	//return previousAngle; // This is actually the current angle, but is stored for the next iteration
-	return finalAngle;
+float clamp(float a, float min, float max) {
+	if (a < min) {
+		return min;
+	} else if (a > max) {
+		return max;
+	} else {
+		return a;
+	}
 }

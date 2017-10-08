@@ -192,7 +192,7 @@ public:
 		buf[0 + off] = hf & 0xFF;
 		buf[1 + off] = hfa + ((hf >> 8) & 0xFF); //Add amp + 1st byte of frequency to amplitude byte
 
-												 // Byte swapping
+		// Byte swapping
 		buf[2 + off] = lf + ((lfa >> 8) & 0xFF); //Add freq + 1st byte of LF amplitude to the frequency byte
 		buf[3 + off] = lfa & 0xFF;
 
@@ -223,6 +223,35 @@ public:
 		rumble2(hf, hfa, lf, lfa);
 	}
 
+
+
+	void rumble4(float real_LF, float real_HF, uint8_t hfa, uint16_t lfa) {
+
+		real_LF = clamp(real_LF, 40.875885f, 626.286133f);
+		real_HF = clamp(real_HF, 81.75177, 1252.572266f);
+
+		////Float frequency to hex conversion
+		//if (frequency < 0.0f) {
+		//	frequency = 0.0f;
+		//} else if (frequency > 1252.0f) {
+		//	frequency = 1252.0f;
+		//}
+		//uint8_t encoded_hex_freq = (uint8_t)round(log2((double)frequency / 10.0)*32.0);
+
+		//uint16_t encoded_hex_freq = (uint16_t)floor(-32 * (0.693147f - log(frequency / 5)) / 0.693147f + 0.5f); // old
+
+		////Convert to Joy-Con HF range. Range in big-endian: 0x0004-0x01FC with +0x0004 steps.
+		//uint16_t hf = (encoded_hex_freq - 0x60) * 4;
+		////Convert to Joy-Con LF range. Range: 0x01-0x7F.
+		//uint8_t lf = encoded_hex_freq - 0x40;
+
+
+
+		uint16_t hf = ((uint8_t)round(log2((double)real_HF * 0.01)*32.0) - 0x60) * 4;
+		uint8_t lf = (uint8_t)round(log2((double)real_LF * 0.01)*32.0) - 0x40;
+
+		rumble2(hf, hfa, lf, lfa);
+	}
 
 
 	void rumble_freq(uint16_t hf, uint8_t hfa, uint8_t lf, uint16_t lfa) {

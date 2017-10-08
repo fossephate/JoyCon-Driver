@@ -98,7 +98,6 @@ struct Settings {
 	// there appears to be a good amount of variance between JoyCons,
 	// but they work well once you find the right offsets
 	// these are the values that worked well for my JoyCons:
-	// alternatively just use --auto-center, it overrides these settings
 	int leftJoyConXOffset = 16000;
 	int leftJoyConYOffset = 13000;
 
@@ -106,8 +105,8 @@ struct Settings {
 	int rightJoyConYOffset = 19000;
 
 	// multipliers to go from the range (-128,128) to (-32768, 32768)
-	// These shouldn't need to be changed too much, but the option is there
-	// I found that 250 works for me
+	// These shouldn't need to be changed,
+	// but the option is there if you find the joysticks aren't reaching their max values, or hit the max too early
 	float leftJoyConXMultiplier = 10.0f;
 	float leftJoyConYMultiplier = 10.0f;
 	float rightJoyConXMultiplier = 10.0f;
@@ -136,6 +135,10 @@ struct Settings {
 	// enables motion controls
 	bool enableGyro = false;
 
+	// gyroscope (mouse) sensitivity:
+	float gyroSensitivityX = 100.0f;
+	float gyroSensitivityY = 100.0f;
+
 	// enables 3D gyroscope visualizer
 	bool gyroWindow = false;
 
@@ -153,7 +156,11 @@ struct Tracker {
 	int var1 = 0;
 	int var2 = 0;
 	int counter1 = 0;
-	float frequency = 500.0f;
+	//float frequency = 500.0f;
+
+	float low_freq = 200.0f;
+	float high_freq = 500.0f;
+
 	float relX = 0;
 	float relY = 0;
 
@@ -537,17 +544,37 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 
 			// remove this, it's just for rumble testing
-			//uint8_t hfa2 = 0x88;
-			//uint16_t lfa2 = 0x804d;
+			uint8_t hfa2 = 0x88;
+			uint16_t lfa2 = 0x804d;
+
+			tracker.low_freq = clamp(tracker.low_freq, 41.0f, 626.0f);
+			tracker.high_freq = clamp(tracker.high_freq, 82.0f, 1252.0f);
+			
+			//// down:
 			//if (jc->buttons == 1) {
-			//	tracker.frequency -= 1;
-			//	jc->rumble3(tracker.frequency, hfa2, lfa2);
+			//	tracker.high_freq -= 1;
+			//	jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
 			//}
+			//// down:
 			//if (jc->buttons == 2) {
-			//	tracker.frequency += 1;
-			//	jc->rumble3(tracker.frequency, hfa2, lfa2);
+			//	tracker.high_freq += 1;
+			//	jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
 			//}
-			//printf("%f\n", tracker.frequency);
+
+			//// left:
+			//if (jc->buttons == 8) {
+			//	tracker.low_freq -= 1;
+			//	jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
+			//}
+			//// right:
+			//if (jc->buttons == 4) {
+			//	tracker.low_freq += 1;
+			//	jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
+			//}
+
+			////printf("%i\n", jc->buttons);
+			////printf("%f\n", tracker.frequency);
+			//printf("%f %f\n", tracker.low_freq, tracker.high_freq);
 		}
 
 	}
@@ -784,14 +811,14 @@ void updatevJoyDevice(Joycon *jc) {
 
 
 
-		float A = threshold(jc->gyro.relyaw, 252) / 600.0f;
-		float B = threshold(jc->gyro.relroll, 252) / 600.0f;
-		float C = threshold(jc->stick.horizontal, 20) * 0.1;
+		float A = lowpassFilter(jc->gyro.relyaw, 252) / 600.0f;
+		float B = lowpassFilter(jc->gyro.relroll, 252) / 600.0f;
+		float C = lowpassFilter(jc->stick.horizontal, 20) * 0.1;
 
 		float relX = A - B + C;
 
-		A = threshold(jc->gyro.relpitch, 252) / 600.0f;
-		B = threshold(jc->stick.vertical, 20) * 0.1;
+		A = lowpassFilter(jc->gyro.relpitch, 252) / 600.0f;
+		B = lowpassFilter(jc->stick.vertical, 20) * 0.1;
 
 		float relY = -A - B;
 
@@ -934,7 +961,7 @@ void updatevJoyDevice(Joycon *jc) {
 		glm::fquat dely = glm::angleAxis(glm::radians(roll), glm::vec3(0.0, 0.0, 1.0));
 		tracker.quat = tracker.quat*dely;
 
-		printf("%f\n", roll);
+		//printf("%f\n", roll);
 
 
 
@@ -948,7 +975,7 @@ void updatevJoyDevice(Joycon *jc) {
 		float relyawDegreesGyro = -jc->gyro.relyaw * gyroCoeff;
 		float yaw = 0;
 
-		tracker.anglez += relyawDegreesGyro;
+		tracker.anglez += lowpassFilter(relyawDegreesGyro, 1);
 		//if ((yawInDegreesAccel - tracker.anglez) > 180) {
 		//	tracker.anglez += 360;
 		//} else if ((tracker.anglez - yawInDegreesAccel) > 180) {
@@ -1077,6 +1104,10 @@ void parseSettings2() {
 	settings.combineJoyCons = (bool)stoi(cfg["CombineJoyCons"]);
 	settings.autoCenterSticks = (bool)stoi(cfg["AutoCenterSticks"]);
 	settings.enableGyro = (bool)stoi(cfg["GyroControls"]);
+
+	settings.gyroSensitivityX = stof(cfg["gyroSensitivityX"]);
+	settings.gyroSensitivityY = stof(cfg["gyroSensitivityY"]);
+
 	settings.gyroWindow = (bool)stoi(cfg["GyroWindow"]);
 	settings.marioTheme = (bool)stoi(cfg["MarioTheme"]);
 
@@ -2255,16 +2286,28 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("Joycon Driver by fosse ©20
 	CB7->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleReverseY, this);
 	CB7->SetValue(settings.reverseY);
 
-	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 160));
+	wxStaticText *slider1Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity X"), wxPoint(20, 160));
+	slider1 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityX, 0, 1000, wxPoint(180, 140), wxDefaultSize, wxSL_LABELS);
+	slider1->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityX, this);
 
 
-	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 180));
+	wxStaticText *slider2Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity Y"), wxPoint(20, 200));
+	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, 0, 1000, wxPoint(180, 180), wxDefaultSize, wxSL_LABELS);
+	slider2->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityY, this);
+
+
+
+
+	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 220));
+
+
+	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 240));
 	startButton->Bind(wxEVT_BUTTON, &MainFrame::onStart, this);
 
-	wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 180));
+	wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 240));
 	quitButton->Bind(wxEVT_BUTTON, &MainFrame::onQuit, this);
 
-	//SetClientSize(400, 400);
+	SetClientSize(350, 280);
 	Show();
 }
 
@@ -2316,6 +2359,14 @@ void MainFrame::toggleReverseX(wxCommandEvent&) {
 
 void MainFrame::toggleReverseY(wxCommandEvent&) {
 	settings.reverseY = !settings.reverseY;
+}
+
+void MainFrame::setGyroSensitivityX(wxCommandEvent&) {
+	settings.gyroSensitivityX = slider1->GetValue();
+}
+
+void MainFrame::setGyroSensitivityY(wxCommandEvent&) {
+	settings.gyroSensitivityY = slider2->GetValue();
 }
 
 // ----------------------------------------------------------------------------

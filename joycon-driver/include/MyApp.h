@@ -104,6 +104,10 @@ public:
 	wxCheckBox *CB8;
 	wxCheckBox *CB9;
 
+
+	wxSlider *slider1;
+	wxSlider *slider2;
+
 	MainFrame();
 
 	void OnInit();
@@ -124,6 +128,9 @@ public:
 	void toggleReverseX(wxCommandEvent&);
 
 	void toggleReverseY(wxCommandEvent&);
+
+	void setGyroSensitivityX(wxCommandEvent&);
+	void setGyroSensitivityY(wxCommandEvent&);
 };
 
 
