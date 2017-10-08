@@ -162,6 +162,8 @@ struct Tracker {
 	float anglez = 0;
 	//glm::qauternion q;
 	glm::fquat quat = glm::angleAxis(0.0f, glm::vec3(1.0, 0.0, 0.0));
+
+	float previousPitch = 0;
 } tracker;
 
 
@@ -528,6 +530,8 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		if (jc->left_right == 1) {
 			if (jc->buttons == 207) {
 				settings.restart = true;
+				//start();
+				//accurateSleep(100.0);
 				//goto init_start;
 			}
 
@@ -733,10 +737,10 @@ void updatevJoyDevice(Joycon *jc) {
 	// gyro data:
 	//if (settings.enableGyro) {
 	if ((jc->left_right == 2) || (joycons.size() == 1 && jc->left_right == 1)) {
-	//if (jc->left_right == 2) {
-		//rz = jc->gyro.roll*240;
-		//iReport.wAxisZRot = jc->gyro.roll * 120;
-		//iReport.wSlider = jc->gyro.pitch * 120;
+		//if (jc->left_right == 2) {
+			//rz = jc->gyro.roll*240;
+			//iReport.wAxisZRot = jc->gyro.roll * 120;
+			//iReport.wSlider = jc->gyro.pitch * 120;
 
 		int multiplier;
 
@@ -764,7 +768,7 @@ void updatevJoyDevice(Joycon *jc) {
 
 
 		// move with relative gyro:
-			
+
 		//MC.moveRel2((jc->gyro.relyaw - jc->gyro.relroll)+(jc->stick.horizontal/10.0f), -jc->gyro.relpitch);
 		//MC.moveRel2(jc->gyro.relyaw, 0);
 
@@ -778,7 +782,7 @@ void updatevJoyDevice(Joycon *jc) {
 		float thresY = 0.45;
 
 
-			
+
 
 		float A = threshold(jc->gyro.relyaw, 252) / 600.0f;
 		float B = threshold(jc->gyro.relroll, 252) / 600.0f;
@@ -793,7 +797,7 @@ void updatevJoyDevice(Joycon *jc) {
 
 		//relX = relX / 100.0;
 		//relY = relY / 100.0;
-			
+
 
 		//MC.moveRel2(relX, relY);
 
@@ -803,26 +807,27 @@ void updatevJoyDevice(Joycon *jc) {
 
 		//tracker.relX = jc->gyro.relpitch/1000.0;
 		//tracker.relY = -jc->gyro.relyaw/1000.0;
-			
 
-		float div = 54000;//54000.0;// 1000.0
-		float dx = -jc->gyro.relpitch / div;
-		float dy = jc->gyro.relyaw / div;
-		float dz = -jc->gyro.relroll / div;
+		{
+			float coeff = 0.001;//54000;//54000.0;// 1000.0
+			float dx = -jc->gyro.relpitch * coeff;
+			float dy = jc->gyro.relyaw * coeff;
+			float dz = -jc->gyro.relroll * coeff;
 
-		glm::fquat delx = glm::angleAxis(dx, glm::vec3(1.0, 0.0, 0.0));
-		glm::fquat dely = glm::angleAxis(dy, glm::vec3(0.0, 1.0, 0.0));
-		glm::fquat delz = glm::angleAxis(dz, glm::vec3(0.0, 0.0, 1.0));
+			glm::fquat delx = glm::angleAxis(dx, glm::vec3(1.0, 0.0, 0.0));
+			glm::fquat dely = glm::angleAxis(dy, glm::vec3(0.0, 1.0, 0.0));
+			glm::fquat delz = glm::angleAxis(dz, glm::vec3(0.0, 0.0, 1.0));
 
-		float smallest = glm::radians(0.25f);// 0.25
-		if (abs(dx) > smallest) {
-			tracker.quat = tracker.quat*delx;
-		}
-		if (abs(dy) > smallest) {
-			tracker.quat = tracker.quat*dely;
-		}
-		if (abs(dz) > smallest) {
-			tracker.quat = tracker.quat*delz;
+			float smallest = glm::radians(0.25f);// 0.25
+			if (abs(dx) > smallest) {
+				tracker.quat = tracker.quat*delx;
+			}
+			if (abs(dy) > smallest) {
+				tracker.quat = tracker.quat*dely;
+			}
+			if (abs(dz) > smallest) {
+				tracker.quat = tracker.quat*delz;
+			}
 		}
 
 
@@ -869,10 +874,47 @@ void updatevJoyDevice(Joycon *jc) {
 
 			//printf("%f   %f\n", jc->accel.x*0.0221f, jc->accel.z*0.0221f);
 			//printf("%f\n", ax);
-			//printf("%f\n", -ay);
+			//printf("%f\n", ay);
 		}
 
 
+
+
+		// set to 0:
+		tracker.quat = glm::angleAxis(0.0f, glm::vec3(1.0, 0.0, 0.0));
+
+		float gyroCoeff = 0.001;
+
+		//float prevPitchInDegreesAccel = glm::degrees((atan2(-jc->accel.prevX, -jc->accel.prevZ) + PI));
+
+		float prevPitch = tracker.previousPitch;
+		float pitchInDegreesAccel = glm::degrees((atan2(-jc->accel.x, -jc->accel.z) + PI));
+		float relPitchDegreesGyro = -jc->gyro.relpitch * gyroCoeff;
+		//float pitch = comp_filter(pitchInDegreesAccel, relPitchDegreesGyro, prevPitch);
+		float pitch = 0;
+
+		//tracker.previousPitch = pitch;
+
+		tracker.anglex += relPitchDegreesGyro;
+		if (abs(pitchInDegreesAccel - tracker.anglex) > 180) {
+			//printf("aaaaaaaaaaaaah\n");
+			//pitchInDegreesAccel -= 360;
+			//tracker.anglex += 360;
+		}
+
+		if ((pitchInDegreesAccel - tracker.anglex) > 180) {
+			tracker.anglex += 360;
+		} else if ((tracker.anglex - pitchInDegreesAccel) > 180) {
+			tracker.anglex -= 360;
+		}
+		tracker.anglex = (tracker.anglex * 0.98) + (pitchInDegreesAccel * 0.02);
+		pitch = tracker.anglex;
+
+		// x:
+		glm::fquat delx = glm::angleAxis(glm::radians(pitch), glm::vec3(1.0, 0.0, 0.0));
+		tracker.quat = tracker.quat*delx;
+
+		//printf("%f\n", pitch);
 
 		//printf("%f\n", tracker.anglez);
 		//printf("%f\n", (float)unsignedToSigned16(jc->gyro.rawrelroll) * 0.07f);
@@ -1011,6 +1053,7 @@ void pollLoop() {
 		if (!jc->handle) { continue; }
 
 		// set to be non-blocking:
+
 		//hid_set_nonblocking(jc->handle, 1);
 
 		// set to be blocking:
@@ -1043,6 +1086,7 @@ void pollLoop() {
 	if (settings.restart) {
 		settings.restart = false;
 		//goto init_start;
+		//start();
 	}
 }
 
