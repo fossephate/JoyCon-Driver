@@ -775,86 +775,28 @@ void updatevJoyDevice(Joycon *jc) {
 		// Gyroscope (roll, pitch, yaw):
 		multiplier = 1000;
 
-		//iReport.wAxisZRot = 16384 + (jc->gyro.relroll * multiplier);
-		//iReport.wSlider = 16384 + (jc->gyro.relpitch * multiplier);
-		//iReport.wDial = 16384 + (jc->gyro.relyaw * multiplier);
 
-		//iReport.wAxisZ = 16384 + (jc->gyro.relyaw * multiplier);
-
-
-
-
-
-
-		// Accelerometer (x, y, z):
-
-		multiplier = 10;
-		iReport.wAxisZRot = 16384 + (jc->accel.x * multiplier);
-		iReport.wSlider = 16384 + (jc->accel.y * multiplier);
-		iReport.wDial = 16384 + (jc->accel.z * multiplier);
-
-
-		// move with relative gyro:
-
-		//MC.moveRel2((jc->gyro.relyaw - jc->gyro.relroll)+(jc->stick.horizontal/10.0f), -jc->gyro.relpitch);
-		//MC.moveRel2(jc->gyro.relyaw, 0);
-
-		//float relX = (jc->gyro.relyaw /*- jc->gyro.relroll*/) + (jc->stick.horizontal / 20.0f);
-		//float relY = -jc->gyro.relpitch -(jc->stick.vertical / 40.0f);
-
-		//float relX = (jc->gyro.relyaw / 600.0f) - (jc->gyro.relroll / 600.0f) + (jc->stick.horizontal / 20.0f);
-		//float relY = (-jc->gyro.relpitch / 600.0f) - (jc->stick.vertical / 40.0f);
-
-		float thresX = 0.45;
-		float thresY = 0.45;
-
-
-
-
-		float A = lowpassFilter(jc->gyro.relyaw, 252) / 600.0f;
-		float B = lowpassFilter(jc->gyro.relroll, 252) / 600.0f;
-		float C = lowpassFilter(jc->stick.horizontal, 20) * 0.1;
-
-		float relX = A - B + C;
-
-		A = lowpassFilter(jc->gyro.relpitch, 252) / 600.0f;
-		B = lowpassFilter(jc->stick.vertical, 20) * 0.1;
-
-		float relY = -A - B;
-
-		//relX = relX / 100.0;
-		//relY = relY / 100.0;
-
-
-		//MC.moveRel2(relX, relY);
-
-		//Spin(relX, relY);
-		//tracker.relX = relX/1000.0;
-		//tracker.relY = relY/1000.0;
-
-		//tracker.relX = jc->gyro.relpitch/1000.0;
-		//tracker.relY = -jc->gyro.relyaw/1000.0;
-
+		// gyro:
 		{
-			float coeff = 0.001;//54000;//54000.0;// 1000.0
-			float dx = -jc->gyro.relpitch * coeff;
-			float dy = jc->gyro.relyaw * coeff;
-			float dz = -jc->gyro.relroll * coeff;
+			//float coeff = 0.001;//54000;//54000.0;// 1000.0
+			//float dx = -jc->gyro.relpitch * coeff;
+			//float dy = jc->gyro.relyaw * coeff;
+			//float dz = -jc->gyro.relroll * coeff;
 
-			glm::fquat delx = glm::angleAxis(dx, glm::vec3(1.0, 0.0, 0.0));
-			glm::fquat dely = glm::angleAxis(dy, glm::vec3(0.0, 1.0, 0.0));
-			glm::fquat delz = glm::angleAxis(dz, glm::vec3(0.0, 0.0, 1.0));
+			//glm::fquat delx = glm::angleAxis(dx, glm::vec3(1.0, 0.0, 0.0));
+			//glm::fquat dely = glm::angleAxis(dy, glm::vec3(0.0, 1.0, 0.0));
+			//glm::fquat delz = glm::angleAxis(dz, glm::vec3(0.0, 0.0, 1.0));
 
-			float smallest = glm::radians(0.25f);// 0.25
-			if (abs(dx) > smallest) {
-				tracker.quat = tracker.quat*delx;
-			}
-			if (abs(dy) > smallest) {
-				tracker.quat = tracker.quat*dely;
-			}
-			if (abs(dz) > smallest) {
-				tracker.quat = tracker.quat*delz;
-			}
+			//float smallest = glm::radians(0.25f);// 0.25
+			//if (abs(dx) > smallest) {
+			//	tracker.quat = tracker.quat*delx;
+			//}
+			//if (abs(dy) > smallest) {
+			//	tracker.quat = tracker.quat*dely;
+			//}
+			//if (abs(dz) > smallest) {
+			//	tracker.quat = tracker.quat*delz;
+			//}
 		}
 
 
@@ -872,47 +814,46 @@ void updatevJoyDevice(Joycon *jc) {
 
 
 
-		
-		// complimentary filtered output:
-		// (absolute)
+		// accelerometer
 		{
-			//float ax = jc->accel.x*0.00039f;// radians
-			//float ax = jc->accel.x*0.0221f;// degrees
-			//float ax = glm::radians(jc->accel.x*0.000244f);
+			////float ax = jc->accel.x*0.00039f;// radians
+			////float ax = jc->accel.x*0.0221f;// degrees
+			////float ax = glm::radians(jc->accel.x*0.000244f);
 
-			float ax = glm::degrees((atan2(-jc->accel.x, -jc->accel.z) + PI));
-			float ay = glm::degrees((atan2(-jc->accel.y, -jc->accel.z) + PI));
-			//float az = glm::degrees((atan2(-jc->accel.x, -jc->accel.z) + PI));
+			//float ax = glm::degrees((atan2(-jc->accel.x, -jc->accel.z) + PI));
+			//float ay = glm::degrees((atan2(-jc->accel.y, -jc->accel.z) + PI));
+			////float az = glm::degrees((atan2(-jc->accel.x, -jc->accel.z) + PI));
 
-			// set to 0:
-			tracker.quat = glm::angleAxis(0.0f, glm::vec3(1.0, 0.0, 0.0));
+			//// set to 0:
+			//tracker.quat = glm::angleAxis(0.0f, glm::vec3(1.0, 0.0, 0.0));
 
-			// x:
-			glm::fquat delx = glm::angleAxis(glm::radians(ax), glm::vec3(1.0, 0.0, 0.0));
-			tracker.quat = tracker.quat*delx;
+			//// x:
+			//glm::fquat delx = glm::angleAxis(glm::radians(ax), glm::vec3(1.0, 0.0, 0.0));
+			//tracker.quat = tracker.quat*delx;
 
-			// y:
-			glm::fquat dely = glm::angleAxis(glm::radians(-ay), glm::vec3(0.0, 0.0, 1.0));
-			tracker.quat = tracker.quat*dely;
+			//// y:
+			//glm::fquat dely = glm::angleAxis(glm::radians(-ay), glm::vec3(0.0, 0.0, 1.0));
+			//tracker.quat = tracker.quat*dely;
 
-			// z:
-			//glm::fquat delz = glm::angleAxis(glm::radians(az), glm::vec3(0.0, 0.0, 1.0));
-			//tracker.quat = tracker.quat*delz;
+			//// z:
+			////glm::fquat delz = glm::angleAxis(glm::radians(az), glm::vec3(0.0, 0.0, 1.0));
+			////tracker.quat = tracker.quat*delz;
 
-			//printf("%f   %f\n", jc->accel.x*0.0221f, jc->accel.z*0.0221f);
-			//printf("%f\n", ax);
-			//printf("%f\n", ay);
+			////printf("%f   %f\n", jc->accel.x*0.0221f, jc->accel.z*0.0221f);
+			////printf("%f\n", ax);
+			////printf("%f\n", ay);
 		}
 
 
 
 
+		// complementary filtered tracking
+		// uses gyro + accelerometer
+
 		// set to 0:
 		tracker.quat = glm::angleAxis(0.0f, glm::vec3(1.0, 0.0, 0.0));
 
 		float gyroCoeff = 0.001;
-
-
 
 
 		// x:
@@ -975,7 +916,7 @@ void updatevJoyDevice(Joycon *jc) {
 		float relyawDegreesGyro = -jc->gyro.relyaw * gyroCoeff;
 		float yaw = 0;
 
-		tracker.anglez += lowpassFilter(relyawDegreesGyro, 1);
+		tracker.anglez += lowpassFilter(relyawDegreesGyro, 0.5);
 		//if ((yawInDegreesAccel - tracker.anglez) > 180) {
 		//	tracker.anglez += 360;
 		//} else if ((tracker.anglez - yawInDegreesAccel) > 180) {
@@ -1008,8 +949,8 @@ void updatevJoyDevice(Joycon *jc) {
 
 		//printf("%.5f\n", jc->gyro.pitch);
 
-		float relX2 = -jc->gyro.relyaw / 100.0;
-		float relY2 = jc->gyro.relpitch / 100.0;
+		float relX2 = -jc->gyro.relyaw / settings.gyroSensitivityX;
+		float relY2 = jc->gyro.relpitch / settings.gyroSensitivityY;
 
 		if (settings.enableGyro) {
 			MC.moveRel2(relX2, relY2);
