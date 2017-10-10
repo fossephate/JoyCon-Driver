@@ -12,7 +12,8 @@ A vJoy feeder for the Nintendo Switch JoyCons with analog stick support and moti
 3. Pair the JoyCon(s) to your PC
 
 4. Run the Application, if it doesn't detect your JoyCon(s), make sure they are fully paired/connected and restart the program.
-	* There's a precompiled version of the program in the release folder with all of the dlls it needs, just download the zip and extract it.
+	* For the latest features and updates, clone the repositiory / download the zip
+	* For the last major release, go here: https://github.com/mfosse/JoyCon-Driver/releases
 
 5. Once the program is running vJoy should register the input from the JoyCons.
     * To verify it's working you can use the vJoy monitor that comes with vJoy, it looks like this: http://i.imgur.com/x4Fn7Cq.png
