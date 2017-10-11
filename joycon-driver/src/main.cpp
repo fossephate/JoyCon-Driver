@@ -550,31 +550,31 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			tracker.low_freq = clamp(tracker.low_freq, 41.0f, 626.0f);
 			tracker.high_freq = clamp(tracker.high_freq, 82.0f, 1252.0f);
 			
-			//// down:
-			//if (jc->buttons == 1) {
-			//	tracker.high_freq -= 1;
-			//	jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
-			//}
-			//// down:
-			//if (jc->buttons == 2) {
-			//	tracker.high_freq += 1;
-			//	jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
-			//}
+			// down:
+			if (jc->buttons == 1) {
+				tracker.high_freq -= 1;
+				jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
+			}
+			// down:
+			if (jc->buttons == 2) {
+				tracker.high_freq += 1;
+				jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
+			}
 
-			//// left:
-			//if (jc->buttons == 8) {
-			//	tracker.low_freq -= 1;
-			//	jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
-			//}
-			//// right:
-			//if (jc->buttons == 4) {
-			//	tracker.low_freq += 1;
-			//	jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
-			//}
+			// left:
+			if (jc->buttons == 8) {
+				tracker.low_freq -= 1;
+				jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
+			}
+			// right:
+			if (jc->buttons == 4) {
+				tracker.low_freq += 1;
+				jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
+			}
 
 			////printf("%i\n", jc->buttons);
 			////printf("%f\n", tracker.frequency);
-			//printf("%f %f\n", tracker.low_freq, tracker.high_freq);
+			printf("%f %f\n", tracker.low_freq, tracker.high_freq);
 		}
 
 	}

@@ -3,27 +3,30 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# added by me:
+doc/
+*.html
 
 # User-specific files
-#*.suo
-#*.user
-#*.userosscache
-#*.sln.docstates
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
 # User-specific files (MonoDevelop/Xamarin Studio)
-#*.userprefs
+*.userprefs
 
 # Build results
-#[Dd]ebug/
-#[Dd]ebugPublic/
+[Dd]ebug/
+[Dd]ebugPublic/
 #[Rr]elease/
-#[Rr]eleases/
-#x64/
-#x86/
-#bld/
-#[Bb]in/
-#[Oo]bj/
-#[Ll]og/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
 
 # Visual Studio 2015 cache/options directory
 .vs/
