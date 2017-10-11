@@ -202,7 +202,7 @@
 /lib/univdll
 /lib/univdlld
 /lib/vc_dll
-/lib/vc_lib
+#/lib/vc_lib
 /lib/vc_x64_dll
 /lib/vc_x64_lib
 /lib/wat_lib
