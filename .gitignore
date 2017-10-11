@@ -3,9 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-# added by me:
-doc/
-*.html
+# custom:
+
 
 # User-specific files
 *.suo
