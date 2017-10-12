@@ -1007,7 +1007,7 @@ void pollLoop() {
 
 
 	// sleep:
-	accurateSleep(2.00);// 8.00
+	accurateSleep(16.66);// 8.00
 
 	if (settings.restart) {
 		settings.restart = false;
@@ -1475,18 +1475,6 @@ init_start:
 	}
 
 
-
-
-
-
-
-
-	//Joycon *jc = &joycons[0];
-	//for (int i = 40; i < 1000; ++i) {
-	//	uint8_t hfa2 = 0x88;
-	//	uint16_t lfa2 = 0x804d;
-	//	jc->rumble3(i, hfa2, lfa2);
-	//}
 
 
 
