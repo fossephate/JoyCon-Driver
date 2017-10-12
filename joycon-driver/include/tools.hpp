@@ -98,28 +98,6 @@ int16_t unsignedToSigned16(uint16_t n) {
 	}
 }
 
-//float filterTerm2 = 0;
-//
-//float comp_filter(float newAngle, float newRate, float previousAngle) {
-//
-//	float filterTerm0;
-//	float filterTerm1;
-//	
-//	float timeConstant;
-//	float finalAngle;
-//	float dt = 0.015;
-//
-//	timeConstant = 0.5; // default 1.0
-//
-//	filterTerm0 = (newAngle - previousAngle) * timeConstant * timeConstant;
-//	filterTerm2 += filterTerm0 * dt;
-//	filterTerm1 = filterTerm2 + ((newAngle - previousAngle) * 2 * timeConstant) + newRate;
-//	finalAngle = (filterTerm1 * dt) + previousAngle;
-//
-//	//return previousAngle; // This is actually the current angle, but is stored for the next iteration
-//	return finalAngle;
-//}
-
 
 float clamp(float a, float min, float max) {
 	if (a < min) {
@@ -130,3 +108,139 @@ float clamp(float a, float min, float max) {
 		return a;
 	}
 }
+
+unsigned createMask(unsigned a, unsigned b) {
+	unsigned r = 0;
+	for (unsigned i = a; i <= b; i++)
+		r |= 1 << i;
+
+	return r;
+}
+
+inline int mk_even(int n) {
+	return n - n % 2;
+}
+
+inline int mk_odd(int n) {
+	return n - (n % 2 ? 0 : 1);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//struct s_button_map {
+//	int bit;
+//	char *name;
+//};
+//
+//
+//struct s_button_map button_map[16] = {
+//	{ 0, "D" },{ 1, "R" },{ 2, "L" },{ 3, "U" },{ 4, "SL" },{ 5, "SR" },
+//	{ 6, "?" },{ 7, "?" },{ 8, "-" },{ 9, "+" },{ 10, "LS" },{ 11, "RS" },
+//	{ 12, "Ho" },{ 13, "Sc" },{ 14, "LR" },{ 15, "ZLR" },
+//};
+
+//void print_buttons(Joycon *jc) {
+//
+//	for (int i = 0; i < 16; i++) {
+//		if (jc->buttons & (1 << button_map[i].bit)) {
+//			printf("1");
+//		} else {
+//			printf("0");
+//		}
+//	}
+//	printf("\n");
+//}
+
+
+//void print_buttons2(Joycon *jc) {
+//
+//	printf("Joycon %c (Unattached): ", L_OR_R(jc->left_right));
+//
+//	for (int i = 0; i < 32; i++) {
+//		if (jc->buttons2[i]) {
+//			printf("1");
+//		} else {
+//			printf("0");
+//		}
+//
+//	}
+//	printf("\n");
+//}
+
+//void print_stick2(Joycon *jc) {
+//
+//	printf("Joycon %c (Unattached): ", L_OR_R(jc->left_right));
+//
+//	printf("%d %d\n", jc->stick.horizontal, jc->stick.vertical);
+//}
+
+
+
+
+const char *const dstick_names[9] = { "Up", "UR", "Ri", "DR", "Do", "DL", "Le", "UL", "Neu" };
+
+
+
+void hex_dump(unsigned char *buf, int len) {
+	for (int i = 0; i < len; i++) {
+		printf("%02x ", buf[i]);
+	}
+	printf("\n");
+}
+
+void hex_dump2(unsigned char *buf, int len) {
+	for (int i = 0; i < len; i++) {
+		printf("%02x ", buf[i]);
+	}
+}
+
+void hex_dump_0(unsigned char *buf, int len) {
+	for (int i = 0; i < len; i++) {
+		if (buf[i] != 0) {
+			printf("%02x ", buf[i]);
+		}
+	}
+}
+
+//void device_print(struct hid_device_info *dev) {
+//	printf("USB device info:\n  vid: 0x%04hX pid: 0x%04hX\n  path: %s\n  serial_number: %ls\n  interface_number: %d\n",
+//		dev->vendor_id, dev->product_id, dev->path, dev->serial_number, dev->interface_number);
+//	printf("  Manufacturer: %ls\n", dev->manufacturer_string);
+//	printf("  Product:      %ls\n\n", dev->product_string);
+//}
+
+
+
+//void print_dstick(Joycon *jc) {
+//	printf("%s\n", dstick_names[jc->dstick]);
+//}

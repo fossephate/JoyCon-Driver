@@ -220,112 +220,6 @@ void found_joycon(struct hid_device_info *dev) {
 	joycons.push_back(jc);
 }
 
-unsigned createMask(unsigned a, unsigned b) {
-	unsigned r = 0;
-	for (unsigned i = a; i <= b; i++)
-		r |= 1 << i;
-
-	return r;
-}
-
-inline int mk_even(int n) {
-	return n - n % 2;
-}
-
-inline int mk_odd(int n) {
-	return n - (n % 2 ? 0 : 1);
-}
-
-struct s_button_map {
-	int bit;
-	char *name;
-};
-
-
-struct s_button_map button_map[16] = {
-    {0, "D"},   {1, "R"},   {2, "L"},   {3, "U"},    {4, "SL"},  {5, "SR"},
-    {6, "?"},   {7, "?"},   {8, "-"},   {9, "+"},    {10, "LS"}, {11, "RS"},
-    {12, "Ho"}, {13, "Sc"}, {14, "LR"}, {15, "ZLR"},
-};
-
-void print_buttons(Joycon *jc) {
-
-	for (int i = 0; i < 16; i++) {
-		if (jc->buttons & (1 << button_map[i].bit)) {
-			printf("1");
-		} else {
-			printf("0");
-		}
-	}
-	printf("\n");
-}
-
-
-void print_buttons2(Joycon *jc) {
-
-	printf("Joycon %c (Unattached): ", L_OR_R(jc->left_right));
-	
-	for (int i = 0; i < 32; i++) {
-		if (jc->buttons2[i]) {
-			printf("1");
-		} else {
-			printf("0");
-		}
-		
-	}
-	printf("\n");
-}
-
-void print_stick2(Joycon *jc) {
-
-	printf("Joycon %c (Unattached): ", L_OR_R(jc->left_right));
-
-	printf("%d %d\n", jc->stick.horizontal, jc->stick.vertical);
-
-	
-}
-
-
-
-
-const char *const dstick_names[9] = {"Up", "UR", "Ri", "DR", "Do", "DL", "Le", "UL", "Neu"};
-
-
-
-void hex_dump(unsigned char *buf, int len) {
-	for (int i = 0; i < len; i++) {
-		printf("%02x ", buf[i]);
-	}
-	printf("\n");
-}
-
-void hex_dump2(unsigned char *buf, int len) {
-	for (int i = 0; i < len; i++) {
-		printf("%02x ", buf[i]);
-	}
-}
-
-void hex_dump_0(unsigned char *buf, int len) {
-	for (int i = 0; i < len; i++) {
-		if (buf[i] != 0) {
-			printf("%02x ", buf[i]);
-		}
-	}
-}
-
-void device_print(struct hid_device_info *dev) {
-	printf("USB device info:\n  vid: 0x%04hX pid: 0x%04hX\n  path: %s\n  serial_number: %ls\n  interface_number: %d\n",
-		dev->vendor_id, dev->product_id, dev->path, dev->serial_number, dev->interface_number);
-	printf("  Manufacturer: %ls\n", dev->manufacturer_string);
-	printf("  Product:      %ls\n\n", dev->product_string);
-}
-
-
-
-void print_dstick(Joycon *jc) {
-	printf("%s\n", dstick_names[jc->dstick]);
-}
-
 
 
 
@@ -353,7 +247,6 @@ void hid_dual_write(hid_device *handle_l, hid_device *handle_r, unsigned char *b
 		if (res < 0) {
 			settings.disconnect = true;
 
-			//throw;
 			return;
 		}
 
@@ -365,11 +258,6 @@ void hid_dual_write(hid_device *handle_l, hid_device *handle_r, unsigned char *b
 
 void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
-
-
-	
-	// Upright: LDUR
-	// Sideways: DRLU
 	// bluetooth button pressed packet:
 	if (packet[0] == 0x3F) {
 
@@ -380,7 +268,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		// todo: get button states here aswell:
 	}
 
-	//printf("%02x\n", packet[0]);
 
 	// input update packet:
 	// 0x21 is just buttons, 0x30 includes gyro, 0x31 includes NFC (large packet size)
@@ -389,9 +276,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		// offset for usb or bluetooth data:
 		int offset = settings.usingBluetooth ? 0 : 10;
 
-
 		uint8_t *btn_data = packet + offset + 3;
-
 
 		// get button states:
 		{
@@ -415,17 +300,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			stick_data += 9;
 		}
 
-		
-
-		// it appears that the X component of the stick data isn't just nibble reversed,
-		// specifically, the second nibble of second byte is combined with the first nibble of the first byte
-		// to get the correct X stick value:
-		//uint8_t stick_horizontal = ((stick_data[1] & 0x0F) << 4) | ((stick_data[0] & 0xF0) >> 4);// horizontal axis is reversed / combined with byte 0
-		//uint8_t stick_vertical = stick_data[2];
-
-		//jc->stick.horizontal = -128 + (int)(unsigned int)stick_horizontal;
-		//jc->stick.vertical = -128 + (int)(unsigned int)stick_vertical;
-
 
 		uint16_t stick_horizontal = stick_data[0] | ((stick_data[1] & 0xF) << 8);
 		uint16_t stick_vertical = (stick_data[1] >> 4) | (stick_data[2] << 4);
@@ -447,7 +321,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 		// Accelerometer:
 		// Accelerometer data is absolute
-		//{
+		{
 			// get Accelerometer X:
 			uint16_t accelX = ((uint16_t)gyro_data[1] << 8) | gyro_data[2];
 			jc->accel.x = (double)unsignedToSigned16(accelX);
@@ -462,11 +336,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			uint16_t accelZ = ((uint16_t)gyro_data[5] << 8) | gyro_data[6];
 			jc->accel.z = (double)unsignedToSigned16(accelZ);
 			//jc->accel.z = accelZ;
-
-			//jc->accel.x /= 257;
-			//jc->accel.y /= 257;
-			//jc->accel.z /= 257;
-		//}
+		}
 
 
 
@@ -484,10 +354,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			// get relative yaw:
 			uint16_t relyaw = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
 			jc->gyro.relyaw = (double)unsignedToSigned16(relyaw);
-
-			jc->gyro.rawrelyaw = relyaw;
-			jc->gyro.rawrelpitch = relpitch;
-			jc->gyro.rawrelroll = relroll;
 
 
 			// to degrees/second;
@@ -1893,93 +1759,12 @@ TestGLContext::TestGLContext(wxGLCanvas *canvas) : wxGLContext(canvas) {
 	CheckGLError();
 }
 
-void TestGLContext::DrawRotatedCube(float xangle, float yangle) {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -2.0f);
-	glRotatef(xangle, 1.0f, 0.0f, 0.0f);
-	glRotatef(yangle, 0.0f, 1.0f, 0.0f);
-
-	// draw six faces of a cube of size 1 centered at (0, 0, 0)
-	glBindTexture(GL_TEXTURE_2D, m_textures[0]);
-	glBegin(GL_QUADS);
-	glNormal3f(0.0f, 0.0f, 1.0f);
-	glTexCoord2f(0, 0); glVertex3f(0.5f, 0.5f, 0.5f);
-	glTexCoord2f(1, 0); glVertex3f(-0.5f, 0.5f, 0.5f);
-	glTexCoord2f(1, 1); glVertex3f(-0.5f, -0.5f, 0.5f);
-	glTexCoord2f(0, 1); glVertex3f(0.5f, -0.5f, 0.5f);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D, m_textures[1]);
-	glBegin(GL_QUADS);
-	glNormal3f(0.0f, 0.0f, -1.0f);
-	glTexCoord2f(0, 0); glVertex3f(-0.5f, -0.5f, -0.5f);
-	glTexCoord2f(1, 0); glVertex3f(-0.5f, 0.5f, -0.5f);
-	glTexCoord2f(1, 1); glVertex3f(0.5f, 0.5f, -0.5f);
-	glTexCoord2f(0, 1); glVertex3f(0.5f, -0.5f, -0.5f);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D, m_textures[2]);
-	glBegin(GL_QUADS);
-	glNormal3f(0.0f, 1.0f, 0.0f);
-	glTexCoord2f(0, 0); glVertex3f(0.5f, 0.5f, 0.5f);
-	glTexCoord2f(1, 0); glVertex3f(0.5f, 0.5f, -0.5f);
-	glTexCoord2f(1, 1); glVertex3f(-0.5f, 0.5f, -0.5f);
-	glTexCoord2f(0, 1); glVertex3f(-0.5f, 0.5f, 0.5f);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D, m_textures[3]);
-	glBegin(GL_QUADS);
-	glNormal3f(0.0f, -1.0f, 0.0f);
-	glTexCoord2f(0, 0); glVertex3f(-0.5f, -0.5f, -0.5f);
-	glTexCoord2f(1, 0); glVertex3f(0.5f, -0.5f, -0.5f);
-	glTexCoord2f(1, 1); glVertex3f(0.5f, -0.5f, 0.5f);
-	glTexCoord2f(0, 1); glVertex3f(-0.5f, -0.5f, 0.5f);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D, m_textures[4]);
-	glBegin(GL_QUADS);
-	glNormal3f(1.0f, 0.0f, 0.0f);
-	glTexCoord2f(0, 0); glVertex3f(0.5f, 0.5f, 0.5f);
-	glTexCoord2f(1, 0); glVertex3f(0.5f, -0.5f, 0.5f);
-	glTexCoord2f(1, 1); glVertex3f(0.5f, -0.5f, -0.5f);
-	glTexCoord2f(0, 1); glVertex3f(0.5f, 0.5f, -0.5f);
-	glEnd();
-
-	glBindTexture(GL_TEXTURE_2D, m_textures[5]);
-	glBegin(GL_QUADS);
-	glNormal3f(-1.0f, 0.0f, 0.0f);
-	glTexCoord2f(0, 0); glVertex3f(-0.5f, -0.5f, -0.5f);
-	glTexCoord2f(1, 0); glVertex3f(-0.5f, -0.5f, 0.5f);
-	glTexCoord2f(1, 1); glVertex3f(-0.5f, 0.5f, 0.5f);
-	glTexCoord2f(0, 1); glVertex3f(-0.5f, 0.5f, -0.5f);
-	glEnd();
-
-	glFlush();
-
-	CheckGLError();
-}
-
 
 void TestGLContext::DrawRotatedCube(glm::fquat q) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
-
-	//glTranslatef(0.0f, 0.0f, -2.0f);
-
-
-	//glm::vec3 eulerAngles = glm::eulerAngles(q);
-
-	//glRotatef(glm::degrees(eulerAngles.x), 1.0f, 0.0f, 0.0f);
-	//glRotatef(glm::degrees(eulerAngles.y), 0.0f, 1.0f, 0.0f);
-	//glRotatef(glm::degrees(eulerAngles.z), 0.0f, 0.0f, 1.0f);
-
-	
 
 
 	//glm::mat4 m = glm::toMat4(q);
