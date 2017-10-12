@@ -202,14 +202,16 @@ void found_joycon(struct hid_device_info *dev) {
 		jc.left_right = 2;// right joycon
 	}
 
+	if (dev->product_id == PRO_CONTROLLER) {
+		jc.name = std::string("Pro Controller");
+		jc.left_right = 3;// left joycon
+	}
+
 	jc.serial = wcsdup(dev->serial_number);
 	jc.buttons = 0;
 
 	printf("Found joycon %c %i: %ls %s\n", L_OR_R(jc.left_right), joycons.size(), jc.serial, dev->path);
-	//errno = 0;
 	jc.handle = hid_open_path(dev->path);
-	// set non-blocking:
-	//hid_set_nonblocking(jc.handle, 1);
 
 
 	if (jc.handle == nullptr) {
@@ -281,15 +283,25 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		// get button states:
 		{
 			uint16_t states = 0;
+			uint16_t states2 = 0;
+
 			// Left JoyCon:
 			if (jc->left_right == 1) {
 				states = (btn_data[1] << 8) | (btn_data[2] & 0xFF);
 			// Right JoyCon:
 			} else if (jc->left_right == 2) {
 				states = (btn_data[1] << 8) | (btn_data[0] & 0xFF);
+			// Pro Controller:
+			} else if (jc->left_right == 3) {
+				states = (btn_data[1] << 8) | (btn_data[2] & 0xFF);
+				states2 = (btn_data[1] << 8) | (btn_data[0] & 0xFF);
 			}
 
 			jc->buttons = states;
+			// Pro Controller:
+			if (jc->left_right == 3) {
+				jc->buttons2 = states2;
+			}
 		}
 
 		// get stick data:
@@ -298,6 +310,17 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			stick_data += 6;
 		} else if (jc->left_right == 2) {
 			stick_data += 9;
+		} else if (jc->left_right == 3) {
+			stick_data += 6;
+			uint16_t stick_horizontal = stick_data[0] | ((stick_data[1] & 0xF) << 8);
+			uint16_t stick_vertical = (stick_data[1] >> 4) | (stick_data[2] << 4);
+			jc->stick.horizontal = (int)(unsigned int)stick_horizontal;
+			jc->stick.vertical = (int)(unsigned int)stick_vertical;
+			stick_data += 3;
+			uint16_t stick_horizontal2 = stick_data[0] | ((stick_data[1] & 0xF) << 8);
+			uint16_t stick_vertical2 = (stick_data[1] >> 4) | (stick_data[2] << 4);
+			jc->stick2.horizontal = (int)(unsigned int)stick_horizontal2;
+			jc->stick2.vertical = (int)(unsigned int)stick_vertical2;
 		}
 
 
@@ -354,12 +377,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			// get relative yaw:
 			uint16_t relyaw = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
 			jc->gyro.relyaw = (double)unsignedToSigned16(relyaw);
-
-
-			// to degrees/second;
-			//jc->gyro.relroll = jc->gyro.relroll * 0.070f;
-			//jc->gyro.relpitch = jc->gyro.relpitch * 0.070f;
-			//jc->gyro.relyaw = jc->gyro.relyaw * 0.070f;
 		}
 		
 
@@ -410,33 +427,33 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 
 			// remove this, it's just for rumble testing
-			uint8_t hfa2 = 0x88;
-			uint16_t lfa2 = 0x804d;
+			//uint8_t hfa2 = 0x88;
+			//uint16_t lfa2 = 0x804d;
 
-			tracker.low_freq = clamp(tracker.low_freq, 41.0f, 626.0f);
-			tracker.high_freq = clamp(tracker.high_freq, 82.0f, 1252.0f);
-			
-			// down:
-			if (jc->buttons == 1) {
-				tracker.high_freq -= 1;
-				jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
-			}
-			// down:
-			if (jc->buttons == 2) {
-				tracker.high_freq += 1;
-				jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
-			}
+			//tracker.low_freq = clamp(tracker.low_freq, 41.0f, 626.0f);
+			//tracker.high_freq = clamp(tracker.high_freq, 82.0f, 1252.0f);
+			//
+			//// down:
+			//if (jc->buttons == 1) {
+			//	tracker.high_freq -= 1;
+			//	jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
+			//}
+			//// down:
+			//if (jc->buttons == 2) {
+			//	tracker.high_freq += 1;
+			//	jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
+			//}
 
-			// left:
-			if (jc->buttons == 8) {
-				tracker.low_freq -= 1;
-				jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
-			}
-			// right:
-			if (jc->buttons == 4) {
-				tracker.low_freq += 1;
-				jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
-			}
+			//// left:
+			//if (jc->buttons == 8) {
+			//	tracker.low_freq -= 1;
+			//	jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
+			//}
+			//// right:
+			//if (jc->buttons == 4) {
+			//	tracker.low_freq += 1;
+			//	jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
+			//}
 
 			////printf("%i\n", jc->buttons);
 			////printf("%f\n", tracker.frequency);
@@ -544,8 +561,6 @@ void updatevJoyDevice(Joycon *jc) {
 	float rightJoyConXMultiplier = settings.rightJoyConXMultiplier;
 	float rightJoyConYMultiplier = settings.rightJoyConYMultiplier;
 
-	bool combineJoyCons = settings.combineJoyCons;
-
 	bool reverseX = settings.reverseX;
 	bool reverseY = settings.reverseY;
 
@@ -555,9 +570,14 @@ void updatevJoyDevice(Joycon *jc) {
 
 	UINT DevID;
 
-	if (!combineJoyCons) {
+	if (!settings.combineJoyCons) {
 		DevID = jc->left_right;
 	} else {
+		DevID = 1;
+	}
+
+	// Pro Controller:
+	if (jc->left_right == 3) {
 		DevID = 1;
 	}
 
@@ -580,7 +600,7 @@ void updatevJoyDevice(Joycon *jc) {
 	int ry = 16384;
 	int rz = 0;
 
-	if (!combineJoyCons) {
+	if (!settings.combineJoyCons) {
 		if (jc->left_right == 1) {
 			x = leftJoyConXMultiplier * (jc->stick.horizontal) + leftJoyConXOffset;
 			y = leftJoyConYMultiplier * (jc->stick.vertical) + leftJoyConYOffset;
@@ -606,7 +626,7 @@ void updatevJoyDevice(Joycon *jc) {
 	}
 
 	// both left and right joycons
-	if (!combineJoyCons) {
+	if (!settings.combineJoyCons) {
 		iReport.wAxisX = x;
 		iReport.wAxisY = y;
 		iReport.wAxisXRot = rx;
@@ -625,15 +645,24 @@ void updatevJoyDevice(Joycon *jc) {
 		}
 	}
 
+	// Pro Controller:
+	if (jc->left_right == 3) {
+		x = leftJoyConXMultiplier * (jc->stick.horizontal) + leftJoyConXOffset;
+		y = leftJoyConYMultiplier * (jc->stick.vertical) + leftJoyConYOffset;
+		rx = rightJoyConXMultiplier * (jc->stick2.horizontal) + rightJoyConXOffset;
+		ry = rightJoyConYMultiplier * (jc->stick2.vertical) + rightJoyConYOffset;
+
+		iReport.wAxisX = x;
+		iReport.wAxisY = y;
+		iReport.wAxisXRot = rx;
+		iReport.wAxisYRot = ry;
+	}
 
 
-	// gyro data:
+
+	// gyro / accelerometer data:
 	//if (settings.enableGyro) {
-	if ((jc->left_right == 2) || (joycons.size() == 1 && jc->left_right == 1)) {
-		//if (jc->left_right == 2) {
-			//rz = jc->gyro.roll*240;
-			//iReport.wAxisZRot = jc->gyro.roll * 120;
-			//iReport.wSlider = jc->gyro.pitch * 120;
+	if ((jc->left_right == 2) || (joycons.size() == 1 && jc->left_right == 1) || (jc->left_right == 3)) {
 
 		int multiplier;
 
@@ -838,7 +867,7 @@ void updatevJoyDevice(Joycon *jc) {
 	// JoyCon(R) is the last 16 bits
 
 	long btns = 0;
-	if (!combineJoyCons) {
+	if (!settings.combineJoyCons) {
 		btns = jc->buttons;
 	} else {
 
@@ -850,6 +879,13 @@ void updatevJoyDevice(Joycon *jc) {
 			btns = ((jc->buttons) << 16) | (r & iReport.lButtons);
 
 		}
+	}
+
+	// Pro Controller:
+	if (jc->left_right == 3) {
+		btns = ((iReport.lButtons >> 16) << 16) | (jc->buttons);
+		unsigned r = createMask(0, 15);// 15
+		btns = ((jc->buttons2) << 16) | (r & iReport.lButtons);
 	}
 
 	iReport.lButtons = btns;
@@ -1028,6 +1064,7 @@ init_start:
 			// I don't have a pro controller to test with.)
 			if (cur_dev->product_id == PRO_CONTROLLER) {
 				found_joycon(cur_dev);
+				settings.usingBluetooth = true;
 			}
 
 			// charging grip:
@@ -1067,19 +1104,29 @@ init_start:
 
 		for (int i = 0; i < joycons.size(); ++i) {
 			Joycon *jc = &joycons[i];
-			// left joycon:
+			// JoyCon(L):
 			if (jc->left_right == 1) {
 				int x = (settings.leftJoyConXMultiplier * (jc->stick.horizontal));
 				settings.leftJoyConXOffset = -x + (16384);
 				int y = (settings.leftJoyConYMultiplier * (jc->stick.vertical));
 				settings.leftJoyConYOffset = -y + (16384);
 
-			// right joycon:
+			// JoyCon(R):
 			} else if (jc->left_right == 2) {
 				int x = (settings.rightJoyConXMultiplier * (jc->stick.horizontal));
 				settings.rightJoyConXOffset = -x + (16384);
 				int y = (settings.rightJoyConYMultiplier * (jc->stick.vertical));
 				settings.rightJoyConYOffset = -y + (16384);
+			// Pro Controller:
+			} else if (jc->left_right == 3) {
+				int x = (settings.leftJoyConXMultiplier * (jc->stick.horizontal));
+				settings.leftJoyConXOffset = -x + (16384);
+				int y = (settings.leftJoyConYMultiplier * (jc->stick.vertical));
+				settings.leftJoyConYOffset = -y + (16384);
+				int rx = (settings.rightJoyConXMultiplier * (jc->stick2.horizontal));
+				settings.rightJoyConXOffset = -rx + (16384);
+				int ry = (settings.rightJoyConYMultiplier * (jc->stick2.vertical));
+				settings.rightJoyConYOffset = -ry + (16384);
 			}
 		}
 		//printf("Done centering sticks.\n");
@@ -1121,14 +1168,14 @@ init_start:
 
 	// give a small rumble to all joycons:
 	printf("vibrating JoyCon(s).\n");
-	//for (int k = 0; k < 1; ++k) {
-	//	for (int i = 0; i < joycons.size(); ++i) {
-	//		joycons[i].rumble(100, 1);
-	//		Sleep(20);
-	//		joycons[i].rumble(10, 3);
-	//		//Sleep(100);
-	//	}
-	//}
+	for (int k = 0; k < 1; ++k) {
+		for (int i = 0; i < joycons.size(); ++i) {
+			joycons[i].rumble(100, 1);
+			Sleep(20);
+			joycons[i].rumble(10, 3);
+			//Sleep(100);
+		}
+	}
 
 	// Plays the Mario theme on the JoyCons:
 	// I'm bad with music I just did this by
@@ -2037,9 +2084,6 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("Joycon Driver by fosse ©20
 	Show();
 }
 
-void MainFrame::on_button_clicked(wxCommandEvent&) {
-	wxMessageBox("pressed.", "Info");
-}
 
 void MainFrame::onStart(wxCommandEvent&) {
 	setupConsole("Debug");
@@ -2056,7 +2100,6 @@ void MainFrame::onStart(wxCommandEvent&) {
 
 void MainFrame::onQuit(wxCommandEvent&) {
 	exit(0);
-	//close(true);
 }
 
 void MainFrame::toggleCombine(wxCommandEvent&) {
@@ -2160,12 +2203,6 @@ void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event)) {
 	SwapBuffers();
 }
 
-void TestGLCanvas::Spin(float xSpin, float ySpin) {
-	//m_xangle += xSpin;
-	//m_yangle += ySpin;
-	Refresh(false);
-}
-
 void TestGLCanvas::OnKeyDown(wxKeyEvent& event) {
 
 	glm::fquat del;
@@ -2240,19 +2277,6 @@ MyFrame::MyFrame(bool stereoWindow) : wxFrame(NULL, wxID_ANY, wxT("3D JoyCon gyr
 	new TestGLCanvas(this, stereoWindow ? stereoAttribList : NULL);
 
 	SetIcon(wxICON(sample));
-
-	// Make a menubar
-	//wxMenu *menu = new wxMenu;
-	//menu->Append(wxID_NEW);
-	//menu->Append(NEW_STEREO_WINDOW, "New Stereo Window");
-	//menu->AppendSeparator();
-	//menu->Append(wxID_CLOSE);
-	//wxMenuBar *menuBar = new wxMenuBar;
-	//menuBar->Append(menu, wxT("&Cube"));
-
-	//SetMenuBar(menuBar);
-
-	//CreateStatusBar();
 
 	SetClientSize(400, 400);
 	Show();

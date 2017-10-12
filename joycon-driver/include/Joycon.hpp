@@ -16,10 +16,11 @@ public:
 
 	bool bluetooth = true;
 
-	int left_right = 0;// 1: left joycon, 2: right joycon
+	int left_right = 0;// 1: left joycon, 2: right joycon, 3: pro controller
 
 	uint16_t buttons;
-	bool buttons2[32];
+	uint16_t buttons2;// for pro controller
+
 	int8_t dstick;
 	uint8_t battery;
 
@@ -28,10 +29,10 @@ public:
 	struct Stick {
 		int horizontal;
 		int vertical;
+	};
 
-		uint8_t horizontal2;
-		uint8_t vertical2;
-	} stick;
+	Stick stick;
+	Stick stick2;// Pro Controller
 
 	struct Gyroscope {
 		// absolute:
@@ -57,9 +58,6 @@ public:
 		double y = 0;
 		double z = 0;
 	} accel;
-
-
-	uint8_t newButtons[3];
 
 
 public:
