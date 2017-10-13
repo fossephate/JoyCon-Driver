@@ -170,6 +170,12 @@ struct Tracker {
 	//glm::qauternion q;
 	glm::fquat quat = glm::angleAxis(0.0f, glm::vec3(1.0, 0.0, 0.0));
 
+	// get current time
+	//std::chrono::high_resolution_clock tNow;
+	std::chrono::steady_clock::time_point tPoll = std::chrono::high_resolution_clock::now();
+
+	//auto tSleepStart = std::chrono::high_resolution_clock::now();
+
 	float previousPitch = 0;
 } tracker;
 
@@ -457,7 +463,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 			////printf("%i\n", jc->buttons);
 			////printf("%f\n", tracker.frequency);
-			printf("%f %f\n", tracker.low_freq, tracker.high_freq);
+			//printf("%f %f\n", tracker.low_freq, tracker.high_freq);
 		}
 
 	}
@@ -507,8 +513,8 @@ int acquirevJoyDevice(int deviceID) {
 		throw;
 		//goto Exit;
 	} else {
-		wprintf(L"Vendor: %s\nProduct :%s\nVersion Number:%s\n", static_cast<TCHAR *> (GetvJoyManufacturerString()), static_cast<TCHAR *>(GetvJoyProductString()), static_cast<TCHAR *>(GetvJoySerialNumberString()));
-		wprintf(L"Product :%s\n", static_cast<TCHAR *>(GetvJoyProductString()));
+		//wprintf(L"Vendor: %s\nProduct :%s\nVersion Number:%s\n", static_cast<TCHAR *> (GetvJoyManufacturerString()), static_cast<TCHAR *>(GetvJoyProductString()), static_cast<TCHAR *>(GetvJoySerialNumberString()));
+		//wprintf(L"Product :%s\n", static_cast<TCHAR *>(GetvJoyProductString()));
 	};
 
 	// Get the status of the vJoy device before trying to acquire it
@@ -996,7 +1002,25 @@ void pollLoop() {
 		//}
 		//jc->send_command(0x1F, buf, 0);
 
-		jc->send_command(0x1E, buf, 0);
+
+		// get current time
+		std::chrono::steady_clock::time_point tNow = std::chrono::high_resolution_clock::now();
+
+		auto timeSincePoll = std::chrono::duration_cast<std::chrono::microseconds>(tNow - tracker.tPoll);
+
+
+
+		// time spent sleeping (0):
+		double timeSincePollMS = timeSincePoll.count() / 1000.0;
+
+		if (timeSincePollMS > (1000.0/60.0)) {
+			jc->send_command(0x1E, buf, 0);
+			tracker.tPoll = std::chrono::high_resolution_clock::now();
+		}
+
+
+		hid_read(jc->handle, buf, 0x40);
+
 		handle_input(jc, buf, 0x40);
 	}
 
@@ -1007,7 +1031,7 @@ void pollLoop() {
 
 
 	// sleep:
-	accurateSleep(16.66);// 8.00
+	accurateSleep(2.00);// 8.00
 
 	if (settings.restart) {
 		settings.restart = false;
