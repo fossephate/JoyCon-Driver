@@ -27,8 +27,10 @@ public:
 	int global_count = 0;
 
 	struct Stick {
-		int horizontal;
-		int vertical;
+		uint16_t x;
+		uint16_t y;
+		float CalX;
+		float CalY;
 	};
 
 	Stick stick;
@@ -36,14 +38,14 @@ public:
 
 	struct Gyroscope {
 		// absolute:
-		double pitch		= 0;
-		double yaw		= 0;
-		double roll		= 0;
+		double pitch = 0;
+		double yaw = 0;
+		double roll = 0;
 
 		// relative:
-		double relpitch	= 0;
-		double relyaw	= 0;
-		double relroll	= 0;
+		double relpitch = 0;
+		double relyaw = 0;
+		double relroll = 0;
 
 		uint16_t rawrelpitch = 0;
 		uint16_t rawrelyaw = 0;
@@ -58,6 +60,52 @@ public:
 		double y = 0;
 		double z = 0;
 	} accel;
+
+
+	// calibration data:
+
+	struct brcm_hdr {
+		uint8_t cmd;
+		uint8_t rumble[9];
+	};
+
+	struct brcm_cmd_01 {
+		uint8_t subcmd;
+		union {
+
+			struct {
+				uint32_t offset;
+				uint8_t size;
+			} spi_read;
+
+			struct {
+				uint32_t address;
+			} hax_read;
+		};
+	};
+
+	float acc_cal_coeff[3];
+	float gyro_cal_coeff[3];
+	float cal_x[1] = { 0.0f };
+	float cal_y[1] = { 0.0f };
+
+	bool has_user_cal_stick_l = false;
+	bool has_user_cal_stick_r = false;
+	bool has_user_cal_sensor = false;
+
+	unsigned char factory_stick_cal[0x12];
+	unsigned char user_stick_cal[0x16];
+	unsigned char sensor_model[0x6];
+	unsigned char stick_model[0x24];
+	unsigned char factory_sensor_cal[0x18];
+	unsigned char user_sensor_cal[0x1A];
+	uint16_t factory_sensor_cal_calm[0xC];
+	uint16_t user_sensor_cal_calm[0xC];
+	int16_t sensor_cal[0x2][0x3];
+	uint16_t stick_cal_x_l[0x3];
+	uint16_t stick_cal_y_l[0x3];
+	uint16_t stick_cal_x_r[0x3];
+	uint16_t stick_cal_y_r[0x3];
 
 
 public:
@@ -116,6 +164,10 @@ public:
 
 		uint8_t rumble_base[9] = { (++global_count) & 0xF, 0x00, 0x01, 0x40, 0x40, 0x00, 0x01, 0x40, 0x40 };
 		memcpy(buf, rumble_base, 9);
+
+		if (global_count > 0xF) {
+			global_count = 0x0;
+		}
 
 		// set neutral rumble base only if the command is vibrate (0x01)
 		// if set when other commands are set, might cause the command to be misread and not executed
@@ -190,7 +242,7 @@ public:
 		buf[0 + off] = hf & 0xFF;
 		buf[1 + off] = hfa + ((hf >> 8) & 0xFF); //Add amp + 1st byte of frequency to amplitude byte
 
-		// Byte swapping
+												 // Byte swapping
 		buf[2 + off] = lf + ((lfa >> 8) & 0xFF); //Add freq + 1st byte of LF amplitude to the frequency byte
 		buf[3 + off] = lfa & 0xFF;
 
@@ -274,7 +326,7 @@ public:
 		buf[0 + off] = hf & 0xFF;
 		buf[1 + off] = hfa + ((hf >> 8) & 0xFF); //Add amp + 1st byte of frequency to amplitude byte
 
-		// Byte swapping
+												 // Byte swapping
 		buf[2 + off] = lf + ((lfa >> 8) & 0xFF); //Add freq + 1st byte of LF amplitude to the frequency byte
 		buf[3 + off] = lfa & 0xFF;
 
@@ -337,6 +389,30 @@ public:
 		//buf[0] = 0x03;
 		//send_subcommand(0x01, 0x01, buf, 1);
 
+		printf("Getting calibration data...\n");
+
+		// get calibration data:
+		memset(factory_stick_cal, 0, 0x12);
+		memset(user_stick_cal, 0, 0x16);
+		memset(sensor_model, 0, 0x6);
+		memset(stick_model, 0, 0x12);
+		memset(factory_sensor_cal, 0, 0x18);
+		memset(user_sensor_cal, 0, 0x1A);
+		memset(factory_sensor_cal_calm, 0, 0xC);
+		memset(user_sensor_cal_calm, 0, 0xC);
+		memset(sensor_cal, 0, sizeof(sensor_cal));
+		memset(stick_cal_x_l, 0, sizeof(stick_cal_x_l));
+		memset(stick_cal_y_l, 0, sizeof(stick_cal_y_l));
+		memset(stick_cal_x_r, 0, sizeof(stick_cal_x_r));
+		memset(stick_cal_y_r, 0, sizeof(stick_cal_y_r));
+
+		get_spi_data(0x6020, 0x18, factory_sensor_cal);
+		get_spi_data(0x603D, 0x12, factory_stick_cal);
+		get_spi_data(0x6080, 0x6, sensor_model);
+		get_spi_data(0x6086, 0x12, stick_model);
+		get_spi_data(0x6098, 0x12, &stick_model[0x12]);
+		get_spi_data(0x8010, 0x16, user_stick_cal);
+		get_spi_data(0x8026, 0x1A, user_sensor_cal);
 
 
 		printf("Successfully initialized %s!\n", this->name.c_str());
@@ -426,113 +502,165 @@ public:
 	}
 
 
+	// calibrated sticks:
+	// Credit to Hypersect (Ryan Juckett)
+	// http://blog.hypersect.com/interpreting-analog-sticks/
+	void CalcAnalogStick() {
 
+		if (this->left_right == 1) {
+			CalcAnalogStick2(
+				&this->stick.CalX,
+				&this->stick.CalY,
+				this->stick.x,
+				this->stick.y,
+				this->stick_cal_x_l,
+				this->stick_cal_y_l);
 
+		} else if (this->left_right == 2) {
+			CalcAnalogStick2(
+				&this->stick.CalX,
+				&this->stick.CalY,
+				this->stick2.x,
+				this->stick2.y,
+				this->stick_cal_x_r,
+				this->stick_cal_y_r);
 
-	// SPI:
+		} else if (this->left_right == 3) {
+			CalcAnalogStick2(
+				&this->stick.CalX,
+				&this->stick.CalY,
+				this->stick.x,
+				this->stick.y,
+				this->stick_cal_x_l,
+				this->stick_cal_y_l);
 
-	void spi_write(hid_device *handle, uint32_t offs, uint8_t *data, uint8_t len) {
-		unsigned char buf[0x400];
-		uint8_t *spi_write = (uint8_t*)calloc(1, 0x26 * sizeof(uint8_t));
-		uint32_t* offset = (uint32_t*)(&spi_write[0]);
-		uint8_t* length = (uint8_t*)(&spi_write[4]);
-
-		*length = len;
-		*offset = offs;
-		memcpy(&spi_write[0x5], data, len);
-
-		int max_write_count = 2000;
-		int write_count = 0;
-		do {
-			//usleep(300000);
-			write_count += 1;
-			memcpy(buf, spi_write, 0x39);
-			this->send_subcommand(0x1, 0x11, buf, 0x26);
-		} while ((buf[0x10 + (bluetooth ? 0 : 10)] != 0x11 && buf[0] != (bluetooth ? 0x21 : 0x81))
-			&& write_count < max_write_count);
-		if (write_count > max_write_count)
-			printf("ERROR: Write error or timeout\nSkipped writing of %dBytes at address 0x%05X...\n",
-				*length, *offset);
+			CalcAnalogStick2(
+				&this->stick2.CalX,
+				&this->stick2.CalY,
+				this->stick2.x,
+				this->stick2.y,
+				this->stick_cal_x_r,
+				this->stick_cal_y_r);
+		}
 	}
 
-	void spi_read(hid_device *handle, uint32_t offs, uint8_t *data, uint8_t len) {
-		unsigned char buf[0x400];
-		uint8_t *spi_read_cmd = (uint8_t*)calloc(1, 0x26 * sizeof(uint8_t));
-		uint32_t* offset = (uint32_t*)(&spi_read_cmd[0]);
-		uint8_t* length = (uint8_t*)(&spi_read_cmd[4]);
 
-		*length = len;
-		*offset = offs;
+	void CalcAnalogStick2
+	(
+		float *pOutX,       // out: resulting stick X value
+		float *pOutY,       // out: resulting stick Y value
+		uint16_t x,              // in: initial stick X value
+		uint16_t y,              // in: initial stick Y value
+		uint16_t x_calc[3],      // calc -X, CenterX, +X
+		uint16_t y_calc[3]       // calc -Y, CenterY, +Y
+	)
+	{
 
-		int max_read_count = 2000;
-		int read_count = 0;
-		do {
-			//usleep(300000);
-			read_count += 1;
-			memcpy(buf, spi_read_cmd, 0x36);
-			this->send_subcommand(0x1, 0x10, buf, 0x26);
-		} while (*(uint32_t*)&buf[0xF + (bluetooth ? 0 : 10)] != *offset && read_count < max_read_count);
-		if (read_count > max_read_count)
-			printf("ERROR: Read error or timeout\nSkipped reading of %dBytes at address 0x%05X...\n",
-				*length, *offset);
+		float x_f, y_f;
+		// Apply Joy-Con center deadzone. 0xAE translates approx to 15%. Pro controller has a 10% () deadzone
+		float deadZoneCenter = 0.15f;
+		// Add a small ammount of outer deadzone to avoid edge cases or machine variety.
+		float deadZoneOuter = 0.10f;
 
-
-		memcpy(data, &buf[0x14 + (bluetooth ? 0 : 10)], len);
-	}
-
-	void spi_flash_dump(hid_device *handle, char *out_path) {
-		unsigned char buf[0x400];
-		uint8_t *spi_read_cmd = (uint8_t*)calloc(1, 0x26 * sizeof(uint8_t));
-		int safe_length = 0x10; // 512KB fits into 32768 * 16B packets
-		int fast_rate_length = 0x1D; // Max SPI data that fit into a packet is 29B. Needs removal of last 3 bytes from the dump.
-
-		int length = fast_rate_length;
-
-		FILE *dump = fopen(out_path, "wb");
-		if (dump == NULL)
-		{
-			printf("Failed to open dump file %s, aborting...\n", out_path);
-			return;
+		// convert to float based on calibration and valid ranges per +/-axis
+		x = clamp(x, x_calc[0], x_calc[2]);
+		y = clamp(y, y_calc[0], y_calc[2]);
+		if (x >= x_calc[1]) {
+			x_f = (float)(x - x_calc[1]) / (float)(x_calc[2] - x_calc[1]);
+		} else {
+			x_f = -((float)(x - x_calc[1]) / (float)(x_calc[0] - x_calc[1]));
+		}
+		if (y >= y_calc[1]) {
+			y_f = (float)(y - y_calc[1]) / (float)(y_calc[2] - y_calc[1]);
+		} else {
+			y_f = -((float)(y - y_calc[1]) / (float)(y_calc[0] - y_calc[1]));
 		}
 
-		uint32_t* offset = (uint32_t*)(&spi_read_cmd[0x0]);
-		for (*offset = 0x0; *offset < 0x80000; *offset += length)
-		{
-			// HACK/TODO: hid_exchange loves to return data from the wrong addr, or 0x30 (NACK?) packets
-			// so let's make sure our returned data is okay before writing
-
-			//Set length of requested data
-			spi_read_cmd[0x4] = length;
-
-			int max_read_count = 2000;
-			int read_count = 0;
-			while (1)
-			{
-				read_count += 1;
-				memcpy(buf, spi_read_cmd, 0x26);
-				this->send_subcommand(0x1, 0x10, buf, 0x26);
-
-				// sanity-check our data, loop if it's not good
-				if ((buf[0] == (bluetooth ? 0x21 : 0x81)
-					&& *(uint32_t*)&buf[0xF + (bluetooth ? 0 : 10)] == *offset)
-					|| read_count > max_read_count)
-					break;
-			}
-
-			if (read_count > max_read_count)
-			{
-				printf("\n\nERROR: Read error or timeout.\nSkipped dumping of %dB at address 0x%05X...\n\n",
-					length, *offset);
-				return;
-			}
-			fwrite(buf + (0x14 + (bluetooth ? 0 : 10)) * sizeof(char), length, 1, dump);
-
-			if ((*offset & 0xFF) == 0) // less spam
-				printf("\rDumped 0x%05X of 0x80000", *offset);
+		// Interpolate zone between deadzones
+		float mag = sqrtf(x_f*x_f + y_f*y_f);
+		if (mag > deadZoneCenter) {
+			// scale such that output magnitude is in the range [0.0f, 1.0f]
+			float legalRange = 1.0f - deadZoneOuter - deadZoneCenter;
+			float normalizedMag = min(1.0f, (mag - deadZoneCenter) / legalRange);
+			float scale = normalizedMag / mag;
+			pOutX[1] = x_f * scale;
+			pOutY[1] = y_f * scale;
+		} else {
+			// stick is in the inner dead zone
+			pOutX[1] = 0.0f;
+			pOutY[1] = 0.0f;
 		}
-		printf("\rDumped 0x80000 of 0x80000\n");
-		fclose(dump);
 	}
 
+	// SPI (CTCaer):
+
+
+	int get_spi_data(uint32_t offset, const uint16_t read_len, uint8_t *test_buf) {
+		int res;
+		uint8_t buf[0x100];
+		while (1) {
+			memset(buf, 0, sizeof(buf));
+			auto hdr = (brcm_hdr *)buf;
+			auto pkt = (brcm_cmd_01 *)(hdr + 1);
+			hdr->cmd = 1;
+			hdr->rumble[0] = global_count;
+			global_count++;
+			if (global_count > 0xF) {
+				global_count = 0x0;
+			}
+			pkt->subcmd = 0x10;
+			pkt->spi_read.offset = offset;
+			pkt->spi_read.size = read_len;
+			res = hid_write(handle, buf, sizeof(*hdr) + sizeof(*pkt));
+
+			res = hid_read(handle, buf, sizeof(buf));
+
+			if ((*(uint16_t*)&buf[0xD] == 0x1090) && (*(uint32_t*)&buf[0xF] == offset))
+				break;
+		}
+		if (res >= 0x14 + read_len) {
+			for (int i = 0; i < read_len; i++) {
+				test_buf[i] = buf[0x14 + i];
+			}
+		}
+
+		return 0;
+	}
+
+	int write_spi_data(uint32_t offset, const uint16_t write_len, uint8_t* test_buf) {
+		int res;
+		uint8_t buf[0x100];
+		int error_writing = 0;
+		while (1) {
+			memset(buf, 0, sizeof(buf));
+			auto hdr = (brcm_hdr *)buf;
+			auto pkt = (brcm_cmd_01 *)(hdr + 1);
+			hdr->cmd = 1;
+			hdr->rumble[0] = global_count;
+			global_count++;
+			if (global_count > 0xF) {
+				global_count = 0x0;
+			}
+			pkt->subcmd = 0x11;
+			pkt->spi_read.offset = offset;
+			pkt->spi_read.size = write_len;
+			for (int i = 0; i < write_len; i++) {
+				buf[0x10 + i] = test_buf[i];
+			}
+			res = hid_write(handle, buf, sizeof(*hdr) + sizeof(*pkt) + write_len);
+
+			res = hid_read(handle, buf, sizeof(buf));
+
+			if (*(uint16_t*)&buf[0xD] == 0x1180)
+				break;
+
+			error_writing++;
+			if (error_writing == 125)
+				return 1;
+		}
+
+		return 0;
+
+	}
 
 };

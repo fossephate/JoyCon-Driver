@@ -320,20 +320,26 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			stick_data += 6;
 			uint16_t stick_horizontal = stick_data[0] | ((stick_data[1] & 0xF) << 8);
 			uint16_t stick_vertical = (stick_data[1] >> 4) | (stick_data[2] << 4);
-			jc->stick.horizontal = (int)(unsigned int)stick_horizontal;
-			jc->stick.vertical = (int)(unsigned int)stick_vertical;
+			jc->stick.x = (int)(unsigned int)stick_horizontal;
+			jc->stick.y = (int)(unsigned int)stick_vertical;
 			stick_data += 3;
 			uint16_t stick_horizontal2 = stick_data[0] | ((stick_data[1] & 0xF) << 8);
 			uint16_t stick_vertical2 = (stick_data[1] >> 4) | (stick_data[2] << 4);
-			jc->stick2.horizontal = (int)(unsigned int)stick_horizontal2;
-			jc->stick2.vertical = (int)(unsigned int)stick_vertical2;
+			jc->stick2.x = (int)(unsigned int)stick_horizontal2;
+			jc->stick2.y = (int)(unsigned int)stick_vertical2;
 		}
 
 
 		uint16_t stick_horizontal = stick_data[0] | ((stick_data[1] & 0xF) << 8);
 		uint16_t stick_vertical = (stick_data[1] >> 4) | (stick_data[2] << 4);
-		jc->stick.horizontal = (int)(unsigned int)stick_horizontal;
-		jc->stick.vertical = (int)(unsigned int)stick_vertical;
+
+
+		
+
+		jc->stick.x = stick_horizontal;
+		jc->stick.y = stick_vertical;
+		// use calibration data:
+		jc->CalcAnalogStick();
 
 		jc->battery = (stick_data[1] & 0xF0) >> 4;
 
@@ -608,19 +614,19 @@ void updatevJoyDevice(Joycon *jc) {
 
 	if (!settings.combineJoyCons) {
 		if (jc->left_right == 1) {
-			x = leftJoyConXMultiplier * (jc->stick.horizontal) + leftJoyConXOffset;
-			y = leftJoyConYMultiplier * (jc->stick.vertical) + leftJoyConYOffset;
+			x = leftJoyConXMultiplier * (jc->stick.CalX) + leftJoyConXOffset;
+			y = leftJoyConYMultiplier * (jc->stick.CalY) + leftJoyConYOffset;
 		} else if (jc->left_right == 2) {
-			x = rightJoyConXMultiplier * (jc->stick.horizontal) + rightJoyConXOffset;
-			y = rightJoyConYMultiplier * (jc->stick.vertical) + rightJoyConYOffset;
+			x = rightJoyConXMultiplier * (jc->stick.CalX) + rightJoyConXOffset;
+			y = rightJoyConYMultiplier * (jc->stick.CalY) + rightJoyConYOffset;
 		}
 	} else {
 		if (jc->left_right == 1) {
-			x = leftJoyConXMultiplier * (jc->stick.horizontal) + leftJoyConXOffset;
-			y = leftJoyConYMultiplier * (jc->stick.vertical) + leftJoyConYOffset;
+			x = leftJoyConXMultiplier * (jc->stick.CalX) + leftJoyConXOffset;
+			y = leftJoyConYMultiplier * (jc->stick.CalY) + leftJoyConYOffset;
 		} else if (jc->left_right == 2) {
-			rx = rightJoyConXMultiplier * (jc->stick.horizontal) + rightJoyConXOffset;
-			ry = rightJoyConYMultiplier * (jc->stick.vertical) + rightJoyConYOffset;
+			rx = rightJoyConXMultiplier * (jc->stick.CalX) + rightJoyConXOffset;
+			ry = rightJoyConYMultiplier * (jc->stick.CalY) + rightJoyConYOffset;
 		}
 	}
 
@@ -653,15 +659,20 @@ void updatevJoyDevice(Joycon *jc) {
 
 	// Pro Controller:
 	if (jc->left_right == 3) {
-		x = leftJoyConXMultiplier * (jc->stick.horizontal) + leftJoyConXOffset;
-		y = leftJoyConYMultiplier * (jc->stick.vertical) + leftJoyConYOffset;
-		rx = rightJoyConXMultiplier * (jc->stick2.horizontal) + rightJoyConXOffset;
-		ry = rightJoyConYMultiplier * (jc->stick2.vertical) + rightJoyConYOffset;
+		//x = leftJoyConXMultiplier * (jc->stick.x) + leftJoyConXOffset;
+		//y = leftJoyConYMultiplier * (jc->stick.y) + leftJoyConYOffset;
+		//rx = rightJoyConXMultiplier * (jc->stick2.x) + rightJoyConXOffset;
+		//ry = rightJoyConYMultiplier * (jc->stick2.y) + rightJoyConYOffset;
 
-		iReport.wAxisX = x;
-		iReport.wAxisY = y;
-		iReport.wAxisXRot = rx;
-		iReport.wAxisYRot = ry;
+		//iReport.wAxisX = x;
+		//iReport.wAxisY = y;
+		//iReport.wAxisXRot = rx;
+		//iReport.wAxisYRot = ry;
+
+		iReport.wAxisX = jc->stick.CalX;
+		iReport.wAxisY = jc->stick.CalY;
+		iReport.wAxisXRot = jc->stick2.CalX;
+		iReport.wAxisYRot = jc->stick2.CalY;
 	}
 
 
@@ -1118,43 +1129,43 @@ init_start:
 		}
 	}
 
-	// use stick data to calibrate:
-	if (settings.autoCenterSticks) {
-		printf("Auto centering sticks...\n");
-		// do a few polls to get stick data:
-		for (int j = 0; j < 10; ++j) {
-			pollLoop();
-		}
+	//// use stick data to calibrate:
+	//if (settings.autoCenterSticks) {
+	//	printf("Auto centering sticks...\n");
+	//	// do a few polls to get stick data:
+	//	for (int j = 0; j < 10; ++j) {
+	//		pollLoop();
+	//	}
 
-		for (int i = 0; i < joycons.size(); ++i) {
-			Joycon *jc = &joycons[i];
-			// JoyCon(L):
-			if (jc->left_right == 1) {
-				int x = (settings.leftJoyConXMultiplier * (jc->stick.horizontal));
-				settings.leftJoyConXOffset = -x + (16384);
-				int y = (settings.leftJoyConYMultiplier * (jc->stick.vertical));
-				settings.leftJoyConYOffset = -y + (16384);
+	//	for (int i = 0; i < joycons.size(); ++i) {
+	//		Joycon *jc = &joycons[i];
+	//		// JoyCon(L):
+	//		if (jc->left_right == 1) {
+	//			int x = (settings.leftJoyConXMultiplier * (jc->stick.x));
+	//			settings.leftJoyConXOffset = -x + (16384);
+	//			int y = (settings.leftJoyConYMultiplier * (jc->stick.y));
+	//			settings.leftJoyConYOffset = -y + (16384);
 
-			// JoyCon(R):
-			} else if (jc->left_right == 2) {
-				int x = (settings.rightJoyConXMultiplier * (jc->stick.horizontal));
-				settings.rightJoyConXOffset = -x + (16384);
-				int y = (settings.rightJoyConYMultiplier * (jc->stick.vertical));
-				settings.rightJoyConYOffset = -y + (16384);
-			// Pro Controller:
-			} else if (jc->left_right == 3) {
-				int x = (settings.leftJoyConXMultiplier * (jc->stick.horizontal));
-				settings.leftJoyConXOffset = -x + (16384);
-				int y = (settings.leftJoyConYMultiplier * (jc->stick.vertical));
-				settings.leftJoyConYOffset = -y + (16384);
-				int rx = (settings.rightJoyConXMultiplier * (jc->stick2.horizontal));
-				settings.rightJoyConXOffset = -rx + (16384);
-				int ry = (settings.rightJoyConYMultiplier * (jc->stick2.vertical));
-				settings.rightJoyConYOffset = -ry + (16384);
-			}
-		}
-		//printf("Done centering sticks.\n");
-	}
+	//		// JoyCon(R):
+	//		} else if (jc->left_right == 2) {
+	//			int x = (settings.rightJoyConXMultiplier * (jc->stick.x));
+	//			settings.rightJoyConXOffset = -x + (16384);
+	//			int y = (settings.rightJoyConYMultiplier * (jc->stick.y));
+	//			settings.rightJoyConYOffset = -y + (16384);
+	//		// Pro Controller:
+	//		} else if (jc->left_right == 3) {
+	//			int x = (settings.leftJoyConXMultiplier * (jc->stick.x));
+	//			settings.leftJoyConXOffset = -x + (16384);
+	//			int y = (settings.leftJoyConYMultiplier * (jc->stick.y));
+	//			settings.leftJoyConYOffset = -y + (16384);
+	//			int rx = (settings.rightJoyConXMultiplier * (jc->stick2.x));
+	//			settings.rightJoyConXOffset = -rx + (16384);
+	//			int ry = (settings.rightJoyConYMultiplier * (jc->stick2.y));
+	//			settings.rightJoyConYOffset = -ry + (16384);
+	//		}
+	//	}
+	//	//printf("Done centering sticks.\n");
+	//}
 
 
 	pollLoop();
