@@ -2,6 +2,15 @@
 #include <hidapi.h>
 #include "tools.hpp"
 
+//typedef uint8_t u8;
+//typedef uint16_t u16;
+//typedef uint32_t u32;
+//typedef uint64_t u64;
+//typedef int8_t s8;
+//typedef int16_t s16;
+//typedef int32_t s32;
+//typedef int64_t s64;
+
 class Joycon {
 
 public:
@@ -18,19 +27,22 @@ public:
 
 	int left_right = 0;// 1: left joycon, 2: right joycon, 3: pro controller
 
-	uint16_t buttons;
-	uint16_t buttons2;// for pro controller
+	uint16_t buttons = 0;
+	uint16_t buttons2 = 0;// for pro controller
 
 	int8_t dstick;
 	uint8_t battery;
 
 	int global_count = 0;
 
+
+	int timing_byte = 0x0;
+
 	struct Stick {
-		uint16_t x;
-		uint16_t y;
-		float CalX;
-		float CalY;
+		uint16_t x = 0;
+		uint16_t y = 0;
+		float CalX = 0;
+		float CalY = 0;
 	};
 
 	Stick stick;
@@ -38,18 +50,15 @@ public:
 
 	struct Gyroscope {
 		// absolute:
-		double pitch = 0;
-		double yaw = 0;
-		double roll = 0;
+		double pitch	= 0;
+		double yaw		= 0;
+		double roll		= 0;
 
 		// relative:
 		double relpitch = 0;
-		double relyaw = 0;
-		double relroll = 0;
+		double relyaw	= 0;
+		double relroll	= 0;
 
-		uint16_t rawrelpitch = 0;
-		uint16_t rawrelyaw = 0;
-		uint16_t rawrelroll = 0;
 	} gyro;
 
 	struct Accelerometer {
@@ -345,6 +354,38 @@ public:
 		unsigned char buf[0x40];
 		memset(buf, 0, 0x40);
 
+
+
+		// set non-blocking:
+		//hid_set_nonblocking(this->handle, 1);
+		// set blocking to ensure command is recieved:
+		hid_set_nonblocking(this->handle, 0);
+
+		// get calibration data:
+		printf("Getting calibration data...\n");
+		memset(factory_stick_cal, 0, 0x12);
+		memset(user_stick_cal, 0, 0x16);
+		memset(sensor_model, 0, 0x6);
+		memset(stick_model, 0, 0x12);
+		memset(factory_sensor_cal, 0, 0x18);
+		memset(user_sensor_cal, 0, 0x1A);
+		memset(factory_sensor_cal_calm, 0, 0xC);
+		memset(user_sensor_cal_calm, 0, 0xC);
+		memset(sensor_cal, 0, sizeof(sensor_cal));
+		memset(stick_cal_x_l, 0, sizeof(stick_cal_x_l));
+		memset(stick_cal_y_l, 0, sizeof(stick_cal_y_l));
+		memset(stick_cal_x_r, 0, sizeof(stick_cal_x_r));
+		memset(stick_cal_y_r, 0, sizeof(stick_cal_y_r));
+
+
+		get_spi_data(0x6020, 0x18, factory_sensor_cal);
+		get_spi_data(0x603D, 0x12, factory_stick_cal);
+		get_spi_data(0x6080, 0x6, sensor_model);
+		get_spi_data(0x6086, 0x12, stick_model);
+		get_spi_data(0x6098, 0x12, &stick_model[0x12]);
+		get_spi_data(0x8010, 0x16, user_stick_cal);
+		get_spi_data(0x8026, 0x1A, user_sensor_cal);
+
 		// set blocking to ensure command is recieved:
 		hid_set_nonblocking(this->handle, 0);
 
@@ -367,52 +408,9 @@ public:
 		// x23	MCU update input report ?
 		// 30	NPad standard mode. Pushes current state @60Hz. Default in SDK if arg is not in the list
 		// 31	NFC mode. Pushes large packets @60Hz
-
-		// sometimes gets stuck at 0x21 mode until set to 0x31, so do that and then set to 0x30 mode?
-		// I don't understand why this happens, but it prevents gyro data from being polled
-		printf("Increase data rate for Bluetooth...\n");
+		printf("Set input report mode to 0x30...\n");
 		buf[0] = 0x30;
 		send_subcommand(0x01, 0x03, buf, 1);
-		//buf[0] = 0x30;
-		//send_subcommand(0x01, 0x03, buf, 1);
-
-
-		//printf("Pairing1?...\n");
-		//buf[0] = 0x01;
-		//send_subcommand(0x01, 0x01, buf, 1);
-
-		//printf("Pairing2?...\n");
-		//buf[0] = 0x02;
-		//send_subcommand(0x01, 0x01, buf, 1);
-
-		//printf("Pairing3?...\n");
-		//buf[0] = 0x03;
-		//send_subcommand(0x01, 0x01, buf, 1);
-
-		printf("Getting calibration data...\n");
-
-		// get calibration data:
-		memset(factory_stick_cal, 0, 0x12);
-		memset(user_stick_cal, 0, 0x16);
-		memset(sensor_model, 0, 0x6);
-		memset(stick_model, 0, 0x12);
-		memset(factory_sensor_cal, 0, 0x18);
-		memset(user_sensor_cal, 0, 0x1A);
-		memset(factory_sensor_cal_calm, 0, 0xC);
-		memset(user_sensor_cal_calm, 0, 0xC);
-		memset(sensor_cal, 0, sizeof(sensor_cal));
-		memset(stick_cal_x_l, 0, sizeof(stick_cal_x_l));
-		memset(stick_cal_y_l, 0, sizeof(stick_cal_y_l));
-		memset(stick_cal_x_r, 0, sizeof(stick_cal_x_r));
-		memset(stick_cal_y_r, 0, sizeof(stick_cal_y_r));
-
-		get_spi_data(0x6020, 0x18, factory_sensor_cal);
-		get_spi_data(0x603D, 0x12, factory_stick_cal);
-		get_spi_data(0x6080, 0x6, sensor_model);
-		get_spi_data(0x6086, 0x12, stick_model);
-		get_spi_data(0x6098, 0x12, &stick_model[0x12]);
-		get_spi_data(0x8010, 0x16, user_stick_cal);
-		get_spi_data(0x8026, 0x1A, user_sensor_cal);
 
 
 		printf("Successfully initialized %s!\n", this->name.c_str());
@@ -603,20 +601,25 @@ public:
 			auto hdr = (brcm_hdr *)buf;
 			auto pkt = (brcm_cmd_01 *)(hdr + 1);
 			hdr->cmd = 1;
-			hdr->rumble[0] = global_count;
-			global_count++;
-			if (global_count > 0xF) {
-				global_count = 0x0;
+			hdr->rumble[0] = timing_byte;
+			timing_byte++;
+			if (timing_byte > 0xF) {
+				timing_byte = 0x0;
 			}
 			pkt->subcmd = 0x10;
 			pkt->spi_read.offset = offset;
 			pkt->spi_read.size = read_len;
 			res = hid_write(handle, buf, sizeof(*hdr) + sizeof(*pkt));
 
+			hex_dump(buf, 20);
+
 			res = hid_read(handle, buf, sizeof(buf));
 
-			if ((*(uint16_t*)&buf[0xD] == 0x1090) && (*(uint32_t*)&buf[0xF] == offset))
+			
+
+			if ((*(uint16_t*)&buf[0xD] == 0x1090) && (*(uint32_t*)&buf[0xF] == offset)) {
 				break;
+			}
 		}
 		if (res >= 0x14 + read_len) {
 			for (int i = 0; i < read_len; i++) {
@@ -636,10 +639,10 @@ public:
 			auto hdr = (brcm_hdr *)buf;
 			auto pkt = (brcm_cmd_01 *)(hdr + 1);
 			hdr->cmd = 1;
-			hdr->rumble[0] = global_count;
-			global_count++;
-			if (global_count > 0xF) {
-				global_count = 0x0;
+			hdr->rumble[0] = timing_byte;
+			timing_byte++;
+			if (timing_byte > 0xF) {
+				timing_byte = 0x0;
 			}
 			pkt->subcmd = 0x11;
 			pkt->spi_read.offset = offset;

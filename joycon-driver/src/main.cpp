@@ -189,7 +189,6 @@ void found_joycon(struct hid_device_info *dev) {
 	Joycon jc;
 
 	if (dev->product_id == JOYCON_CHARGING_GRIP) {
-		
 		//if (dev->interface_number == 0) {
 		if (dev->interface_number == 0 || dev->interface_number == -1) {
 			jc.name = std::string("Joy-Con (R)");
@@ -214,7 +213,6 @@ void found_joycon(struct hid_device_info *dev) {
 	}
 
 	jc.serial = wcsdup(dev->serial_number);
-	jc.buttons = 0;
 
 	printf("Found joycon %c %i: %ls %s\n", L_OR_R(jc.left_right), joycons.size(), jc.serial, dev->path);
 	jc.handle = hid_open_path(dev->path);
@@ -359,17 +357,17 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		{
 			// get Accelerometer X:
 			uint16_t accelX = ((uint16_t)gyro_data[1] << 8) | gyro_data[2];
-			jc->accel.x = (double)unsignedToSigned16(accelX);
+			jc->accel.x = (double)uint16_to_int16(accelX);
 			//jc->accel.x = accelX;
 
 			// get Accelerometer Y:
 			uint16_t accelY = ((uint16_t)gyro_data[3] << 8) | gyro_data[4];
-			jc->accel.y = (double)unsignedToSigned16(accelY);
+			jc->accel.y = (double)uint16_to_int16(accelY);
 			//jc->accel.y = accelY;
 
 			// get Accelerometer Z:
 			uint16_t accelZ = ((uint16_t)gyro_data[5] << 8) | gyro_data[6];
-			jc->accel.z = (double)unsignedToSigned16(accelZ);
+			jc->accel.z = (double)uint16_to_int16(accelZ);
 			//jc->accel.z = accelZ;
 		}
 
@@ -380,15 +378,15 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		{
 			// get relative roll:
 			uint16_t relroll = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
-			jc->gyro.relroll = (double)unsignedToSigned16(relroll);
+			jc->gyro.relroll = (double)uint16_to_int16(relroll);
 
 			// get relative pitch:
 			uint16_t relpitch = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
-			jc->gyro.relpitch = (double)unsignedToSigned16(relpitch);
+			jc->gyro.relpitch = (double)uint16_to_int16(relpitch);
 
 			// get relative yaw:
 			uint16_t relyaw = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
-			jc->gyro.relyaw = (double)unsignedToSigned16(relyaw);
+			jc->gyro.relyaw = (double)uint16_to_int16(relyaw);
 		}
 		
 
@@ -399,6 +397,9 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			//hex_dump(packet+12, 20);
 
 			//printf("x: %f, y: %f, z: %f\n", tracker.anglex, tracker.angley, tracker.anglez);
+
+			//printf("%04x\n", jc->stick.x);
+			//printf("%f\n", jc->stick.CalX);
 
 			//printf("%d\n", jc->gyro.relyaw);
 			//printf("%02x\n", jc->gyro.relroll);
