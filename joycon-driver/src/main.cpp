@@ -328,14 +328,15 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		}
 
 
-		uint16_t stick_horizontal = stick_data[0] | ((stick_data[1] & 0xF) << 8);
-		uint16_t stick_vertical = (stick_data[1] >> 4) | (stick_data[2] << 4);
+		uint16_t stick_x = stick_data[0] | ((stick_data[1] & 0xF) << 8);
+		uint16_t stick_y = (stick_data[1] >> 4) | (stick_data[2] << 4);
 
+		jc->stick.x = stick_x;
+		jc->stick.y = stick_y;
 
-		
+		//printf("x: %04x, y: %04x\n", jc->stick.x, jc->stick.y);
+		//printf("%i\n", jc->stick_cal_x_l[0]);
 
-		jc->stick.x = stick_horizontal;
-		jc->stick.y = stick_vertical;
 		// use calibration data:
 		jc->CalcAnalogStick();
 
