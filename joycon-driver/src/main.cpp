@@ -56,11 +56,6 @@
 #define PI 3.14159265359
 
 
-//#define DEBUG_PRINT
-//#define LED_TEST
-
-
-
 // joycon_1 is R, joycon_2 is L
 #define CONTROLLER_TYPE_BOTH 0x1
 // joycon_1 is L, joycon_2 is R
@@ -95,23 +90,6 @@ int res = 0;
 
 struct Settings {
 
-	// there appears to be a good amount of variance between JoyCons,
-	// but they work well once you find the right offsets
-	// these are the values that worked well for my JoyCons:
-	int leftJoyConXOffset = 16000;
-	int leftJoyConYOffset = 13000;
-
-	int rightJoyConXOffset = 15000;
-	int rightJoyConYOffset = 19000;
-
-	// multipliers to go from the range (-128,128) to (-32768, 32768)
-	// These shouldn't need to be changed,
-	// but the option is there if you find the joysticks aren't reaching their max values, or hit the max too early
-	float leftJoyConXMultiplier = 10.0f;
-	float leftJoyConYMultiplier = 10.0f;
-	float rightJoyConXMultiplier = 10.0f;
-	float rightJoyConYMultiplier = 10.0f;
-
 	// Enabling this combines both JoyCons to a single vJoy Device(#1)
 	// when combineJoyCons == false:
 	// JoyCon(L) is mapped to vJoy Device #1
@@ -122,11 +100,6 @@ struct Settings {
 
 	bool reverseX = false;// reverses joystick x (both sticks)
 	bool reverseY = false;// reverses joystick y (both sticks)
-
-	// Automatically center sticks
-	// works by getting joystick position at start
-	// and assumes that to be (0,0), and uses that to calculate the offsets
-	bool autoCenterSticks = false;
 
 	bool usingGrip = false;
 	bool usingBluetooth = true;
@@ -557,27 +530,8 @@ int acquirevJoyDevice(int deviceID) {
 
 void updatevJoyDevice(Joycon *jc) {
 
-	//// todo: calibration of some kind
-	//int leftJoyConXOffset = settings.leftJoyConXOffset;
-	//int leftJoyConYOffset = settings.leftJoyConYOffset;
-
-	//int rightJoyConXOffset = settings.rightJoyConXOffset;
-	//int rightJoyConYOffset = settings.rightJoyConYOffset;
-
-	//// multipliers, these shouldn't really be different from one another
-	//// but are there anyways
-	//// todo: add a logarithmic multiplier? it's already doable in x360ce though
-	//float leftJoyConXMultiplier = settings.leftJoyConXMultiplier;
-	//float leftJoyConYMultiplier = settings.leftJoyConYMultiplier;
-	//float rightJoyConXMultiplier = settings.rightJoyConXMultiplier;
-	//float rightJoyConYMultiplier = settings.rightJoyConYMultiplier;
-
 	bool reverseX = settings.reverseX;
 	bool reverseY = settings.reverseY;
-
-
-
-
 
 	UINT DevID;
 
@@ -921,44 +875,6 @@ void updatevJoyDevice(Joycon *jc) {
 }
 
 
-void parseSettings(int length, char *args[]) {
-	for (int i = 0; i < length; ++i) {
-		if (std::string(args[i]) == "--combine") {
-			settings.combineJoyCons = true;
-			printf("JoyCon combining enabled.\n");
-		}
-		if (std::string(args[i]) == "--LXO") {
-			settings.leftJoyConXOffset = std::stoi(args[i + 1]);
-		}
-		if (std::string(args[i]) == "--LYO") {
-			settings.leftJoyConYOffset = std::stoi(args[i + 1]);
-		}
-		if (std::string(args[i]) == "--RXO") {
-			settings.rightJoyConXOffset = std::stoi(args[i + 1]);
-		}
-		if (std::string(args[i]) == "--RYO") {
-			settings.rightJoyConYOffset = std::stoi(args[i + 1]);
-		}
-
-		if (std::string(args[i]) == "--REVX") {
-			settings.reverseX = true;
-		}
-		if (std::string(args[i]) == "--REVY") {
-			settings.reverseY = true;
-		}
-		if (std::string(args[i]) == "--auto-center") {
-			settings.autoCenterSticks = true;
-		}
-		if (std::string(args[i]) == "--mario-theme") {
-			settings.marioTheme = true;
-		}
-		if (std::string(args[i]) == "--enable-gyro") {
-			settings.enableGyro = true;
-		}
-	}
-}
-
-
 void parseSettings2() {
 
 	//setupConsole("Debug");
@@ -966,7 +882,6 @@ void parseSettings2() {
 	std::map<std::string, std::string> cfg = LoadConfig("config.txt");
 
 	settings.combineJoyCons = (bool)stoi(cfg["CombineJoyCons"]);
-	settings.autoCenterSticks = (bool)stoi(cfg["AutoCenterSticks"]);
 	settings.enableGyro = (bool)stoi(cfg["GyroControls"]);
 
 	settings.gyroSensitivityX = stof(cfg["gyroSensitivityX"]);
@@ -977,17 +892,6 @@ void parseSettings2() {
 
 	settings.reverseX = (bool)stoi(cfg["reverseX"]);
 	settings.reverseY = (bool)stoi(cfg["reverseY"]);
-
-
-	settings.leftJoyConXOffset = stof(cfg["leftJoyConXOffset"]);
-	settings.leftJoyConYOffset = stof(cfg["leftJoyConYOffset"]);
-	settings.rightJoyConXOffset = stof(cfg["rightJoyConXOffset"]);
-	settings.rightJoyConYOffset = stof(cfg["rightJoyConYOffset"]);
-
-	settings.leftJoyConXMultiplier = stof(cfg["leftJoyConXMultiplier"]);
-	settings.leftJoyConYMultiplier = stof(cfg["leftJoyConYMultiplier"]);
-	settings.rightJoyConXMultiplier = stof(cfg["rightJoyConXMultiplier"]);
-	settings.rightJoyConYMultiplier = stof(cfg["rightJoyConYMultiplier"]);
 
 }
 
@@ -1000,7 +904,6 @@ void pollLoop() {
 		if (!jc->handle) { continue; }
 
 		// set to be non-blocking:
-
 		//hid_set_nonblocking(jc->handle, 1);
 
 		// set to be blocking:
@@ -1008,15 +911,6 @@ void pollLoop() {
 
 		// get input:
 		memset(buf, 0, 65);
-		//if (settings.enableGyro) {
-		//	// seems to have slower response time:
-		//	jc->send_command(0x1F, buf, 0);
-		//} else {
-		//	// may reset MCU data, not sure:
-		//	jc->send_command(0x01, buf, 0);
-		//}
-		//jc->send_command(0x1F, buf, 0);
-
 
 		// get current time
 		std::chrono::steady_clock::time_point tNow = std::chrono::high_resolution_clock::now();
@@ -1028,7 +922,9 @@ void pollLoop() {
 		// time spent sleeping (0):
 		double timeSincePollMS = timeSincePoll.count() / 1000.0;
 
-		if (timeSincePollMS > (1000.0/60.0)) {
+		
+		//if (timeSincePollMS > (1000.0/60.0)) {
+		if (timeSincePollMS > 1000.0) {
 			jc->send_command(0x1E, buf, 0);
 			tracker.tPoll = std::chrono::high_resolution_clock::now();
 		}
@@ -1050,8 +946,6 @@ void pollLoop() {
 
 	if (settings.restart) {
 		settings.restart = false;
-		//goto init_start;
-		//start();
 	}
 }
 
@@ -1132,44 +1026,6 @@ init_start:
 			joycons[i].init_bt();
 		}
 	}
-
-	//// use stick data to calibrate:
-	//if (settings.autoCenterSticks) {
-	//	printf("Auto centering sticks...\n");
-	//	// do a few polls to get stick data:
-	//	for (int j = 0; j < 10; ++j) {
-	//		pollLoop();
-	//	}
-
-	//	for (int i = 0; i < joycons.size(); ++i) {
-	//		Joycon *jc = &joycons[i];
-	//		// JoyCon(L):
-	//		if (jc->left_right == 1) {
-	//			int x = (settings.leftJoyConXMultiplier * (jc->stick.x));
-	//			settings.leftJoyConXOffset = -x + (16384);
-	//			int y = (settings.leftJoyConYMultiplier * (jc->stick.y));
-	//			settings.leftJoyConYOffset = -y + (16384);
-
-	//		// JoyCon(R):
-	//		} else if (jc->left_right == 2) {
-	//			int x = (settings.rightJoyConXMultiplier * (jc->stick.x));
-	//			settings.rightJoyConXOffset = -x + (16384);
-	//			int y = (settings.rightJoyConYMultiplier * (jc->stick.y));
-	//			settings.rightJoyConYOffset = -y + (16384);
-	//		// Pro Controller:
-	//		} else if (jc->left_right == 3) {
-	//			int x = (settings.leftJoyConXMultiplier * (jc->stick.x));
-	//			settings.leftJoyConXOffset = -x + (16384);
-	//			int y = (settings.leftJoyConYMultiplier * (jc->stick.y));
-	//			settings.leftJoyConYOffset = -y + (16384);
-	//			int rx = (settings.rightJoyConXMultiplier * (jc->stick2.x));
-	//			settings.rightJoyConXOffset = -rx + (16384);
-	//			int ry = (settings.rightJoyConYMultiplier * (jc->stick2.y));
-	//			settings.rightJoyConYOffset = -ry + (16384);
-	//		}
-	//	}
-	//	//printf("Done centering sticks.\n");
-	//}
 
 
 	pollLoop();
@@ -1642,8 +1498,6 @@ init_start:
 
 	printf("Done.\n");
 
-	int counter = 0;
-
 
 
 
@@ -2059,55 +1913,55 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("Joycon Driver by fosse ©20
 	CB1->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleCombine, this);
 	CB1->SetValue(settings.combineJoyCons);
 
-	CB2 = new wxCheckBox(panel, wxID_ANY, wxT("Auto Center Sticks"), wxPoint(20, 40));
-	CB2->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleCenter, this);
-	CB2->SetValue(settings.autoCenterSticks);
+	//CB2 = new wxCheckBox(panel, wxID_ANY, wxT("Auto Center Sticks"), wxPoint(20, 40));
+	//CB2->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleCenter, this);
+	//CB2->SetValue(settings.autoCenterSticks);
 
-	CB3 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Controls"), wxPoint(20, 60));
+	CB3 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Controls"), wxPoint(20, 40));
 	CB3->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleGyro, this);
 	CB3->SetValue(settings.enableGyro);
 
-	CB4 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Window"), wxPoint(20, 80));
+	CB4 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Window"), wxPoint(20, 60));
 	CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleGyroWindow, this);
 	CB4->SetValue(settings.gyroWindow);
 
-	CB5 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 100));
+	CB5 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 80));
 	CB5->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleMario, this);
 	CB5->SetValue(settings.marioTheme);
 	//CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &[](wxCommandEvent&){}, this);
 
 
 
-	CB6 = new wxCheckBox(panel, wxID_ANY, wxT("Reverse X"), wxPoint(20, 120));
+	CB6 = new wxCheckBox(panel, wxID_ANY, wxT("Reverse X"), wxPoint(20, 100));
 	CB6->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleReverseX, this);
 	CB6->SetValue(settings.reverseX);
 
-	CB7 = new wxCheckBox(panel, wxID_ANY, wxT("Reverse Y"), wxPoint(20, 140));
+	CB7 = new wxCheckBox(panel, wxID_ANY, wxT("Reverse Y"), wxPoint(20, 120));
 	CB7->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleReverseY, this);
 	CB7->SetValue(settings.reverseY);
 
-	wxStaticText *slider1Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity X"), wxPoint(20, 160));
-	slider1 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityX, 0, 1000, wxPoint(180, 140), wxDefaultSize, wxSL_LABELS);
+	wxStaticText *slider1Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity X"), wxPoint(20, 140));
+	slider1 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityX, 0, 1000, wxPoint(180, 120), wxDefaultSize, wxSL_LABELS);
 	slider1->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityX, this);
 
 
-	wxStaticText *slider2Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity Y"), wxPoint(20, 200));
-	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, 0, 1000, wxPoint(180, 180), wxDefaultSize, wxSL_LABELS);
+	wxStaticText *slider2Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity Y"), wxPoint(20, 180));
+	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, 0, 1000, wxPoint(180, 160), wxDefaultSize, wxSL_LABELS);
 	slider2->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityY, this);
 
 
 
 
-	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 220));
+	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 200));
 
 
-	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 240));
+	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 220));
 	startButton->Bind(wxEVT_BUTTON, &MainFrame::onStart, this);
 
-	wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 240));
+	wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 220));
 	quitButton->Bind(wxEVT_BUTTON, &MainFrame::onQuit, this);
 
-	SetClientSize(350, 280);
+	SetClientSize(350, 260);
 	Show();
 }
 
@@ -2131,10 +1985,6 @@ void MainFrame::onQuit(wxCommandEvent&) {
 
 void MainFrame::toggleCombine(wxCommandEvent&) {
 	settings.combineJoyCons = !settings.combineJoyCons;
-}
-
-void MainFrame::toggleCenter(wxCommandEvent&) {
-	settings.autoCenterSticks = !settings.autoCenterSticks;
 }
 
 void MainFrame::toggleGyro(wxCommandEvent&) {

@@ -558,7 +558,6 @@ public:
 	void CalcAnalogStick() {
 
 		if (this->left_right == 1) {
-
 			CalcAnalogStick2(
 				this->stick.CalX,
 				this->stick.CalY,
@@ -566,8 +565,6 @@ public:
 				this->stick.y,
 				this->stick_cal_x_l,
 				this->stick_cal_y_l);
-
-			//printf("%f, %f\n", this->stick.CalX, this->stick.CalY);
 
 		} else if (this->left_right == 2) {
 			CalcAnalogStick2(
@@ -671,8 +668,6 @@ public:
 				buf[i] = buf[i+3];
 			}
 
-			//hex_dump(buf, 20);
-
 			res = hid_write(handle, buf, sizeof(*hdr) + sizeof(*pkt));
 
 			res = hid_read(handle, buf, sizeof(buf));
@@ -686,7 +681,6 @@ public:
 				test_buf[i] = buf[0x14 + i];
 			}
 		}
-		hex_dump(test_buf, read_len);
 
 		return 0;
 	}

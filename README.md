@@ -1,5 +1,5 @@
 # JoyCon-Driver
-A vJoy feeder for the Nintendo Switch JoyCons with analog stick support and motion controls
+A vJoy feeder / Driver for the Nintendo Switch JoyCons with analog stick support and motion controls
 
 
 ## How to use
@@ -29,22 +29,6 @@ A vJoy feeder for the Nintendo Switch JoyCons with analog stick support and moti
 
 These are the default settings:
 ```
-// there appears to be a good amount of variance between JoyCons,
-// but they work well once you find the right offsets
-// these are the values that worked well for my JoyCons:
-int leftJoyConXOffset = 16000;
-int leftJoyConYOffset = 13000;
-
-int rightJoyConXOffset = 15000;
-int rightJoyConYOffset = 19000;
-
-// multipliers to go from the range (-128,128) to (-32768, 32768)
-// These shouldn't need to be changed,
-// but the option is there if you find the joysticks aren't reaching their max values, or hit the max too early
-float leftJoyConXMultiplier = 10.0f;
-float leftJoyConYMultiplier = 10.0f;
-float rightJoyConXMultiplier = 10.0f;
-float rightJoyConYMultiplier = 10.0f;
 
 // Enabling this combines both JoyCons to a single vJoy Device(#1)
 // when combineJoyCons == false:
@@ -56,11 +40,6 @@ bool combineJoyCons = false;
 
 bool reverseX = false;// reverses joystick x (both sticks)
 bool reverseY = false;// reverses joystick y (both sticks)
-
-// Automatically center sticks
-// works by getting joystick position at start
-// and assumes that to be (0,0), and uses that to calculate the offsets
-bool autoCenterSticks = false;
 
 bool usingGrip = false;
 bool usingBluetooth = true;

@@ -118,8 +118,6 @@ public:
 
 	void toggleCombine(wxCommandEvent&);
 
-	void toggleCenter(wxCommandEvent&);
-
 	void toggleGyro(wxCommandEvent&);
 	void toggleGyroWindow(wxCommandEvent &);
 	void toggleMario(wxCommandEvent&);
