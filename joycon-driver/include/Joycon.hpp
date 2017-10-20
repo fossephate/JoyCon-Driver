@@ -558,35 +558,38 @@ public:
 	void CalcAnalogStick() {
 
 		if (this->left_right == 1) {
+
 			CalcAnalogStick2(
-				&this->stick.CalX,
-				&this->stick.CalY,
+				this->stick.CalX,
+				this->stick.CalY,
 				this->stick.x,
 				this->stick.y,
 				this->stick_cal_x_l,
 				this->stick_cal_y_l);
 
+			//printf("%f, %f\n", this->stick.CalX, this->stick.CalY);
+
 		} else if (this->left_right == 2) {
 			CalcAnalogStick2(
-				&this->stick.CalX,
-				&this->stick.CalY,
-				this->stick2.x,
-				this->stick2.y,
+				this->stick.CalX,
+				this->stick.CalY,
+				this->stick.x,
+				this->stick.y,
 				this->stick_cal_x_r,
 				this->stick_cal_y_r);
 
 		} else if (this->left_right == 3) {
 			CalcAnalogStick2(
-				&this->stick.CalX,
-				&this->stick.CalY,
+				this->stick.CalX,
+				this->stick.CalY,
 				this->stick.x,
 				this->stick.y,
 				this->stick_cal_x_l,
 				this->stick_cal_y_l);
 
 			CalcAnalogStick2(
-				&this->stick2.CalX,
-				&this->stick2.CalY,
+				this->stick2.CalX,
+				this->stick2.CalY,
 				this->stick2.x,
 				this->stick2.y,
 				this->stick_cal_x_r,
@@ -597,8 +600,8 @@ public:
 
 	void CalcAnalogStick2
 	(
-		float *pOutX,       // out: resulting stick X value
-		float *pOutY,       // out: resulting stick Y value
+		float &pOutX,       // out: resulting stick X value
+		float &pOutY,       // out: resulting stick Y value
 		uint16_t x,              // in: initial stick X value
 		uint16_t y,              // in: initial stick Y value
 		uint16_t x_calc[3],      // calc -X, CenterX, +X
@@ -633,12 +636,12 @@ public:
 			float legalRange = 1.0f - deadZoneOuter - deadZoneCenter;
 			float normalizedMag = min(1.0f, (mag - deadZoneCenter) / legalRange);
 			float scale = normalizedMag / mag;
-			pOutX[1] = x_f * scale;
-			pOutY[1] = y_f * scale;
+			pOutX = (x_f * scale);
+			pOutY = (y_f * scale);
 		} else {
 			// stick is in the inner dead zone
-			pOutX[1] = 0.0f;
-			pOutY[1] = 0.0f;
+			pOutX = 0.0f;
+			pOutY = 0.0f;
 		}
 	}
 

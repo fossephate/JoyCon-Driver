@@ -334,9 +334,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		jc->stick.x = stick_x;
 		jc->stick.y = stick_y;
 
-		//printf("x: %04x, y: %04x\n", jc->stick.x, jc->stick.y);
-		//printf("%i\n", jc->stick_cal_x_l[0]);
-
 		// use calibration data:
 		jc->CalcAnalogStick();
 
@@ -560,20 +557,20 @@ int acquirevJoyDevice(int deviceID) {
 
 void updatevJoyDevice(Joycon *jc) {
 
-	// todo: calibration of some kind
-	int leftJoyConXOffset = settings.leftJoyConXOffset;
-	int leftJoyConYOffset = settings.leftJoyConYOffset;
+	//// todo: calibration of some kind
+	//int leftJoyConXOffset = settings.leftJoyConXOffset;
+	//int leftJoyConYOffset = settings.leftJoyConYOffset;
 
-	int rightJoyConXOffset = settings.rightJoyConXOffset;
-	int rightJoyConYOffset = settings.rightJoyConYOffset;
+	//int rightJoyConXOffset = settings.rightJoyConXOffset;
+	//int rightJoyConYOffset = settings.rightJoyConYOffset;
 
-	// multipliers, these shouldn't really be different from one another
-	// but are there anyways
-	// todo: add a logarithmic multiplier? it's already doable in x360ce though
-	float leftJoyConXMultiplier = settings.leftJoyConXMultiplier;
-	float leftJoyConYMultiplier = settings.leftJoyConYMultiplier;
-	float rightJoyConXMultiplier = settings.rightJoyConXMultiplier;
-	float rightJoyConYMultiplier = settings.rightJoyConYMultiplier;
+	//// multipliers, these shouldn't really be different from one another
+	//// but are there anyways
+	//// todo: add a logarithmic multiplier? it's already doable in x360ce though
+	//float leftJoyConXMultiplier = settings.leftJoyConXMultiplier;
+	//float leftJoyConYMultiplier = settings.leftJoyConYMultiplier;
+	//float rightJoyConXMultiplier = settings.rightJoyConXMultiplier;
+	//float rightJoyConYMultiplier = settings.rightJoyConYMultiplier;
 
 	bool reverseX = settings.reverseX;
 	bool reverseY = settings.reverseY;
@@ -616,21 +613,26 @@ void updatevJoyDevice(Joycon *jc) {
 
 	if (!settings.combineJoyCons) {
 		if (jc->left_right == 1) {
-			x = leftJoyConXMultiplier * (jc->stick.CalX) + leftJoyConXOffset;
-			y = leftJoyConYMultiplier * (jc->stick.CalY) + leftJoyConYOffset;
+			x = 16384 * (jc->stick.CalX);
+			y = 16384 * (jc->stick.CalY);
 		} else if (jc->left_right == 2) {
-			x = rightJoyConXMultiplier * (jc->stick.CalX) + rightJoyConXOffset;
-			y = rightJoyConYMultiplier * (jc->stick.CalY) + rightJoyConYOffset;
+			x = 16384 * (jc->stick.CalX);
+			y = 16384 * (jc->stick.CalY);
 		}
 	} else {
 		if (jc->left_right == 1) {
-			x = leftJoyConXMultiplier * (jc->stick.CalX) + leftJoyConXOffset;
-			y = leftJoyConYMultiplier * (jc->stick.CalY) + leftJoyConYOffset;
+			x = 16384 * (jc->stick.CalX);
+			y = 16384 * (jc->stick.CalY);
 		} else if (jc->left_right == 2) {
-			rx = rightJoyConXMultiplier * (jc->stick.CalX) + rightJoyConXOffset;
-			ry = rightJoyConYMultiplier * (jc->stick.CalY) + rightJoyConYOffset;
+			rx = 16384 * (jc->stick.CalX);
+			ry = 16384 * (jc->stick.CalY);
 		}
 	}
+
+	x += 16384;
+	y += 16384;
+	rx += 16384;
+	ry += 16384;
 
 	if (reverseX) {
 		x = 32768 - x;
