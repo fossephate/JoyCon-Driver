@@ -2,15 +2,6 @@
 #include <hidapi.h>
 #include "tools.hpp"
 
-//typedef uint8_t u8;
-//typedef uint16_t u16;
-//typedef uint32_t u32;
-//typedef uint64_t u64;
-//typedef int8_t s8;
-//typedef int16_t s16;
-//typedef int32_t s32;
-//typedef int64_t s64;
-
 class Joycon {
 
 public:
@@ -19,9 +10,6 @@ public:
 	wchar_t *serial;
 
 	std::string name;
-
-	unsigned char r_buf[65];// read buffer
-	unsigned char w_buf[65];// write buffer, what to hid_write to the device
 
 	bool bluetooth = true;
 
@@ -78,19 +66,25 @@ public:
 		uint8_t rumble[9];
 	};
 
+	//struct brcm_cmd_01 {
+	//	uint8_t subcmd;
+	//	union {
+
+	//		struct {
+	//			uint32_t offset;
+	//			uint8_t size;
+	//		} spi_read;
+
+	//		struct {
+	//			uint32_t address;
+	//		} hax_read;
+	//	};
+	//};
+
 	struct brcm_cmd_01 {
 		uint8_t subcmd;
-		union {
-
-			struct {
-				uint32_t offset;
-				uint8_t size;
-			} spi_read;
-
-			struct {
-				uint32_t address;
-			} hax_read;
-		};
+		uint32_t offset;
+		uint8_t size;
 	};
 
 	float acc_cal_coeff[3];
@@ -592,7 +586,6 @@ public:
 
 	// SPI (CTCaer):
 
-
 	int get_spi_data(uint32_t offset, const uint16_t read_len, uint8_t *test_buf) {
 		int res;
 		uint8_t buf[0x100];
@@ -603,12 +596,11 @@ public:
 			hdr->cmd = 1;
 			hdr->rumble[0] = timing_byte;
 			timing_byte++;
-			if (timing_byte > 0xF) {
+			if (timing_byte > 0xF) {                   
 				timing_byte = 0x0;
 			}
 			pkt->subcmd = 0x10;
-			pkt->spi_read.offset = offset;
-			pkt->spi_read.size = read_len;
+
 			res = hid_write(handle, buf, sizeof(*hdr) + sizeof(*pkt));
 
 			hex_dump(buf, 20);
@@ -645,8 +637,8 @@ public:
 				timing_byte = 0x0;
 			}
 			pkt->subcmd = 0x11;
-			pkt->spi_read.offset = offset;
-			pkt->spi_read.size = write_len;
+			//pkt->spi_read.offset = offset;
+			//pkt->spi_read.size = write_len;
 			for (int i = 0; i < write_len; i++) {
 				buf[0x10 + i] = test_buf[i];
 			}
@@ -658,12 +650,12 @@ public:
 				break;
 
 			error_writing++;
-			if (error_writing == 125)
+			if (error_writing == 125) {
 				return 1;
+			}
 		}
 
 		return 0;
 
 	}
-
 };
