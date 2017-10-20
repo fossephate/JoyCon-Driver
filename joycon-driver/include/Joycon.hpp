@@ -595,19 +595,26 @@ public:
 			auto pkt = (brcm_cmd_01 *)(hdr + 1);
 			hdr->cmd = 1;
 			hdr->rumble[0] = timing_byte;
+
+			buf[1] = timing_byte;
+
 			timing_byte++;
-			if (timing_byte > 0xF) {                   
+			if (timing_byte > 0xF) {
 				timing_byte = 0x0;
 			}
 			pkt->subcmd = 0x10;
+			pkt->offset = offset;
+			pkt->size = read_len;
+
+			for (int i = 11; i < 22; ++i) {
+				buf[i] = buf[i+3];
+			}
+
+			//hex_dump(buf, 20);
 
 			res = hid_write(handle, buf, sizeof(*hdr) + sizeof(*pkt));
 
-			hex_dump(buf, 20);
-
 			res = hid_read(handle, buf, sizeof(buf));
-
-			
 
 			if ((*(uint16_t*)&buf[0xD] == 0x1090) && (*(uint32_t*)&buf[0xF] == offset)) {
 				break;
@@ -637,8 +644,8 @@ public:
 				timing_byte = 0x0;
 			}
 			pkt->subcmd = 0x11;
-			//pkt->spi_read.offset = offset;
-			//pkt->spi_read.size = write_len;
+			pkt->offset = offset;
+			pkt->size = write_len;
 			for (int i = 0; i < write_len; i++) {
 				buf[0x10 + i] = test_buf[i];
 			}

@@ -239,6 +239,14 @@ void hex_dump_0(unsigned char *buf, int len) {
 	}
 }
 
+void int_dump(unsigned char *buf, int len) {
+	for (int i = 0; i < len; i++) {
+		printf("%i ", buf[i]);
+	}
+	printf("\n");
+}
+
+
 //void device_print(struct hid_device_info *dev) {
 //	printf("USB device info:\n  vid: 0x%04hX pid: 0x%04hX\n  path: %s\n  serial_number: %ls\n  interface_number: %d\n",
 //		dev->vendor_id, dev->product_id, dev->path, dev->serial_number, dev->interface_number);
