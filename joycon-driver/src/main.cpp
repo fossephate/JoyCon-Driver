@@ -823,17 +823,26 @@ void updatevJoyDevice(Joycon *jc) {
 		float relY2 = jc->gyro.relpitch / settings.gyroSensitivityY;
 
 		if (settings.enableGyro) {
+			if (jc->left_right == 2) {
+				relX2 *= -1;
+				relY2 *= -1;
+			}
 			MC.moveRel2(relX2, relY2);
 		}
 
-		//multiplier = 200;
+		float mult = settings.gyroSensitivityX/100.0f;
 
-		//iReport.wAxisZRot = (jc->gyro.roll * multiplier);
-		//iReport.wSlider = (jc->gyro.pitch * multiplier);
-		//iReport.wDial = (jc->gyro.yaw * multiplier);
+		iReport.wAxisZRot = 16384 + (jc->gyro.relroll * mult);
+		iReport.wSlider = 16384 + (jc->gyro.relpitch * mult);
+		iReport.wDial = 16384 + (jc->gyro.relyaw * mult);
 
 	}
 	//}
+
+
+
+
+	
 
 
 
