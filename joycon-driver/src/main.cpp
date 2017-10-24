@@ -206,32 +206,6 @@ void found_joycon(struct hid_device_info *dev) {
 
 
 
-void hid_dual_write(hid_device *handle_l, hid_device *handle_r, unsigned char *buf_l, unsigned char *buf_r, int len) {
-	int res;
-
-	if (handle_l && buf_l) {
-		hid_set_nonblocking(handle_l, 1);
-		res = hid_write(handle_l, buf_l, len);
-		if (res < 0) {
-			settings.disconnect = true;
-			return;
-		}
-
-		hid_set_nonblocking(handle_l, 0);
-	}
-
-	if (handle_r && buf_r) {
-		hid_set_nonblocking(handle_r, 1);
-		res = hid_write(handle_r, buf_r, len);
-		if (res < 0) {
-			settings.disconnect = true;
-
-			return;
-		}
-
-		hid_set_nonblocking(handle_r, 0);
-	}
-}
 
 
 
@@ -294,10 +268,10 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			jc->stick.x = (int)(unsigned int)stick_horizontal;
 			jc->stick.y = (int)(unsigned int)stick_vertical;
 			stick_data += 3;
-			uint16_t stick_horizontal2 = stick_data[0] | ((stick_data[1] & 0xF) << 8);
-			uint16_t stick_vertical2 = (stick_data[1] >> 4) | (stick_data[2] << 4);
-			jc->stick2.x = (int)(unsigned int)stick_horizontal2;
-			jc->stick2.y = (int)(unsigned int)stick_vertical2;
+			uint16_t stick_x2 = stick_data[0] | ((stick_data[1] & 0xF) << 8);
+			uint16_t stick_y2 = (stick_data[1] >> 4) | (stick_data[2] << 4);
+			jc->stick2.x = (int)(unsigned int)stick_x2;
+			jc->stick2.y = (int)(unsigned int)stick_y2;
 		}
 
 
@@ -328,18 +302,15 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		{
 			// get Accelerometer X:
 			uint16_t accelX = ((uint16_t)gyro_data[1] << 8) | gyro_data[2];
-			jc->accel.x = (double)uint16_to_int16(accelX);
-			//jc->accel.x = accelX;
+			jc->accel.x = (double)uint16_to_int16(accelX) * jc->acc_cal_coeff[0];
 
 			// get Accelerometer Y:
 			uint16_t accelY = ((uint16_t)gyro_data[3] << 8) | gyro_data[4];
-			jc->accel.y = (double)uint16_to_int16(accelY);
-			//jc->accel.y = accelY;
+			jc->accel.y = (double)uint16_to_int16(accelY) * jc->acc_cal_coeff[1];
 
 			// get Accelerometer Z:
 			uint16_t accelZ = ((uint16_t)gyro_data[5] << 8) | gyro_data[6];
-			jc->accel.z = (double)uint16_to_int16(accelZ);
-			//jc->accel.z = accelZ;
+			jc->accel.z = (double)uint16_to_int16(accelZ) * jc->acc_cal_coeff[2];
 		}
 
 
@@ -348,16 +319,16 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		// Gyroscope data is relative
 		{
 			// get relative roll:
-			uint16_t relroll = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
-			jc->gyro.relroll = (double)uint16_to_int16(relroll);
+			uint16_t roll = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
+			jc->gyro.roll = (double)uint16_to_int16(roll) * jc->gyro_cal_coeff[0];
 
 			// get relative pitch:
-			uint16_t relpitch = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
-			jc->gyro.relpitch = (double)uint16_to_int16(relpitch);
+			uint16_t pitch = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
+			jc->gyro.pitch = (double)uint16_to_int16(pitch) * jc->gyro_cal_coeff[1];
 
 			// get relative yaw:
-			uint16_t relyaw = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
-			jc->gyro.relyaw = (double)uint16_to_int16(relyaw);
+			uint16_t yaw = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
+			jc->gyro.yaw = (double)uint16_to_int16(yaw) * jc->gyro_cal_coeff[2];
 		}
 		
 
@@ -366,26 +337,17 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		if (jc->left_right == 1) {
 			//hex_dump(gyro_data, 20);
 			//hex_dump(packet+12, 20);
-
 			//printf("x: %f, y: %f, z: %f\n", tracker.anglex, tracker.angley, tracker.anglez);
-
 			//printf("%04x\n", jc->stick.x);
 			//printf("%f\n", jc->stick.CalX);
-
-			//printf("%d\n", jc->gyro.relyaw);
-			//printf("%02x\n", jc->gyro.relroll);
-			//printf("%04x\n", jc->gyro.relyaw);
-
-			//printf("%04x\n", jc->gyro.relroll);
-
-			//printf("%f\n", jc->gyro.relroll);
-
+			//printf("%d\n", jc->gyro.yaw);
+			//printf("%02x\n", jc->gyro.roll);
+			//printf("%04x\n", jc->gyro.yaw);
+			//printf("%04x\n", jc->gyro.roll);
+			//printf("%f\n", jc->gyro.roll);
 			//printf("%d\n", accelXA);
-
-			/*printf("%d\n", jc->buttons);*/
-
-			//printf("%.4f\n", jc->gyro.relpitch);
-
+			//printf("%d\n", jc->buttons);
+			//printf("%.4f\n", jc->gyro.pitch);
 			//printf("%04x\n", accelX);
 			//printf("%02x %02x\n", rollA, rollB);
 		}
@@ -404,9 +366,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		if (jc->left_right == 1) {
 			if (jc->buttons == 207) {
 				settings.restart = true;
-				//start();
-				//accurateSleep(100.0);
-				//goto init_start;
 			}
 
 
@@ -451,34 +410,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 
 
-
-
-void hid_dual_exchange(hid_device *handle_l, hid_device *handle_r, unsigned char *buf_l, unsigned char *buf_r, int len) {
-	if (handle_l && buf_l) {
-		hid_set_nonblocking(handle_l, 1);
-		hid_write(handle_l, buf_l, len);
-		hid_read(handle_l, buf_l, 65);
-#ifdef DEBUG_PRINT
-		hex_dump(buf_l, 0x40);
-#endif
-		hid_set_nonblocking(handle_l, 0);
-	}
-
-	if (handle_r && buf_r) {
-		hid_set_nonblocking(handle_r, 1);
-		hid_write(handle_r, buf_r, len);
-		hid_read(handle_r, buf_r, 65);
-#ifdef DEBUG_PRINT
-		hex_dump(buf_r, 0x40);
-#endif
-		hid_set_nonblocking(handle_r, 0);
-	}
-}
-
-
-
-
-
 int acquirevJoyDevice(int deviceID) {
 
 	int stat;
@@ -489,7 +420,6 @@ int acquirevJoyDevice(int deviceID) {
 		int dummy = getchar();
 		stat = -2;
 		throw;
-		//goto Exit;
 	} else {
 		//wprintf(L"Vendor: %s\nProduct :%s\nVersion Number:%s\n", static_cast<TCHAR *> (GetvJoyManufacturerString()), static_cast<TCHAR *>(GetvJoyProductString()), static_cast<TCHAR *>(GetvJoySerialNumberString()));
 		//wprintf(L"Product :%s\n", static_cast<TCHAR *>(GetvJoyProductString()));
@@ -521,7 +451,6 @@ int acquirevJoyDevice(int deviceID) {
 		printf("Failed to acquire vJoy device number %d.\n", deviceID);
 		int dummy = getchar();
 		stat = -1;
-		//goto Exit;
 		throw;
 	} else {
 		printf("Acquired device number %d - OK\n", deviceID);
@@ -649,9 +578,9 @@ void updatevJoyDevice(Joycon *jc) {
 		// gyro:
 		{
 			//float coeff = 0.001;//54000;//54000.0;// 1000.0
-			//float dx = -jc->gyro.relpitch * coeff;
-			//float dy = jc->gyro.relyaw * coeff;
-			//float dz = -jc->gyro.relroll * coeff;
+			//float dx = -jc->gyro.pitch * coeff;
+			//float dy = jc->gyro.yaw * coeff;
+			//float dz = -jc->gyro.roll * coeff;
 
 			//glm::fquat delx = glm::angleAxis(dx, glm::vec3(1.0, 0.0, 0.0));
 			//glm::fquat dely = glm::angleAxis(dy, glm::vec3(0.0, 1.0, 0.0));
@@ -674,9 +603,9 @@ void updatevJoyDevice(Joycon *jc) {
 		////float gyro_cal_coeff = (float)(936.0 / (float)(13371 - unsignedToSigned16(16)));
 		//float gyro_cal_coeff = 0.00007f;
 		////float div2 = 100000;//54000.0;// 1000.0
-		//float dx2 = -jc->gyro.relpitch * gyro_cal_coeff;
-		//float dy2 = jc->gyro.relyaw * gyro_cal_coeff;
-		//float dz2 = -jc->gyro.relroll * gyro_cal_coeff;
+		//float dx2 = -jc->gyro.pitch * gyro_cal_coeff;
+		//float dy2 = jc->gyro.yaw * gyro_cal_coeff;
+		//float dz2 = -jc->gyro.roll * gyro_cal_coeff;
 		//tracker.anglex += dx2;
 		//tracker.angley += dy2;
 		//tracker.anglez += dz2+0.01;
@@ -728,10 +657,10 @@ void updatevJoyDevice(Joycon *jc) {
 
 		// x:
 		float pitchInDegreesAccel = glm::degrees((atan2(-jc->accel.x, -jc->accel.z) + PI));
-		float relPitchDegreesGyro = -jc->gyro.relpitch * gyroCoeff;
+		float pitchDegreesGyro = -jc->gyro.pitch * gyroCoeff;
 		float pitch = 0;
 
-		tracker.anglex += relPitchDegreesGyro;
+		tracker.anglex += pitchDegreesGyro;
 		if ((pitchInDegreesAccel - tracker.anglex) > 180) {
 			tracker.anglex += 360;
 		} else if ((tracker.anglex - pitchInDegreesAccel) > 180) {
@@ -755,10 +684,10 @@ void updatevJoyDevice(Joycon *jc) {
 
 		// y:
 		float rollInDegreesAccel = -glm::degrees((atan2(-jc->accel.y, -jc->accel.z) + PI));
-		float relRollDegreesGyro = -jc->gyro.relroll * gyroCoeff;
+		float rollDegreesGyro = -jc->gyro.roll * gyroCoeff;
 		float roll = 0;
 
-		tracker.angley += relRollDegreesGyro;
+		tracker.angley += rollDegreesGyro;
 		if ((rollInDegreesAccel - tracker.angley) > 180) {
 			tracker.angley += 360;
 		} else if ((tracker.angley - rollInDegreesAccel) > 180) {
@@ -783,10 +712,10 @@ void updatevJoyDevice(Joycon *jc) {
 
 		// z:
 		float yawInDegreesAccel = glm::degrees((atan2(-jc->accel.y, -jc->accel.x) + PI));
-		float relyawDegreesGyro = -jc->gyro.relyaw * gyroCoeff;
+		float yawDegreesGyro = -jc->gyro.yaw * gyroCoeff;
 		float yaw = 0;
 
-		tracker.anglez += lowpassFilter(relyawDegreesGyro, 0.5);
+		tracker.anglez += lowpassFilter(yawDegreesGyro, 0.5);
 		//if ((yawInDegreesAccel - tracker.anglez) > 180) {
 		//	tracker.anglez += 360;
 		//} else if ((tracker.anglez - yawInDegreesAccel) > 180) {
@@ -807,20 +736,20 @@ void updatevJoyDevice(Joycon *jc) {
 		//printf("%f\n", pitch);
 
 		//printf("%f\n", tracker.anglez);
-		//printf("%f\n", (float)unsignedToSigned16(jc->gyro.rawrelroll) * 0.07f);
+		//printf("%f\n", (float)unsignedToSigned16(jc->gyro.rawroll) * 0.07f);
 
 
 		//glm::toQuat(glm::vec3(0.0, 0.0, 0.0));
 
 		// move with absolute (tracked) gyro:
 		// todo: add a reset button
-		//MC.moveRel(jc->gyro.yaw, -jc->gyro.relpitch);
+		//MC.moveRel(jc->gyro.yaw, -jc->gyro.pitch);
 		//MC.moveRel(jc->gyro.yaw, -jc->gyro.pitch);
 
 		//printf("%.5f\n", jc->gyro.pitch);
 
-		float relX2 = -jc->gyro.relyaw / settings.gyroSensitivityX;
-		float relY2 = jc->gyro.relpitch / settings.gyroSensitivityY;
+		float relX2 = -jc->gyro.yaw / settings.gyroSensitivityX;
+		float relY2 = jc->gyro.pitch / settings.gyroSensitivityY;
 
 		if (settings.enableGyro) {
 			if (jc->left_right == 2) {
@@ -832,9 +761,9 @@ void updatevJoyDevice(Joycon *jc) {
 
 		float mult = settings.gyroSensitivityX/100.0f;
 
-		iReport.wAxisZRot = 16384 + (jc->gyro.relroll * mult);
-		iReport.wSlider = 16384 + (jc->gyro.relpitch * mult);
-		iReport.wDial = 16384 + (jc->gyro.relyaw * mult);
+		iReport.wAxisZRot = 16384 + (jc->gyro.roll * mult);
+		iReport.wSlider = 16384 + (jc->gyro.pitch * mult);
+		iReport.wDial = 16384 + (jc->gyro.yaw * mult);
 
 	}
 	//}
@@ -859,17 +788,14 @@ void updatevJoyDevice(Joycon *jc) {
 			btns = ((iReport.lButtons >> 16) << 16) | (jc->buttons);
 
 		} else if (jc->left_right == 2) {
-			unsigned r = createMask(0, 15);// 15
-			btns = ((jc->buttons) << 16) | (r & iReport.lButtons);
-
+			btns = ((jc->buttons) << 16) | (createMask(0, 15) & iReport.lButtons);
 		}
 	}
 
 	// Pro Controller:
 	if (jc->left_right == 3) {
 		btns = ((iReport.lButtons >> 16) << 16) | (jc->buttons);
-		unsigned r = createMask(0, 15);// 15
-		btns = ((jc->buttons2) << 16) | (r & iReport.lButtons);
+		btns = ((jc->buttons2) << 16) | (createMask(0, 15) & iReport.lButtons);
 	}
 
 	iReport.lButtons = btns;
@@ -882,6 +808,230 @@ void updatevJoyDevice(Joycon *jc) {
 		AcquireVJD(DevID);
 	}
 }
+
+
+
+
+void updatevJoyDevice2(Joycon *jc) {
+
+	bool reverseX = settings.reverseX;
+	bool reverseY = settings.reverseY;
+
+	UINT DevID;
+	
+
+	PVOID pPositionMessage;
+	UINT	IoCode = LOAD_POSITIONS;
+	UINT	IoSize = sizeof(JOYSTICK_POSITION);
+	// HID_DEVICE_ATTRIBUTES attrib;
+	BYTE id = 1;
+	UINT iInterface = 1;
+
+	// Set destination vJoy device
+	id = (BYTE)DevID;
+	iReport.bDevice = id;
+	DevID = jc->vJoyNumber;
+
+
+	// Set Stick data
+
+	int x = 16384;
+	int y = 16384;
+	int z = 16384;
+	int rx = 16384;
+	int ry = 16384;
+	int rz = 0;
+
+	if (jc->deviceNumber == 0) {
+		x = 16384 * (jc->stick.CalX);
+		y = 16384 * (jc->stick.CalY);
+	} else if (jc->deviceNumber == 1) {
+		rx = 16384 * (jc->stick.CalX);
+		ry = 16384 * (jc->stick.CalY);
+	}
+	if (jc->left_right == 3) {
+		x = 16384 * (jc->stick.CalX);
+		y = 16384 * (jc->stick.CalY);
+		rx = 16384 * (jc->stick2.CalX);
+		ry = 16384 * (jc->stick2.CalY);
+	}
+
+
+	x += 16384;
+	y += 16384;
+	rx += 16384;
+	ry += 16384;
+
+	if (reverseX) {
+		x = 32768 - x;
+		rx = 32768 - rx;
+	}
+	if (reverseY) {
+		y = 32768 - y;
+		ry = 32768 - ry;
+	}
+
+	iReport.wAxisX = x;
+	iReport.wAxisY = y;
+	iReport.wAxisXRot = rx;
+	iReport.wAxisYRot = ry;
+
+
+	// gyro / accelerometer data:
+	if ((jc->left_right == 2) || (joycons.size() == 1 && jc->left_right == 1) || (jc->left_right == 3)) {
+
+		int multiplier;
+
+
+		// Gyroscope (roll, pitch, yaw):
+		multiplier = 1000;
+
+
+
+
+		// complementary filtered tracking
+		// uses gyro + accelerometer
+
+		// set to 0:
+		tracker.quat = glm::angleAxis(0.0f, glm::vec3(1.0, 0.0, 0.0));
+
+		float gyroCoeff = 0.001;
+
+
+		// x:
+		float pitchInDegreesAccel = glm::degrees((atan2(-jc->accel.x, -jc->accel.z) + PI));
+		float pitchDegreesGyro = -jc->gyro.pitch * gyroCoeff;
+		float pitch = 0;
+
+		tracker.anglex += pitchDegreesGyro;
+		if ((pitchInDegreesAccel - tracker.anglex) > 180) {
+			tracker.anglex += 360;
+		} else if ((tracker.anglex - pitchInDegreesAccel) > 180) {
+			tracker.anglex -= 360;
+		}
+		tracker.anglex = (tracker.anglex * 0.98) + (pitchInDegreesAccel * 0.02);
+		pitch = tracker.anglex;
+
+		glm::fquat delx = glm::angleAxis(glm::radians(pitch), glm::vec3(1.0, 0.0, 0.0));
+		tracker.quat = tracker.quat*delx;
+
+
+
+
+
+
+
+
+
+
+
+		// y:
+		float rollInDegreesAccel = -glm::degrees((atan2(-jc->accel.y, -jc->accel.z) + PI));
+		float rollDegreesGyro = -jc->gyro.roll * gyroCoeff;
+		float roll = 0;
+
+		tracker.angley += rollDegreesGyro;
+		if ((rollInDegreesAccel - tracker.angley) > 180) {
+			tracker.angley += 360;
+		} else if ((tracker.angley - rollInDegreesAccel) > 180) {
+			tracker.angley -= 360;
+		}
+		tracker.angley = (tracker.angley * 0.98) + (rollInDegreesAccel * 0.02);
+		//tracker.angley = -rollInDegreesAccel;
+		roll = tracker.angley;
+
+
+		glm::fquat dely = glm::angleAxis(glm::radians(roll), glm::vec3(0.0, 0.0, 1.0));
+		tracker.quat = tracker.quat*dely;
+
+		//printf("%f\n", roll);
+
+
+
+
+
+
+
+
+		// z:
+		float yawInDegreesAccel = glm::degrees((atan2(-jc->accel.y, -jc->accel.x) + PI));
+		float yawDegreesGyro = -jc->gyro.yaw * gyroCoeff;
+		float yaw = 0;
+
+		tracker.anglez += lowpassFilter(yawDegreesGyro, 0.5);
+		//if ((yawInDegreesAccel - tracker.anglez) > 180) {
+		//	tracker.anglez += 360;
+		//} else if ((tracker.anglez - yawInDegreesAccel) > 180) {
+		//	tracker.anglez -= 360;
+		//}
+		//tracker.anglez = (tracker.anglez * 0.98) + (yawInDegreesAccel * 0.02);
+		yaw = tracker.anglez;
+
+
+		glm::fquat delz = glm::angleAxis(glm::radians(-yaw), glm::vec3(0.0, 1.0, 0.0));
+		tracker.quat = tracker.quat*delz;
+
+		float relX2 = -jc->gyro.yaw / settings.gyroSensitivityX;
+		float relY2 = jc->gyro.pitch / settings.gyroSensitivityY;
+
+		if (settings.enableGyro) {
+			if (jc->left_right == 2) {
+				relX2 *= -1;
+				relY2 *= -1;
+			}
+			MC.moveRel2(relX2, relY2);
+		}
+
+		float mult = settings.gyroSensitivityX / 100.0f;
+
+		iReport.wAxisZRot = 16384 + (jc->gyro.roll * mult);
+		iReport.wSlider = 16384 + (jc->gyro.pitch * mult);
+		iReport.wDial = 16384 + (jc->gyro.yaw * mult);
+
+	}
+
+
+
+
+
+
+
+
+	// Set button data
+	// JoyCon(L) is the first 16 bits
+	// JoyCon(R) is the last 16 bits
+
+	long btns = 0;
+	if (!settings.combineJoyCons) {
+		btns = jc->buttons;
+	} else {
+
+		if (jc->left_right == 1) {
+			btns = ((iReport.lButtons >> 16) << 16) | (jc->buttons);
+		} else if (jc->left_right == 2) {
+			btns = ((jc->buttons) << 16) | (createMask(0, 15) & iReport.lButtons);
+		}
+	}
+
+	// Pro Controller:
+	if (jc->left_right == 3) {
+		btns = ((iReport.lButtons >> 16) << 16) | (jc->buttons);
+		btns = ((jc->buttons2) << 16) | (createMask(0, 15) & iReport.lButtons);
+	}
+
+	iReport.lButtons = btns;
+
+	// Send data to vJoy device
+	pPositionMessage = (PVOID)(&iReport);
+	if (!UpdateVJD(DevID, pPositionMessage)) {
+		printf("Feeding vJoy device number %d failed - try to enable device then press enter\n", DevID);
+		getchar();
+		AcquireVJD(DevID);
+	}
+}
+
+
+
 
 
 void parseSettings2() {
@@ -968,6 +1118,12 @@ void start() {
 	// get vJoy Device 2
 	acquirevJoyDevice(2);
 
+	// get vJoy Device 3
+	acquirevJoyDevice(3);
+	// get vJoy Device 4
+	acquirevJoyDevice(4);
+
+
 	int missedPollCount = 0;
 	int res;
 	int i;
@@ -1033,6 +1189,20 @@ init_start:
 	} else {
 		for (int i = 0; i < joycons.size(); ++i) {
 			joycons[i].init_bt();
+		}
+	}
+
+	if (settings.combineJoyCons) {
+		int counter = 0;
+		for (int i = 0; i < joycons.size(); ++i) {
+			joycons[i].vJoyNumber = counter/2;
+			joycons[i].deviceNumber = (counter % 2 ? 1 : 0);
+			counter++;
+		}
+	} else {
+		for (int i = 0; i < joycons.size(); ++i) {
+			joycons[i].vJoyNumber = i;
+			joycons[i].deviceNumber = 0;// left
 		}
 	}
 

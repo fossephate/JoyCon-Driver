@@ -105,6 +105,17 @@ int16_t uint16_to_int16(uint16_t a) {
 	return b;
 }
 
+uint16_t combine_uint8_t(uint8_t a, uint8_t b) {
+	uint16_t c = ((uint16_t)a << 8) | b;
+	return c;
+}
+
+int16_t combine_gyro_data(uint8_t a, uint8_t b) {
+	uint16_t c = combine_uint8_t(a, b);
+	int16_t d = uint16_to_int16(c);
+	return d;
+}
+
 
 float clamp(float a, float min, float max) {
 	if (a < min) {

@@ -11,6 +11,9 @@ public:
 
 	std::string name;
 
+	int deviceNumber = 0;// left(0) or right(1) vjoy
+	int vJoyNumber = 0;// vjoy device number / device group number
+
 	bool bluetooth = true;
 
 	int left_right = 0;// 1: left joycon, 2: right joycon, 3: pro controller
