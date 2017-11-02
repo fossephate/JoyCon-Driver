@@ -21,6 +21,34 @@ public:
 	uint16_t buttons = 0;
 	uint16_t buttons2 = 0;// for pro controller
 
+	
+	struct btn_states {
+		// left:
+		int up = 0;
+		int down = 0;
+		int left = 0;
+		int right = 0;
+		int l = 0;
+		int zl = 0;
+		int minus = 0;
+		int capture = 0;
+
+		// right:
+		int a = 0;
+		int b = 0;
+		int x = 0;
+		int y = 0;
+		int r = 0;
+		int zr = 0;
+		int plus = 0;
+		int home = 0;
+
+		// shared:
+		int sl = 0;
+		int sr = 0;
+		int stick_button = 0;
+	} btns;
+
 	int8_t dstick;
 	uint8_t battery;
 

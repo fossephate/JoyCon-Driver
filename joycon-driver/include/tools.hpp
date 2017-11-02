@@ -4,6 +4,9 @@
 #include <map>
 #include <string>
 
+//if(a == b || a == c)
+// -> if(a == b $ c)
+//#define $or(a, b, c) if(a == b || a == c)
 
 double lowpassFilter(double a, double thresh) {
 	if (abs(a) > thresh) {

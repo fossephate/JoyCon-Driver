@@ -302,15 +302,15 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		{
 			// get Accelerometer X:
 			uint16_t accelX = ((uint16_t)gyro_data[1] << 8) | gyro_data[2];
-			jc->accel.x = (double)uint16_to_int16(accelX) * jc->acc_cal_coeff[0];
+			jc->accel.x = (double)uint16_to_int16(accelX);// *jc->acc_cal_coeff[0];
 
 			// get Accelerometer Y:
 			uint16_t accelY = ((uint16_t)gyro_data[3] << 8) | gyro_data[4];
-			jc->accel.y = (double)uint16_to_int16(accelY) * jc->acc_cal_coeff[1];
+			jc->accel.y = (double)uint16_to_int16(accelY);// *jc->acc_cal_coeff[1];
 
 			// get Accelerometer Z:
 			uint16_t accelZ = ((uint16_t)gyro_data[5] << 8) | gyro_data[6];
-			jc->accel.z = (double)uint16_to_int16(accelZ) * jc->acc_cal_coeff[2];
+			jc->accel.z = (double)uint16_to_int16(accelZ);// *jc->acc_cal_coeff[2];
 		}
 
 
@@ -320,15 +320,15 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		{
 			// get relative roll:
 			uint16_t roll = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
-			jc->gyro.roll = (double)uint16_to_int16(roll) * jc->gyro_cal_coeff[0];
+			jc->gyro.roll = (double)uint16_to_int16(roll);// *jc->gyro_cal_coeff[0];
 
 			// get relative pitch:
 			uint16_t pitch = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
-			jc->gyro.pitch = (double)uint16_to_int16(pitch) * jc->gyro_cal_coeff[1];
+			jc->gyro.pitch = (double)uint16_to_int16(pitch);// *jc->gyro_cal_coeff[1];
 
 			// get relative yaw:
 			uint16_t yaw = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
-			jc->gyro.yaw = (double)uint16_to_int16(yaw) * jc->gyro_cal_coeff[2];
+			jc->gyro.yaw = (double)uint16_to_int16(yaw);// *jc->gyro_cal_coeff[2];
 		}
 		
 
@@ -368,7 +368,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 				settings.restart = true;
 			}
 
-
 			// remove this, it's just for rumble testing
 			//uint8_t hfa2 = 0x88;
 			//uint16_t lfa2 = 0x804d;
@@ -402,6 +401,73 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			////printf("%f\n", tracker.frequency);
 			//printf("%f %f\n", tracker.low_freq, tracker.high_freq);
 		}
+
+
+
+		if (jc->left_right == 1) {
+			jc->btns.down = (jc->buttons & (1 << 0)) ? 1 : 0;
+			jc->btns.up = (jc->buttons & (1 << 1)) ? 1 : 0;
+			jc->btns.right = (jc->buttons & (1 << 2)) ? 1 : 0;
+			jc->btns.left = (jc->buttons & (1 << 3)) ? 1 : 0;
+			jc->btns.sr = (jc->buttons & (1 << 4)) ? 1 : 0;
+			jc->btns.sl = (jc->buttons & (1 << 5)) ? 1 : 0;
+			jc->btns.l = (jc->buttons & (1 << 6)) ? 1 : 0;
+			jc->btns.zl = (jc->buttons & (1 << 7)) ? 1 : 0;
+			jc->btns.minus = (jc->buttons & (1 << 8)) ? 1 : 0;
+			jc->btns.stick_button = (jc->buttons & (1 << 11)) ? 1 : 0;
+			jc->btns.capture = (jc->buttons & (1 << 13)) ? 1 : 0;
+
+			// cout:
+			//std::cout << "U: " << jc->btns.up << " ";
+			//std::cout << "D: " << jc->btns.down << " ";
+			//std::cout << "L: " << jc->btns.left << " ";
+			//std::cout << "R: " << jc->btns.right << " ";
+			//std::cout << "LL: " << jc->btns.l << " ";
+			//std::cout << "ZL: " << jc->btns.zr << " ";
+			//std::cout << "SB: " << jc->btns.stick_button << " ";
+			//std::cout << "SX: " << jc->stick.CalX << " ";
+			//std::cout << "SY: " << jc->stick.CalY << " ";
+			//std::cout << "M: " << jc->btns.minus << " ";
+			//std::cout << "C: " << jc->btns.capture << " ";
+			//std::cout << "GR: " << jc->gyro.roll << " ";
+			//std::cout << "GP: " << jc->gyro.pitch << " ";
+			//std::cout << "GY: " << jc->gyro.yaw << " ";
+			//std::cout << "\n";
+		}
+
+		if (jc->left_right == 2) {
+			jc->btns.y = (jc->buttons & (1 << 0)) ? 1 : 0;
+			jc->btns.x = (jc->buttons & (1 << 1)) ? 1 : 0;
+			jc->btns.b = (jc->buttons & (1 << 2)) ? 1 : 0;
+			jc->btns.a = (jc->buttons & (1 << 3)) ? 1 : 0;
+			jc->btns.sr = (jc->buttons & (1 << 4)) ? 1 : 0;
+			jc->btns.sl = (jc->buttons & (1 << 5)) ? 1 : 0;
+			jc->btns.r = (jc->buttons & (1 << 6)) ? 1 : 0;
+			jc->btns.zr = (jc->buttons & (1 << 7)) ? 1 : 0;
+			jc->btns.plus = (jc->buttons & (1 << 9)) ? 1 : 0;
+			jc->btns.stick_button = (jc->buttons & (1 << 10)) ? 1 : 0;
+			jc->btns.home = (jc->buttons & (1 << 12)) ? 1 : 0;
+
+
+			// cout:
+			//std::cout << "A: " << jc->btns.a << " ";
+			//std::cout << "B: " << jc->btns.b << " ";
+			//std::cout << "X: " << jc->btns.x << " ";
+			//std::cout << "Y: " << jc->btns.y << " ";
+			//std::cout << "RR: " << jc->btns.r << " ";
+			//std::cout << "ZR: " << jc->btns.zr << " ";
+			//std::cout << "SB: " << jc->btns.stick_button << " ";
+			//std::cout << "SX: " << jc->stick.CalX << " ";
+			//std::cout << "SY: " << jc->stick.CalY << " ";
+			//std::cout << "P: " << jc->btns.plus << " ";
+			//std::cout << "H: " << jc->btns.home << " ";
+			//std::cout << "GR: " << jc->gyro.roll << " ";
+			//std::cout << "GP: " << jc->gyro.pitch << " ";
+			//std::cout << "GY: " << jc->gyro.yaw << " ";
+			//std::cout << "\n";
+		}
+
+
 
 	}
 }
@@ -575,75 +641,6 @@ void updatevJoyDevice(Joycon *jc) {
 		multiplier = 1000;
 
 
-		// gyro:
-		{
-			//float coeff = 0.001;//54000;//54000.0;// 1000.0
-			//float dx = -jc->gyro.pitch * coeff;
-			//float dy = jc->gyro.yaw * coeff;
-			//float dz = -jc->gyro.roll * coeff;
-
-			//glm::fquat delx = glm::angleAxis(dx, glm::vec3(1.0, 0.0, 0.0));
-			//glm::fquat dely = glm::angleAxis(dy, glm::vec3(0.0, 1.0, 0.0));
-			//glm::fquat delz = glm::angleAxis(dz, glm::vec3(0.0, 0.0, 1.0));
-
-			//float smallest = glm::radians(0.25f);// 0.25
-			//if (abs(dx) > smallest) {
-			//	tracker.quat = tracker.quat*delx;
-			//}
-			//if (abs(dy) > smallest) {
-			//	tracker.quat = tracker.quat*dely;
-			//}
-			//if (abs(dz) > smallest) {
-			//	tracker.quat = tracker.quat*delz;
-			//}
-		}
-
-
-
-		////float gyro_cal_coeff = (float)(936.0 / (float)(13371 - unsignedToSigned16(16)));
-		//float gyro_cal_coeff = 0.00007f;
-		////float div2 = 100000;//54000.0;// 1000.0
-		//float dx2 = -jc->gyro.pitch * gyro_cal_coeff;
-		//float dy2 = jc->gyro.yaw * gyro_cal_coeff;
-		//float dz2 = -jc->gyro.roll * gyro_cal_coeff;
-		//tracker.anglex += dx2;
-		//tracker.angley += dy2;
-		//tracker.anglez += dz2+0.01;
-
-
-
-
-		// accelerometer
-		{
-			////float ax = jc->accel.x*0.00039f;// radians
-			////float ax = jc->accel.x*0.0221f;// degrees
-			////float ax = glm::radians(jc->accel.x*0.000244f);
-
-			//float ax = glm::degrees((atan2(-jc->accel.x, -jc->accel.z) + PI));
-			//float ay = glm::degrees((atan2(-jc->accel.y, -jc->accel.z) + PI));
-			////float az = glm::degrees((atan2(-jc->accel.x, -jc->accel.z) + PI));
-
-			//// set to 0:
-			//tracker.quat = glm::angleAxis(0.0f, glm::vec3(1.0, 0.0, 0.0));
-
-			//// x:
-			//glm::fquat delx = glm::angleAxis(glm::radians(ax), glm::vec3(1.0, 0.0, 0.0));
-			//tracker.quat = tracker.quat*delx;
-
-			//// y:
-			//glm::fquat dely = glm::angleAxis(glm::radians(-ay), glm::vec3(0.0, 0.0, 1.0));
-			//tracker.quat = tracker.quat*dely;
-
-			//// z:
-			////glm::fquat delz = glm::angleAxis(glm::radians(az), glm::vec3(0.0, 0.0, 1.0));
-			////tracker.quat = tracker.quat*delz;
-
-			////printf("%f   %f\n", jc->accel.x*0.0221f, jc->accel.z*0.0221f);
-			////printf("%f\n", ax);
-			////printf("%f\n", ay);
-		}
-
-
 
 
 		// complementary filtered tracking
@@ -656,17 +653,17 @@ void updatevJoyDevice(Joycon *jc) {
 
 
 		// x:
-		float pitchInDegreesAccel = glm::degrees((atan2(-jc->accel.x, -jc->accel.z) + PI));
+		float pitchDegreesAccel = glm::degrees((atan2(-jc->accel.x, -jc->accel.z) + PI));
 		float pitchDegreesGyro = -jc->gyro.pitch * gyroCoeff;
 		float pitch = 0;
 
 		tracker.anglex += pitchDegreesGyro;
-		if ((pitchInDegreesAccel - tracker.anglex) > 180) {
+		if ((pitchDegreesAccel - tracker.anglex) > 180) {
 			tracker.anglex += 360;
-		} else if ((tracker.anglex - pitchInDegreesAccel) > 180) {
+		} else if ((tracker.anglex - pitchDegreesAccel) > 180) {
 			tracker.anglex -= 360;
 		}
-		tracker.anglex = (tracker.anglex * 0.98) + (pitchInDegreesAccel * 0.02);
+		tracker.anglex = (tracker.anglex * 0.98) + (pitchDegreesAccel * 0.02);
 		pitch = tracker.anglex;
 
 		glm::fquat delx = glm::angleAxis(glm::radians(pitch), glm::vec3(1.0, 0.0, 0.0));
@@ -683,22 +680,21 @@ void updatevJoyDevice(Joycon *jc) {
 
 
 		// y:
-		float rollInDegreesAccel = -glm::degrees((atan2(-jc->accel.y, -jc->accel.z) + PI));
+		float rollDegreesAccel = -glm::degrees((atan2(-jc->accel.y, -jc->accel.z) + PI));
 		float rollDegreesGyro = -jc->gyro.roll * gyroCoeff;
 		float roll = 0;
 
 		tracker.angley += rollDegreesGyro;
-		if ((rollInDegreesAccel - tracker.angley) > 180) {
+		if ((rollDegreesAccel - tracker.angley) > 180) {
 			tracker.angley += 360;
-		} else if ((tracker.angley - rollInDegreesAccel) > 180) {
+		} else if ((tracker.angley - rollDegreesAccel) > 180) {
 			tracker.angley -= 360;
 		}
-		tracker.angley = (tracker.angley * 0.98) + (rollInDegreesAccel * 0.02);
-		//tracker.angley = -rollInDegreesAccel;
-		roll = tracker.angley;
+		tracker.angley = (tracker.angley * 0.98) + (rollDegreesAccel * 0.02);
+		roll = -tracker.angley;
 
 		
-		glm::fquat dely = glm::angleAxis(glm::radians(roll), glm::vec3(0.0, 0.0, 1.0));
+		glm::fquat dely = glm::angleAxis(glm::radians(-roll), glm::vec3(0.0, 0.0, 1.0));
 		tracker.quat = tracker.quat*dely;
 
 		//printf("%f\n", roll);
@@ -711,17 +707,17 @@ void updatevJoyDevice(Joycon *jc) {
 
 
 		// z:
-		float yawInDegreesAccel = glm::degrees((atan2(-jc->accel.y, -jc->accel.x) + PI));
+		float yawDegreesAccel = glm::degrees((atan2(-jc->accel.y, -jc->accel.x) + PI));
 		float yawDegreesGyro = -jc->gyro.yaw * gyroCoeff;
 		float yaw = 0;
 
 		tracker.anglez += lowpassFilter(yawDegreesGyro, 0.5);
-		//if ((yawInDegreesAccel - tracker.anglez) > 180) {
+		//if ((yawDegreesAccel - tracker.anglez) > 180) {
 		//	tracker.anglez += 360;
-		//} else if ((tracker.anglez - yawInDegreesAccel) > 180) {
+		//} else if ((tracker.anglez - yawDegreesAccel) > 180) {
 		//	tracker.anglez -= 360;
 		//}
-		//tracker.anglez = (tracker.anglez * 0.98) + (yawInDegreesAccel * 0.02);
+		//tracker.anglez = (tracker.anglez * 0.98) + (yawDegreesAccel * 0.02);
 		yaw = tracker.anglez;
 
 
@@ -818,7 +814,6 @@ void updatevJoyDevice2(Joycon *jc) {
 	bool reverseY = settings.reverseY;
 
 	UINT DevID;
-	
 
 	PVOID pPositionMessage;
 	UINT	IoCode = LOAD_POSITIONS;
@@ -828,9 +823,10 @@ void updatevJoyDevice2(Joycon *jc) {
 	UINT iInterface = 1;
 
 	// Set destination vJoy device
+	DevID = jc->vJoyNumber;
 	id = (BYTE)DevID;
 	iReport.bDevice = id;
-	DevID = jc->vJoyNumber;
+	
 
 
 	// Set Stick data
@@ -899,17 +895,17 @@ void updatevJoyDevice2(Joycon *jc) {
 
 
 		// x:
-		float pitchInDegreesAccel = glm::degrees((atan2(-jc->accel.x, -jc->accel.z) + PI));
+		float pitchDegreesAccel = glm::degrees((atan2(-jc->accel.x, -jc->accel.z) + PI));
 		float pitchDegreesGyro = -jc->gyro.pitch * gyroCoeff;
 		float pitch = 0;
 
 		tracker.anglex += pitchDegreesGyro;
-		if ((pitchInDegreesAccel - tracker.anglex) > 180) {
+		if ((pitchDegreesAccel - tracker.anglex) > 180) {
 			tracker.anglex += 360;
-		} else if ((tracker.anglex - pitchInDegreesAccel) > 180) {
+		} else if ((tracker.anglex - pitchDegreesAccel) > 180) {
 			tracker.anglex -= 360;
 		}
-		tracker.anglex = (tracker.anglex * 0.98) + (pitchInDegreesAccel * 0.02);
+		tracker.anglex = (tracker.anglex * 0.98) + (pitchDegreesAccel * 0.02);
 		pitch = tracker.anglex;
 
 		glm::fquat delx = glm::angleAxis(glm::radians(pitch), glm::vec3(1.0, 0.0, 0.0));
@@ -926,17 +922,17 @@ void updatevJoyDevice2(Joycon *jc) {
 
 
 		// y:
-		float rollInDegreesAccel = -glm::degrees((atan2(-jc->accel.y, -jc->accel.z) + PI));
+		float rollDegreesAccel = -glm::degrees((atan2(-jc->accel.y, -jc->accel.z) + PI));
 		float rollDegreesGyro = -jc->gyro.roll * gyroCoeff;
 		float roll = 0;
 
 		tracker.angley += rollDegreesGyro;
-		if ((rollInDegreesAccel - tracker.angley) > 180) {
+		if ((rollDegreesAccel - tracker.angley) > 180) {
 			tracker.angley += 360;
-		} else if ((tracker.angley - rollInDegreesAccel) > 180) {
+		} else if ((tracker.angley - rollDegreesAccel) > 180) {
 			tracker.angley -= 360;
 		}
-		tracker.angley = (tracker.angley * 0.98) + (rollInDegreesAccel * 0.02);
+		tracker.angley = (tracker.angley * 0.98) + (rollDegreesAccel * 0.02);
 		//tracker.angley = -rollInDegreesAccel;
 		roll = tracker.angley;
 
@@ -944,7 +940,7 @@ void updatevJoyDevice2(Joycon *jc) {
 		glm::fquat dely = glm::angleAxis(glm::radians(roll), glm::vec3(0.0, 0.0, 1.0));
 		tracker.quat = tracker.quat*dely;
 
-		//printf("%f\n", roll);
+		printf("%f\n", roll);
 
 
 
@@ -954,17 +950,17 @@ void updatevJoyDevice2(Joycon *jc) {
 
 
 		// z:
-		float yawInDegreesAccel = glm::degrees((atan2(-jc->accel.y, -jc->accel.x) + PI));
+		float yawDegreesAccel = glm::degrees((atan2(-jc->accel.y, -jc->accel.x) + PI));
 		float yawDegreesGyro = -jc->gyro.yaw * gyroCoeff;
 		float yaw = 0;
 
 		tracker.anglez += lowpassFilter(yawDegreesGyro, 0.5);
 		//if ((yawInDegreesAccel - tracker.anglez) > 180) {
 		//	tracker.anglez += 360;
-		//} else if ((tracker.anglez - yawInDegreesAccel) > 180) {
+		//} else if ((tracker.anglez - yawDegreesAccel) > 180) {
 		//	tracker.anglez -= 360;
 		//}
-		//tracker.anglez = (tracker.anglez * 0.98) + (yawInDegreesAccel * 0.02);
+		//tracker.anglez = (tracker.anglez * 0.98) + (yawDegreesAccel * 0.02);
 		yaw = tracker.anglez;
 
 
@@ -1113,15 +1109,13 @@ void pollLoop() {
 void start() {
 
 
-	// get vJoy Device 1
+	// get vJoy Device 1-6
 	acquirevJoyDevice(1);
-	// get vJoy Device 2
 	acquirevJoyDevice(2);
-
-	// get vJoy Device 3
 	acquirevJoyDevice(3);
-	// get vJoy Device 4
 	acquirevJoyDevice(4);
+	acquirevJoyDevice(5);
+	acquirevJoyDevice(6);
 
 
 	int missedPollCount = 0;
@@ -1196,7 +1190,7 @@ init_start:
 		int counter = 0;
 		for (int i = 0; i < joycons.size(); ++i) {
 			joycons[i].vJoyNumber = counter/2;
-			joycons[i].deviceNumber = (counter % 2 ? 1 : 0);
+			joycons[i].deviceNumber = (counter % 2 ? 0 : 1);
 			counter++;
 		}
 	} else {
@@ -1688,6 +1682,10 @@ void exit() {
 
 	RelinquishVJD(1);
 	RelinquishVJD(2);
+	RelinquishVJD(3);
+	RelinquishVJD(4);
+	RelinquishVJD(5);
+	RelinquishVJD(6);
 
 	if (settings.usingGrip) {
 		for (int i = 0; i < joycons.size(); ++i) {
