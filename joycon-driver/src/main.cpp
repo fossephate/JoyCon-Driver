@@ -423,8 +423,10 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			//std::cout << "L: " << jc->btns.left << " ";
 			//std::cout << "R: " << jc->btns.right << " ";
 			//std::cout << "LL: " << jc->btns.l << " ";
-			//std::cout << "ZL: " << jc->btns.zr << " ";
+			//std::cout << "ZL: " << jc->btns.zl << " ";
 			//std::cout << "SB: " << jc->btns.stick_button << " ";
+			//std::cout << "SL: " << jc->btns.sl << " ";
+			//std::cout << "SR: " << jc->btns.sr << " ";
 			//std::cout << "SX: " << jc->stick.CalX << " ";
 			//std::cout << "SY: " << jc->stick.CalY << " ";
 			//std::cout << "M: " << jc->btns.minus << " ";
@@ -457,6 +459,8 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			//std::cout << "RR: " << jc->btns.r << " ";
 			//std::cout << "ZR: " << jc->btns.zr << " ";
 			//std::cout << "SB: " << jc->btns.stick_button << " ";
+			//std::cout << "SL: " << jc->btns.sl << " ";
+			//std::cout << "SR: " << jc->btns.sr << " ";
 			//std::cout << "SX: " << jc->stick.CalX << " ";
 			//std::cout << "SY: " << jc->stick.CalY << " ";
 			//std::cout << "P: " << jc->btns.plus << " ";

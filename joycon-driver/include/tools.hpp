@@ -3,10 +3,10 @@
 #include <thread>
 #include <map>
 #include <string>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
-//if(a == b || a == c)
-// -> if(a == b $ c)
-//#define $or(a, b, c) if(a == b || a == c)
 
 double lowpassFilter(double a, double thresh) {
 	if (abs(a) > thresh) {
@@ -23,15 +23,15 @@ void accurateSleep(double durationMS, double sleepThreshold = 1.8) {
 	auto tNow = std::chrono::high_resolution_clock::now();
 
 	auto tSleepStart = std::chrono::high_resolution_clock::now();
-	
+
 	auto tSleepDuration = std::chrono::duration_cast<std::chrono::microseconds>(tNow - tSleepStart);
 
 	// get the application's runtime duration in ms
 	//runningTimeMS = std::chrono::duration_cast<std::chrono::milliseconds>(tNow - tApplicationStart).count();
 	//auto tFrameDuration = std::chrono::duration_cast<std::chrono::microseconds>(tNow - tFrameStart);
 	//double tFrameDurationMS = tFrameDuration.count() / 1000.0;
-	
-	
+
+
 	// time spent sleeping (0):
 	double tSleepTimeMS = tSleepDuration.count() / 1000.0;
 
@@ -177,7 +177,7 @@ inline int mk_odd(int n) {
 
 
 
-//
+
 //struct s_button_map {
 //	int bit;
 //	char *name;
@@ -189,7 +189,7 @@ inline int mk_odd(int n) {
 //	{ 6, "?" },{ 7, "?" },{ 8, "-" },{ 9, "+" },{ 10, "LS" },{ 11, "RS" },
 //	{ 12, "Ho" },{ 13, "Sc" },{ 14, "LR" },{ 15, "ZLR" },
 //};
-
+//
 //void print_buttons(Joycon *jc) {
 //
 //	for (int i = 0; i < 16; i++) {
@@ -273,3 +273,43 @@ void int_dump(unsigned char *buf, int len) {
 //void print_dstick(Joycon *jc) {
 //	printf("%s\n", dstick_names[jc->dstick]);
 //}
+
+//inline bool exists_test0(const std::string& name) {
+//	ifstream f(name.c_str());
+//	return f.good();
+//}
+
+inline bool exists_test0(const std::string& name) {
+	if (FILE *file = fopen(name.c_str(), "r")) {
+		fclose(file);
+		return true;
+	} else {
+		return false;
+	}
+}
+
+template<typename T>
+std::string get_time(std::chrono::time_point<T> time) {
+	using namespace std;
+	using namespace std::chrono;
+
+	time_t curr_time = T::to_time_t(time);
+	char sRep[100];
+	strftime(sRep, sizeof(sRep), "%Y-%m-%d %H:%M:%S", localtime(&curr_time));
+
+	typename T::duration since_epoch = time.time_since_epoch();
+	seconds sec = duration_cast<seconds>(since_epoch);
+	since_epoch -= sec;
+	milliseconds milli = duration_cast<milliseconds>(since_epoch);
+
+
+	string s = "";
+	stringstream ss;
+	ss << "[" << sRep << ":" << milli.count() << "]";
+	s = ss.str();
+
+	//s = to_string(sRep);
+
+	return s;
+
+}
