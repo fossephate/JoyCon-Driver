@@ -827,7 +827,7 @@ void updatevJoyDevice2(Joycon *jc) {
 	UINT iInterface = 1;
 
 	// Set destination vJoy device
-	DevID = jc->vJoyNumber;
+	DevID = jc->vJoyNumber+1;
 	id = (BYTE)DevID;
 	iReport.bDevice = id;
 	
@@ -835,11 +835,11 @@ void updatevJoyDevice2(Joycon *jc) {
 
 	// Set Stick data
 
-	int x = 16384;
-	int y = 16384;
-	int z = 16384;
-	int rx = 16384;
-	int ry = 16384;
+	int x = 0;
+	int y = 0;
+	int z = 0;
+	int rx = 0;
+	int ry = 0;
 	int rz = 0;
 
 	if (jc->deviceNumber == 0) {
@@ -944,7 +944,7 @@ void updatevJoyDevice2(Joycon *jc) {
 		glm::fquat dely = glm::angleAxis(glm::radians(roll), glm::vec3(0.0, 0.0, 1.0));
 		tracker.quat = tracker.quat*dely;
 
-		printf("%f\n", roll);
+		//printf("%f\n", roll);
 
 
 
@@ -1096,7 +1096,8 @@ void pollLoop() {
 
 	// update vjoy:
 	for (int i = 0; i < joycons.size(); ++i) {
-		updatevJoyDevice(&joycons[i]);
+		//updatevJoyDevice(&joycons[i]);
+		updatevJoyDevice2(&joycons[i]);
 	}
 
 
@@ -1194,7 +1195,7 @@ init_start:
 		int counter = 0;
 		for (int i = 0; i < joycons.size(); ++i) {
 			joycons[i].vJoyNumber = counter/2;
-			joycons[i].deviceNumber = (counter % 2 ? 0 : 1);
+			joycons[i].deviceNumber = (counter % 2 ? 1 : 0);
 			counter++;
 		}
 	} else {
