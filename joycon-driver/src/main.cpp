@@ -294,6 +294,8 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			gyro_data = packet + 13;// 13
 		} else if (jc->left_right == 2) {
 			gyro_data = packet + 13;// 13
+		} else if (jc->left_right == 3) {
+			gyro_data = packet + 13;// 13
 		}
 
 
