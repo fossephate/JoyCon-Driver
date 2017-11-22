@@ -145,15 +145,13 @@ struct Tracker {
 
 	// get current time
 	//std::chrono::high_resolution_clock tNow;
-	std::chrono::steady_clock::time_point tPoll = std::chrono::high_resolution_clock::now();
-
+	//std::chrono::steady_clock::time_point tPoll = std::chrono::high_resolution_clock::now();
+	std::vector<std::chrono::steady_clock::time_point> tPolls;
+	//Tracker(int value) : tPolls(100, std::chrono::high_resolution_clock::now()) {}
 	//auto tSleepStart = std::chrono::high_resolution_clock::now();
 
 	float previousPitch = 0;
 } tracker;
-
-
-
 
 
 void found_joycon(struct hid_device_info *dev) {
@@ -1076,7 +1074,7 @@ void pollLoop() {
 		// get current time
 		std::chrono::steady_clock::time_point tNow = std::chrono::high_resolution_clock::now();
 
-		auto timeSincePoll = std::chrono::duration_cast<std::chrono::microseconds>(tNow - tracker.tPoll);
+		auto timeSincePoll = std::chrono::duration_cast<std::chrono::microseconds>(tNow - tracker.tPolls[i]);
 
 
 
@@ -1087,7 +1085,7 @@ void pollLoop() {
 		//if (timeSincePollMS > (1000.0/60.0)) {
 		if (timeSincePollMS > 1000.0) {
 			jc->send_command(0x1E, buf, 0);
-			tracker.tPoll = std::chrono::high_resolution_clock::now();
+			tracker.tPolls[i] = std::chrono::high_resolution_clock::now();
 		}
 
 
@@ -1139,6 +1137,11 @@ void start() {
 	struct hid_device_info *devs, *cur_dev;
 
 	res = hid_init();
+
+	// hack:
+	for (int i = 0; i < 100; ++i) {
+		tracker.tPolls.push_back(std::chrono::high_resolution_clock::now());
+	}
 
 
 init_start:
