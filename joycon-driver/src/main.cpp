@@ -1058,15 +1058,19 @@ void pollLoop() {
 
 	// poll joycons:
 	for (int i = 0; i < joycons.size(); ++i) {
+		
 		Joycon *jc = &joycons[i];
 
+		// choose a random joycon to reduce bias / figure out the problem w/input lag:
+		//Joycon *jc = &joycons[rand_range(0, joycons.size()-1)];
+		
 		if (!jc->handle) { continue; }
 
 		// set to be non-blocking:
-		//hid_set_nonblocking(jc->handle, 1);
+		hid_set_nonblocking(jc->handle, 1);
 
 		// set to be blocking:
-		hid_set_nonblocking(jc->handle, 0);
+		//hid_set_nonblocking(jc->handle, 0);
 
 		// get input:
 		memset(buf, 0, 65);
@@ -1082,14 +1086,21 @@ void pollLoop() {
 		double timeSincePollMS = timeSincePoll.count() / 1000.0;
 
 		
-		//if (timeSincePollMS > (1000.0/60.0)) {
-		if (timeSincePollMS > 1000.0) {
+		if (timeSincePollMS > (1000.0/60.0)) {
+		//if (timeSincePollMS > 1000.0) {
 			jc->send_command(0x1E, buf, 0);
+			//jc->send_command(0x1F, buf, 0);
 			tracker.tPolls[i] = std::chrono::high_resolution_clock::now();
 		}
 
 
 		hid_read(jc->handle, buf, 0x40);
+
+		// get rid of queue:
+		while (hid_read(jc->handle, buf, 0x40) > 0) {};
+		//for (int i = 0; i < 100; ++i) {
+		//	hid_read(jc->handle, buf, 0x40);
+		//}
 
 		handle_input(jc, buf, 0x40);
 	}
@@ -1098,11 +1109,12 @@ void pollLoop() {
 	for (int i = 0; i < joycons.size(); ++i) {
 		//updatevJoyDevice(&joycons[i]);
 		updatevJoyDevice2(&joycons[i]);
+		//updatevJoyDevice2(&joycons[rand_range(0, joycons.size()-1)]);
 	}
 
 
 	// sleep:
-	accurateSleep(2.00);// 8.00
+	accurateSleep(0.00);// 8.00
 
 	if (settings.restart) {
 		settings.restart = false;
@@ -1246,14 +1258,14 @@ init_start:
 
 	// give a small rumble to all joycons:
 	printf("vibrating JoyCon(s).\n");
-	for (int k = 0; k < 1; ++k) {
-		for (int i = 0; i < joycons.size(); ++i) {
-			joycons[i].rumble(100, 1);
-			Sleep(20);
-			joycons[i].rumble(10, 3);
-			//Sleep(100);
-		}
-	}
+	//for (int k = 0; k < 1; ++k) {
+	//	for (int i = 0; i < joycons.size(); ++i) {
+	//		joycons[i].rumble(100, 1);
+	//		Sleep(20);
+	//		joycons[i].rumble(10, 3);
+	//		//Sleep(100);
+	//	}
+	//}
 
 	// Plays the Mario theme on the JoyCons:
 	// I'm bad with music I just did this by

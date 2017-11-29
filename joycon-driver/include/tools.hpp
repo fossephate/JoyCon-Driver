@@ -16,6 +16,10 @@ double lowpassFilter(double a, double thresh) {
 	}
 }
 
+int rand_range(int min, int max) {
+	return rand() % (max + 1 - min) + min;
+}
+
 // sleeps accurately:
 void accurateSleep(double durationMS, double sleepThreshold = 1.8) {
 
