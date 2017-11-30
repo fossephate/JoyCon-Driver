@@ -846,6 +846,7 @@ void updatevJoyDevice2(Joycon *jc) {
 		rx = 16384 * (jc->stick.CalX);
 		ry = 16384 * (jc->stick.CalY);
 	}
+	// pro controller:
 	if (jc->left_right == 3) {
 		x = 16384 * (jc->stick.CalX);
 		y = 16384 * (jc->stick.CalY);
@@ -868,10 +869,23 @@ void updatevJoyDevice2(Joycon *jc) {
 		ry = 32768 - ry;
 	}
 
-	iReport.wAxisX = x;
-	iReport.wAxisY = y;
-	iReport.wAxisXRot = rx;
-	iReport.wAxisYRot = ry;
+
+	if (jc->deviceNumber == 0) {
+		iReport.wAxisX = x;
+		iReport.wAxisY = y;
+	} else if (jc->deviceNumber == 1) {
+		iReport.wAxisXRot = rx;
+		iReport.wAxisYRot = ry;
+	}
+	// pro controller:
+	if (jc->left_right == 3) {
+		// both sticks:
+		iReport.wAxisX = x;
+		iReport.wAxisY = y;
+		iReport.wAxisXRot = rx;
+		iReport.wAxisYRot = ry;
+	}
+
 
 
 	// gyro / accelerometer data:
@@ -1091,7 +1105,7 @@ void pollLoop() {
 
 
 	// sleep:
-	accurateSleep(0.00);// 8.00
+	accurateSleep(2.00);// 8.00
 
 	if (settings.restart) {
 		settings.restart = false;
