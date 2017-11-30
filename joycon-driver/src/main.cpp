@@ -814,9 +814,6 @@ void updatevJoyDevice(Joycon *jc) {
 
 void updatevJoyDevice2(Joycon *jc) {
 
-	bool reverseX = settings.reverseX;
-	bool reverseY = settings.reverseY;
-
 	UINT DevID;
 
 	PVOID pPositionMessage;
@@ -827,7 +824,7 @@ void updatevJoyDevice2(Joycon *jc) {
 	UINT iInterface = 1;
 
 	// Set destination vJoy device
-	DevID = jc->vJoyNumber+1;
+	DevID = jc->vJoyNumber;
 	id = (BYTE)DevID;
 	iReport.bDevice = id;
 	
@@ -862,11 +859,11 @@ void updatevJoyDevice2(Joycon *jc) {
 	rx += 16384;
 	ry += 16384;
 
-	if (reverseX) {
+	if (settings.reverseX) {
 		x = 32768 - x;
 		rx = 32768 - rx;
 	}
-	if (reverseY) {
+	if (settings.reverseY) {
 		y = 32768 - y;
 		ry = 32768 - ry;
 	}
@@ -918,13 +915,6 @@ void updatevJoyDevice2(Joycon *jc) {
 
 
 
-
-
-
-
-
-
-
 		// y:
 		float rollDegreesAccel = -glm::degrees((atan2(-jc->accel.y, -jc->accel.z) + PI));
 		float rollDegreesGyro = -jc->gyro.roll * gyroCoeff;
@@ -945,12 +935,6 @@ void updatevJoyDevice2(Joycon *jc) {
 		tracker.quat = tracker.quat*dely;
 
 		//printf("%f\n", roll);
-
-
-
-
-
-
 
 
 		// z:
@@ -989,13 +973,6 @@ void updatevJoyDevice2(Joycon *jc) {
 		iReport.wDial = 16384 + (jc->gyro.yaw * mult);
 
 	}
-
-
-
-
-
-
-
 
 	// Set button data
 	// JoyCon(L) is the first 16 bits
@@ -1211,7 +1188,7 @@ init_start:
 	if (settings.combineJoyCons) {
 		int counter = 0;
 		for (int i = 0; i < joycons.size(); ++i) {
-			joycons[i].vJoyNumber = counter/2;
+			joycons[i].vJoyNumber = (counter/2)+1;
 			joycons[i].deviceNumber = (counter % 2 ? 1 : 0);
 			counter++;
 		}
