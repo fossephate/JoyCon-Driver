@@ -1,5 +1,5 @@
 # JoyCon-Driver
-A vJoy feeder / Driver for the Nintendo Switch JoyCons with analog stick support and motion controls
+A vJoy feeder / Driver for the Nintendo Switch JoyCons on Windows with analog stick support and motion controls
 
 ## How to use
 1. Install vJoy, found here: http://vjoystick.sourceforge.net/site/
