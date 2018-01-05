@@ -1,2 +1,0 @@
-#include <wx/wx.h>
-
