@@ -123,8 +123,9 @@ public:
 	void toggleMario(wxCommandEvent&);
 
 	void toggleReverseX(wxCommandEvent&);
-
 	void toggleReverseY(wxCommandEvent&);
+
+	void togglePreferLeftJoyCon(wxCommandEvent &);
 
 	void setGyroSensitivityX(wxCommandEvent&);
 	void setGyroSensitivityY(wxCommandEvent&);

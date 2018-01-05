@@ -101,6 +101,8 @@ struct Settings {
 	bool reverseX = false;// reverses joystick x (both sticks)
 	bool reverseY = false;// reverses joystick y (both sticks)
 
+	bool preferLeftJoyCon = false;// prefer the left joycon for gyro controls
+
 	bool usingGrip = false;
 	bool usingBluetooth = true;
 	bool disconnect = false;
@@ -886,10 +888,18 @@ void updatevJoyDevice2(Joycon *jc) {
 		iReport.wAxisYRot = ry;
 	}
 
-
+	int a = -1;
+	int b = -1;
+	if (!settings.preferLeftJoyCon) {
+		a = 2;
+		b = 1;
+	} else {
+		a = 1;
+		b = 2;
+	}
 
 	// gyro / accelerometer data:
-	if ((jc->left_right == 2) || (joycons.size() == 1 && jc->left_right == 1) || (jc->left_right == 3)) {
+	if ((jc->left_right == a) || (joycons.size() == 1 && jc->left_right == b) || (jc->left_right == 3)) {
 
 		int multiplier;
 
@@ -1042,6 +1052,8 @@ void parseSettings2() {
 
 	settings.reverseX = (bool)stoi(cfg["reverseX"]);
 	settings.reverseY = (bool)stoi(cfg["reverseY"]);
+
+	settings.preferLeftJoyCon = (bool)stoi(cfg["preferLeftJoyCon"]);
 
 }
 
@@ -2130,28 +2142,32 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("Joycon Driver by fosse ©20
 	CB7->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleReverseY, this);
 	CB7->SetValue(settings.reverseY);
 
-	wxStaticText *slider1Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity X"), wxPoint(20, 140));
-	slider1 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityX, 0, 1000, wxPoint(180, 120), wxDefaultSize, wxSL_LABELS);
+	CB8 = new wxCheckBox(panel, wxID_ANY, wxT("Prefer Left JoyCon for Gyro Controls"), wxPoint(20, 140));
+	CB8->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::togglePreferLeftJoyCon, this);
+	CB8->SetValue(settings.preferLeftJoyCon);
+
+
+
+
+	wxStaticText *slider1Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity X"), wxPoint(20, 180));
+	slider1 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityX, 0, 1000, wxPoint(180, 160), wxDefaultSize, wxSL_LABELS);
 	slider1->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityX, this);
 
 
-	wxStaticText *slider2Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity Y"), wxPoint(20, 180));
-	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, 0, 1000, wxPoint(180, 160), wxDefaultSize, wxSL_LABELS);
+	wxStaticText *slider2Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity Y"), wxPoint(20, 220));
+	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, 0, 1000, wxPoint(180, 200), wxDefaultSize, wxSL_LABELS);
 	slider2->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityY, this);
 
+	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 260));
 
 
-
-	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 200));
-
-
-	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 220));
+	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 300));
 	startButton->Bind(wxEVT_BUTTON, &MainFrame::onStart, this);
 
-	wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 220));
+	wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 300));
 	quitButton->Bind(wxEVT_BUTTON, &MainFrame::onQuit, this);
 
-	SetClientSize(350, 260);
+	SetClientSize(350, 340);
 	Show();
 }
 
@@ -2195,6 +2211,10 @@ void MainFrame::toggleReverseX(wxCommandEvent&) {
 
 void MainFrame::toggleReverseY(wxCommandEvent&) {
 	settings.reverseY = !settings.reverseY;
+}
+
+void MainFrame::togglePreferLeftJoyCon(wxCommandEvent&) {
+	settings.preferLeftJoyCon = !settings.preferLeftJoyCon;
 }
 
 void MainFrame::setGyroSensitivityX(wxCommandEvent&) {
