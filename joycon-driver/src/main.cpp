@@ -103,6 +103,8 @@ struct Settings {
 
 	bool preferLeftJoyCon = false;// prefer the left joycon for gyro controls
 
+	int gyroscopeComboCode = 4;// combo code to set key combination to disable gyroscope for quick turning in games. -1 to disable.
+
 	bool usingGrip = false;
 	bool usingBluetooth = true;
 	bool disconnect = false;
@@ -888,15 +890,21 @@ void updatevJoyDevice2(Joycon *jc) {
 		iReport.wAxisYRot = ry;
 	}
 
+
+	// prefer left joycon for gyroscope controls:
 	int a = -1;
 	int b = -1;
-	if (!settings.preferLeftJoyCon) {
-		a = 2;
-		b = 1;
-	} else {
+	if (settings.preferLeftJoyCon) {
 		a = 1;
 		b = 2;
+	} else {
+		a = 2;
+		b = 1;
 	}
+
+	bool comboCodePressed = false;
+
+
 
 	// gyro / accelerometer data:
 	if ((jc->left_right == a) || (joycons.size() == 1 && jc->left_right == b) || (jc->left_right == 3)) {
@@ -982,12 +990,28 @@ void updatevJoyDevice2(Joycon *jc) {
 		float relX2 = -jc->gyro.yaw / settings.gyroSensitivityX;
 		float relY2 = jc->gyro.pitch / settings.gyroSensitivityY;
 
+
+		// check if combo keys are pressed:
+		//if (settings.preferLeftJoyCon) {
+		//	
+		//} else {
+
+		//}
+		if (jc->buttons == settings.gyroscopeComboCode) {
+			comboCodePressed = true;
+		} else {
+			comboCodePressed = false;
+		}
+
 		if (settings.enableGyro) {
 			if (jc->left_right == 2) {
 				relX2 *= -1;
 				relY2 *= -1;
 			}
-			MC.moveRel2(relX2, relY2);
+			// check if combo keys are pressed:
+			if (!comboCodePressed) {
+				MC.moveRel2(relX2, relY2);
+			}
 		}
 
 		float mult = settings.gyroSensitivityX / 100.0f;
@@ -1055,6 +1079,8 @@ void parseSettings2() {
 
 	settings.preferLeftJoyCon = (bool)stoi(cfg["preferLeftJoyCon"]);
 
+	settings.gyroscopeComboCode = stoi(cfg["gyroscopeComboCode"]);
+
 }
 
 void pollLoop() {
@@ -1090,7 +1116,6 @@ void pollLoop() {
 
 		
 		if (timeSincePollMS > (1000.0/60.0)) {
-		//if (timeSincePollMS > 1000.0) {
 			jc->send_command(0x1E, buf, 0);
 			//jc->send_command(0x1F, buf, 0);
 			tracker.tPolls[i] = std::chrono::high_resolution_clock::now();
