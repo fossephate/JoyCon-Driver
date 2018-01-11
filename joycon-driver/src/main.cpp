@@ -1730,12 +1730,9 @@ init_start:
 
 void exit() {
 
-	RelinquishVJD(1);
-	RelinquishVJD(2);
-	RelinquishVJD(3);
-	RelinquishVJD(4);
-	RelinquishVJD(5);
-	RelinquishVJD(6);
+	for (int i = 1; i < 9; ++i) {
+		RelinquishVJD(i);
+	}
 
 	if (settings.usingGrip) {
 		for (int i = 0; i < joycons.size(); ++i) {
