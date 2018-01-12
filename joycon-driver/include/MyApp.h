@@ -126,6 +126,7 @@ public:
 	void toggleReverseY(wxCommandEvent&);
 
 	void togglePreferLeftJoyCon(wxCommandEvent &);
+	void toggleDebugMode(wxCommandEvent &);
 
 	void setGyroSensitivityX(wxCommandEvent&);
 	void setGyroSensitivityY(wxCommandEvent&);

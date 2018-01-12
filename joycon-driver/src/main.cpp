@@ -126,6 +126,9 @@ struct Settings {
 	// bool to restart the program
 	bool restart = false;
 
+	// debug mode
+	bool debugMode = false;
+
 } settings;
 
 
@@ -422,23 +425,28 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			jc->btns.capture = (jc->buttons & (1 << 13)) ? 1 : 0;
 
 			// cout:
-			//std::cout << "U: " << jc->btns.up << " ";
-			//std::cout << "D: " << jc->btns.down << " ";
-			//std::cout << "L: " << jc->btns.left << " ";
-			//std::cout << "R: " << jc->btns.right << " ";
-			//std::cout << "LL: " << jc->btns.l << " ";
-			//std::cout << "ZL: " << jc->btns.zl << " ";
-			//std::cout << "SB: " << jc->btns.stick_button << " ";
-			//std::cout << "SL: " << jc->btns.sl << " ";
-			//std::cout << "SR: " << jc->btns.sr << " ";
-			//std::cout << "SX: " << jc->stick.CalX << " ";
-			//std::cout << "SY: " << jc->stick.CalY << " ";
-			//std::cout << "M: " << jc->btns.minus << " ";
-			//std::cout << "C: " << jc->btns.capture << " ";
-			//std::cout << "GR: " << jc->gyro.roll << " ";
-			//std::cout << "GP: " << jc->gyro.pitch << " ";
-			//std::cout << "GY: " << jc->gyro.yaw << " ";
-			//std::cout << "\n";
+			if (settings.debugMode) {
+				//std::cout << "U: " << jc->btns.up << " ";
+				//std::cout << "D: " << jc->btns.down << " ";
+				//std::cout << "L: " << jc->btns.left << " ";
+				//std::cout << "R: " << jc->btns.right << " ";
+				//std::cout << "LL: " << jc->btns.l << " ";
+				//std::cout << "ZL: " << jc->btns.zl << " ";
+				//std::cout << "SB: " << jc->btns.stick_button << " ";
+				//std::cout << "SL: " << jc->btns.sl << " ";
+				//std::cout << "SR: " << jc->btns.sr << " ";
+				//std::cout << "SX: " << jc->stick.CalX << " ";
+				//std::cout << "SY: " << jc->stick.CalY << " ";
+				//std::cout << "M: " << jc->btns.minus << " ";
+				//std::cout << "C: " << jc->btns.capture << " ";
+				//std::cout << "GR: " << jc->gyro.roll << " ";
+				//std::cout << "GP: " << jc->gyro.pitch << " ";
+				//std::cout << "GY: " << jc->gyro.yaw << " ";
+				//std::cout << "\n";
+				printf("U: %d D: %d L: %d R: %d LL: %d ZL: %d SB: %d SL: %d SR: %d SX: %d SY: %d M: %d C: %d GR: %d GP: %d GY: %d\n", \
+					jc->btns.up, jc->btns.down, jc->btns.left, jc->btns.right, jc->btns.l, jc->btns.zl, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, jc->stick.CalX, \
+					jc->stick.CalY, jc->btns.minus, jc->btns.capture, jc->gyro.roll, jc->gyro.pitch, jc->gyro.yaw);
+			}
 		}
 
 		if (jc->left_right == 2) {
@@ -456,24 +464,31 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 
 			// cout:
-			//std::cout << "A: " << jc->btns.a << " ";
-			//std::cout << "B: " << jc->btns.b << " ";
-			//std::cout << "X: " << jc->btns.x << " ";
-			//std::cout << "Y: " << jc->btns.y << " ";
-			//std::cout << "RR: " << jc->btns.r << " ";
-			//std::cout << "ZR: " << jc->btns.zr << " ";
-			//std::cout << "SB: " << jc->btns.stick_button << " ";
-			//std::cout << "SL: " << jc->btns.sl << " ";
-			//std::cout << "SR: " << jc->btns.sr << " ";
-			//std::cout << "SX: " << jc->stick.CalX << " ";
-			//std::cout << "SY: " << jc->stick.CalY << " ";
-			//std::cout << "P: " << jc->btns.plus << " ";
-			//std::cout << "H: " << jc->btns.home << " ";
-			//std::cout << "GR: " << jc->gyro.roll << " ";
-			//std::cout << "GP: " << jc->gyro.pitch << " ";
-			//std::cout << "GY: " << jc->gyro.yaw << " ";
-			//std::cout << "\n";
+			if (settings.debugMode) {
+				//std::cout << "A: " << jc->btns.a << " ";
+				//std::cout << "B: " << jc->btns.b << " ";
+				//std::cout << "X: " << jc->btns.x << " ";
+				//std::cout << "Y: " << jc->btns.y << " ";
+				//std::cout << "RR: " << jc->btns.r << " ";
+				//std::cout << "ZR: " << jc->btns.zr << " ";
+				//std::cout << "SB: " << jc->btns.stick_button << " ";
+				//std::cout << "SL: " << jc->btns.sl << " ";
+				//std::cout << "SR: " << jc->btns.sr << " ";
+				//std::cout << "SX: " << jc->stick.CalX << " ";
+				//std::cout << "SY: " << jc->stick.CalY << " ";
+				//std::cout << "P: " << jc->btns.plus << " ";
+				//std::cout << "H: " << jc->btns.home << " ";
+				//std::cout << "GR: " << jc->gyro.roll << " ";
+				//std::cout << "GP: " << jc->gyro.pitch << " ";
+				//std::cout << "GY: " << jc->gyro.yaw << " ";
+				//std::cout << "\n";
+				printf("A: %d B: %d X: %d Y: %d RR: %d ZR: %d SB: %d SL: %d SR: %d SX: %d SY: %d P: %d H: %d GR: %d GP: %d GY: %d\n", \
+					jc->btns.a, jc->btns.b, jc->btns.x, jc->btns.y, jc->btns.r, jc->btns.zr, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, jc->stick.CalX, \
+					jc->stick.CalY, jc->btns.plus, jc->btns.home, jc->gyro.roll, jc->gyro.pitch, jc->gyro.yaw);
+			}
 		}
+
+
 
 
 
@@ -1080,6 +1095,8 @@ void parseSettings2() {
 	settings.preferLeftJoyCon = (bool)stoi(cfg["preferLeftJoyCon"]);
 
 	settings.gyroscopeComboCode = stoi(cfg["gyroscopeComboCode"]);
+
+	settings.debugMode = (bool)stoi(cfg["debugMode"]);
 
 }
 
@@ -2168,28 +2185,32 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("Joycon Driver by fosse ©20
 	CB8->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::togglePreferLeftJoyCon, this);
 	CB8->SetValue(settings.preferLeftJoyCon);
 
+	CB9 = new wxCheckBox(panel, wxID_ANY, wxT("Debug Mode"), wxPoint(20, 160));
+	CB9->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::togglePreferLeftJoyCon, this);
+	CB9->SetValue(settings.preferLeftJoyCon);
 
 
 
-	wxStaticText *slider1Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity X"), wxPoint(20, 180));
-	slider1 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityX, 0, 1000, wxPoint(180, 160), wxDefaultSize, wxSL_LABELS);
+
+	wxStaticText *slider1Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity X"), wxPoint(20, 200));
+	slider1 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityX, 0, 1000, wxPoint(180, 180), wxDefaultSize, wxSL_LABELS);
 	slider1->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityX, this);
 
 
-	wxStaticText *slider2Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity Y"), wxPoint(20, 220));
-	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, 0, 1000, wxPoint(180, 200), wxDefaultSize, wxSL_LABELS);
+	wxStaticText *slider2Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity Y"), wxPoint(20, 240));
+	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, 0, 1000, wxPoint(180, 220), wxDefaultSize, wxSL_LABELS);
 	slider2->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityY, this);
 
-	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 260));
+	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 280));
 
 
-	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 300));
+	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 320));
 	startButton->Bind(wxEVT_BUTTON, &MainFrame::onStart, this);
 
-	wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 300));
+	wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 320));
 	quitButton->Bind(wxEVT_BUTTON, &MainFrame::onQuit, this);
 
-	SetClientSize(350, 340);
+	SetClientSize(350, 360);
 	Show();
 }
 
@@ -2237,6 +2258,10 @@ void MainFrame::toggleReverseY(wxCommandEvent&) {
 
 void MainFrame::togglePreferLeftJoyCon(wxCommandEvent&) {
 	settings.preferLeftJoyCon = !settings.preferLeftJoyCon;
+}
+
+void MainFrame::toggleDebugMode(wxCommandEvent&) {
+	settings.debugMode = !settings.debugMode;
 }
 
 void MainFrame::setGyroSensitivityX(wxCommandEvent&) {
