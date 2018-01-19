@@ -435,17 +435,18 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 				//std::cout << "SB: " << jc->btns.stick_button << " ";
 				//std::cout << "SL: " << jc->btns.sl << " ";
 				//std::cout << "SR: " << jc->btns.sr << " ";
-				//std::cout << "SX: " << jc->stick.CalX << " ";
-				//std::cout << "SY: " << jc->stick.CalY << " ";
 				//std::cout << "M: " << jc->btns.minus << " ";
 				//std::cout << "C: " << jc->btns.capture << " ";
+
+				//std::cout << "SX: " << jc->stick.CalX << " ";
+				//std::cout << "SY: " << jc->stick.CalY << " ";
 				//std::cout << "GR: " << jc->gyro.roll << " ";
 				//std::cout << "GP: " << jc->gyro.pitch << " ";
 				//std::cout << "GY: " << jc->gyro.yaw << " ";
 				//std::cout << "\n";
-				printf("U: %d D: %d L: %d R: %d LL: %d ZL: %d SB: %d SL: %d SR: %d SX: %d SY: %d M: %d C: %d GR: %d GP: %d GY: %d\n", \
-					jc->btns.up, jc->btns.down, jc->btns.left, jc->btns.right, jc->btns.l, jc->btns.zl, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, jc->stick.CalX, \
-					jc->stick.CalY, jc->btns.minus, jc->btns.capture, jc->gyro.roll, jc->gyro.pitch, jc->gyro.yaw);
+				printf("U: %d D: %d L: %d R: %d LL: %d ZL: %d SB: %d SL: %d SR: %d M: %d C: %d SX: %.5f SY: %.5f GR: %.5f GP: %.5f GY: %.5f\n", \
+					jc->btns.up, jc->btns.down, jc->btns.left, jc->btns.right, jc->btns.l, jc->btns.zl, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
+					jc->btns.minus, jc->btns.capture, jc->stick.CalX, jc->stick.CalY, jc->gyro.roll, jc->gyro.pitch, jc->gyro.yaw);
 			}
 		}
 
@@ -474,17 +475,18 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 				//std::cout << "SB: " << jc->btns.stick_button << " ";
 				//std::cout << "SL: " << jc->btns.sl << " ";
 				//std::cout << "SR: " << jc->btns.sr << " ";
-				//std::cout << "SX: " << jc->stick.CalX << " ";
-				//std::cout << "SY: " << jc->stick.CalY << " ";
 				//std::cout << "P: " << jc->btns.plus << " ";
 				//std::cout << "H: " << jc->btns.home << " ";
+
+				//std::cout << "SX: " << jc->stick.CalX << " ";
+				//std::cout << "SY: " << jc->stick.CalY << " ";
 				//std::cout << "GR: " << jc->gyro.roll << " ";
 				//std::cout << "GP: " << jc->gyro.pitch << " ";
 				//std::cout << "GY: " << jc->gyro.yaw << " ";
 				//std::cout << "\n";
-				printf("A: %d B: %d X: %d Y: %d RR: %d ZR: %d SB: %d SL: %d SR: %d SX: %d SY: %d P: %d H: %d GR: %d GP: %d GY: %d\n", \
-					jc->btns.a, jc->btns.b, jc->btns.x, jc->btns.y, jc->btns.r, jc->btns.zr, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, jc->stick.CalX, \
-					jc->stick.CalY, jc->btns.plus, jc->btns.home, jc->gyro.roll, jc->gyro.pitch, jc->gyro.yaw);
+				printf("A: %d B: %d X: %d Y: %d RR: %d ZR: %d SB: %d SL: %d SR: %d P: %d H: %d SX: %.5f SY: %.5f GR: %.5f GP: %.5f GY: %.5f\n", \
+					jc->btns.a, jc->btns.b, jc->btns.x, jc->btns.y, jc->btns.r, jc->btns.zr, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
+					jc->btns.plus, jc->btns.home, jc->stick.CalX, jc->stick.CalY, jc->gyro.roll, jc->gyro.pitch, jc->gyro.yaw);
 			}
 		}
 
