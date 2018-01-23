@@ -447,9 +447,9 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 				//std::cout << "GP: " << jc->gyro.pitch << " ";
 				//std::cout << "GY: " << jc->gyro.yaw << " ";
 				//std::cout << "\n";
-				printf("U: %d D: %d L: %d R: %d LL: %d ZL: %d SB: %d SL: %d SR: %d M: %d C: %d SX: %.5f SY: %.5f GR: %.5f GP: %.5f GY: %.5f\n", \
+				printf("U: %d D: %d L: %d R: %d LL: %d ZL: %d SB: %d SL: %d SR: %d M: %d C: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
 					jc->btns.up, jc->btns.down, jc->btns.left, jc->btns.right, jc->btns.l, jc->btns.zl, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
-					jc->btns.minus, jc->btns.capture, jc->stick.CalX, jc->stick.CalY, jc->gyro.roll, jc->gyro.pitch, jc->gyro.yaw);
+					jc->btns.minus, jc->btns.capture, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
 			}
 		}
 
@@ -487,9 +487,9 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 				//std::cout << "GP: " << jc->gyro.pitch << " ";
 				//std::cout << "GY: " << jc->gyro.yaw << " ";
 				//std::cout << "\n";
-				printf("A: %d B: %d X: %d Y: %d RR: %d ZR: %d SB: %d SL: %d SR: %d P: %d H: %d SX: %.5f SY: %.5f GR: %.5f GP: %.5f GY: %.5f\n", \
+				printf("A: %d B: %d X: %d Y: %d RR: %d ZR: %d SB: %d SL: %d SR: %d P: %d H: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
 					jc->btns.a, jc->btns.b, jc->btns.x, jc->btns.y, jc->btns.r, jc->btns.zr, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
-					jc->btns.plus, jc->btns.home, jc->stick.CalX, jc->stick.CalY, jc->gyro.roll, jc->gyro.pitch, jc->gyro.yaw);
+					jc->btns.plus, jc->btns.home, jc->stick.CalX + 1, jc->stick.CalY + 1, (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
 			}
 		}
 
@@ -1105,6 +1105,8 @@ void parseSettings2() {
 
 }
 
+void start();
+
 void pollLoop() {
 
 	// poll joycons:
@@ -1168,6 +1170,7 @@ void pollLoop() {
 
 	if (settings.restart) {
 		settings.restart = false;
+		start();
 	}
 }
 
@@ -1298,14 +1301,14 @@ init_start:
 
 	// give a small rumble to all joycons:
 	printf("vibrating JoyCon(s).\n");
-	//for (int k = 0; k < 1; ++k) {
-	//	for (int i = 0; i < joycons.size(); ++i) {
-	//		joycons[i].rumble(100, 1);
-	//		Sleep(20);
-	//		joycons[i].rumble(10, 3);
-	//		//Sleep(100);
-	//	}
-	//}
+	for (int k = 0; k < 1; ++k) {
+		for (int i = 0; i < joycons.size(); ++i) {
+			joycons[i].rumble(100, 1);
+			Sleep(20);
+			joycons[i].rumble(10, 3);
+			//Sleep(100);
+		}
+	}
 
 	// Plays the Mario theme on the JoyCons:
 	// I'm bad with music I just did this by
@@ -2181,8 +2184,8 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("Joycon Driver by fosse ©20
 	CB8->SetValue(settings.preferLeftJoyCon);
 
 	CB9 = new wxCheckBox(panel, wxID_ANY, wxT("Debug Mode"), wxPoint(20, 160));
-	CB9->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::togglePreferLeftJoyCon, this);
-	CB9->SetValue(settings.preferLeftJoyCon);
+	CB9->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleDebugMode, this);
+	CB9->SetValue(settings.debugMode);
 
 
 
