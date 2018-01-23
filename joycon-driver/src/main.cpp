@@ -1259,7 +1259,7 @@ init_start:
 			counter++;
 		}
 	} else {
-		for (int i = 0; i < joycons.size(); ++i) {
+		for (int i = 1; i < joycons.size(); ++i) {
 			joycons[i].vJoyNumber = i;
 			joycons[i].deviceNumber = 0;// left
 		}
