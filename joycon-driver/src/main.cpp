@@ -251,6 +251,9 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			} else if (jc->left_right == 3) {
 				states = (btn_data[1] << 8) | (btn_data[2] & 0xFF);
 				states2 = (btn_data[1] << 8) | (btn_data[0] & 0xFF);
+				if (settings.debugMode) {
+					printf("%d %d\n", states, states2);
+				}
 			}
 
 			jc->buttons = states;
@@ -919,7 +922,7 @@ void updatevJoyDevice2(Joycon *jc) {
 		b = 1;
 	}
 
-	bool comboCodePressed = false;
+	bool gyroComboCodePressed = false;
 
 
 
@@ -1015,9 +1018,9 @@ void updatevJoyDevice2(Joycon *jc) {
 
 		//}
 		if (jc->buttons == settings.gyroscopeComboCode) {
-			comboCodePressed = true;
+			gyroComboCodePressed = true;
 		} else {
-			comboCodePressed = false;
+			gyroComboCodePressed = false;
 		}
 
 		if (settings.enableGyro) {
@@ -1026,7 +1029,7 @@ void updatevJoyDevice2(Joycon *jc) {
 				relY2 *= -1;
 			}
 			// check if combo keys are pressed:
-			if (!comboCodePressed) {
+			if (!gyroComboCodePressed) {
 				MC.moveRel2(relX2, relY2);
 			}
 		}
@@ -1173,20 +1176,10 @@ void pollLoop() {
 void start() {
 
 
-	// get vJoy Device 1-6
-	acquirevJoyDevice(1);
-	acquirevJoyDevice(2);
-	acquirevJoyDevice(3);
-	acquirevJoyDevice(4);
-	acquirevJoyDevice(5);
-	acquirevJoyDevice(6);
-
-
-	int missedPollCount = 0;
-	int res;
-	int i;
-	unsigned char buf[65];
-	unsigned char buf2[65];
+	// get vJoy Device 1-8
+	for (int i = 1; i < 9; ++i) {
+		acquirevJoyDevice(i);
+	}
 
 	int read;	// number of bytes read
 	int written;// number of bytes written
