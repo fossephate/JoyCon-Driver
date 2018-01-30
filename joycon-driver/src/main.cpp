@@ -851,6 +851,10 @@ void updatevJoyDevice2(Joycon *jc) {
 	DevID = jc->vJoyNumber;
 	id = (BYTE)DevID;
 	iReport.bDevice = id;
+
+	if (DevID == 0 && settings.debugMode) {
+		printf("something went very wrong D:\n");
+	}
 	
 
 
@@ -1259,8 +1263,8 @@ init_start:
 			counter++;
 		}
 	} else {
-		for (int i = 1; i < joycons.size(); ++i) {
-			joycons[i].vJoyNumber = i;
+		for (int i = 0; i < joycons.size(); ++i) {
+			joycons[i].vJoyNumber = i+1;
 			joycons[i].deviceNumber = 0;// left
 		}
 	}
