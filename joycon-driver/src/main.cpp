@@ -862,7 +862,8 @@ void updatevJoyDevice2(Joycon *jc) {
 
 	int x = 0;
 	int y = 0;
-	int z = 0;
+	//int z = 0;
+	int z = 16384;
 	int rx = 0;
 	int ry = 0;
 	int rz = 0;
@@ -887,6 +888,7 @@ void updatevJoyDevice2(Joycon *jc) {
 	y += 16384;
 	rx += 16384;
 	ry += 16384;
+	//rz += 16384;
 
 	if (settings.reverseX) {
 		x = 32768 - x;
