@@ -916,6 +916,8 @@ void updatevJoyDevice2(Joycon *jc) {
 		iReport.wAxisYRot = ry;
 	}
 
+	iReport.wAxisZ = z;// update z with 16384
+
 
 	// prefer left joycon for gyroscope controls:
 	int a = -1;
