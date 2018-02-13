@@ -413,7 +413,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		}
 
 
-
+		// left:
 		if (jc->left_right == 1) {
 			jc->btns.down = (jc->buttons & (1 << 0)) ? 1 : 0;
 			jc->btns.up = (jc->buttons & (1 << 1)) ? 1 : 0;
@@ -427,32 +427,15 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			jc->btns.stick_button = (jc->buttons & (1 << 11)) ? 1 : 0;
 			jc->btns.capture = (jc->buttons & (1 << 13)) ? 1 : 0;
 
-			// cout:
+			
 			if (settings.debugMode) {
-				//std::cout << "U: " << jc->btns.up << " ";
-				//std::cout << "D: " << jc->btns.down << " ";
-				//std::cout << "L: " << jc->btns.left << " ";
-				//std::cout << "R: " << jc->btns.right << " ";
-				//std::cout << "LL: " << jc->btns.l << " ";
-				//std::cout << "ZL: " << jc->btns.zl << " ";
-				//std::cout << "SB: " << jc->btns.stick_button << " ";
-				//std::cout << "SL: " << jc->btns.sl << " ";
-				//std::cout << "SR: " << jc->btns.sr << " ";
-				//std::cout << "M: " << jc->btns.minus << " ";
-				//std::cout << "C: " << jc->btns.capture << " ";
-
-				//std::cout << "SX: " << jc->stick.CalX << " ";
-				//std::cout << "SY: " << jc->stick.CalY << " ";
-				//std::cout << "GR: " << jc->gyro.roll << " ";
-				//std::cout << "GP: " << jc->gyro.pitch << " ";
-				//std::cout << "GY: " << jc->gyro.yaw << " ";
-				//std::cout << "\n";
 				printf("U: %d D: %d L: %d R: %d LL: %d ZL: %d SB: %d SL: %d SR: %d M: %d C: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
 					jc->btns.up, jc->btns.down, jc->btns.left, jc->btns.right, jc->btns.l, jc->btns.zl, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
 					jc->btns.minus, jc->btns.capture, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
 			}
 		}
 
+		// right:
 		if (jc->left_right == 2) {
 			jc->btns.y = (jc->buttons & (1 << 0)) ? 1 : 0;
 			jc->btns.x = (jc->buttons & (1 << 1)) ? 1 : 0;
@@ -467,31 +450,74 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			jc->btns.home = (jc->buttons & (1 << 12)) ? 1 : 0;
 
 
-			// cout:
 			if (settings.debugMode) {
-				//std::cout << "A: " << jc->btns.a << " ";
-				//std::cout << "B: " << jc->btns.b << " ";
-				//std::cout << "X: " << jc->btns.x << " ";
-				//std::cout << "Y: " << jc->btns.y << " ";
-				//std::cout << "RR: " << jc->btns.r << " ";
-				//std::cout << "ZR: " << jc->btns.zr << " ";
-				//std::cout << "SB: " << jc->btns.stick_button << " ";
-				//std::cout << "SL: " << jc->btns.sl << " ";
-				//std::cout << "SR: " << jc->btns.sr << " ";
-				//std::cout << "P: " << jc->btns.plus << " ";
-				//std::cout << "H: " << jc->btns.home << " ";
-
-				//std::cout << "SX: " << jc->stick.CalX << " ";
-				//std::cout << "SY: " << jc->stick.CalY << " ";
-				//std::cout << "GR: " << jc->gyro.roll << " ";
-				//std::cout << "GP: " << jc->gyro.pitch << " ";
-				//std::cout << "GY: " << jc->gyro.yaw << " ";
-				//std::cout << "\n";
 				printf("A: %d B: %d X: %d Y: %d RR: %d ZR: %d SB: %d SL: %d SR: %d P: %d H: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
 					jc->btns.a, jc->btns.b, jc->btns.x, jc->btns.y, jc->btns.r, jc->btns.zr, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
 					jc->btns.plus, jc->btns.home, jc->stick.CalX + 1, jc->stick.CalY + 1, (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
 			}
 		}
+		
+		// pro controller:
+		if (jc->left_right == 3) {
+
+			// just a guess:
+
+			// left:
+			jc->btns.down = (jc->buttons & (1 << 0)) ? 1 : 0;
+			jc->btns.up = (jc->buttons & (1 << 1)) ? 1 : 0;
+			jc->btns.right = (jc->buttons & (1 << 2)) ? 1 : 0;
+			jc->btns.left = (jc->buttons & (1 << 3)) ? 1 : 0;
+			jc->btns.sr = (jc->buttons & (1 << 4)) ? 1 : 0;
+			jc->btns.sl = (jc->buttons & (1 << 5)) ? 1 : 0;
+			jc->btns.l = (jc->buttons & (1 << 6)) ? 1 : 0;
+			jc->btns.zl = (jc->buttons & (1 << 7)) ? 1 : 0;
+			jc->btns.minus = (jc->buttons & (1 << 8)) ? 1 : 0;
+			jc->btns.stick_button = (jc->buttons & (1 << 11)) ? 1 : 0;
+			jc->btns.capture = (jc->buttons & (1 << 13)) ? 1 : 0;
+
+			// right:
+			jc->btns.y = (jc->buttons2 & (1 << 0)) ? 1 : 0;
+			jc->btns.x = (jc->buttons2 & (1 << 1)) ? 1 : 0;
+			jc->btns.b = (jc->buttons2 & (1 << 2)) ? 1 : 0;
+			jc->btns.a = (jc->buttons2 & (1 << 3)) ? 1 : 0;
+			jc->btns.sr = (jc->buttons2 & (1 << 4)) ? 1 : 0;
+			jc->btns.sl = (jc->buttons2 & (1 << 5)) ? 1 : 0;
+			jc->btns.r = (jc->buttons2 & (1 << 6)) ? 1 : 0;
+			jc->btns.zr = (jc->buttons2 & (1 << 7)) ? 1 : 0;
+			jc->btns.plus = (jc->buttons2 & (1 << 9)) ? 1 : 0;
+			jc->btns.stick_button = (jc->buttons2 & (1 << 10)) ? 1 : 0;
+			jc->btns.home = (jc->buttons2 & (1 << 12)) ? 1 : 0;
+
+
+			if (settings.debugMode) {
+				std::bitset<16> buttons1(jc->buttons);
+				std::string btns1 = buttons1.to_string();
+
+				std::bitset<16> buttons2(jc->buttons2);
+				std::string btns2 = buttons2.to_string();
+
+				// print states in binary since I don't know which bits are which
+				printf("%s %s\n", btns1, btns2);
+
+
+				//				printf("U: %d D: %d L: %d R: %d LL: %d ZL: %d SB: %d SL: %d SR: %d M: %d C: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
+					jc->btns.up, jc->btns.down, jc->btns.left, jc->btns.right, jc->btns.l, jc->btns.zl, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
+					jc->btns.minus, jc->btns.capture, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
+
+				//				printf("A: %d B: %d X: %d Y: %d RR: %d ZR: %d SB: %d SL: %d SR: %d P: %d H: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
+					jc->btns.a, jc->btns.b, jc->btns.x, jc->btns.y, jc->btns.r, jc->btns.zr, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
+					jc->btns.plus, jc->btns.home, jc->stick.CalX + 1, jc->stick.CalY + 1, (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
+			}
+		}
+
+
+		if (settings.debugMode) {
+			//char buffer[33];
+			//itoa(jc->buttons, buffer, 2);
+			//printf("buttons1: %s\n", buffer);
+
+		}
+
 
 
 
