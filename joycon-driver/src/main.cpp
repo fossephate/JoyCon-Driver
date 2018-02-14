@@ -26,6 +26,7 @@
 
 // wxWidgets:
 #include <wx/wx.h>
+#include <wx/hyperlink.h>
 #include <wx/glcanvas.h>
 #include <cube.h>
 #include <MyApp.h>
@@ -66,15 +67,6 @@
 #define L_OR_R(lr) (lr == 1 ? 'L' : (lr == 2 ? 'R' : '?'))
 
 unsigned short product_ids[] = { JOYCON_L_BT, JOYCON_R_BT, PRO_CONTROLLER, JOYCON_CHARGING_GRIP };
-
-
-float rand0t1() {
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<> dis(0.0f, 1.0f);
-	float rnd = dis(gen);
-	return rnd;
-}
 
 
 
@@ -128,6 +120,9 @@ struct Settings {
 
 	// debug mode
 	bool debugMode = false;
+
+	// version number
+	std::string version = "0.8";
 
 } settings;
 
@@ -1520,34 +1515,6 @@ void exit() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -1849,7 +1816,6 @@ bool MyApp::OnInit() {
 	new MainFrame();
 
 	//new MyFrame();
-
 	//m_myTimer.Start(0);
 
 	return true;
@@ -1895,7 +1861,7 @@ TestGLContext& MyApp::GetContext(wxGLCanvas *canvas, bool useStereo) {
 
 
 
-MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("Joycon Driver by fosse ©2017")) {
+MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("Joycon Driver by fosse ©2018")) {
 
 	wxPanel *panel = new wxPanel(this, wxID_ANY);
 
@@ -1953,14 +1919,21 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("Joycon Driver by fosse ©20
 
 	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 280));
 
+	//wxHyperlinkCtrl
+	std::string version = std::string("JoyCon-Driver Version ") + settings.version;
+	wxString versionString(version.c_str(), wxConvUTF8);
+	wxStaticText *st2 = new wxStaticText(panel, wxID_ANY, versionString, wxPoint(20, 310));
 
-	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 320));
+	wxButton *updateButton = new wxButton(panel, wxID_EXIT, wxT("Check for update"), wxPoint(20, 340));
+	updateButton->Bind(wxEVT_BUTTON, &MainFrame::onUpdate, this);
+
+	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 340));
 	startButton->Bind(wxEVT_BUTTON, &MainFrame::onStart, this);
 
-	wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 320));
+	wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 340));
 	quitButton->Bind(wxEVT_BUTTON, &MainFrame::onQuit, this);
 
-	SetClientSize(350, 360);
+	SetClientSize(350, 380);
 	Show();
 }
 
@@ -1979,6 +1952,10 @@ void MainFrame::onStart(wxCommandEvent&) {
 }
 
 void MainFrame::onQuit(wxCommandEvent&) {
+	exit(0);
+}
+
+void MainFrame::onUpdate(wxCommandEvent&) {
 	exit(0);
 }
 

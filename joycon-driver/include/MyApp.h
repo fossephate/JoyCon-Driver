@@ -115,6 +115,7 @@ public:
 
 	void onStart(wxCommandEvent&);
 	void onQuit(wxCommandEvent&);
+	void onUpdate(wxCommandEvent&);
 
 	void toggleCombine(wxCommandEvent&);
 
