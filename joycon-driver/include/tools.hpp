@@ -7,6 +7,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <curl/curl.h>
+
 
 double lowpassFilter(double a, double thresh) {
 	if (abs(a) > thresh) {
@@ -323,5 +325,25 @@ std::string get_time(std::chrono::time_point<T> time) {
 	//s = to_string(sRep);
 
 	return s;
+
+}
+
+
+void download(char outfilename[FILENAME_MAX], char *url) {
+
+	CURL *curl;
+	FILE *fp;
+	CURLcode res;
+
+	curl = curl_easy_init();
+	if (curl) {
+		fp = fopen(outfilename, "wb");
+		curl_easy_setopt(curl, CURLOPT_URL, url);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
+		res = curl_easy_perform(curl);
+		curl_easy_cleanup(curl);
+		fclose(fp);
+	}
 
 }

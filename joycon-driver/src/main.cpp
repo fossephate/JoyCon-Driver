@@ -26,7 +26,6 @@
 
 // wxWidgets:
 #include <wx/wx.h>
-#include <wx/hyperlink.h>
 #include <wx/glcanvas.h>
 #include <cube.h>
 #include <MyApp.h>
@@ -39,6 +38,9 @@
 //#include <glm/gtc/matrix_projection.hpp>
 //#include <glm/gtc/matrix_transform.hpp>
 //#include <glm/gtx/type_ptr.hpp>
+
+// curl:
+#include <curl/curl.h>
 
 
 #pragma warning(disable:4996)
@@ -142,7 +144,7 @@ struct Tracker {
 	float anglex = 0;
 	float angley = 0;
 	float anglez = 0;
-	//glm::qauternion q;
+
 	glm::fquat quat = glm::angleAxis(0.0f, glm::vec3(1.0, 0.0, 0.0));
 
 	// get current time
@@ -1861,7 +1863,7 @@ TestGLContext& MyApp::GetContext(wxGLCanvas *canvas, bool useStereo) {
 
 
 
-MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("Joycon Driver by fosse ©2018")) {
+MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("JoyCon-Driver by fosse ©2018")) {
 
 	wxPanel *panel = new wxPanel(this, wxID_ANY);
 
@@ -1919,12 +1921,11 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("Joycon Driver by fosse ©20
 
 	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 280));
 
-	//wxHyperlinkCtrl
-	std::string version = std::string("JoyCon-Driver Version ") + settings.version;
-	wxString versionString(version.c_str(), wxConvUTF8);
-	wxStaticText *st2 = new wxStaticText(panel, wxID_ANY, versionString, wxPoint(20, 310));
+	wxString version;
+	version.Printf("JoyCon-Driver Version %s\n", settings.version);
+	wxStaticText *st2 = new wxStaticText(panel, wxID_ANY, version, wxPoint(20, 310));
 
-	wxButton *updateButton = new wxButton(panel, wxID_EXIT, wxT("Check for update"), wxPoint(20, 340));
+	wxButton *updateButton = new wxButton(panel, wxID_EXIT, wxT("Check for update"), wxPoint(18, 340));
 	updateButton->Bind(wxEVT_BUTTON, &MainFrame::onUpdate, this);
 
 	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 340));
@@ -1955,8 +1956,29 @@ void MainFrame::onQuit(wxCommandEvent&) {
 	exit(0);
 }
 
+
 void MainFrame::onUpdate(wxCommandEvent&) {
-	exit(0);
+	download("version.txt", "https://raw.githubusercontent.com/mfosse/JoyCon-Driver/master/joycon-driver/build/Win32/Release/version.txt");
+	std::ifstream ifs("version.txt");
+	std::string content;
+	content.assign((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
+
+	wxString alert;
+
+	bool upToDate = (content == settings.version) ? true : false;
+
+	if (!upToDate) {
+		alert.Printf("An update is available!\nCurrent version: %s\nLatest version: %s\n", settings.version, content);
+	} else {
+		alert.Printf("You are running the latest version!\n");
+	}
+	wxMessageBox(alert);
+
+	if (!upToDate) {
+		wxAboutDialogInfo info;
+		info.SetWebSite("https://github.com/mfosse/JoyCon-Driver");
+		wxAboutBox(info);
+	}
 }
 
 void MainFrame::toggleCombine(wxCommandEvent&) {

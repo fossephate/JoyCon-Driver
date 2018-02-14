@@ -1,7 +1,10 @@
 #pragma once
 
-#include "wx/glcanvas.h"
-#include "wx/wx.h"
+#include <wx/glcanvas.h>
+#include <wx/wx.h>
+#include <wx/hyperlink.h>
+#include <wx/aboutdlg.h>
+
 
 #include <glm/glm.hpp>
 
