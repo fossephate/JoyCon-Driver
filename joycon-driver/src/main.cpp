@@ -114,7 +114,7 @@ struct Settings {
 	float timeToSleepMS = 2.0f;
 
 	// version number
-	std::string version = "0.82";
+	std::string version = "0.83";
 
 } settings;
 
@@ -1842,9 +1842,6 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("JoyCon-Driver by fosse ©20
 	CB5 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 100));
 	CB5->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleMario, this);
 	CB5->SetValue(settings.marioTheme);
-	//CB5->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &[](wxCommandEvent&){}, this);
-
-
 
 	CB9 = new wxCheckBox(panel, wxID_ANY, wxT("Debug Mode"), wxPoint(20, 120));
 	CB9->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleDebugMode, this);
@@ -1874,14 +1871,17 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("JoyCon-Driver by fosse ©20
 	version.Printf("JoyCon-Driver version %s\n", settings.version);
 	wxStaticText *st2 = new wxStaticText(panel, wxID_ANY, version, wxPoint(20, 270));
 
-	wxButton *updateButton = new wxButton(panel, wxID_EXIT, wxT("Check for update"), wxPoint(18, 300));
-	updateButton->Bind(wxEVT_BUTTON, &MainFrame::onUpdate, this);
-
 	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 300));
 	startButton->Bind(wxEVT_BUTTON, &MainFrame::onStart, this);
 
 	wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 300));
 	quitButton->Bind(wxEVT_BUTTON, &MainFrame::onQuit, this);
+
+	wxButton *updateButton = new wxButton(panel, wxID_EXIT, wxT("Check for update"), wxPoint(18, 300));
+	updateButton->Bind(wxEVT_BUTTON, &MainFrame::onUpdate, this);
+
+	wxButton *donateButton = new wxButton(panel, wxID_EXIT, wxT("Donate"), wxPoint(250, 265));
+	donateButton->Bind(wxEVT_BUTTON, &MainFrame::onDonate, this);
 
 	SetClientSize(350, 340);
 	Show();
@@ -1930,6 +1930,12 @@ void MainFrame::onUpdate(wxCommandEvent&) {
 		info.SetWebSite("https://github.com/mfosse/JoyCon-Driver");
 		wxAboutBox(info);
 	}
+}
+
+void MainFrame::onDonate(wxCommandEvent&) {
+	wxString alert;
+	alert.Printf("Thank you very much!\n\nI have a paypal at matt.cfosse@gmail.com\nBTC Address: 17hDC2X7a1SWjsqBJRt9mJb9fJjqLCwgzG\nETH Address: 0xFdcA914e1213af24fD20fB6855E89141DF8caF96\n");
+	wxMessageBox(alert);
 }
 
 void MainFrame::toggleCombine(wxCommandEvent&) {
