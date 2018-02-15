@@ -70,8 +70,6 @@ public:
 
 	void onIdle(wxIdleEvent &evt);
 
-	void OnMyTimer(wxTimerEvent& WXUNUSED(event));
-
 	// Returns the shared context used by all frames and sets it as current for
 	// the given canvas.
 	TestGLContext& GetContext(wxGLCanvas *canvas, bool useStereo);
@@ -115,9 +113,6 @@ public:
 	wxSlider *slider2;
 
 	MainFrame();
-
-	void OnInit();
-	void on_button_clicked(wxCommandEvent&);
 
 	void onStart(wxCommandEvent&);
 	void onQuit(wxCommandEvent&);

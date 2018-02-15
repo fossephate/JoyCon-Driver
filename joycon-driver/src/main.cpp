@@ -2,19 +2,16 @@
 #include <Windows.h>
 #pragma comment(lib, "user32.lib")
 
-
 #include <bitset>
 #include <random>
 #include <stdafx.h>
 #include <string.h>
 #include <chrono>
-#include <iomanip>      // std::setprecision
+#include <iomanip>
 #include <iostream>
 #include <fstream>
 
 #include <hidapi.h>
-
-
 
 #include "public.h"
 #include "vjoyinterface.h"
@@ -35,9 +32,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtc/matrix_projection.hpp>
-//#include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtx/type_ptr.hpp>
 
 // curl:
 #include <curl/curl.h>
@@ -46,36 +40,17 @@
 #pragma warning(disable:4996)
 
 #define JOYCON_VENDOR 0x057e
-
 #define JOYCON_L_BT 0x2006
 #define JOYCON_R_BT 0x2007
-
 #define PRO_CONTROLLER 0x2009
-
 #define JOYCON_CHARGING_GRIP 0x200e
-
 #define SERIAL_LEN 18
-
 #define PI 3.14159265359
-
-
-// joycon_1 is R, joycon_2 is L
-#define CONTROLLER_TYPE_BOTH 0x1
-// joycon_1 is L, joycon_2 is R
-#define CONTROLLER_TYPE_LONLY 0x2
-// joycon_1 is R, joycon_2 is -1
-#define CONTROLLER_TYPE_RONLY 0x3
-
 #define L_OR_R(lr) (lr == 1 ? 'L' : (lr == 2 ? 'R' : '?'))
-
-unsigned short product_ids[] = { JOYCON_L_BT, JOYCON_R_BT, PRO_CONTROLLER, JOYCON_CHARGING_GRIP };
-
 
 
 std::vector<Joycon> joycons;
-
 MouseController MC;
-
 JOYSTICK_POSITION_V2 iReport; // The structure that holds the full position data
 uint8_t global_count = 0;
 unsigned char buf[65];
@@ -138,9 +113,8 @@ struct Settings {
 	// time to sleep (in ms) between polls:
 	float timeToSleepMS = 2.0f;
 
-
 	// version number
-	std::string version = "0.81";
+	std::string version = "0.82";
 
 } settings;
 
@@ -216,13 +190,6 @@ void found_joycon(struct hid_device_info *dev) {
 
 	joycons.push_back(jc);
 }
-
-
-
-
-
-
-
 
 
 
@@ -1070,7 +1037,6 @@ init_start:
 			joycons[i].rumble(100, 1);
 			Sleep(20);
 			joycons[i].rumble(10, 3);
-			//Sleep(100);
 		}
 	}
 
@@ -1372,10 +1338,6 @@ init_start:
 	}
 
 
-
-
-
-
 	#define MusicOffset 600
 
 	// notes in hertz:
@@ -1530,7 +1492,6 @@ void exit() {
 // control ids
 enum {
 	SpinTimer = wxID_HIGHEST + 1
-	//MyTimer = wxID_HIGHEST + 1,
 };
 
 // ----------------------------------------------------------------------------
@@ -1652,7 +1613,6 @@ TestGLContext::TestGLContext(wxGLCanvas *canvas) : wxGLContext(canvas) {
 
 	CheckGLError();
 }
-
 
 void TestGLContext::DrawRotatedCube(glm::fquat q) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1804,27 +1764,16 @@ void TestGLContext::DrawRotatedCube(float xangle, float yangle, float zangle) {
 //IMPLEMENT_APP(app);
 wxIMPLEMENT_APP_NO_MAIN(MyApp);
 
-//wxBEGIN_EVENT_TABLE(MyApp)
-//EVT_TIMER(MyTimer, MyApp::OnMyTimer)
-//wxEND_EVENT_TABLE()
-
-//MyApp::MyApp()
-//	: m_myTimer(this, MyTimer) {
-//}
-
 bool MyApp::OnInit() {
 	if (!wxApp::OnInit()) {
 		return false;
 	}
 
 	Connect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(MyApp::onIdle));
-
-
 	new MainFrame();
 
 	//new MyFrame();
 	//m_myTimer.Start(0);
-
 	return true;
 }
 
@@ -1836,10 +1785,6 @@ int MyApp::OnExit() {
 }
 
 void MyApp::onIdle(wxIdleEvent& evt) {
-	pollLoop();
-}
-
-void MyApp::OnMyTimer(wxTimerEvent & WXUNUSED) {
 	pollLoop();
 }
 
@@ -1926,7 +1871,7 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("JoyCon-Driver by fosse ©20
 	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 240));
 
 	wxString version;
-	version.Printf("JoyCon-Driver Version %s\n", settings.version);
+	version.Printf("JoyCon-Driver version %s\n", settings.version);
 	wxStaticText *st2 = new wxStaticText(panel, wxID_ANY, version, wxPoint(20, 270));
 
 	wxButton *updateButton = new wxButton(panel, wxID_EXIT, wxT("Check for update"), wxPoint(18, 300));
@@ -2196,8 +2141,6 @@ MyFrame::MyFrame(bool stereoWindow) : wxFrame(NULL, wxID_ANY, wxT("3D JoyCon gyr
 int wWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPWSTR cmdLine, int cmdShow) {
 
 	parseSettings2();
-
 	wxEntry(hInstance);
-
 	return 0;
 }
