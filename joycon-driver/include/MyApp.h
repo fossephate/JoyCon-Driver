@@ -105,6 +105,10 @@ public:
 	wxCheckBox *CB7;
 	wxCheckBox *CB8;
 	wxCheckBox *CB9;
+	wxCheckBox *CB10;
+	wxCheckBox *CB11;
+	wxCheckBox *CB12;
+	wxCheckBox *CB13;
 
 
 	wxSlider *slider1;
@@ -113,7 +117,6 @@ public:
 	MainFrame();
 
 	void OnInit();
-
 	void on_button_clicked(wxCommandEvent&);
 
 	void onStart(wxCommandEvent&);
@@ -131,6 +134,9 @@ public:
 
 	void togglePreferLeftJoyCon(wxCommandEvent &);
 	void toggleDebugMode(wxCommandEvent &);
+	void toggleWriteDebug(wxCommandEvent &);
+
+	void toggleForcePoll(wxCommandEvent &);
 
 	void setGyroSensitivityX(wxCommandEvent&);
 	void setGyroSensitivityY(wxCommandEvent&);

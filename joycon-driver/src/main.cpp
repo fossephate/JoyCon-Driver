@@ -123,8 +123,24 @@ struct Settings {
 	// debug mode
 	bool debugMode = false;
 
+	// write debug to file:
+	bool writeDebugToFile = false;
+
+
+	// poll options:
+
+	// force joycon to update when polled:
+	bool forcePollUpdate = false;
+
+	// times to poll per second per joycon:
+	float pollsPerSec = 60.0f;
+
+	// time to sleep (in ms) between polls:
+	float timeToSleepMS = 2.0f;
+
+
 	// version number
-	std::string version = "0.8";
+	std::string version = "0.81";
 
 } settings;
 
@@ -851,6 +867,9 @@ void parseSettings2() {
 	settings.gyroscopeComboCode = stoi(cfg["gyroscopeComboCode"]);
 
 	settings.debugMode = (bool)stoi(cfg["debugMode"]);
+	settings.writeDebugToFile = (bool)stoi(cfg["writeDebugToFile"]);
+
+	settings.forcePollUpdate = (bool)stoi(cfg["forcePollUpdate"]);
 
 }
 
@@ -868,11 +887,14 @@ void pollLoop() {
 		
 		if (!jc->handle) { continue; }
 
-		// set to be non-blocking:
-		hid_set_nonblocking(jc->handle, 1);
 
-		// set to be blocking:
-		//hid_set_nonblocking(jc->handle, 0);
+		if (settings.forcePollUpdate) {
+			// set to be blocking:
+			hid_set_nonblocking(jc->handle, 0);
+		} else {
+			// set to be non-blocking:
+			hid_set_nonblocking(jc->handle, 1);
+		}
 
 		// get input:
 		memset(buf, 0, 65);
@@ -882,15 +904,11 @@ void pollLoop() {
 
 		auto timeSincePoll = std::chrono::duration_cast<std::chrono::microseconds>(tNow - tracker.tPolls[i]);
 
-
-
 		// time spent sleeping (0):
 		double timeSincePollMS = timeSincePoll.count() / 1000.0;
-
 		
-		if (timeSincePollMS > (1000.0/60.0)) {
+		if (timeSincePollMS > (1000.0/settings.pollsPerSec)) {
 			jc->send_command(0x1E, buf, 0);
-			//jc->send_command(0x1F, buf, 0);
 			tracker.tPolls[i] = std::chrono::high_resolution_clock::now();
 		}
 
@@ -898,7 +916,10 @@ void pollLoop() {
 		hid_read(jc->handle, buf, 0x40);
 
 		// get rid of queue:
-		while (hid_read(jc->handle, buf, 0x40) > 0) {};
+		// if we force the poll to wait then the queue will never clear and will just freeze:
+		if (!settings.forcePollUpdate) {
+			while (hid_read(jc->handle, buf, 0x40) > 0) {};
+		}
 		//for (int i = 0; i < 100; ++i) {
 		//	hid_read(jc->handle, buf, 0x40);
 		//}
@@ -908,14 +929,11 @@ void pollLoop() {
 
 	// update vjoy:
 	for (int i = 0; i < joycons.size(); ++i) {
-		//updatevJoyDevice(&joycons[i]);
 		updatevJoyDevice2(&joycons[i]);
-		//updatevJoyDevice2(&joycons[rand_range(0, joycons.size()-1)]);
 	}
 
-
 	// sleep:
-	accurateSleep(2.00);// 8.00
+	accurateSleep(settings.timeToSleepMS);// 8.00
 
 	if (settings.restart) {
 		settings.restart = false;
@@ -953,10 +971,10 @@ init_start:
 	devs = hid_enumerate(JOYCON_VENDOR, 0x0);
 	cur_dev = devs;
 	while (cur_dev) {
+
 		// identify by vendor:
 		if (cur_dev->vendor_id == JOYCON_VENDOR) {
 
-			//device_print(cur_dev);
 			Joycon jc;
 
 			// bluetooth, left / right joycon:
@@ -966,8 +984,6 @@ init_start:
 			}
 
 			// pro controller:
-			// (probably won't work right, I'm just putting this here so it detects it,
-			// I don't have a pro controller to test with.)
 			if (cur_dev->product_id == PRO_CONTROLLER) {
 				found_joycon(cur_dev);
 				settings.usingBluetooth = true;
@@ -981,7 +997,6 @@ init_start:
 			//	found_joycon(cur_dev);
 			//}
 		}
-
 
 		cur_dev = cur_dev->next;
 	}
@@ -1014,7 +1029,7 @@ init_start:
 		}
 	}
 
-
+	// initial poll to get battery data:
 	pollLoop();
 	for (int i = 0; i < joycons.size(); ++i) {
 		printf("battery level: %u\n", joycons[i].battery);
@@ -1508,15 +1523,6 @@ void exit() {
 }
 
 
-
-
-
-
-
-
-
-
-
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -1804,7 +1810,6 @@ wxIMPLEMENT_APP_NO_MAIN(MyApp);
 
 //MyApp::MyApp()
 //	: m_myTimer(this, MyTimer) {
-//
 //}
 
 bool MyApp::OnInit() {
@@ -1872,69 +1877,68 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("JoyCon-Driver by fosse ©20
 	CB1->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleCombine, this);
 	CB1->SetValue(settings.combineJoyCons);
 
-	//CB2 = new wxCheckBox(panel, wxID_ANY, wxT("Auto Center Sticks"), wxPoint(20, 40));
-	//CB2->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleCenter, this);
-	//CB2->SetValue(settings.autoCenterSticks);
-
-	CB3 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Controls"), wxPoint(20, 40));
-	CB3->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleGyro, this);
-	CB3->SetValue(settings.enableGyro);
-
-	CB4 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Window"), wxPoint(20, 60));
-	CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleGyroWindow, this);
-	CB4->SetValue(settings.gyroWindow);
-
-	CB5 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 80));
-	CB5->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleMario, this);
-	CB5->SetValue(settings.marioTheme);
-	//CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &[](wxCommandEvent&){}, this);
-
-
-
-	CB6 = new wxCheckBox(panel, wxID_ANY, wxT("Reverse X"), wxPoint(20, 100));
+	CB6 = new wxCheckBox(panel, wxID_ANY, wxT("Reverse Stick X"), wxPoint(20, 40));
 	CB6->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleReverseX, this);
 	CB6->SetValue(settings.reverseX);
-
-	CB7 = new wxCheckBox(panel, wxID_ANY, wxT("Reverse Y"), wxPoint(20, 120));
+	CB7 = new wxCheckBox(panel, wxID_ANY, wxT("Reverse Stick Y"), wxPoint(120, 40));
 	CB7->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleReverseY, this);
 	CB7->SetValue(settings.reverseY);
 
-	CB8 = new wxCheckBox(panel, wxID_ANY, wxT("Prefer Left JoyCon for Gyro Controls"), wxPoint(20, 140));
+	CB3 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Controls"), wxPoint(20, 60));
+	CB3->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleGyro, this);
+	CB3->SetValue(settings.enableGyro);
+	CB4 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Window"), wxPoint(120, 60));
+	CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleGyroWindow, this);
+	CB4->SetValue(settings.gyroWindow);
+	CB8 = new wxCheckBox(panel, wxID_ANY, wxT("Prefer Left JoyCon for Gyro Controls"), wxPoint(20, 80));
 	CB8->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::togglePreferLeftJoyCon, this);
 	CB8->SetValue(settings.preferLeftJoyCon);
 
-	CB9 = new wxCheckBox(panel, wxID_ANY, wxT("Debug Mode"), wxPoint(20, 160));
+	CB5 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 100));
+	CB5->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleMario, this);
+	CB5->SetValue(settings.marioTheme);
+	//CB5->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &[](wxCommandEvent&){}, this);
+
+
+
+	CB9 = new wxCheckBox(panel, wxID_ANY, wxT("Debug Mode"), wxPoint(20, 120));
 	CB9->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleDebugMode, this);
 	CB9->SetValue(settings.debugMode);
 
+	CB10 = new wxCheckBox(panel, wxID_ANY, wxT("Write Debug To File"), wxPoint(120, 120));
+	CB10->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleWriteDebug, this);
+	CB10->SetValue(settings.debugMode);
+
+	CB11 = new wxCheckBox(panel, wxID_ANY, wxT("Force Poll Update"), wxPoint(20, 140));
+	CB11->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleForcePoll, this);
+	CB11->SetValue(settings.forcePollUpdate);
 
 
-
-	wxStaticText *slider1Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity X"), wxPoint(20, 200));
-	slider1 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityX, 0, 1000, wxPoint(180, 180), wxDefaultSize, wxSL_LABELS);
+	wxStaticText *slider1Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity X"), wxPoint(20, 160));
+	slider1 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityX, 0, 1000, wxPoint(180, 140), wxDefaultSize, wxSL_LABELS);
 	slider1->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityX, this);
 
 
-	wxStaticText *slider2Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity Y"), wxPoint(20, 240));
-	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, 0, 1000, wxPoint(180, 220), wxDefaultSize, wxSL_LABELS);
+	wxStaticText *slider2Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity Y"), wxPoint(20, 200));
+	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, 0, 1000, wxPoint(180, 180), wxDefaultSize, wxSL_LABELS);
 	slider2->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityY, this);
 
-	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 280));
+	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 240));
 
 	wxString version;
 	version.Printf("JoyCon-Driver Version %s\n", settings.version);
-	wxStaticText *st2 = new wxStaticText(panel, wxID_ANY, version, wxPoint(20, 310));
+	wxStaticText *st2 = new wxStaticText(panel, wxID_ANY, version, wxPoint(20, 270));
 
-	wxButton *updateButton = new wxButton(panel, wxID_EXIT, wxT("Check for update"), wxPoint(18, 340));
+	wxButton *updateButton = new wxButton(panel, wxID_EXIT, wxT("Check for update"), wxPoint(18, 300));
 	updateButton->Bind(wxEVT_BUTTON, &MainFrame::onUpdate, this);
 
-	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 340));
+	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 300));
 	startButton->Bind(wxEVT_BUTTON, &MainFrame::onStart, this);
 
-	wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 340));
+	wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 300));
 	quitButton->Bind(wxEVT_BUTTON, &MainFrame::onQuit, this);
 
-	SetClientSize(350, 380);
+	SetClientSize(350, 340);
 	Show();
 }
 
@@ -1948,6 +1952,7 @@ void MainFrame::onStart(wxCommandEvent&) {
 	if (!settings.gyroWindow) {
 		while (true) {
 			pollLoop();
+			wxYield();// so that the main window doesn't freeze
 		}
 	}
 }
@@ -1958,6 +1963,7 @@ void MainFrame::onQuit(wxCommandEvent&) {
 
 
 void MainFrame::onUpdate(wxCommandEvent&) {
+
 	download("version.txt", "https://raw.githubusercontent.com/mfosse/JoyCon-Driver/master/joycon-driver/build/Win32/Release/version.txt");
 	std::ifstream ifs("version.txt");
 	std::string content;
@@ -2011,6 +2017,14 @@ void MainFrame::togglePreferLeftJoyCon(wxCommandEvent&) {
 
 void MainFrame::toggleDebugMode(wxCommandEvent&) {
 	settings.debugMode = !settings.debugMode;
+}
+
+void MainFrame::toggleWriteDebug(wxCommandEvent&) {
+	settings.writeDebugToFile = !settings.writeDebugToFile;
+}
+
+void MainFrame::toggleForcePoll(wxCommandEvent&) {
+	settings.forcePollUpdate = !settings.forcePollUpdate;
 }
 
 void MainFrame::setGyroSensitivityX(wxCommandEvent&) {
