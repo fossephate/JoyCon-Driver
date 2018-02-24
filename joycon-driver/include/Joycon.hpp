@@ -47,6 +47,7 @@ public:
 		int sl = 0;
 		int sr = 0;
 		int stick_button = 0;
+		int stick_button2 = 0;// pro controller
 	} btns;
 
 	int8_t dstick;
@@ -405,12 +406,6 @@ public:
 		printf("Set input report mode to 0x30...\n");
 		buf[0] = 0x30;
 		send_subcommand(0x01, 0x03, buf, 1);
-
-
-
-
-
-
 
 
 		// get calibration data:

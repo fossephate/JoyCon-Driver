@@ -114,7 +114,7 @@ struct Settings {
 	float timeToSleepMS = 2.0f;
 
 	// version number
-	std::string version = "0.83";
+	std::string version = "0.84";
 
 } settings;
 
@@ -231,9 +231,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			} else if (jc->left_right == 3) {
 				states = (btn_data[1] << 8) | (btn_data[2] & 0xFF);
 				states2 = (btn_data[1] << 8) | (btn_data[0] & 0xFF);
-				if (settings.debugMode) {
-					printf("%d %d\n", states, states2);
-				}
 			}
 
 			jc->buttons = states;
@@ -249,32 +246,36 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			stick_data += 6;
 		} else if (jc->left_right == 2) {
 			stick_data += 9;
-		} else if (jc->left_right == 3) {
-			stick_data += 6;
-			uint16_t stick_horizontal = stick_data[0] | ((stick_data[1] & 0xF) << 8);
-			uint16_t stick_vertical = (stick_data[1] >> 4) | (stick_data[2] << 4);
-			jc->stick.x = (int)(unsigned int)stick_horizontal;
-			jc->stick.y = (int)(unsigned int)stick_vertical;
-			stick_data += 3;
-			uint16_t stick_x2 = stick_data[0] | ((stick_data[1] & 0xF) << 8);
-			uint16_t stick_y2 = (stick_data[1] >> 4) | (stick_data[2] << 4);
-			jc->stick2.x = (int)(unsigned int)stick_x2;
-			jc->stick2.y = (int)(unsigned int)stick_y2;
 		}
-
 
 		uint16_t stick_x = stick_data[0] | ((stick_data[1] & 0xF) << 8);
 		uint16_t stick_y = (stick_data[1] >> 4) | (stick_data[2] << 4);
-
 		jc->stick.x = stick_x;
 		jc->stick.y = stick_y;
 
 		// use calibration data:
 		jc->CalcAnalogStick();
 
+		// pro controller:
+		if (jc->left_right == 3) {
+			stick_data += 6;
+			uint16_t stick_x = stick_data[0] | ((stick_data[1] & 0xF) << 8);
+			uint16_t stick_y = (stick_data[1] >> 4) | (stick_data[2] << 4);
+			jc->stick.x = (int)(unsigned int)stick_x;
+			jc->stick.y = (int)(unsigned int)stick_y;
+			stick_data += 3;
+			uint16_t stick_x2 = stick_data[0] | ((stick_data[1] & 0xF) << 8);
+			uint16_t stick_y2 = (stick_data[1] >> 4) | (stick_data[2] << 4);
+			jc->stick2.x = (int)(unsigned int)stick_x2;
+			jc->stick2.y = (int)(unsigned int)stick_y2;
+
+			// calibration data:
+			jc->CalcAnalogStick();
+		}
+
 		jc->battery = (stick_data[1] & 0xF0) >> 4;
 
-		//printf("Joycon battery: %d\n", jc->battery);
+		//printf("JoyCon battery: %d\n", jc->battery);
 
 
 		uint8_t *gyro_data = nullptr;
@@ -433,14 +434,12 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			if (settings.debugMode) {
 				printf("A: %d B: %d X: %d Y: %d RR: %d ZR: %d SB: %d SL: %d SR: %d P: %d H: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
 					jc->btns.a, jc->btns.b, jc->btns.x, jc->btns.y, jc->btns.r, jc->btns.zr, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
-					jc->btns.plus, jc->btns.home, jc->stick.CalX + 1, jc->stick.CalY + 1, (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
+					jc->btns.plus, jc->btns.home, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
 			}
 		}
 		
 		// pro controller:
 		if (jc->left_right == 3) {
-
-			// just a guess:
 
 			// left:
 			jc->btns.down = (jc->buttons & (1 << 0)) ? 1 : 0;
@@ -465,28 +464,28 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			jc->btns.r = (jc->buttons2 & (1 << 6)) ? 1 : 0;
 			jc->btns.zr = (jc->buttons2 & (1 << 7)) ? 1 : 0;
 			jc->btns.plus = (jc->buttons2 & (1 << 9)) ? 1 : 0;
-			jc->btns.stick_button = (jc->buttons2 & (1 << 10)) ? 1 : 0;
+			jc->btns.stick_button2 = (jc->buttons2 & (1 << 10)) ? 1 : 0;
 			jc->btns.home = (jc->buttons2 & (1 << 12)) ? 1 : 0;
 
 
 			if (settings.debugMode) {
-				std::bitset<16> buttons1(jc->buttons);
-				std::string btns1 = buttons1.to_string();
+				//std::bitset<16> buttons1(jc->buttons);
+				//std::string btns1 = buttons1.to_string();
 
-				std::bitset<16> buttons2(jc->buttons2);
-				std::string btns2 = buttons2.to_string();
+				//std::bitset<16> buttons2(jc->buttons2);
+				//std::string btns2 = buttons2.to_string();
 
-				// print states in binary since I don't know which bits are which
-				printf("%s %s\n", btns1, btns2);
+				//// print states in binary since I don't know which bits are which
+				//printf("%s %s\n", btns1, btns2);
 
+				// change from CalX to x to see if the calibration is the problem
+				printf("U: %d D: %d L: %d R: %d LL: %d ZL: %d SB: %d SL: %d SR: %d M: %d C: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
+						jc->btns.up, jc->btns.down, jc->btns.left, jc->btns.right, jc->btns.l, jc->btns.zl, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
+						jc->btns.minus, jc->btns.capture, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
 
-				//				printf("U: %d D: %d L: %d R: %d LL: %d ZL: %d SB: %d SL: %d SR: %d M: %d C: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
-					jc->btns.up, jc->btns.down, jc->btns.left, jc->btns.right, jc->btns.l, jc->btns.zl, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
-					jc->btns.minus, jc->btns.capture, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
-
-				//				printf("A: %d B: %d X: %d Y: %d RR: %d ZR: %d SB: %d SL: %d SR: %d P: %d H: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
-					jc->btns.a, jc->btns.b, jc->btns.x, jc->btns.y, jc->btns.r, jc->btns.zr, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
-					jc->btns.plus, jc->btns.home, jc->stick.CalX + 1, jc->stick.CalY + 1, (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
+				printf("A: %d B: %d X: %d Y: %d RR: %d ZR: %d SB: %d SL: %d SR: %d P: %d H: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
+						jc->btns.a, jc->btns.b, jc->btns.x, jc->btns.y, jc->btns.r, jc->btns.zr, jc->btns.stick_button2, jc->btns.sl, jc->btns.sr, \
+						jc->btns.plus, jc->btns.home, (jc->stick2.CalX + 1), (jc->stick2.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
 			}
 		}
 
@@ -495,13 +494,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			//char buffer[33];
 			//itoa(jc->buttons, buffer, 2);
 			//printf("buttons1: %s\n", buffer);
-
 		}
-
-
-
-
-
 
 	}
 }
@@ -780,8 +773,8 @@ void updatevJoyDevice2(Joycon *jc) {
 	if (!settings.combineJoyCons) {
 		btns = jc->buttons;
 	} else {
-
 		if (jc->left_right == 1) {
+			// don't overwrite the other joycon
 			btns = ((iReport.lButtons >> 16) << 16) | (jc->buttons);
 		} else if (jc->left_right == 2) {
 			btns = ((jc->buttons) << 16) | (createMask(0, 15) & iReport.lButtons);
@@ -790,10 +783,8 @@ void updatevJoyDevice2(Joycon *jc) {
 
 	// Pro Controller:
 	if (jc->left_right == 3) {
-		long btns1 = ((iReport.lButtons >> 16) << 16) | (jc->buttons);
-		long btns2 = ((jc->buttons2) << 16) | (createMask(0, 15) & iReport.lButtons);
-		long btns3 = btns1 | btns2;
-		btns = btns3;
+		uint32_t combined = ((uint32_t)jc->buttons << 16) | jc->buttons2;
+		btns = combined;
 	}
 
 	iReport.lButtons = btns;
@@ -901,6 +892,8 @@ void pollLoop() {
 
 	// sleep:
 	accurateSleep(settings.timeToSleepMS);// 8.00
+
+	//Sleep(1000);
 
 	if (settings.restart) {
 		settings.restart = false;
