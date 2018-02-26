@@ -55,9 +55,6 @@ public:
 
 	int global_count = 0;
 
-
-	int timing_byte = 0x0;
-
 	struct Stick {
 		uint16_t x = 0;
 		uint16_t y = 0;
@@ -70,24 +67,24 @@ public:
 
 	struct Gyroscope {
 		// absolute:
-		double pitch	= 0;
-		double yaw		= 0;
-		double roll		= 0;
+		float pitch	= 0;
+		float yaw		= 0;
+		float roll		= 0;
 
 		// relative:
-		double relpitch = 0;
-		double relyaw	= 0;
-		double relroll	= 0;
+		float relpitch = 0;
+		float relyaw	= 0;
+		float relroll	= 0;
 
 	} gyro;
 
 	struct Accelerometer {
-		double prevX = 0;
-		double prevY = 0;
-		double prevZ = 0;
-		double x = 0;
-		double y = 0;
-		double z = 0;
+		float prevX = 0;
+		float prevY = 0;
+		float prevZ = 0;
+		float x = 0;
+		float y = 0;
+		float z = 0;
 	} accel;
 
 
@@ -118,6 +115,35 @@ public:
 		uint32_t offset;
 		uint8_t size;
 	};
+
+	int timing_byte = 0x0;
+
+	//struct brcm_hdr {
+	//	uint8_t cmd;
+	//	uint8_t timer;
+	//	uint8_t rumble_l[4];
+	//	uint8_t rumble_r[4];
+	//};
+
+	//struct brcm_cmd_01 {
+	//	uint8_t subcmd;
+	//	union {
+	//		struct {
+	//			uint32_t offset;
+	//			uint8_t size;
+	//		} spi_read;
+
+	//		struct {
+	//			uint8_t arg1;
+	//			uint8_t arg2;
+	//		} subcmd_arg;
+	//	};
+	//};
+
+	//// Used to order the packets received in Joy-Con internally. Range 0x0-0xF.
+	//uint8_t timing_byte = 0x0;
+
+
 
 	float acc_cal_coeff[3];
 	float gyro_cal_coeff[3];
@@ -407,6 +433,7 @@ public:
 		buf[0] = 0x30;
 		send_subcommand(0x01, 0x03, buf, 1);
 
+		// @CTCaer
 
 		// get calibration data:
 		printf("Getting calibration data...\n");
@@ -433,7 +460,12 @@ public:
 		get_spi_data(0x8010, 0x16, user_stick_cal);
 		get_spi_data(0x8026, 0x1A, user_sensor_cal);
 
-		if (this->left_right == 1) {
+
+		// get stick calibration data:
+
+		// factory calibration:
+
+		if (this->left_right == 1 || this->left_right == 3) {
 			stick_cal_x_l[1] = (factory_stick_cal[4] << 8) & 0xF00 | factory_stick_cal[3];
 			stick_cal_y_l[1] = (factory_stick_cal[5] << 4) | (factory_stick_cal[4] >> 4);
 			stick_cal_x_l[0] = stick_cal_x_l[1] - ((factory_stick_cal[7] << 8) & 0xF00 | factory_stick_cal[6]);
@@ -441,7 +473,7 @@ public:
 			stick_cal_x_l[2] = stick_cal_x_l[1] + ((factory_stick_cal[1] << 8) & 0xF00 | factory_stick_cal[0]);
 			stick_cal_y_l[2] = stick_cal_y_l[1] + ((factory_stick_cal[2] << 4) | (factory_stick_cal[2] >> 4));
 		
-		} else if (this->left_right == 2) {
+		} else if (this->left_right == 2 || this->left_right == 3) {
 			stick_cal_x_r[1] = (factory_stick_cal[10] << 8) & 0xF00 | factory_stick_cal[9];
 			stick_cal_y_r[1] = (factory_stick_cal[11] << 4) | (factory_stick_cal[10] >> 4);
 			stick_cal_x_r[0] = stick_cal_x_r[1] - ((factory_stick_cal[13] << 8) & 0xF00 | factory_stick_cal[12]);
@@ -449,24 +481,10 @@ public:
 			stick_cal_x_r[2] = stick_cal_x_r[1] + ((factory_stick_cal[16] << 8) & 0xF00 | factory_stick_cal[15]);
 			stick_cal_y_r[2] = stick_cal_y_r[1] + ((factory_stick_cal[17] << 4) | (factory_stick_cal[16] >> 4));
 		
-		} else if (this->left_right == 3) {
-			stick_cal_x_l[1] = (factory_stick_cal[4] << 8) & 0xF00 | factory_stick_cal[3];
-			stick_cal_y_l[1] = (factory_stick_cal[5] << 4) | (factory_stick_cal[4] >> 4);
-			stick_cal_x_l[0] = stick_cal_x_l[1] - ((factory_stick_cal[7] << 8) & 0xF00 | factory_stick_cal[6]);
-			stick_cal_y_l[0] = stick_cal_y_l[1] - ((factory_stick_cal[8] << 4) | (factory_stick_cal[7] >> 4));
-			stick_cal_x_l[2] = stick_cal_x_l[1] + ((factory_stick_cal[1] << 8) & 0xF00 | factory_stick_cal[0]);
-			stick_cal_y_l[2] = stick_cal_y_l[1] + ((factory_stick_cal[2] << 4) | (factory_stick_cal[2] >> 4));
-
-
-			stick_cal_x_r[1] = (factory_stick_cal[10] << 8) & 0xF00 | factory_stick_cal[9];
-			stick_cal_y_r[1] = (factory_stick_cal[11] << 4) | (factory_stick_cal[10] >> 4);
-			stick_cal_x_r[0] = stick_cal_x_r[1] - ((factory_stick_cal[13] << 8) & 0xF00 | factory_stick_cal[12]);
-			stick_cal_y_r[0] = stick_cal_y_r[1] - ((factory_stick_cal[14] << 4) | (factory_stick_cal[13] >> 4));
-			stick_cal_x_r[2] = stick_cal_x_r[1] + ((factory_stick_cal[16] << 8) & 0xF00 | factory_stick_cal[15]);
-			stick_cal_y_r[2] = stick_cal_y_r[1] + ((factory_stick_cal[17] << 4) | (factory_stick_cal[16] >> 4));
 		}
 
 
+		// if there is user calibration data:
 		if ((user_stick_cal[0] | user_stick_cal[1] << 8) == 0xA1B2) {
 			stick_cal_x_l[1] = (user_stick_cal[6] << 8) & 0xF00 | user_stick_cal[5];
 			stick_cal_y_l[1] = (user_stick_cal[7] << 4) | (user_stick_cal[6] >> 4);
@@ -478,6 +496,7 @@ public:
 				//stick_cal_x_l[1], stick_cal_y_l[1], stick_cal_x_l[0], stick_cal_y_l[0], stick_cal_x_l[2], stick_cal_y_l[2]);
 		} else {
 			//FormJoy::myform1->textBox_lstick_ucal->Text = L"L Stick User:\r\nNo calibration";
+			//printf("no user Calibration data for left stick.\n");
 		}
 
 		if ((user_stick_cal[0xB] | user_stick_cal[0xC] << 8) == 0xA1B2) {
@@ -489,7 +508,63 @@ public:
 			stick_cal_y_r[2] = stick_cal_y_r[1] + ((user_stick_cal[21] << 4) | (user_stick_cal[20] >> 4));
 			//FormJoy::myform1->textBox_rstick_ucal->Text = String::Format(L"R Stick User:\r\nCenter X,Y: ({0:X3}, {1:X3})\r\nX: [{2:X3} - {4:X3}] Y: [{3:X3} - {5:X3}]",
 				//stick_cal_x_r[1], stick_cal_y_r[1], stick_cal_x_r[0], stick_cal_y_r[0], stick_cal_x_r[2], stick_cal_y_r[2]);
+		} else {
+			//FormJoy::myform1->textBox_rstick_ucal->Text = L"R Stick User:\r\nNo calibration";
+			//printf("no user Calibration data for right stick.\n");
 		}
+
+		// get gyro / accelerometer calibration data:
+
+		// factory calibration:
+
+		// Acc cal origin position
+		sensor_cal[0][0] = uint16_to_int16(factory_sensor_cal[0] | factory_sensor_cal[1] << 8);
+		sensor_cal[0][1] = uint16_to_int16(factory_sensor_cal[2] | factory_sensor_cal[3] << 8);
+		sensor_cal[0][2] = uint16_to_int16(factory_sensor_cal[4] | factory_sensor_cal[5] << 8);
+
+		// Gyro cal origin position
+		sensor_cal[1][0] = uint16_to_int16(factory_sensor_cal[0xC] | factory_sensor_cal[0xD] << 8);
+		sensor_cal[1][1] = uint16_to_int16(factory_sensor_cal[0xE] | factory_sensor_cal[0xF] << 8);
+		sensor_cal[1][2] = uint16_to_int16(factory_sensor_cal[0x10] | factory_sensor_cal[0x11] << 8);
+
+		// user calibration:
+		if ((user_sensor_cal[0x0] | user_sensor_cal[0x1] << 8) == 0xA1B2) {
+			//FormJoy::myform1->textBox_6axis_ucal->Text = L"6-Axis User (XYZ):\r\nAcc:  ";
+			//for (int i = 0; i < 0xC; i = i + 6) {
+			//	FormJoy::myform1->textBox_6axis_ucal->Text += String::Format(L"{0:X4} {1:X4} {2:X4}\r\n      ",
+			//		user_sensor_cal[i + 2] | user_sensor_cal[i + 3] << 8,
+			//		user_sensor_cal[i + 4] | user_sensor_cal[i + 5] << 8,
+			//		user_sensor_cal[i + 6] | user_sensor_cal[i + 7] << 8);
+			//}
+			// Acc cal origin position
+			sensor_cal[0][0] = uint16_to_int16(user_sensor_cal[2] | user_sensor_cal[3] << 8);
+			sensor_cal[0][1] = uint16_to_int16(user_sensor_cal[4] | user_sensor_cal[5] << 8);
+			sensor_cal[0][2] = uint16_to_int16(user_sensor_cal[6] | user_sensor_cal[7] << 8);
+			//FormJoy::myform1->textBox_6axis_ucal->Text += L"\r\nGyro: ";
+			//for (int i = 0xC; i < 0x18; i = i + 6) {
+			//	FormJoy::myform1->textBox_6axis_ucal->Text += String::Format(L"{0:X4} {1:X4} {2:X4}\r\n      ",
+			//		user_sensor_cal[i + 2] | user_sensor_cal[i + 3] << 8,
+			//		user_sensor_cal[i + 4] | user_sensor_cal[i + 5] << 8,
+			//		user_sensor_cal[i + 6] | user_sensor_cal[i + 7] << 8);
+			//}
+			// Gyro cal origin position
+			sensor_cal[1][0] = uint16_to_int16(user_sensor_cal[0xE] | user_sensor_cal[0xF] << 8);
+			sensor_cal[1][1] = uint16_to_int16(user_sensor_cal[0x10] | user_sensor_cal[0x11] << 8);
+			sensor_cal[1][2] = uint16_to_int16(user_sensor_cal[0x12] | user_sensor_cal[0x13] << 8);
+		} else {
+			//FormJoy::myform1->textBox_6axis_ucal->Text = L"\r\n\r\nUser:\r\nNo calibration";
+		}
+
+		// Use SPI calibration and convert them to SI acc unit
+		acc_cal_coeff[0] = (float)(1.0 / (float)(16384 - uint16_to_int16(sensor_cal[0][0]))) * 4.0f  * 9.8f;
+		acc_cal_coeff[1] = (float)(1.0 / (float)(16384 - uint16_to_int16(sensor_cal[0][1]))) * 4.0f  * 9.8f;
+		acc_cal_coeff[2] = (float)(1.0 / (float)(16384 - uint16_to_int16(sensor_cal[0][2]))) * 4.0f  * 9.8f;
+
+		// Use SPI calibration and convert them to SI gyro unit
+		gyro_cal_coeff[0] = (float)(936.0 / (float)(13371 - uint16_to_int16(sensor_cal[1][0])) * 0.01745329251994);
+		gyro_cal_coeff[1] = (float)(936.0 / (float)(13371 - uint16_to_int16(sensor_cal[1][1])) * 0.01745329251994);
+		gyro_cal_coeff[2] = (float)(936.0 / (float)(13371 - uint16_to_int16(sensor_cal[1][2])) * 0.01745329251994);
+
 
 		printf("Successfully initialized %s!\n", this->name.c_str());
 
@@ -668,7 +743,7 @@ public:
 		}
 	}
 
-	// SPI (CTCaer):
+	// SPI (@CTCaer):
 
 	int get_spi_data(uint32_t offset, const uint16_t read_len, uint8_t *test_buf) {
 		int res;
@@ -747,4 +822,72 @@ public:
 		return 0;
 
 	}
+
+
+	//int write_spi_data(uint32_t offset, const uint16_t write_len, uint8_t* test_buf) {
+	//	int res;
+	//	uint8_t buf[0x100];
+	//	int error_writing = 0;
+	//	while (1) {
+	//		memset(buf, 0, sizeof(buf));
+	//		auto hdr = (brcm_hdr *)buf;
+	//		auto pkt = (brcm_cmd_01 *)(hdr + 1);
+	//		hdr->cmd = 1;
+	//		hdr->timer = timing_byte & 0xF;
+	//		timing_byte++;
+	//		pkt->subcmd = 0x11;
+	//		pkt->spi_read.offset = offset;
+	//		pkt->spi_read.size = write_len;
+	//		for (int i = 0; i < write_len; i++) {
+	//			buf[0x10 + i] = test_buf[i];
+	//		}
+
+	//		res = hid_write(handle, buf, sizeof(*hdr) + sizeof(*pkt) + write_len);
+
+	//		res = hid_read(handle, buf, sizeof(buf));
+	//		if (*(uint16_t*)&buf[0xD] == 0x1180) {
+	//			break;
+	//		}
+	//		error_writing++;
+	//		if (error_writing == 125) {
+	//			return 1;
+	//		}
+	//	}
+
+	//	return 0;
+	//}
+
+
+
+	//int get_spi_data(uint32_t offset, const uint16_t read_len, uint8_t* test_buf) {
+	//	int res;
+	//	uint8_t buf[0x100];
+	//	while (1) {
+	//		memset(buf, 0, sizeof(buf));
+	//		auto hdr = (brcm_hdr *)buf;
+	//		auto pkt = (brcm_cmd_01 *)(hdr + 1);
+	//		hdr->cmd = 1;
+	//		hdr->timer = timing_byte & 0xF;
+	//		timing_byte++;
+	//		pkt->subcmd = 0x10;
+	//		pkt->spi_read.offset = offset;
+	//		pkt->spi_read.size = read_len;
+	//		res = hid_write(handle, buf, sizeof(*hdr) + sizeof(*pkt));
+
+	//		res = hid_read(handle, buf, sizeof(buf));
+	//		if ((*(u16*)&buf[0xD] == 0x1090) && (*(uint32_t*)&buf[0xF] == offset)) {
+	//			break;
+	//		}
+	//	}
+	//	if (res >= 0x14 + read_len) {
+	//		for (int i = 0; i < read_len; i++) {
+	//			test_buf[i] = buf[0x14 + i];
+	//		}
+	//	}
+
+	//	return 0;
+	//}
+
+
+
 };

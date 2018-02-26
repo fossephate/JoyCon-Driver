@@ -114,7 +114,7 @@ struct Settings {
 	float timeToSleepMS = 2.0f;
 
 	// version number
-	std::string version = "0.84";
+	std::string version = "0.9";
 
 } settings;
 
@@ -274,52 +274,34 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		}
 
 		jc->battery = (stick_data[1] & 0xF0) >> 4;
-
 		//printf("JoyCon battery: %d\n", jc->battery);
-
-
-		uint8_t *gyro_data = nullptr;
-		if (jc->left_right == 1) {
-			gyro_data = packet + 13;// 13
-		} else if (jc->left_right == 2) {
-			gyro_data = packet + 13;// 13
-		} else if (jc->left_right == 3) {
-			gyro_data = packet + 13;// 13
-		}
-
 
 		// Accelerometer:
 		// Accelerometer data is absolute
 		{
-			// get Accelerometer X:
-			uint16_t accelX = ((uint16_t)gyro_data[1] << 8) | gyro_data[2];
-			jc->accel.x = (double)uint16_to_int16(accelX);// *jc->acc_cal_coeff[0];
+			// get accelerometer X:
+			jc->accel.x = (float)(uint16_to_int16(packet[13] | (packet[14] << 8) & 0xFF00)) * jc->acc_cal_coeff[0];
 
-			// get Accelerometer Y:
-			uint16_t accelY = ((uint16_t)gyro_data[3] << 8) | gyro_data[4];
-			jc->accel.y = (double)uint16_to_int16(accelY);// *jc->acc_cal_coeff[1];
+			// get accelerometer Y:
+			jc->accel.y = (float)(uint16_to_int16(packet[15] | (packet[16] << 8) & 0xFF00)) * jc->acc_cal_coeff[1];
 
-			// get Accelerometer Z:
-			uint16_t accelZ = ((uint16_t)gyro_data[5] << 8) | gyro_data[6];
-			jc->accel.z = (double)uint16_to_int16(accelZ);// *jc->acc_cal_coeff[2];
+			// get accelerometer Z:
+			jc->accel.z = (float)(uint16_to_int16(packet[17] | (packet[18] << 8) & 0xFF00))  * jc->acc_cal_coeff[2];
 		}
 
 
 
 		// Gyroscope:
-		// Gyroscope data is relative
+		// Gyroscope data is relative (rads/s)
 		{
-			// get relative roll:
-			uint16_t roll = ((uint16_t)gyro_data[7] << 8) | gyro_data[8];
-			jc->gyro.roll = (double)uint16_to_int16(roll);// *jc->gyro_cal_coeff[0];
+			// get roll:
+			jc->gyro.roll = (float)(uint16_to_int16(packet[19] | (packet[20] << 8) & 0xFF00)) * jc->gyro_cal_coeff[0];
 
-			// get relative pitch:
-			uint16_t pitch = ((uint16_t)gyro_data[9] << 8) | gyro_data[10];
-			jc->gyro.pitch = (double)uint16_to_int16(pitch);// *jc->gyro_cal_coeff[1];
+			// get pitch:
+			jc->gyro.pitch = (float)(uint16_to_int16(packet[21] | (packet[22] << 8) & 0xFF00)) * jc->gyro_cal_coeff[1];
 
-			// get relative yaw:
-			uint16_t yaw = ((uint16_t)gyro_data[11] << 8) | gyro_data[12];
-			jc->gyro.yaw = (double)uint16_to_int16(yaw);// *jc->gyro_cal_coeff[2];
+			// get yaw:
+			jc->gyro.yaw = (float)(uint16_to_int16(packet[23] | (packet[24] << 8) & 0xFF00)) * jc->gyro_cal_coeff[2];
 		}
 		
 
@@ -730,16 +712,14 @@ void updatevJoyDevice2(Joycon *jc) {
 		glm::fquat delz = glm::angleAxis(glm::radians(-yaw), glm::vec3(0.0, 1.0, 0.0));
 		tracker.quat = tracker.quat*delz;
 
-		float relX2 = -jc->gyro.yaw / settings.gyroSensitivityX;
-		float relY2 = jc->gyro.pitch / settings.gyroSensitivityY;
+		float relX2 = -jc->gyro.yaw * settings.gyroSensitivityX;
+		float relY2 = jc->gyro.pitch * settings.gyroSensitivityY;
+
+		relX2 /= 100;
+		relY2 /= 100;
 
 
 		// check if combo keys are pressed:
-		//if (settings.preferLeftJoyCon) {
-		//	
-		//} else {
-
-		//}
 		if (jc->buttons == settings.gyroscopeComboCode) {
 			gyroComboCodePressed = true;
 		} else {
@@ -1850,12 +1830,12 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("JoyCon-Driver by fosse ©20
 
 
 	wxStaticText *slider1Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity X"), wxPoint(20, 160));
-	slider1 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityX, 0, 1000, wxPoint(180, 140), wxDefaultSize, wxSL_LABELS);
+	slider1 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityX, 0, 300, wxPoint(180, 140), wxSize(150, 20), wxSL_LABELS);
 	slider1->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityX, this);
 
 
 	wxStaticText *slider2Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity Y"), wxPoint(20, 200));
-	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, 0, 1000, wxPoint(180, 180), wxDefaultSize, wxSL_LABELS);
+	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, 0, 300, wxPoint(180, 180), wxSize(150, 20), wxSL_LABELS);
 	slider2->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityY, this);
 
 	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 240));
