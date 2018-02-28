@@ -114,7 +114,7 @@ struct Settings {
 	float timeToSleepMS = 2.0f;
 
 	// version number
-	std::string version = "0.9";
+	std::string version = "0.91";
 
 } settings;
 
