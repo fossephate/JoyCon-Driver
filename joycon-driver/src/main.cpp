@@ -114,16 +114,16 @@ struct Settings {
 	float timeToSleepMS = 2.0f;
 
 	// version number
-	std::string version = "0.91";
+	std::string version = "0.92";
 
 } settings;
 
 
 struct Tracker {
+
 	int var1 = 0;
 	int var2 = 0;
 	int counter1 = 0;
-	//float frequency = 500.0f;
 
 	float low_freq = 200.0f;
 	float high_freq = 500.0f;
@@ -154,7 +154,7 @@ void found_joycon(struct hid_device_info *dev) {
 	Joycon jc;
 
 	if (dev->product_id == JOYCON_CHARGING_GRIP) {
-		//if (dev->interface_number == 0) {
+
 		if (dev->interface_number == 0 || dev->interface_number == -1) {
 			jc.name = std::string("Joy-Con (R)");
 			jc.left_right = 2;// right joycon
@@ -170,9 +170,7 @@ void found_joycon(struct hid_device_info *dev) {
 	} else if (dev->product_id == JOYCON_R_BT) {
 		jc.name = std::string("Joy-Con (R)");
 		jc.left_right = 2;// right joycon
-	}
-
-	if (dev->product_id == PRO_CONTROLLER) {
+	} else if (dev->product_id == PRO_CONTROLLER) {
 		jc.name = std::string("Pro Controller");
 		jc.left_right = 3;// left joycon
 	}
@@ -205,7 +203,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		jc->dstick = packet[3];
 		// todo: get button states here aswell:
 	}
-
 
 	// input update packet:
 	// 0x21 is just buttons, 0x30 includes gyro, 0x31 includes NFC (large packet size)
@@ -737,7 +734,7 @@ void updatevJoyDevice2(Joycon *jc) {
 			}
 		}
 
-		float mult = settings.gyroSensitivityX / 100.0f;
+		float mult = settings.gyroSensitivityX * 10.0f;
 
 		iReport.wAxisZRot = 16384 + (jc->gyro.roll * mult);
 		iReport.wSlider = 16384 + (jc->gyro.pitch * mult);
@@ -1830,12 +1827,12 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("JoyCon-Driver by fosse ©20
 
 
 	wxStaticText *slider1Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity X"), wxPoint(20, 160));
-	slider1 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityX, 0, 300, wxPoint(180, 140), wxSize(150, 20), wxSL_LABELS);
+	slider1 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityX, -300, 300, wxPoint(180, 140), wxSize(150, 20), wxSL_LABELS);
 	slider1->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityX, this);
 
 
 	wxStaticText *slider2Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity Y"), wxPoint(20, 200));
-	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, 0, 300, wxPoint(180, 180), wxSize(150, 20), wxSL_LABELS);
+	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, -300, 300, wxPoint(180, 180), wxSize(150, 20), wxSL_LABELS);
 	slider2->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityY, this);
 
 	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 240));
