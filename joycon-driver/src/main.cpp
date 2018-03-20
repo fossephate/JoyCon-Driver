@@ -114,7 +114,7 @@ struct Settings {
 	float timeToSleepMS = 2.0f;
 
 	// version number
-	std::string version = "0.92";
+	std::string version = "0.93";
 
 } settings;
 
@@ -1879,7 +1879,8 @@ void MainFrame::onQuit(wxCommandEvent&) {
 
 void MainFrame::onUpdate(wxCommandEvent&) {
 
-	download("version.txt", "https://raw.githubusercontent.com/mfosse/JoyCon-Driver/master/joycon-driver/build/Win32/Release/version.txt");
+	//download("version.txt", "https://raw.githubusercontent.com/mfosse/JoyCon-Driver/master/joycon-driver/build/Win32/Release/version.txt");
+	download("version.txt", "https://fosse.co/version.txt");
 	std::ifstream ifs("version.txt");
 	std::string content;
 	content.assign((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
