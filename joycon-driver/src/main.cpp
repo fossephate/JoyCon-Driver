@@ -922,14 +922,19 @@ void start() {
 		tracker.tPolls.push_back(std::chrono::high_resolution_clock::now());
 	}
 
-	// find a debug file to output to:
-	int fileNumber = 0;
-	std::string name = std::string("output-") + std::to_string(fileNumber) + std::string(".txt");
-	while (exists_test0(name)) {
-		fileNumber += 1;
-		name = std::string("output-") + std::to_string(fileNumber) + std::string(".txt");
+
+	if (settings.writeDebugToFile) {
+
+		// find a debug file to output to:
+		int fileNumber = 0;
+		std::string name = std::string("output-") + std::to_string(fileNumber) + std::string(".txt");
+		while (exists_test0(name)) {
+			fileNumber += 1;
+			name = std::string("output-") + std::to_string(fileNumber) + std::string(".txt");
+		}
+
+		settings.outputFile = fopen(name.c_str(), "w");
 	}
-	settings.outputFile = fopen(name.c_str(), "w");
 
 
 init_start:
@@ -1972,6 +1977,17 @@ void MainFrame::toggleDebugMode(wxCommandEvent&) {
 
 void MainFrame::toggleWriteDebug(wxCommandEvent&) {
 	settings.writeDebugToFile = !settings.writeDebugToFile;
+	// find a debug file to output to:
+
+	if (settings.writeDebugToFile) {
+		int fileNumber = 0;
+		std::string name = std::string("output-") + std::to_string(fileNumber) + std::string(".txt");
+		while (exists_test0(name)) {
+			fileNumber += 1;
+			name = std::string("output-") + std::to_string(fileNumber) + std::string(".txt");
+		}
+		settings.outputFile = fopen(name.c_str(), "w");
+	}
 }
 
 void MainFrame::toggleForcePoll(wxCommandEvent&) {
