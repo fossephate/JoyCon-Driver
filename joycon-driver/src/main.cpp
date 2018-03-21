@@ -52,7 +52,6 @@
 std::vector<Joycon> joycons;
 MouseController MC;
 JOYSTICK_POSITION_V2 iReport; // The structure that holds the full position data
-uint8_t global_count = 0;
 unsigned char buf[65];
 int res = 0;
 
@@ -82,8 +81,8 @@ struct Settings {
 	bool enableGyro = false;
 
 	// gyroscope (mouse) sensitivity:
-	float gyroSensitivityX = 100.0f;
-	float gyroSensitivityY = 100.0f;
+	float gyroSensitivityX = 150.0f;
+	float gyroSensitivityY = 150.0f;
 
 	// enables 3D gyroscope visualizer
 	bool gyroWindow = false;
@@ -101,6 +100,8 @@ struct Settings {
 	// write debug to file:
 	bool writeDebugToFile = false;
 
+	// debug file:
+	FILE* outputFile;
 
 	// poll options:
 
@@ -114,7 +115,7 @@ struct Settings {
 	float timeToSleepMS = 2.0f;
 
 	// version number
-	std::string version = "0.93";
+	std::string version = "0.94";
 
 } settings;
 
@@ -393,6 +394,11 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 					jc->btns.up, jc->btns.down, jc->btns.left, jc->btns.right, jc->btns.l, jc->btns.zl, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
 					jc->btns.minus, jc->btns.capture, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
 			}
+			if (settings.writeDebugToFile) {
+				fprintf(settings.outputFile, "U: %d D: %d L: %d R: %d LL: %d ZL: %d SB: %d SL: %d SR: %d M: %d C: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
+					jc->btns.up, jc->btns.down, jc->btns.left, jc->btns.right, jc->btns.l, jc->btns.zl, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
+					jc->btns.minus, jc->btns.capture, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
+			}
 		}
 
 		// right:
@@ -412,6 +418,11 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 			if (settings.debugMode) {
 				printf("A: %d B: %d X: %d Y: %d RR: %d ZR: %d SB: %d SL: %d SR: %d P: %d H: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
+					jc->btns.a, jc->btns.b, jc->btns.x, jc->btns.y, jc->btns.r, jc->btns.zr, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
+					jc->btns.plus, jc->btns.home, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
+			}
+			if (settings.writeDebugToFile) {
+				fprintf(settings.outputFile, "A: %d B: %d X: %d Y: %d RR: %d ZR: %d SB: %d SL: %d SR: %d P: %d H: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
 					jc->btns.a, jc->btns.b, jc->btns.x, jc->btns.y, jc->btns.r, jc->btns.zr, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
 					jc->btns.plus, jc->btns.home, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
 			}
@@ -466,6 +477,17 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 						jc->btns.a, jc->btns.b, jc->btns.x, jc->btns.y, jc->btns.r, jc->btns.zr, jc->btns.stick_button2, jc->btns.sl, jc->btns.sr, \
 						jc->btns.plus, jc->btns.home, (jc->stick2.CalX + 1), (jc->stick2.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
 			}
+
+			if (settings.writeDebugToFile) {
+				fprintf(settings.outputFile, "U: %d D: %d L: %d R: %d LL: %d ZL: %d SB: %d SL: %d SR: %d M: %d C: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
+					jc->btns.up, jc->btns.down, jc->btns.left, jc->btns.right, jc->btns.l, jc->btns.zl, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
+					jc->btns.minus, jc->btns.capture, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
+
+				fprintf(settings.outputFile, "A: %d B: %d X: %d Y: %d RR: %d ZR: %d SB: %d SL: %d SR: %d P: %d H: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
+					jc->btns.a, jc->btns.b, jc->btns.x, jc->btns.y, jc->btns.r, jc->btns.zr, jc->btns.stick_button2, jc->btns.sl, jc->btns.sr, \
+					jc->btns.plus, jc->btns.home, (jc->stick2.CalX + 1), (jc->stick2.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
+			}
+
 		}
 
 
@@ -549,8 +571,6 @@ void updatevJoyDevice2(Joycon *jc) {
 	if (DevID == 0 && settings.debugMode) {
 		printf("something went very wrong D:\n");
 	}
-	
-
 
 	// Set Stick data
 
@@ -901,6 +921,15 @@ void start() {
 	for (int i = 0; i < 100; ++i) {
 		tracker.tPolls.push_back(std::chrono::high_resolution_clock::now());
 	}
+
+	// find a debug file to output to:
+	int fileNumber = 0;
+	std::string name = std::string("output-") + std::to_string(fileNumber) + std::string(".txt");
+	while (exists_test0(name)) {
+		fileNumber += 1;
+		name = std::string("output-") + std::to_string(fileNumber) + std::string(".txt");
+	}
+	settings.outputFile = fopen(name.c_str(), "w");
 
 
 init_start:
