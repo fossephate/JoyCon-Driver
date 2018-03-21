@@ -149,48 +149,6 @@ struct Tracker {
 } tracker;
 
 
-void found_joycon(struct hid_device_info *dev) {
-	
-	
-	Joycon jc;
-
-	if (dev->product_id == JOYCON_CHARGING_GRIP) {
-
-		if (dev->interface_number == 0 || dev->interface_number == -1) {
-			jc.name = std::string("Joy-Con (R)");
-			jc.left_right = 2;// right joycon
-		} else if (dev->interface_number == 1) {
-			jc.name = std::string("Joy-Con (L)");
-			jc.left_right = 1;// left joycon
-		}
-	}
-
-	if (dev->product_id == JOYCON_L_BT) {
-		jc.name = std::string("Joy-Con (L)");
-		jc.left_right = 1;// left joycon
-	} else if (dev->product_id == JOYCON_R_BT) {
-		jc.name = std::string("Joy-Con (R)");
-		jc.left_right = 2;// right joycon
-	} else if (dev->product_id == PRO_CONTROLLER) {
-		jc.name = std::string("Pro Controller");
-		jc.left_right = 3;// left joycon
-	}
-
-	jc.serial = wcsdup(dev->serial_number);
-
-	printf("Found joycon %c %i: %ls %s\n", L_OR_R(jc.left_right), joycons.size(), jc.serial, dev->path);
-	jc.handle = hid_open_path(dev->path);
-
-
-	if (jc.handle == nullptr) {
-		printf("Could not open serial %ls: %s\n", jc.serial, strerror(errno));
-		throw;
-	}
-
-	joycons.push_back(jc);
-}
-
-
 
 
 void handle_input(Joycon *jc, uint8_t *packet, int len) {
@@ -210,7 +168,8 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 	if (packet[0] == 0x21 || packet[0] == 0x30 || packet[0] == 0x31) {
 		
 		// offset for usb or bluetooth data:
-		int offset = settings.usingBluetooth ? 0 : 10;
+		/*int offset = settings.usingBluetooth ? 0 : 10;*/
+		int offset = jc->bluetooth ? 0 : 10;
 
 		uint8_t *btn_data = packet + offset + 3;
 
@@ -459,16 +418,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 
 			if (settings.debugMode) {
-				//std::bitset<16> buttons1(jc->buttons);
-				//std::string btns1 = buttons1.to_string();
 
-				//std::bitset<16> buttons2(jc->buttons2);
-				//std::string btns2 = buttons2.to_string();
-
-				//// print states in binary since I don't know which bits are which
-				//printf("%s %s\n", btns1, btns2);
-
-				// change from CalX to x to see if the calibration is the problem
 				printf("U: %d D: %d L: %d R: %d LL: %d ZL: %d SB: %d SL: %d SR: %d M: %d C: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
 						jc->btns.up, jc->btns.down, jc->btns.left, jc->btns.right, jc->btns.l, jc->btns.zl, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
 						jc->btns.minus, jc->btns.capture, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
@@ -488,13 +438,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 					jc->btns.plus, jc->btns.home, (jc->stick2.CalX + 1), (jc->stick2.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
 			}
 
-		}
-
-
-		if (settings.debugMode) {
-			//char buffer[33];
-			//itoa(jc->buttons, buffer, 2);
-			//printf("buttons1: %s\n", buffer);
 		}
 
 	}
@@ -888,9 +831,7 @@ void pollLoop() {
 	}
 
 	// sleep:
-	accurateSleep(settings.timeToSleepMS);// 8.00
-
-	//Sleep(1000);
+	accurateSleep(settings.timeToSleepMS);
 
 	if (settings.restart) {
 		settings.restart = false;
@@ -946,28 +887,28 @@ init_start:
 		// identify by vendor:
 		if (cur_dev->vendor_id == JOYCON_VENDOR) {
 
-			Joycon jc;
-
 			// bluetooth, left / right joycon:
 			if (cur_dev->product_id == JOYCON_L_BT || cur_dev->product_id == JOYCON_R_BT) {
-				found_joycon(cur_dev);
-				settings.usingBluetooth = true;
+				Joycon jc = Joycon(cur_dev);
+				joycons.push_back(jc);
 			}
 
 			// pro controller:
 			if (cur_dev->product_id == PRO_CONTROLLER) {
-				found_joycon(cur_dev);
-				settings.usingBluetooth = true;
+				Joycon jc = Joycon(cur_dev);
+				joycons.push_back(jc);
 			}
 
 			// charging grip:
 			//if (cur_dev->product_id == JOYCON_CHARGING_GRIP) {
-			//	settings.usingGrip = true;
+			//	Joycon jc = Joycon(cur_dev);
 			//	settings.usingBluetooth = false;
 			//	settings.combineJoyCons = true;
-			//	found_joycon(cur_dev);
+			//	joycons.push_back(jc);
 			//}
+			
 		}
+		
 
 		cur_dev = cur_dev->next;
 	}

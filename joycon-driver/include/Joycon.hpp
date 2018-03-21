@@ -2,6 +2,13 @@
 #include <hidapi.h>
 #include "tools.hpp"
 
+#define JOYCON_VENDOR 0x057e
+#define JOYCON_L_BT 0x2006
+#define JOYCON_R_BT 0x2007
+#define PRO_CONTROLLER 0x2009
+#define JOYCON_CHARGING_GRIP 0x200e
+#define L_OR_R(lr) (lr == 1 ? 'L' : (lr == 2 ? 'R' : '?'))
+
 class Joycon {
 
 public:
@@ -47,7 +54,10 @@ public:
 		int sl = 0;
 		int sr = 0;
 		int stick_button = 0;
+
+		// pro controller:
 		int stick_button2 = 0;// pro controller
+
 	} btns;
 
 	int8_t dstick;
@@ -170,6 +180,44 @@ public:
 
 
 public:
+
+
+	Joycon(struct hid_device_info *dev) {
+
+		if (dev->product_id == JOYCON_CHARGING_GRIP) {
+
+			if (dev->interface_number == 0 || dev->interface_number == -1) {
+				this->name = std::string("Joy-Con (R)");
+				this->left_right = 2;// right joycon
+			} else if (dev->interface_number == 1) {
+				this->name = std::string("Joy-Con (L)");
+				this->left_right = 1;// left joycon
+			}
+		}
+
+		if (dev->product_id == JOYCON_L_BT) {
+			this->name = std::string("Joy-Con (L)");
+			this->left_right = 1;// left joycon
+		} else if (dev->product_id == JOYCON_R_BT) {
+			this->name = std::string("Joy-Con (R)");
+			this->left_right = 2;// right joycon
+		} else if (dev->product_id == PRO_CONTROLLER) {
+			this->name = std::string("Pro Controller");
+			this->left_right = 3;// left joycon
+		}
+
+		this->serial = _wcsdup(dev->serial_number);
+
+		//printf("Found joycon %c %i: %ls %s\n", L_OR_R(this->left_right), joycons.size(), this->serial, dev->path);
+		printf("Found joycon %c: %ls %s\n", L_OR_R(this->left_right), this->serial, dev->path);
+		this->handle = hid_open_path(dev->path);
+
+
+		if (this->handle == nullptr) {
+			printf("Could not open serial %ls: %s\n", this->serial, strerror(errno));
+			throw;
+		}
+	}
 
 	void hid_exchange(hid_device *handle, unsigned char *buf, int len) {
 		if (!handle) return;
@@ -333,8 +381,6 @@ public:
 
 		rumble2(hf, hfa, lf, lfa);
 	}
-
-
 
 	void rumble4(float real_LF, float real_HF, uint8_t hfa, uint16_t lfa) {
 
