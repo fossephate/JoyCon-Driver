@@ -94,23 +94,39 @@ public:
 	wxApp *parent;
 
 
-	wxCheckBox *CB1;
-	wxCheckBox *CB2;
-	wxCheckBox *CB3;
-	wxCheckBox *CB4;
-	wxCheckBox *CB5;
-	wxCheckBox *CB6;
-	wxCheckBox *CB7;
-	wxCheckBox *CB8;
-	wxCheckBox *CB9;
-	wxCheckBox *CB10;
-	wxCheckBox *CB11;
-	wxCheckBox *CB12;
-	wxCheckBox *CB13;
+	wxCheckBox* CB1;
+	wxCheckBox* CB2;
+	wxCheckBox* CB3;
+	wxCheckBox* CB4;
+	wxCheckBox* CB5;
+	wxCheckBox* CB6;
+	wxCheckBox* CB7;
+	wxCheckBox* CB8;
+	wxCheckBox* CB9;
+	wxCheckBox* CB10;
+	wxCheckBox* CB11;
+	wxCheckBox* CB12;
+	wxCheckBox* CB13;
+	wxCheckBox* CB14;
 
 
-	wxSlider *slider1;
-	wxSlider *slider2;
+
+	wxStaticText* st1;
+	wxStaticText* st2;
+	wxStaticText* st3;
+	wxStaticText* st4;
+
+	wxSlider* slider1;
+	wxSlider* slider2;
+	wxStaticText* slider1Text;
+	wxStaticText* slider2Text;
+
+
+	wxButton* startButton;
+	wxButton* quitButton;
+	wxButton* updateButton;
+	wxButton* donateButton;
+
 
 	MainFrame();
 
@@ -128,14 +144,17 @@ public:
 	void toggleReverseX(wxCommandEvent&);
 	void toggleReverseY(wxCommandEvent&);
 
-	void togglePreferLeftJoyCon(wxCommandEvent &);
-	void toggleDebugMode(wxCommandEvent &);
-	void toggleWriteDebug(wxCommandEvent &);
+	void togglePreferLeftJoyCon(wxCommandEvent&);
+	void toggleQuickToggleGyro(wxCommandEvent&);
 
-	void toggleForcePoll(wxCommandEvent &);
+	void toggleDebugMode(wxCommandEvent&);
+	void toggleWriteDebug(wxCommandEvent&);
+
+	void toggleForcePoll(wxCommandEvent&);
 
 	void setGyroSensitivityX(wxCommandEvent&);
 	void setGyroSensitivityY(wxCommandEvent&);
+
 };
 
 

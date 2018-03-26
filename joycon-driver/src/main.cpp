@@ -55,6 +55,12 @@ JOYSTICK_POSITION_V2 iReport; // The structure that holds the full position data
 unsigned char buf[65];
 int res = 0;
 
+// this is awful, don't do this:
+wxStaticText* gyroComboCodeText;
+void setGyroComboCodeText(int code);
+
+wxCheckBox* gyroCheckBox;
+
 
 struct Settings {
 
@@ -69,10 +75,6 @@ struct Settings {
 	bool reverseX = false;// reverses joystick x (both sticks)
 	bool reverseY = false;// reverses joystick y (both sticks)
 
-	bool preferLeftJoyCon = false;// prefer the left joycon for gyro controls
-
-	int gyroscopeComboCode = 4;// combo code to set key combination to disable gyroscope for quick turning in games. -1 to disable.
-
 	bool usingGrip = false;
 	bool usingBluetooth = true;
 	bool disconnect = false;
@@ -83,6 +85,22 @@ struct Settings {
 	// gyroscope (mouse) sensitivity:
 	float gyroSensitivityX = 150.0f;
 	float gyroSensitivityY = 150.0f;
+
+
+	// prefer the left joycon for gyro controls
+	bool preferLeftJoyCon = false;
+
+	// combo code to set key combination to disable gyroscope for quick turning in games. -1 to disable.
+	int gyroscopeComboCode = 4;
+
+	// toggles between two different toggle types
+	// disabled = traditional toggle
+	// enabled = while button(s) are held gyro is disabled
+	bool quickToggleGyro = false;
+
+	// so that you don't rapidly toggle the gyro controls every frame:
+	bool canToggleGyro = true;
+
 
 	// enables 3D gyroscope visualizer
 	bool gyroWindow = false;
@@ -115,7 +133,7 @@ struct Settings {
 	float timeToSleepMS = 2.0f;
 
 	// version number
-	std::string version = "0.94";
+	std::string version = "0.95";
 
 } settings;
 
@@ -680,17 +698,29 @@ void updatevJoyDevice2(Joycon *jc) {
 
 
 		// check if combo keys are pressed:
+		setGyroComboCodeText(jc->buttons);
 		if (jc->buttons == settings.gyroscopeComboCode) {
 			gyroComboCodePressed = true;
 		} else {
 			gyroComboCodePressed = false;
 		}
 
+		if (!gyroComboCodePressed) {
+			settings.canToggleGyro = true;
+		}
+
+		if (settings.canToggleGyro && gyroComboCodePressed && !settings.quickToggleGyro) {
+			settings.enableGyro = !settings.enableGyro;
+			gyroCheckBox->SetValue(settings.enableGyro);
+			settings.canToggleGyro = false;
+		}
+
+		if (jc->left_right == 2) {
+			relX2 *= -1;
+			relY2 *= -1;
+		}
+
 		if (settings.enableGyro) {
-			if (jc->left_right == 2) {
-				relX2 *= -1;
-				relY2 *= -1;
-			}
 			// check if combo keys are pressed:
 			if (!gyroComboCodePressed) {
 				MC.moveRel2(relX2, relY2);
@@ -699,9 +729,11 @@ void updatevJoyDevice2(Joycon *jc) {
 
 		float mult = settings.gyroSensitivityX * 10.0f;
 
-		iReport.wAxisZRot = 16384 + (jc->gyro.roll * mult);
-		iReport.wSlider = 16384 + (jc->gyro.pitch * mult);
-		iReport.wDial = 16384 + (jc->gyro.yaw * mult);
+		if (!gyroComboCodePressed) {
+			iReport.wAxisZRot = 16384 + (jc->gyro.roll * mult);
+			iReport.wSlider = 16384 + (jc->gyro.pitch * mult);
+			iReport.wDial = 16384 + (jc->gyro.yaw * mult);
+		}
 
 	}
 
@@ -1774,61 +1806,69 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("JoyCon-Driver by fosse ©20
 	CB7->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleReverseY, this);
 	CB7->SetValue(settings.reverseY);
 
-	CB3 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Controls"), wxPoint(20, 60));
-	CB3->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleGyro, this);
-	CB3->SetValue(settings.enableGyro);
+	gyroCheckBox = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Controls"), wxPoint(20, 60));
+	gyroCheckBox->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleGyro, this);
+	gyroCheckBox->SetValue(settings.enableGyro);
+
 	CB4 = new wxCheckBox(panel, wxID_ANY, wxT("Gyro Window"), wxPoint(120, 60));
 	CB4->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleGyroWindow, this);
 	CB4->SetValue(settings.gyroWindow);
 	CB8 = new wxCheckBox(panel, wxID_ANY, wxT("Prefer Left JoyCon for Gyro Controls"), wxPoint(20, 80));
 	CB8->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::togglePreferLeftJoyCon, this);
 	CB8->SetValue(settings.preferLeftJoyCon);
+	CB12 = new wxCheckBox(panel, wxID_ANY, wxT("Quick Toggle Gyro Controls"), wxPoint(20, 100));
+	CB12->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleQuickToggleGyro, this);
+	CB12->SetValue(settings.quickToggleGyro);
 
-	CB5 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 100));
+	CB5 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 120));
 	CB5->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleMario, this);
 	CB5->SetValue(settings.marioTheme);
 
-	CB9 = new wxCheckBox(panel, wxID_ANY, wxT("Debug Mode"), wxPoint(20, 120));
+	CB9 = new wxCheckBox(panel, wxID_ANY, wxT("Debug Mode"), wxPoint(20, 140));
 	CB9->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleDebugMode, this);
 	CB9->SetValue(settings.debugMode);
 
-	CB10 = new wxCheckBox(panel, wxID_ANY, wxT("Write Debug To File"), wxPoint(120, 120));
+	CB10 = new wxCheckBox(panel, wxID_ANY, wxT("Write Debug To File"), wxPoint(120, 140));
 	CB10->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleWriteDebug, this);
 	CB10->SetValue(settings.debugMode);
 
-	CB11 = new wxCheckBox(panel, wxID_ANY, wxT("Force Poll Update"), wxPoint(20, 140));
+	CB11 = new wxCheckBox(panel, wxID_ANY, wxT("Force Poll Update"), wxPoint(20, 160));
 	CB11->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleForcePoll, this);
 	CB11->SetValue(settings.forcePollUpdate);
 
 
-	wxStaticText *slider1Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity X"), wxPoint(20, 160));
-	slider1 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityX, -300, 300, wxPoint(180, 140), wxSize(150, 20), wxSL_LABELS);
+	slider1Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity X"), wxPoint(20, 200));
+	st1 = new wxStaticText(panel, wxID_ANY, wxT("(Also the sensitivity for Rz/sl0/sl1)"), wxPoint(40, 220));
+	slider1 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityX, -300, 300, wxPoint(180, 180), wxSize(150, 20), wxSL_LABELS);
 	slider1->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityX, this);
 
 
-	wxStaticText *slider2Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity Y"), wxPoint(20, 200));
-	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, -300, 300, wxPoint(180, 180), wxSize(150, 20), wxSL_LABELS);
+	slider2Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity Y"), wxPoint(20, 240));
+	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, -300, 300, wxPoint(180, 220), wxSize(150, 20), wxSL_LABELS);
 	slider2->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityY, this);
 
-	wxStaticText *st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 240));
+
+	gyroComboCodeText = new wxStaticText(panel, wxID_ANY, wxT("Gyro Combo Code: "), wxPoint(20, 270));
+
+	st1 = new wxStaticText(panel, wxID_ANY, wxT("Change the default settings and more in the config file!"), wxPoint(20, 300));
 
 	wxString version;
 	version.Printf("JoyCon-Driver version %s\n", settings.version);
-	wxStaticText *st2 = new wxStaticText(panel, wxID_ANY, version, wxPoint(20, 270));
+	st2 = new wxStaticText(panel, wxID_ANY, version, wxPoint(20, 330));
 
-	wxButton *startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 300));
+	startButton = new wxButton(panel, wxID_EXIT, wxT("Start"), wxPoint(150, 360));
 	startButton->Bind(wxEVT_BUTTON, &MainFrame::onStart, this);
 
-	wxButton *quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 300));
+	quitButton = new wxButton(panel, wxID_EXIT, wxT("Quit"), wxPoint(250, 360));
 	quitButton->Bind(wxEVT_BUTTON, &MainFrame::onQuit, this);
 
-	wxButton *updateButton = new wxButton(panel, wxID_EXIT, wxT("Check for update"), wxPoint(18, 300));
+	updateButton = new wxButton(panel, wxID_EXIT, wxT("Check for update"), wxPoint(18, 360));
 	updateButton->Bind(wxEVT_BUTTON, &MainFrame::onUpdate, this);
 
-	wxButton *donateButton = new wxButton(panel, wxID_EXIT, wxT("Donate"), wxPoint(250, 265));
+	donateButton = new wxButton(panel, wxID_EXIT, wxT("Donate"), wxPoint(250, 325));
 	donateButton->Bind(wxEVT_BUTTON, &MainFrame::onDonate, this);
 
-	SetClientSize(350, 340);
+	SetClientSize(350, 400);
 	Show();
 }
 
@@ -1912,6 +1952,10 @@ void MainFrame::togglePreferLeftJoyCon(wxCommandEvent&) {
 	settings.preferLeftJoyCon = !settings.preferLeftJoyCon;
 }
 
+void MainFrame::toggleQuickToggleGyro(wxCommandEvent&) {
+	settings.quickToggleGyro = !settings.quickToggleGyro;
+}
+
 void MainFrame::toggleDebugMode(wxCommandEvent&) {
 	settings.debugMode = !settings.debugMode;
 }
@@ -1942,6 +1986,13 @@ void MainFrame::setGyroSensitivityX(wxCommandEvent&) {
 void MainFrame::setGyroSensitivityY(wxCommandEvent&) {
 	settings.gyroSensitivityY = slider2->GetValue();
 }
+
+void setGyroComboCodeText(int code) {
+	wxString text;
+	text.Printf("Gyro Combo Code: %d\n", code);
+	gyroComboCodeText->SetLabel(text);
+}
+
 
 // ----------------------------------------------------------------------------
 // TestGLCanvas
