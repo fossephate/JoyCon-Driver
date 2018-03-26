@@ -133,7 +133,7 @@ struct Settings {
 	float timeToSleepMS = 2.0f;
 
 	// version number
-	std::string version = "0.95";
+	std::string version = "0.96";
 
 } settings;
 
@@ -1912,9 +1912,14 @@ void MainFrame::onUpdate(wxCommandEvent&) {
 	wxMessageBox(alert);
 
 	if (!upToDate) {
-		wxAboutDialogInfo info;
-		info.SetWebSite("https://github.com/mfosse/JoyCon-Driver");
-		wxAboutBox(info);
+		//wxAboutDialogInfo info;
+		//info.SetWebSite("https://github.com/mfosse/JoyCon-Driver");
+		//wxAboutBox(info);
+
+		wxString text;
+		text.Printf("Downloading the latest version as latest.zip, you will have to unzip it yourself, (for now)\n");
+		wxMessageBox(text);
+		download("latest.zip", "https://fosse.co/latest.zip");
 	}
 }
 
