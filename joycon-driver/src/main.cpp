@@ -1931,12 +1931,12 @@ void MainFrame::onUpdate(wxCommandEvent&) {
 //setlocal\n\
 //cd /d %%~dp0\n\
 //Call :UnZipFile \"%%CDIR%%\" \"%%FILENAME%%\"\n\
+//del latest.zip\n\
 //del *.iobj\n\
 //del *.ipdb\n\
 //del *.pdb\n\
 //start joycon-driver.exe\n\
-//DEL \"%%~f0\"\n\
-//exit\n\
+//DEL \"%%~f0\"&exit /b\n\
 //:UnZipFile <ExtractTo> <newzipfile>\n\
 //set vbs=\"%%temp%%\\_.vbs\"\n\
 //if exist %%vbs%% del /f /q %%vbs%%\n\
