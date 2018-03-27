@@ -133,7 +133,7 @@ struct Settings {
 	float timeToSleepMS = 2.0f;
 
 	// version number
-	std::string version = "0.96";
+	std::string version = "0.97";
 
 } settings;
 
@@ -1917,9 +1917,47 @@ void MainFrame::onUpdate(wxCommandEvent&) {
 		//wxAboutBox(info);
 
 		wxString text;
-		text.Printf("Downloading the latest version as latest.zip, you will have to unzip it yourself, (for now)\n");
+		text.Printf("Updating! the program will now close, it may fail so check the version when the script finishes.\n");
 		wxMessageBox(text);
-		download("latest.zip", "https://fosse.co/latest.zip");
+		//download("latest.zip", "https://fosse.co/latest.zip");
+
+
+//		FILE* updateFile = fopen("update.bat", "w");
+//		rewind(updateFile);
+//		fprintf(updateFile, "\
+//SET \"FILENAME=%%~dp0latest.zip\"\n\
+//SET \"CDIR=%%~dp0\"\n\
+//bitsadmin.exe /transfer \"downloading update\" https://fosse.co/latest.zip \"%%FILENAME%%\"\n\
+//setlocal\n\
+//cd /d %%~dp0\n\
+//Call :UnZipFile \"%%CDIR%%\" \"%%FILENAME%%\"\n\
+//del *.iobj\n\
+//del *.ipdb\n\
+//del *.pdb\n\
+//start joycon-driver.exe\n\
+//DEL \"%%~f0\"\n\
+//exit\n\
+//:UnZipFile <ExtractTo> <newzipfile>\n\
+//set vbs=\"%%temp%%\\_.vbs\"\n\
+//if exist %%vbs%% del /f /q %%vbs%%\n\
+//>%%vbs%%  echo Set fso = CreateObject(\"Scripting.FileSystemObject\")\n\
+//>>%%vbs%% echo If NOT fso.FolderExists(%%1) Then\n\
+//>>%%vbs%% echo fso.CreateFolder(%%1)\n\
+//>>%%vbs%% echo End If\n\
+//>>%%vbs%% echo set objShell = CreateObject(\"Shell.Application\")\n\
+//>>%%vbs%% echo set FilesInZip=objShell.NameSpace(%%2).items\n\
+//>>%%vbs%% echo Call objShell.NameSpace(%%1).CopyHere(FilesInZip, 20)\n\
+//>>%%vbs%% echo Set fso = Nothing\n\
+//>>%%vbs%% echo Set objShell = Nothing\n\
+//cscript //nologo %%vbs%%\n\
+//if exist %%vbs%% del /f /q %%vbs%%\"\n\
+//			");
+//		fclose(updateFile);
+
+		download("update.bat", "https://fosse.co/update.bat");
+		system("start update.bat");
+
+		exit(0);
 	}
 }
 
