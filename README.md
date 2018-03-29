@@ -30,7 +30,7 @@ A vJoy feeder / Driver for the Nintendo Switch JoyCons and Pro Controller on Win
 * Gyroscope Combo Code: A number that tells the program which button or set of buttons to use to toggle gyro controls
 	* To figure out what number to put in the config, look at the Gyro Combo Code when you press your desired keycombo
 * Quick Toggle Gyro:
-	* Changes the behavior of the Gyro toggle from a standard to switch, to a "always on unless keycombo is pressed" mode
+	* Changes the behavior of the Gyro toggle from a standard switch, to a "always on unless keycombo is pressed" mode
 * Gyro Window: Opens up a visualizer for the JoyCon's gyroscope
 * Mario Theme: plays the Mario theme on the first connected JoyCon at startup
 * Debug Mode: prints debug info to the console
