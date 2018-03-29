@@ -2,23 +2,40 @@
 A vJoy feeder / Driver for the Nintendo Switch JoyCons and Pro Controller on Windows with analog stick support and motion controls
 
 ## How to use
-1. Install vJoy, found here: http://vjoystick.sourceforge.net/site/
+1. Install vJoy, here: http://vjoystick.sourceforge.net/site/
 
-2. Setup your vJoy Devices to look like this:
-    * http://i.imgur.com/nXQDFPK.png
-    * http://i.imgur.com/bF1re0X.png
-    * If you have more than 2 JoyCons, or have a Pro Controller, enable an additional device for each that you have
+2. Setup your vJoy Devices to look like this (search for configure vJoy in Windows search):
+    * ![Imgur](http://i.imgur.com/nXQDFPK.png)
+    * Add a device for every controller you have, so if you have 4 JoyCons and 1 Pro Controller, enable 5 devices
 
-3. Pair the JoyCon(s) / Pro Controller to your PC
+3. Pair the JoyCon(s) / Pro Controller(s) to your PC
 
-4. Run the Application, if it doesn't detect your JoyCon(s) / Pro Controller, make sure they are fully paired/connected and restart the program.
-	* For the latest features and updates, clone the repositiory / download the zip
+4. Run the Application, if it doesn't detect your JoyCon(s) / Pro Controller, make sure they are fully paired / connected and restart the program.
+	* For the latest features and updates, just click check for updates, updating is (mostly) automatic
 
 5. Once the program is running vJoy should register the input from the JoyCon(s) / Pro Controller.
-    * To verify it's working you can use the vJoy monitor that comes with vJoy, it looks like this: http://i.imgur.com/x4Fn7Cq.png
+    * To verify it's working you can use the vJoy monitor that comes with vJoy, it should look something like this: http://i.imgur.com/x4Fn7Cq.png
     * To re-pair the JoyCon(s) / Pro Controller go into Settings and remove them and then pair them again.
     * You'll likely want to use this with something like x360ce (http://www.x360ce.com), which will let you map the vJoy device to a virtual xbox controller for games that support them.
 
+6. Here's a screenshot of the actual program:
+	* ![Imgur](https://i.imgur.com/ihK9WNf.png)
+
+## Settings and features (some settings are only in the config file!)
+* Combine JoyCons: combines a pair of JoyCons into a single vJoy device
+* Gyro Controls: enables controlling the mouse with a JoyCon like a WiiMote
+	* Prefer Left JoyCon: By default, the right JoyCon is used (if found), this forces the program to use the left JoyCon (if found)
+	* Gyro Controls Sensitivity X/Y: controls the sensitivity -> higher = more sensitive
+		* The X sensitivity also controls the gyro sensitivity for Rz/sl0/sl1 in vJoy
+* Gyroscope Combo Code: A number that tells the program which button or set of buttons to use to toggle gyro controls
+	* To figure out what number to put in the config, look at the Gyro Combo Code when you press your desired keycombo
+* Quick Toggle Gyro:
+	* Changes the behavior of the Gyro toggle from a standard to switch, to a "always on unless keycombo is pressed" mode
+* Gyro Window: Opens up a visualizer for the JoyCon's gyroscope
+* Mario Theme: plays the Mario theme on the first connected JoyCon at startup
+* Debug Mode: prints debug info to the console
+	* Write Debug to File: Writes the debug info to a file
+* Force Poll Update: probably don't enable this unless something weird is happening/lagging, avoid using it, but if it works for you let me know
 
 ## Important Notes
 * The JoyCons need to be re-paired anytime after they've reconnected to the switch.
