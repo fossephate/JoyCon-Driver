@@ -22,33 +22,45 @@ A vJoy feeder / Driver for the Nintendo Switch JoyCons and Pro Controller on Win
 	* ![Imgur](https://i.imgur.com/ihK9WNf.png)
 
 ## Settings and features (some settings are only in the config file!)
-* Combine JoyCons: combines a pair of JoyCons into a single vJoy device
-* Gyro Controls: enables controlling the mouse with a JoyCon like a WiiMote
-	* Prefer Left JoyCon: By default, the right JoyCon is used (if found), this forces the program to use the left JoyCon (if found)
-	* Gyro Controls Sensitivity X/Y: controls the sensitivity -> higher = more sensitive
-		* The X sensitivity also controls the gyro sensitivity for Rz/sl0/sl1 in vJoy
-* Gyroscope Combo Code: A number that tells the program which button or set of buttons to use to toggle gyro controls
+* Combine JoyCons
+	* Combines a pair of JoyCons into a single vJoy device
+* Reverse Stick X/Y
+	* Reverses the X/Y direction(s) for both sticks
+* Gyro Controls
+	* Enables controlling the mouse with a JoyCon like a WiiMote
+* Prefer Left JoyCon
+	* By default, the right JoyCon is used (if found), this forces the program to use the left JoyCon (if found)
+* Gyro Controls Sensitivity X/Y
+	* Controls the sensitivity -> higher = more sensitive
+	* The X sensitivity also controls the gyro sensitivity for Rz/sl0/sl1 in vJoy
+* Gyroscope Combo Code
+	* A number that tells the program which button or set of buttons to use to toggle gyro controls
 	* To figure out what number to put in the config, look at the Gyro Combo Code when you press your desired keycombo
-* Quick Toggle Gyro:
+* Quick Toggle Gyro
 	* Changes the behavior of the Gyro toggle from a standard switch, to a "always on unless keycombo is pressed" mode
-* Gyro Window: Opens up a visualizer for the JoyCon's gyroscope
-* Mario Theme: plays the Mario theme on the first connected JoyCon at startup
-* Debug Mode: prints debug info to the console
-	* Write Debug to File: Writes the debug info to a file
-* Force Poll Update: probably don't enable this unless something weird is happening/lagging, avoid using it, but if it works for you let me know
+* Gyro Window
+	* Opens up a visualizer for the JoyCon's gyroscope
+* Mario Theme
+	* Plays the Mario theme on the first connected JoyCon at startup
+* Debug Mode
+	* Prints debug info to the console
+* Write Debug to File
+	* Writes the debug info to a file
+* Force Poll Update
+	* Don't use this, probably
 
 ## Important Notes
-* The JoyCons need to be re-paired anytime after they've reconnected to the switch.
+* The JoyCons need to be re-paired anytime after they've reconnected to the switch
 
 ## Contact
-  * If you have any questions about anything the fastest way to reach me is probably discord (mfosse#0430) or reddit (/u/mfosse/) or even my email matt.cfosse@gmail.com
-  * If you find a bug please don't hesitate to make an issue, I'll try to respond within 24 hours if possible
+* If you have any questions about anything the fastest way to reach me is probably discord (mfosse#0430) or reddit (/u/mfosse/) or even my email matt.cfosse@gmail.com
+* If you find a bug please don't hesitate to make an issue, I'll try to respond within 24 hours if possible
 
 ## Donate
-  * If you like the project and would like to donate:
-  * I have a paypal at matt.cfosse@gmail.com
-  * BTC Address: 17hDC2X7a1SWjsqBJRt9mJb9fJjqLCwgzG
-  * ETH Address: 0xFdcA914e1213af24fD20fB6855E89141DF8caF96
+* If you like the project and would like to donate:
+* I have a paypal at matt.cfosse@gmail.com
+* BTC Address: 17hDC2X7a1SWjsqBJRt9mJb9fJjqLCwgzG
+* ETH Address: 0xFdcA914e1213af24fD20fB6855E89141DF8caF96
 
 ## Thanks
-  * Thanks to everyone at: https://github.com/dekuNukem/Nintendo_Switch_Reverse_Engineering/
+* Thanks to everyone at: https://github.com/dekuNukem/Nintendo_Switch_Reverse_Engineering/
