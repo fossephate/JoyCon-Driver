@@ -155,6 +155,9 @@ public:
 	void setGyroSensitivityX(wxCommandEvent&);
 	void setGyroSensitivityY(wxCommandEvent&);
 
+
+	void checkForUpdate();
+
 };
 
 
