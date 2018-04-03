@@ -130,13 +130,13 @@ struct Settings {
 	bool forcePollUpdate = false;
 
 	// times to poll per second per joycon:
-	float pollsPerSec = 60.0f;
+	float pollsPerSec = 30.0f;
 
 	// time to sleep (in ms) between polls:
 	float timeToSleepMS = 2.0f;
 
 	// version number
-	std::string version = "0.99";
+	std::string version = "0.991";
 
 } settings;
 
@@ -880,13 +880,15 @@ void pollLoop() {
 		}
 
 
-		hid_read(jc->handle, buf, 0x40);
+		//hid_read(jc->handle, buf, 0x40);
+		hid_read_timeout(jc->handle, buf, 0x40, 20);
 
 		// get rid of queue:
 		// if we force the poll to wait then the queue will never clear and will just freeze:
-		if (!settings.forcePollUpdate) {
-			while (hid_read(jc->handle, buf, 0x40) > 0) {};
-		}
+		//if (!settings.forcePollUpdate) {
+		//	while (hid_read(jc->handle, buf, 0x40) > 0) {};
+		//}
+
 		//for (int i = 0; i < 100; ++i) {
 		//	hid_read(jc->handle, buf, 0x40);
 		//}
