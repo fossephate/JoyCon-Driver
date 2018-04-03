@@ -95,8 +95,11 @@ struct Settings {
 
 	// toggles between two different toggle types
 	// disabled = traditional toggle
-	// enabled = while button(s) are held gyro is disabled
+	// enabled = while button(s) are held gyro is enabled
 	bool quickToggleGyro = false;
+
+	// inverts the above function
+	bool invertQuickToggle = false;
 
 	// so that you don't rapidly toggle the gyro controls every frame:
 	bool canToggleGyro = true;
@@ -133,7 +136,7 @@ struct Settings {
 	float timeToSleepMS = 2.0f;
 
 	// version number
-	std::string version = "0.98";
+	std::string version = "0.99";
 
 } settings;
 
@@ -212,6 +215,17 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			// Pro Controller:
 			if (jc->left_right == 3) {
 				jc->buttons2 = states2;
+
+				// fix some non-sense the Pro Controller does
+				// clear nth bit
+				//num &= ~(1UL << n);
+				jc->buttons &= ~(1UL << 9);
+				jc->buttons &= ~(1UL << 12);
+				jc->buttons &= ~(1UL << 14);
+
+				jc->buttons2 &= ~(1UL << 8);
+				jc->buttons2 &= ~(1UL << 11);
+				jc->buttons2 &= ~(1UL << 13);
 			}
 		}
 
@@ -252,7 +266,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		//printf("JoyCon battery: %d\n", jc->battery);
 
 		// Accelerometer:
-		// Accelerometer data is absolute
+		// Accelerometer data is absolute (m/s^2)
 		{
 			// get accelerometer X:
 			jc->accel.x = (float)(uint16_to_int16(packet[13] | (packet[14] << 8) & 0xFF00)) * jc->acc_cal_coeff[0];
@@ -698,8 +712,15 @@ void updatevJoyDevice2(Joycon *jc) {
 
 
 		// check if combo keys are pressed:
-		setGyroComboCodeText(jc->buttons);
-		if (jc->buttons == settings.gyroscopeComboCode) {
+		int comboCodeButtons = -1;
+		if (jc->left_right != 3) {
+			comboCodeButtons = jc->buttons;
+		} else {
+			comboCodeButtons = ((uint32_t)jc->buttons2 << 16) | jc->buttons;
+		}
+		
+		setGyroComboCodeText(comboCodeButtons);
+		if (comboCodeButtons == settings.gyroscopeComboCode) {
 			gyroComboCodePressed = true;
 		} else {
 			gyroComboCodePressed = false;
@@ -720,11 +741,22 @@ void updatevJoyDevice2(Joycon *jc) {
 			relY2 *= -1;
 		}
 
-		if (settings.enableGyro) {
+		
+		if (settings.enableGyro && settings.quickToggleGyro) {
 			// check if combo keys are pressed:
-			if (!gyroComboCodePressed) {
-				MC.moveRel2(relX2, relY2);
+			if (settings.invertQuickToggle) {
+				if (!gyroComboCodePressed) {
+					MC.moveRel2(relX2, relY2);
+				}
+			} else {
+				if (gyroComboCodePressed) {
+					MC.moveRel2(relX2, relY2);
+				}
 			}
+		}
+
+		if (settings.enableGyro && !settings.quickToggleGyro) {
+			MC.moveRel2(relX2, relY2);
 		}
 
 		float mult = settings.gyroSensitivityX * 10.0f;
@@ -755,8 +787,11 @@ void updatevJoyDevice2(Joycon *jc) {
 
 	// Pro Controller:
 	if (jc->left_right == 3) {
-		uint32_t combined = ((uint32_t)jc->buttons << 16) | jc->buttons2;
+		uint32_t combined = ((uint32_t)jc->buttons2 << 16) | jc->buttons;
 		btns = combined;
+		//std::bitset<16> num1(jc->buttons);
+		//std::bitset<16> num2(jc->buttons2);
+		//std::cout << num1 << " " << num2 << std::endl;
 	}
 
 	iReport.lButtons = btns;
@@ -780,19 +815,21 @@ void parseSettings2() {
 
 	std::map<std::string, std::string> cfg = LoadConfig("config.txt");
 
-	settings.combineJoyCons = (bool)stoi(cfg["CombineJoyCons"]);
-	settings.enableGyro = (bool)stoi(cfg["GyroControls"]);
+	settings.combineJoyCons = (bool)stoi(cfg["combineJoyCons"]);
+	settings.enableGyro = (bool)stoi(cfg["gyroControls"]);
 
 	settings.gyroSensitivityX = stof(cfg["gyroSensitivityX"]);
 	settings.gyroSensitivityY = stof(cfg["gyroSensitivityY"]);
 
-	settings.gyroWindow = (bool)stoi(cfg["GyroWindow"]);
-	settings.marioTheme = (bool)stoi(cfg["MarioTheme"]);
+	settings.gyroWindow = (bool)stoi(cfg["gyroWindow"]);
+	settings.marioTheme = (bool)stoi(cfg["marioTheme"]);
 
 	settings.reverseX = (bool)stoi(cfg["reverseX"]);
 	settings.reverseY = (bool)stoi(cfg["reverseY"]);
 
 	settings.preferLeftJoyCon = (bool)stoi(cfg["preferLeftJoyCon"]);
+	settings.quickToggleGyro = (bool)stoi(cfg["quickToggleGyro"]);
+	settings.invertQuickToggle = (bool)stoi(cfg["invertQuickToggle"]);
 
 	settings.gyroscopeComboCode = stoi(cfg["gyroscopeComboCode"]);
 
@@ -1818,6 +1855,9 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("JoyCon-Driver by fosse ©20
 	CB12 = new wxCheckBox(panel, wxID_ANY, wxT("Quick Toggle Gyro Controls"), wxPoint(20, 100));
 	CB12->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleQuickToggleGyro, this);
 	CB12->SetValue(settings.quickToggleGyro);
+	CB13 = new wxCheckBox(panel, wxID_ANY, wxT("Invert Quick Toggle"), wxPoint(190, 100));
+	CB13->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleInvertQuickToggle, this);
+	CB13->SetValue(settings.invertQuickToggle);
 
 	CB5 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 120));
 	CB5->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleMario, this);
@@ -1838,12 +1878,12 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("JoyCon-Driver by fosse ©20
 
 	slider1Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity X"), wxPoint(20, 200));
 	st1 = new wxStaticText(panel, wxID_ANY, wxT("(Also the sensitivity for Rz/sl0/sl1)"), wxPoint(40, 220));
-	slider1 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityX, -300, 300, wxPoint(180, 180), wxSize(150, 20), wxSL_LABELS);
+	slider1 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityX, -1000, 1000, wxPoint(180, 180), wxSize(150, 20), wxSL_LABELS);
 	slider1->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityX, this);
 
 
 	slider2Text = new wxStaticText(panel, wxID_ANY, wxT("Gyro Controls Sensitivity Y"), wxPoint(20, 240));
-	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, -300, 300, wxPoint(180, 220), wxSize(150, 20), wxSL_LABELS);
+	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, -1000, 1000, wxPoint(180, 220), wxSize(150, 20), wxSL_LABELS);
 	slider2->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityY, this);
 
 
@@ -1994,6 +2034,10 @@ void MainFrame::togglePreferLeftJoyCon(wxCommandEvent&) {
 
 void MainFrame::toggleQuickToggleGyro(wxCommandEvent&) {
 	settings.quickToggleGyro = !settings.quickToggleGyro;
+}
+
+void MainFrame::toggleInvertQuickToggle(wxCommandEvent&) {
+	settings.invertQuickToggle = !settings.invertQuickToggle;
 }
 
 void MainFrame::toggleDebugMode(wxCommandEvent&) {

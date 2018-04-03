@@ -283,6 +283,15 @@ void int_dump(unsigned char *buf, int len) {
 	printf("\n");
 }
 
+void print_bin(int n) {
+	/* Step 1 */
+	if (n > 1) {
+		print_bin(n / 2);
+	}
+	/* Step 2 */
+	printf("%d", n % 2);
+}
+
 
 //void device_print(struct hid_device_info *dev) {
 //	printf("USB device info:\n  vid: 0x%04hX pid: 0x%04hX\n  path: %s\n  serial_number: %ls\n  interface_number: %d\n",

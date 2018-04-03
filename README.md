@@ -37,7 +37,9 @@ A vJoy feeder / Driver for the Nintendo Switch JoyCons and Pro Controller on Win
 	* A number that tells the program which button or set of buttons to use to toggle gyro controls
 	* To figure out what number to put in the config, look at the Gyro Combo Code when you press your desired keycombo
 * Quick Toggle Gyro
-	* Changes the behavior of the Gyro toggle from a standard switch, to a "always on unless keycombo is pressed" mode
+	* Changes the behavior of the Gyro toggle from a standard switch, to a "always off unless keycombo is pressed" mode
+* Invert Quick Toggle
+	* Changes the behavior of the quick toggle from always off unless keycombo is pressed to always on unless keycombo is pressed
 * Gyro Window
 	* Opens up a visualizer for the JoyCon's gyroscope
 * Mario Theme
