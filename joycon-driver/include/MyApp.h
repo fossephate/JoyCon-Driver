@@ -133,6 +133,9 @@ public:
 
 	void onStart(wxCommandEvent&);
 	void onQuit(wxCommandEvent&);
+	
+	void onQuit2(wxCloseEvent&);
+
 	void onUpdate(wxCommandEvent&);
 	void onDonate(wxCommandEvent &);
 

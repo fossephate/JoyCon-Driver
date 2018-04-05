@@ -283,13 +283,8 @@ void int_dump(unsigned char *buf, int len) {
 	printf("\n");
 }
 
-void print_bin(int n) {
-	/* Step 1 */
-	if (n > 1) {
-		print_bin(n / 2);
-	}
-	/* Step 2 */
-	printf("%d", n % 2);
+int _floor(float n) {
+	return (int)n;
 }
 
 

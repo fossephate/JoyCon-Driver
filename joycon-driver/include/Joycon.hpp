@@ -76,16 +76,19 @@ public:
 	Stick stick2;// Pro Controller
 
 	struct Gyroscope {
-		// absolute:
-		float pitch	= 0;
-		float yaw		= 0;
-		float roll		= 0;
-
 		// relative:
-		float relpitch = 0;
-		float relyaw	= 0;
-		float relroll	= 0;
+		float pitch	= 0;
+		float yaw	= 0;
+		float roll	= 0;
 
+		struct Offset {
+			int n = 0;
+
+			// absolute:
+			float pitch = 0;
+			float yaw	= 0;
+			float roll	= 0;
+		} offset;
 	} gyro;
 
 	struct Accelerometer {
@@ -445,6 +448,23 @@ public:
 	}
 
 
+	void setGyroOffsets() {
+		float thresh = 0.1;
+		if (abs(this->gyro.roll) > thresh || abs(this->gyro.pitch) > thresh || abs(this->gyro.yaw) > thresh) {
+			return;
+		}
+
+		//average = current + ((newData - current) / n);
+		this->gyro.offset.n += 1;
+		this->gyro.offset.roll	= this->gyro.offset.roll + ((this->gyro.roll - this->gyro.offset.roll) / this->gyro.offset.n);
+		this->gyro.offset.pitch = this->gyro.offset.pitch + ((this->gyro.pitch - this->gyro.offset.pitch) / this->gyro.offset.n);
+		this->gyro.offset.yaw	= this->gyro.offset.yaw + ((this->gyro.yaw - this->gyro.offset.yaw) / this->gyro.offset.n);
+		//this->gyro.offset.roll	= this->gyro.roll;
+		//this->gyro.offset.pitch = this->gyro.pitch;
+		//this->gyro.offset.yaw	= this->gyro.yaw;
+	}
+
+
 	int init_bt() {
 
 		this->bluetooth = true;
@@ -528,7 +548,6 @@ public:
 			stick_cal_y_r[0] = stick_cal_y_r[1] - ((factory_stick_cal[14] << 4) | (factory_stick_cal[13] >> 4));
 			stick_cal_x_r[2] = stick_cal_x_r[1] + ((factory_stick_cal[16] << 8) & 0xF00 | factory_stick_cal[15]);
 			stick_cal_y_r[2] = stick_cal_y_r[1] + ((factory_stick_cal[17] << 4) | (factory_stick_cal[16] >> 4));
-		
 		}
 
 

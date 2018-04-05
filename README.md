@@ -55,7 +55,7 @@ A vJoy feeder / Driver for the Nintendo Switch JoyCons and Pro Controller on Win
 * The JoyCons need to be re-paired anytime after they've reconnected to the switch
 
 ## Contact
-* If you have any questions about anything the fastest way to reach me is probably discord (fosse#0430) or twitter (@fosseisanerd) or even my email matt.cfosse@gmail.com
+* If you have any questions about anything the fastest way to reach me is probably discord [server](https://discord.gg/jmcfdeS) or (fosse#0430) or twitter (@fosseisanerd) or even my email matt.cfosse@gmail.com
 * If you find a bug please don't hesitate to make an issue, I'll try to respond within 24 hours if possible
 
 ## Donate

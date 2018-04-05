@@ -136,7 +136,7 @@ struct Settings {
 	float timeToSleepMS = 2.0f;
 
 	// version number
-	std::string version = "0.991";
+	std::string version = "0.995";
 
 } settings;
 
@@ -291,6 +291,21 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 			// get yaw:
 			jc->gyro.yaw = (float)(uint16_to_int16(packet[23] | (packet[24] << 8) & 0xFF00)) * jc->gyro_cal_coeff[2];
+		}
+
+		// offsets:
+		{
+			jc->setGyroOffsets();
+
+			jc->gyro.roll	-= jc->gyro.offset.roll;
+			jc->gyro.pitch	-= jc->gyro.offset.pitch;
+			jc->gyro.yaw	-= jc->gyro.offset.yaw;
+
+			//tracker.counter1++;
+			//if (tracker.counter1 > 10) {
+			//	tracker.counter1 = 0;
+			//	printf("%.3f %.3f %.3f\n", abs(jc->gyro.roll), abs(jc->gyro.pitch), abs(jc->gyro.yaw));
+			//}
 		}
 		
 
@@ -704,12 +719,23 @@ void updatevJoyDevice2(Joycon *jc) {
 		glm::fquat delz = glm::angleAxis(glm::radians(-yaw), glm::vec3(0.0, 1.0, 0.0));
 		tracker.quat = tracker.quat*delz;
 
+
+
+
+
+
+		//jc->gyro.roll	-= jc->gyro.offset.roll;
+		//jc->gyro.pitch	-= jc->gyro.offset.pitch;
+		//jc->gyro.yaw	-= jc->gyro.offset.yaw;
+
 		float relX2 = -jc->gyro.yaw * settings.gyroSensitivityX;
 		float relY2 = jc->gyro.pitch * settings.gyroSensitivityY;
 
-		relX2 /= 100;
-		relY2 /= 100;
+		relX2 /= 10;
+		relY2 /= 10;
 
+		//printf("%.3f %.3f %.3f\n", abs(jc->gyro.roll), abs(jc->gyro.pitch), abs(jc->gyro.yaw));
+		//printf("%.2f %.2f\n", relX2, relY2);
 
 		// check if combo keys are pressed:
 		int comboCodeButtons = -1;
@@ -746,17 +772,17 @@ void updatevJoyDevice2(Joycon *jc) {
 			// check if combo keys are pressed:
 			if (settings.invertQuickToggle) {
 				if (!gyroComboCodePressed) {
-					MC.moveRel2(relX2, relY2);
+					MC.moveRel3(relX2, relY2);
 				}
 			} else {
 				if (gyroComboCodePressed) {
-					MC.moveRel2(relX2, relY2);
+					MC.moveRel3(relX2, relY2);
 				}
 			}
 		}
 
 		if (settings.enableGyro && !settings.quickToggleGyro) {
-			MC.moveRel2(relX2, relY2);
+			MC.moveRel3(relX2, relY2);
 		}
 
 		float mult = settings.gyroSensitivityX * 10.0f;
@@ -1485,10 +1511,15 @@ init_start:
 
 
 
-void exit() {
+void actuallyQuit() {
 
 	for (int i = 1; i < 9; ++i) {
 		RelinquishVJD(i);
+	}
+
+	for (int i = 0; i < joycons.size(); ++i) {
+		buf[0] = 0x0; // disconnect
+		joycons[i].send_subcommand(0x01, 0x06, buf, 1);
 	}
 
 	if (settings.usingGrip) {
@@ -1797,6 +1828,8 @@ int MyApp::OnExit() {
 	delete m_glContext;
 	delete m_glStereoContext;
 
+	actuallyQuit();
+
 	return wxApp::OnExit();
 }
 
@@ -1832,6 +1865,11 @@ TestGLContext& MyApp::GetContext(wxGLCanvas *canvas, bool useStereo) {
 MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("JoyCon-Driver by fosse ©2018")) {
 
 	wxPanel *panel = new wxPanel(this, wxID_ANY);
+
+	//this->Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(MainFrame::onQuit), NULL, this);
+	//Connect(this->GetId(), wxEVT_CLOSE_WINDOW, wxCloseEventHandler(wxCloseEventFunction, MainFrame::onQuit));
+	//this->Bind(wxEVT_CLOSE_WINDOW, &MainFrame::onQuit, this);
+	Connect(wxEVT_CLOSE_WINDOW, wxCloseEventHandler(MainFrame::onQuit2));
 
 	CB1 = new wxCheckBox(panel, wxID_ANY, wxT("Combine JoyCons"), wxPoint(20, 20));
 	CB1->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleCombine, this);
@@ -1931,6 +1969,12 @@ void MainFrame::onStart(wxCommandEvent&) {
 }
 
 void MainFrame::onQuit(wxCommandEvent&) {
+	actuallyQuit();
+	exit(0);
+}
+
+void MainFrame::onQuit2(wxCloseEvent&) {
+	actuallyQuit();
 	exit(0);
 }
 
