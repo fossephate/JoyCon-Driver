@@ -101,6 +101,9 @@ struct Settings {
 	// inverts the above function
 	bool invertQuickToggle = false;
 
+	// for dolphin, mostly:
+	bool dolphinPointerMode = false;
+
 	// so that you don't rapidly toggle the gyro controls every frame:
 	bool canToggleGyro = true;
 
@@ -136,7 +139,7 @@ struct Settings {
 	float timeToSleepMS = 2.0f;
 
 	// version number
-	std::string version = "0.998";
+	std::string version = "0.999";
 
 } settings;
 
@@ -761,32 +764,45 @@ void updatevJoyDevice2(Joycon *jc) {
 			relY2 *= -1;
 		}
 
+		bool gyroActuallyOn = false;
 		
 		if (settings.enableGyro && settings.quickToggleGyro) {
 			// check if combo keys are pressed:
 			if (settings.invertQuickToggle) {
 				if (!gyroComboCodePressed) {
-					MC.moveRel3(relX2, relY2);
+					gyroActuallyOn = true;
 				}
 			} else {
 				if (gyroComboCodePressed) {
-					MC.moveRel3(relX2, relY2);
+					gyroActuallyOn = true;
 				}
 			}
 		}
 
 		if (settings.enableGyro && !settings.quickToggleGyro) {
-			MC.moveRel3(relX2, relY2);
+			gyroActuallyOn = true;
 		}
 
 		float mult = settings.gyroSensitivityX * 10.0f;
 
-		if (!gyroComboCodePressed) {
+
+		if (gyroActuallyOn) {
+			MC.moveRel3(relX2, relY2);
+		}
+
+		if (settings.dolphinPointerMode) {
+			iReport.wAxisZRot += (jc->gyro.roll * mult);
+			iReport.wSlider += (jc->gyro.pitch * mult);
+			iReport.wDial += (jc->gyro.yaw * mult);
+
+			iReport.wAxisZRot = clamp(iReport.wAxisZRot, 0, 32678);
+			iReport.wSlider = clamp(iReport.wSlider, 0, 32678);
+			iReport.wDial = clamp(iReport.wDial, 0, 32678);
+		} else {
 			iReport.wAxisZRot = 16384 + (jc->gyro.roll * mult);
 			iReport.wSlider = 16384 + (jc->gyro.pitch * mult);
 			iReport.wDial = 16384 + (jc->gyro.yaw * mult);
 		}
-
 	}
 
 	// Set button data
@@ -850,6 +866,8 @@ void parseSettings2() {
 	settings.preferLeftJoyCon = (bool)stoi(cfg["preferLeftJoyCon"]);
 	settings.quickToggleGyro = (bool)stoi(cfg["quickToggleGyro"]);
 	settings.invertQuickToggle = (bool)stoi(cfg["invertQuickToggle"]);
+
+	settings.dolphinPointerMode = (bool)stoi(cfg["dolphinPointerMode"]);
 
 	settings.gyroscopeComboCode = stoi(cfg["gyroscopeComboCode"]);
 
@@ -1896,6 +1914,9 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("JoyCon-Driver by fosse ©20
 	CB5 = new wxCheckBox(panel, wxID_ANY, wxT("Mario Theme"), wxPoint(20, 120));
 	CB5->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleMario, this);
 	CB5->SetValue(settings.marioTheme);
+	CB14 = new wxCheckBox(panel, wxID_ANY, wxT("Dolphin Mode"), wxPoint(120, 120));
+	CB14->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleDolphinPointerMode, this);
+	CB14->SetValue(settings.dolphinPointerMode);
 
 	CB9 = new wxCheckBox(panel, wxID_ANY, wxT("Debug Mode"), wxPoint(20, 140));
 	CB9->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleDebugMode, this);
@@ -2078,6 +2099,10 @@ void MainFrame::toggleQuickToggleGyro(wxCommandEvent&) {
 
 void MainFrame::toggleInvertQuickToggle(wxCommandEvent&) {
 	settings.invertQuickToggle = !settings.invertQuickToggle;
+}
+
+void MainFrame::toggleDolphinPointerMode(wxCommandEvent &) {
+	settings.dolphinPointerMode = !settings.dolphinPointerMode;
 }
 
 void MainFrame::toggleDebugMode(wxCommandEvent&) {

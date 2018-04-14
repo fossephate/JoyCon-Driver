@@ -109,6 +109,7 @@ public:
 	wxCheckBox* CB13;
 	wxCheckBox* CB14;
 	wxCheckBox* CB15;
+	wxCheckBox* CB16;
 
 
 
@@ -151,6 +152,7 @@ public:
 	void togglePreferLeftJoyCon(wxCommandEvent&);
 	void toggleQuickToggleGyro(wxCommandEvent&);
 	void toggleInvertQuickToggle(wxCommandEvent&);
+	void toggleDolphinPointerMode(wxCommandEvent&);
 
 	void toggleDebugMode(wxCommandEvent&);
 	void toggleWriteDebug(wxCommandEvent&);
