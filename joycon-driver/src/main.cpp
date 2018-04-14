@@ -136,7 +136,7 @@ struct Settings {
 	float timeToSleepMS = 2.0f;
 
 	// version number
-	std::string version = "0.995";
+	std::string version = "0.998";
 
 } settings;
 
@@ -268,14 +268,15 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		// Accelerometer:
 		// Accelerometer data is absolute (m/s^2)
 		{
+
 			// get accelerometer X:
-			jc->accel.x = (float)(uint16_to_int16(packet[13] | (packet[14] << 8) & 0xFF00)) * jc->acc_cal_coeff[0];
+			jc->accel.x = (float)((uint16_to_int16(packet[13] | (packet[14] << 8) & 0xFF00)) - jc->sensor_cal[0][0]) * jc->acc_cal_coeff[0];
 
 			// get accelerometer Y:
-			jc->accel.y = (float)(uint16_to_int16(packet[15] | (packet[16] << 8) & 0xFF00)) * jc->acc_cal_coeff[1];
+			jc->accel.y = (float)((uint16_to_int16(packet[15] | (packet[16] << 8) & 0xFF00)) - jc->sensor_cal[0][1]) * jc->acc_cal_coeff[1];
 
 			// get accelerometer Z:
-			jc->accel.z = (float)(uint16_to_int16(packet[17] | (packet[18] << 8) & 0xFF00))  * jc->acc_cal_coeff[2];
+			jc->accel.z = (float)((uint16_to_int16(packet[17] | (packet[18] << 8) & 0xFF00)) - jc->sensor_cal[0][2]) * jc->acc_cal_coeff[2];
 		}
 
 
@@ -283,14 +284,15 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		// Gyroscope:
 		// Gyroscope data is relative (rads/s)
 		{
+
 			// get roll:
-			jc->gyro.roll = (float)(uint16_to_int16(packet[19] | (packet[20] << 8) & 0xFF00)) * jc->gyro_cal_coeff[0];
+			jc->gyro.roll = (float)((uint16_to_int16(packet[19] | (packet[20] << 8) & 0xFF00)) - jc->sensor_cal[1][0]) * jc->gyro_cal_coeff[0];
 
 			// get pitch:
-			jc->gyro.pitch = (float)(uint16_to_int16(packet[21] | (packet[22] << 8) & 0xFF00)) * jc->gyro_cal_coeff[1];
+			jc->gyro.pitch = (float)((uint16_to_int16(packet[21] | (packet[22] << 8) & 0xFF00)) - jc->sensor_cal[1][1]) * jc->gyro_cal_coeff[1];
 
 			// get yaw:
-			jc->gyro.yaw = (float)(uint16_to_int16(packet[23] | (packet[24] << 8) & 0xFF00)) * jc->gyro_cal_coeff[2];
+			jc->gyro.yaw = (float)((uint16_to_int16(packet[23] | (packet[24] << 8) & 0xFF00)) - jc->sensor_cal[1][2]) * jc->gyro_cal_coeff[2];
 		}
 
 		// offsets:
@@ -341,9 +343,9 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 		// press up, down, left, right, L, ZL to restart:
 		if (jc->left_right == 1) {
-			if (jc->buttons == 207) {
-				settings.restart = true;
-			}
+			//if (jc->buttons == 207) {
+			//	settings.restart = true;
+			//}
 
 			// remove this, it's just for rumble testing
 			//uint8_t hfa2 = 0x88;
@@ -676,9 +678,6 @@ void updatevJoyDevice2(Joycon *jc) {
 		glm::fquat delx = glm::angleAxis(glm::radians(pitch), glm::vec3(1.0, 0.0, 0.0));
 		tracker.quat = tracker.quat*delx;
 
-
-
-
 		// y:
 		float rollDegreesAccel = -glm::degrees((atan2(-jc->accel.y, -jc->accel.z) + PI));
 		float rollDegreesGyro = -jc->gyro.roll * gyroCoeff;
@@ -722,11 +721,6 @@ void updatevJoyDevice2(Joycon *jc) {
 
 
 
-
-
-		//jc->gyro.roll	-= jc->gyro.offset.roll;
-		//jc->gyro.pitch	-= jc->gyro.offset.pitch;
-		//jc->gyro.yaw	-= jc->gyro.offset.yaw;
 
 		float relX2 = -jc->gyro.yaw * settings.gyroSensitivityX;
 		float relY2 = jc->gyro.pitch * settings.gyroSensitivityY;
