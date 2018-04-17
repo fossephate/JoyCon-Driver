@@ -273,13 +273,13 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		{
 
 			// get accelerometer X:
-			jc->accel.x = (float)((uint16_to_int16(packet[13] | (packet[14] << 8) & 0xFF00)) - jc->sensor_cal[0][0]) * jc->acc_cal_coeff[0];
+			jc->accel.x = (float)(uint16_to_int16(packet[13] | (packet[14] << 8) & 0xFF00)) * jc->acc_cal_coeff[0];
 
 			// get accelerometer Y:
-			jc->accel.y = (float)((uint16_to_int16(packet[15] | (packet[16] << 8) & 0xFF00)) - jc->sensor_cal[0][1]) * jc->acc_cal_coeff[1];
+			jc->accel.y = (float)(uint16_to_int16(packet[15] | (packet[16] << 8) & 0xFF00)) * jc->acc_cal_coeff[1];
 
 			// get accelerometer Z:
-			jc->accel.z = (float)((uint16_to_int16(packet[17] | (packet[18] << 8) & 0xFF00)) - jc->sensor_cal[0][2]) * jc->acc_cal_coeff[2];
+			jc->accel.z = (float)(uint16_to_int16(packet[17] | (packet[18] << 8) & 0xFF00)) * jc->acc_cal_coeff[2];
 		}
 
 
@@ -289,13 +289,13 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		{
 
 			// get roll:
-			jc->gyro.roll = (float)((uint16_to_int16(packet[19] | (packet[20] << 8) & 0xFF00)) - jc->sensor_cal[1][0]) * jc->gyro_cal_coeff[0];
+			jc->gyro.roll	= (float)((uint16_to_int16(packet[19] | (packet[20] << 8) & 0xFF00)) - jc->sensor_cal[1][0]) * jc->gyro_cal_coeff[0];
 
 			// get pitch:
-			jc->gyro.pitch = (float)((uint16_to_int16(packet[21] | (packet[22] << 8) & 0xFF00)) - jc->sensor_cal[1][1]) * jc->gyro_cal_coeff[1];
+			jc->gyro.pitch	= (float)((uint16_to_int16(packet[21] | (packet[22] << 8) & 0xFF00)) - jc->sensor_cal[1][1]) * jc->gyro_cal_coeff[1];
 
 			// get yaw:
-			jc->gyro.yaw = (float)((uint16_to_int16(packet[23] | (packet[24] << 8) & 0xFF00)) - jc->sensor_cal[1][2]) * jc->gyro_cal_coeff[2];
+			jc->gyro.yaw	= (float)((uint16_to_int16(packet[23] | (packet[24] << 8) & 0xFF00)) - jc->sensor_cal[1][2]) * jc->gyro_cal_coeff[2];
 		}
 
 		// offsets:
