@@ -36,6 +36,16 @@
 // curl:
 #include <curl/curl.h>
 
+#if defined(_WIN32)
+#include <Windows.h>
+#include <Lmcons.h>
+#include <shlobj.h>
+#endif
+
+// sio:
+#include "sio/sio_client.h"
+
+
 
 #pragma warning(disable:4996)
 
@@ -54,6 +64,10 @@ MouseController MC;
 JOYSTICK_POSITION_V2 iReport; // The structure that holds the full position data
 unsigned char buf[65];
 int res = 0;
+
+// sio:
+sio::client myClient;
+
 
 // this is awful, don't do this:
 wxStaticText* gyroComboCodeText;
@@ -127,6 +141,11 @@ struct Settings {
 	// debug file:
 	FILE* outputFile;
 
+	// broadcast mode:
+	bool broadcastMode = false;
+	// where to connect:
+	std::string host = "";
+
 	// poll options:
 
 	// force joycon to update when polled:
@@ -139,7 +158,7 @@ struct Settings {
 	float timeToSleepMS = 2.0f;
 
 	// version number
-	std::string version = "0.999";
+	std::string version = "1.0";
 
 } settings;
 
@@ -876,6 +895,9 @@ void parseSettings2() {
 
 	settings.forcePollUpdate = (bool)stoi(cfg["forcePollUpdate"]);
 
+	settings.broadcastMode = (bool)stoi(cfg["broadcastMode"]);
+	settings.host = cfg["host"];
+
 }
 
 void start();
@@ -942,6 +964,60 @@ void pollLoop() {
 	// sleep:
 	accurateSleep(settings.timeToSleepMS);
 
+
+	if (settings.broadcastMode && joycons.size() > 0) {
+		Joycon *jc = &joycons[0];
+		std::string btns = "";
+		
+		
+		if (jc->btns.up == 1 && jc->btns.left == 1) {
+			btns += "7";
+		} else if (jc->btns.up && jc->btns.right == 1) {
+			btns += "1";
+		} else if (jc->btns.down == 1 && jc->btns.left == 1) {
+			btns += "5";
+		} else if (jc->btns.down == 1 && jc->btns.right == 1) {
+			btns += "3";
+		} else if (jc->btns.up == 1) {
+			btns += "0";
+		} else if (jc->btns.down == 1) {
+			btns += "4";
+		} else if (jc->btns.left == 1) {
+			btns += "6";
+		} else if (jc->btns.right == 1) {
+			btns += "2";
+		} else {
+			btns += "8";
+		}
+
+		btns += jc->btns.stick_button == 1 ? "1" : "0";
+		btns += jc->btns.l == 1 ? "1" : "0";
+		btns += jc->btns.zl == 1 ? "1" : "0";
+		btns += jc->btns.minus == 1 ? "1" : "0";
+		btns += jc->btns.capture == 1 ? "1" : "0";
+
+		btns += jc->btns.a == 1 ? "1" : "0";
+		btns += jc->btns.b == 1 ? "1" : "0";
+		btns += jc->btns.x == 1 ? "1" : "0";
+		btns += jc->btns.y == 1 ? "1" : "0";
+		btns += jc->btns.stick_button2 == 1 ? "1" : "0";
+		btns += jc->btns.r == 1 ? "1" : "0";
+		btns += jc->btns.zr == 1 ? "1" : "0";
+		btns += jc->btns.plus == 1 ? "1" : "0";
+		btns += jc->btns.home == 1 ? "1" : "0";
+
+		int LX = ((jc->stick.CalX - 1.0) * 128) + 255;
+		int LY = ((jc->stick.CalY - 1.0) * 128) + 255;
+		int RX = ((jc->stick2.CalX - 1.0) * 128) + 255;
+		int RY = ((jc->stick2.CalY - 1.0) * 128) + 255;
+
+		btns += " " + std::to_string(LX) + " " + std::to_string(LY) + " " + std::to_string(RX) + " " + std::to_string(RY);
+
+		printf("%s\n", btns);
+
+		myClient.socket()->emit("sendControllerState", btns);
+	}
+
 	if (settings.restart) {
 		settings.restart = false;
 		start();
@@ -951,6 +1027,16 @@ void pollLoop() {
 
 
 void start() {
+
+
+
+
+	// set infinite reconnect attempts
+	myClient.set_reconnect_attempts(999999999999);
+	if (settings.broadcastMode) {
+		myClient.connect(settings.host);
+	}
+
 
 
 	// get vJoy Device 1-8
@@ -1941,6 +2027,10 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("JoyCon-Driver by fosse ©20
 	slider2 = new wxSlider(panel, wxID_ANY, settings.gyroSensitivityY, -1000, 1000, wxPoint(180, 220), wxSize(150, 20), wxSL_LABELS);
 	slider2->Bind(wxEVT_SLIDER, &MainFrame::setGyroSensitivityY, this);
 
+	CB15 = new wxCheckBox(panel, wxID_ANY, wxT("Broadcast Mode"), wxPoint(140, 160));
+	CB15->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleBroadcastMode, this);
+	CB15->SetValue(settings.broadcastMode);
+
 
 	gyroComboCodeText = new wxStaticText(panel, wxID_ANY, wxT("Gyro Combo Code: "), wxPoint(20, 270));
 
@@ -1974,6 +2064,8 @@ void MainFrame::onStart(wxCommandEvent&) {
 	if (settings.gyroWindow) {
 		new MyFrame();
 	}
+
+
 	start();
 	if (!settings.gyroWindow) {
 		while (true) {
@@ -2134,6 +2226,10 @@ void MainFrame::setGyroSensitivityX(wxCommandEvent&) {
 
 void MainFrame::setGyroSensitivityY(wxCommandEvent&) {
 	settings.gyroSensitivityY = slider2->GetValue();
+}
+
+void MainFrame::toggleBroadcastMode(wxCommandEvent &) {
+	settings.broadcastMode = !settings.broadcastMode;
 }
 
 void setGyroComboCodeText(int code) {
@@ -2302,6 +2398,9 @@ MyFrame::MyFrame(bool stereoWindow) : wxFrame(NULL, wxID_ANY, wxT("3D JoyCon gyr
 
 //int main(int argc, char *argv[]) {
 int wWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPWSTR cmdLine, int cmdShow) {
+
+
+
 
 	parseSettings2();
 	wxEntry(hInstance);

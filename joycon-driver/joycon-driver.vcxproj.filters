@@ -72,9 +72,24 @@
     <ClInclude Include="include\MyApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\sio\sio_client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\sio\sio_client.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\sio\sio_socket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\sio\internal\sio_client_impl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\sio\internal\sio_packet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
