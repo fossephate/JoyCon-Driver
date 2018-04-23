@@ -164,6 +164,7 @@ public:
 
 
 	void toggleBroadcastMode(wxCommandEvent&);
+	void toggleWriteCastToFile(wxCommandEvent&);
 
 
 	void checkForUpdate();

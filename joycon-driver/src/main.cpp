@@ -145,6 +145,10 @@ struct Settings {
 	bool broadcastMode = false;
 	// where to connect:
 	std::string host = "";
+	// string to send:
+	std::string controllerState = "";
+	// write cast to file:
+	bool writeCastToFile = false;
 
 	// poll options:
 
@@ -158,7 +162,7 @@ struct Settings {
 	float timeToSleepMS = 2.0f;
 
 	// version number
-	std::string version = "1.0";
+	std::string version = "1.05";
 
 } settings;
 
@@ -663,7 +667,7 @@ void updatevJoyDevice2(Joycon *jc) {
 
 
 	// gyro / accelerometer data:
-	if ((jc->left_right == a) || (joycons.size() == 1 && jc->left_right == b) || (jc->left_right == 3)) {
+	if ((((jc->left_right == a) || (joycons.size() == 1 && jc->left_right == b) || (jc->left_right == 3)) && settings.combineJoyCons) || !settings.combineJoyCons) {
 
 		int multiplier;
 
@@ -897,6 +901,7 @@ void parseSettings2() {
 
 	settings.broadcastMode = (bool)stoi(cfg["broadcastMode"]);
 	settings.host = cfg["host"];
+	settings.writeCastToFile = (bool)stoi(cfg["writeCastToFile"]);
 
 }
 
@@ -967,55 +972,60 @@ void pollLoop() {
 
 	if (settings.broadcastMode && joycons.size() > 0) {
 		Joycon *jc = &joycons[0];
-		std::string btns = "";
+		std::string newControllerState = "";
 		
 		
 		if (jc->btns.up == 1 && jc->btns.left == 1) {
-			btns += "7";
+			newControllerState += "7";
 		} else if (jc->btns.up && jc->btns.right == 1) {
-			btns += "1";
+			newControllerState += "1";
 		} else if (jc->btns.down == 1 && jc->btns.left == 1) {
-			btns += "5";
+			newControllerState += "5";
 		} else if (jc->btns.down == 1 && jc->btns.right == 1) {
-			btns += "3";
+			newControllerState += "3";
 		} else if (jc->btns.up == 1) {
-			btns += "0";
+			newControllerState += "0";
 		} else if (jc->btns.down == 1) {
-			btns += "4";
+			newControllerState += "4";
 		} else if (jc->btns.left == 1) {
-			btns += "6";
+			newControllerState += "6";
 		} else if (jc->btns.right == 1) {
-			btns += "2";
+			newControllerState += "2";
 		} else {
-			btns += "8";
+			newControllerState += "8";
 		}
 
-		btns += jc->btns.stick_button == 1 ? "1" : "0";
-		btns += jc->btns.l == 1 ? "1" : "0";
-		btns += jc->btns.zl == 1 ? "1" : "0";
-		btns += jc->btns.minus == 1 ? "1" : "0";
-		btns += jc->btns.capture == 1 ? "1" : "0";
+		newControllerState += jc->btns.stick_button == 1 ? "1" : "0";
+		newControllerState += jc->btns.l == 1 ? "1" : "0";
+		newControllerState += jc->btns.zl == 1 ? "1" : "0";
+		newControllerState += jc->btns.minus == 1 ? "1" : "0";
+		newControllerState += jc->btns.capture == 1 ? "1" : "0";
 
-		btns += jc->btns.a == 1 ? "1" : "0";
-		btns += jc->btns.b == 1 ? "1" : "0";
-		btns += jc->btns.x == 1 ? "1" : "0";
-		btns += jc->btns.y == 1 ? "1" : "0";
-		btns += jc->btns.stick_button2 == 1 ? "1" : "0";
-		btns += jc->btns.r == 1 ? "1" : "0";
-		btns += jc->btns.zr == 1 ? "1" : "0";
-		btns += jc->btns.plus == 1 ? "1" : "0";
-		btns += jc->btns.home == 1 ? "1" : "0";
+		newControllerState += jc->btns.a == 1 ? "1" : "0";
+		newControllerState += jc->btns.b == 1 ? "1" : "0";
+		newControllerState += jc->btns.x == 1 ? "1" : "0";
+		newControllerState += jc->btns.y == 1 ? "1" : "0";
+		newControllerState += jc->btns.stick_button2 == 1 ? "1" : "0";
+		newControllerState += jc->btns.r == 1 ? "1" : "0";
+		newControllerState += jc->btns.zr == 1 ? "1" : "0";
+		newControllerState += jc->btns.plus == 1 ? "1" : "0";
+		newControllerState += jc->btns.home == 1 ? "1" : "0";
 
 		int LX = ((jc->stick.CalX - 1.0) * 128) + 255;
 		int LY = ((jc->stick.CalY - 1.0) * 128) + 255;
 		int RX = ((jc->stick2.CalX - 1.0) * 128) + 255;
 		int RY = ((jc->stick2.CalY - 1.0) * 128) + 255;
 
-		btns += " " + std::to_string(LX) + " " + std::to_string(LY) + " " + std::to_string(RX) + " " + std::to_string(RY);
+		newControllerState += " " + std::to_string(LX) + " " + std::to_string(LY) + " " + std::to_string(RX) + " " + std::to_string(RY);
 
-		printf("%s\n", btns);
-
-		myClient.socket()->emit("sendControllerState", btns);
+		if (newControllerState != settings.controllerState) {
+			settings.controllerState = newControllerState;
+			printf("%s\n", newControllerState);
+			myClient.socket()->emit("sendControllerState", newControllerState);
+		}
+		if (settings.writeCastToFile) {
+			fprintf(settings.outputFile, "%s\n", newControllerState);
+		}
 	}
 
 	if (settings.restart) {
@@ -1059,7 +1069,7 @@ void start() {
 	}
 
 
-	if (settings.writeDebugToFile) {
+	if (settings.writeDebugToFile || settings.writeCastToFile) {
 
 		// find a debug file to output to:
 		int fileNumber = 0;
@@ -2031,6 +2041,10 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxT("JoyCon-Driver by fosse ©20
 	CB15->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleBroadcastMode, this);
 	CB15->SetValue(settings.broadcastMode);
 
+	CB16 = new wxCheckBox(panel, wxID_ANY, wxT("Write Cast to File"), wxPoint(20, 180));
+	CB16->Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &MainFrame::toggleWriteCastToFile, this);
+	CB16->SetValue(settings.broadcastMode);
+
 
 	gyroComboCodeText = new wxStaticText(panel, wxID_ANY, wxT("Gyro Combo Code: "), wxPoint(20, 270));
 
@@ -2230,6 +2244,10 @@ void MainFrame::setGyroSensitivityY(wxCommandEvent&) {
 
 void MainFrame::toggleBroadcastMode(wxCommandEvent &) {
 	settings.broadcastMode = !settings.broadcastMode;
+}
+
+void MainFrame::toggleWriteCastToFile(wxCommandEvent &) {
+	settings.writeCastToFile = !settings.writeCastToFile;
 }
 
 void setGyroComboCodeText(int code) {
