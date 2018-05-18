@@ -132,6 +132,9 @@ struct Settings {
 	// bool to restart the program
 	bool restart = false;
 
+	// auto start the program
+	bool autoStart = false;
+
 	// debug mode
 	bool debugMode = false;
 
@@ -159,10 +162,10 @@ struct Settings {
 	float pollsPerSec = 30.0f;
 
 	// time to sleep (in ms) between polls:
-	float timeToSleepMS = 2.0f;
+	float timeToSleepMS = 4.0f;
 
 	// version number
-	std::string version = "1.05";
+	std::string version = "1.06";
 
 } settings;
 
@@ -903,6 +906,8 @@ void parseSettings2() {
 	settings.host = cfg["host"];
 	settings.writeCastToFile = (bool)stoi(cfg["writeCastToFile"]);
 
+	settings.autoStart = (bool)stoi(cfg["autoStart"]);
+
 }
 
 void start();
@@ -967,7 +972,11 @@ void pollLoop() {
 	}
 
 	// sleep:
-	accurateSleep(settings.timeToSleepMS);
+	if (settings.writeCastToFile) {
+		veryAccurateSleep(settings.timeToSleepMS);
+	} else {
+		accurateSleep(settings.timeToSleepMS);
+	}
 
 
 	if (settings.broadcastMode && joycons.size() > 0) {
@@ -1023,7 +1032,85 @@ void pollLoop() {
 			printf("%s\n", newControllerState);
 			myClient.socket()->emit("sendControllerState", newControllerState);
 		}
+
 		if (settings.writeCastToFile) {
+			//std::string filename = "C:\\Users\\Matt\\Desktop\\commands.txt";
+			//FILE* outputFile = fopen(filename.c_str(), "w");
+			//fprintf(outputFile, "%s\n", newControllerState);
+			//fclose(outputFile);
+			fprintf(settings.outputFile, "%s\n", newControllerState);
+		}
+	}
+
+	if (settings.broadcastMode && joycons.size() > 1) {
+		Joycon *jcL;
+		Joycon *jcR;
+
+		if (joycons[0].left_right == 1) {
+			jcL = &joycons[0];
+			jcR = &joycons[1];
+		} else {
+			jcL = &joycons[1];
+			jcR = &joycons[0];
+		}
+
+		std::string newControllerState = "";
+
+
+		if (jcL->btns.up == 1 && jcL->btns.left == 1) {
+			newControllerState += "7";
+		} else if (jcL->btns.up && jcL->btns.right == 1) {
+			newControllerState += "1";
+		} else if (jcL->btns.down == 1 && jcL->btns.left == 1) {
+			newControllerState += "5";
+		} else if (jcL->btns.down == 1 && jcL->btns.right == 1) {
+			newControllerState += "3";
+		} else if (jcL->btns.up == 1) {
+			newControllerState += "0";
+		} else if (jcL->btns.down == 1) {
+			newControllerState += "4";
+		} else if (jcL->btns.left == 1) {
+			newControllerState += "6";
+		} else if (jcL->btns.right == 1) {
+			newControllerState += "2";
+		} else {
+			newControllerState += "8";
+		}
+
+		newControllerState += jcL->btns.stick_button == 1 ? "1" : "0";
+		newControllerState += jcL->btns.l == 1 ? "1" : "0";
+		newControllerState += jcL->btns.zl == 1 ? "1" : "0";
+		newControllerState += jcL->btns.minus == 1 ? "1" : "0";
+		newControllerState += jcL->btns.capture == 1 ? "1" : "0";
+
+		newControllerState += jcR->btns.a == 1 ? "1" : "0";
+		newControllerState += jcR->btns.b == 1 ? "1" : "0";
+		newControllerState += jcR->btns.x == 1 ? "1" : "0";
+		newControllerState += jcR->btns.y == 1 ? "1" : "0";
+		newControllerState += jcR->btns.stick_button2 == 1 ? "1" : "0";
+		newControllerState += jcR->btns.r == 1 ? "1" : "0";
+		newControllerState += jcR->btns.zr == 1 ? "1" : "0";
+		newControllerState += jcR->btns.plus == 1 ? "1" : "0";
+		newControllerState += jcR->btns.home == 1 ? "1" : "0";
+
+		int LX = ((jcL->stick.CalX - 1.0) * 128) + 255;
+		int LY = ((jcL->stick.CalY - 1.0) * 128) + 255;
+		int RX = ((jcR->stick2.CalX - 1.0) * 128) + 255;
+		int RY = ((jcR->stick2.CalY - 1.0) * 128) + 255;
+
+		newControllerState += " " + std::to_string(LX) + " " + std::to_string(LY) + " " + std::to_string(RX) + " " + std::to_string(RY);
+
+		if (newControllerState != settings.controllerState) {
+			settings.controllerState = newControllerState;
+			printf("%s\n", newControllerState);
+			myClient.socket()->emit("sendControllerState", newControllerState);
+		}
+
+		if (settings.writeCastToFile) {
+			//std::string filename = "C:\\Users\\Matt\\Desktop\\commands.txt";
+			//FILE* outputFile = fopen(filename.c_str(), "w");
+			//fprintf(outputFile, "%s\n", newControllerState);
+			//fclose(outputFile);
 			fprintf(settings.outputFile, "%s\n", newControllerState);
 		}
 	}
@@ -1925,7 +2012,12 @@ bool MyApp::OnInit() {
 	}
 
 	Connect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(MyApp::onIdle));
-	new MainFrame();
+	auto mainFrame = new MainFrame();
+
+	if (settings.autoStart) {
+		wxCommandEvent a;
+		mainFrame->onStart(a);
+	}
 
 	//new MyFrame();
 	//m_myTimer.Start(0);
