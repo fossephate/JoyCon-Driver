@@ -42,6 +42,8 @@ A vJoy feeder / Driver for the Nintendo Switch JoyCons and Pro Controller on Win
 	* Changes the behavior of the quick toggle from always off unless keycombo is pressed to always on unless keycombo is pressed
 * Gyro Window
 	* Opens up a visualizer for the JoyCon's gyroscope
+* Dolphin Mode
+	* Makes it so that the Rz/sl0/sl1 sliders in vJoy don't reset back to 0 when the JoyCon stops moving
 * Mario Theme
 	* Plays the Mario theme on the first connected JoyCon at startup
 * Debug Mode
@@ -50,17 +52,19 @@ A vJoy feeder / Driver for the Nintendo Switch JoyCons and Pro Controller on Win
 	* Writes the debug info to a file
 * Force Poll Update
 	* Don't use this, probably
+* Broadcast mode
+	* Don't use this, probably
 
 ## Important Notes
 * The JoyCons need to be re-paired anytime after they've reconnected to the switch
 
 ## Contact
-* If you have any questions about anything the fastest way to reach me is probably discord [server](https://discord.gg/jmcfdeS) or (fosse#0430) or twitter (@fosseisanerd) or even my email matt.cfosse@gmail.com
+* If you have any questions about anything the fastest way to reach me is probably my discord [server](https://discord.gg/jmcfdeS) or (fosse#0430) or twitter (@fosseisanerd) or even my email matt.cfosse@gmail.com
 * If you find a bug please don't hesitate to make an issue, I'll try to respond within 24 hours if possible
 
 ## Donate
 * If you like the project and would like to donate:
-* I have a paypal at matt.cfosse@gmail.com
+* https://paypal.me/matthewfosse
 * BTC Address: 17hDC2X7a1SWjsqBJRt9mJb9fJjqLCwgzG
 * ETH Address: 0xFdcA914e1213af24fD20fB6855E89141DF8caF96
 
