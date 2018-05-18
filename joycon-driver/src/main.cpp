@@ -1095,8 +1095,8 @@ void pollLoop() {
 
 		int LX = ((jcL->stick.CalX - 1.0) * 128) + 255;
 		int LY = ((jcL->stick.CalY - 1.0) * 128) + 255;
-		int RX = ((jcR->stick2.CalX - 1.0) * 128) + 255;
-		int RY = ((jcR->stick2.CalY - 1.0) * 128) + 255;
+		int RX = ((jcR->stick.CalX - 1.0) * 128) + 255;
+		int RY = ((jcR->stick.CalY - 1.0) * 128) + 255;
 
 		newControllerState += " " + std::to_string(LX) + " " + std::to_string(LY) + " " + std::to_string(RX) + " " + std::to_string(RY);
 
