@@ -979,7 +979,7 @@ void pollLoop() {
 	}
 
 
-	if (settings.broadcastMode && joycons.size() > 0) {
+	if (settings.broadcastMode && joycons.size() == 1) {
 		Joycon *jc = &joycons[0];
 		std::string newControllerState = "";
 		
@@ -1042,7 +1042,7 @@ void pollLoop() {
 		}
 	}
 
-	if (settings.broadcastMode && joycons.size() > 1) {
+	if (settings.broadcastMode && joycons.size() == 2) {
 		Joycon *jcL;
 		Joycon *jcR;
 
