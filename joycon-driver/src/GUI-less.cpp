@@ -95,7 +95,8 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 	if (packet[0] == 0x21 || packet[0] == 0x30 || packet[0] == 0x31) {
 
 		// offset for usb or bluetooth data:
-		int offset = /*settings.usingBluetooth*/true ? 0 : 10;
+		/*int offset = settings.usingBluetooth ? 0 : 10;*/
+		int offset = jc->bluetooth ? 0 : 10;
 
 		uint8_t *btn_data = packet + offset + 3;
 
@@ -120,6 +121,18 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			// Pro Controller:
 			if (jc->left_right == 3) {
 				jc->buttons2 = states2;
+
+				// fix some non-sense the Pro Controller does
+				// clear nth bit
+				//num &= ~(1UL << n);
+				jc->buttons &= ~(1UL << 9);
+				jc->buttons &= ~(1UL << 10);
+				jc->buttons &= ~(1UL << 12);
+				jc->buttons &= ~(1UL << 14);
+
+				jc->buttons2 &= ~(1UL << 8);
+				jc->buttons2 &= ~(1UL << 11);
+				jc->buttons2 &= ~(1UL << 13);
 			}
 		}
 
@@ -160,8 +173,9 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		//printf("JoyCon battery: %d\n", jc->battery);
 
 		// Accelerometer:
-		// Accelerometer data is absolute
+		// Accelerometer data is absolute (m/s^2)
 		{
+
 			// get accelerometer X:
 			jc->accel.x = (float)(uint16_to_int16(packet[13] | (packet[14] << 8) & 0xFF00)) * jc->acc_cal_coeff[0];
 
@@ -169,7 +183,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 			jc->accel.y = (float)(uint16_to_int16(packet[15] | (packet[16] << 8) & 0xFF00)) * jc->acc_cal_coeff[1];
 
 			// get accelerometer Z:
-			jc->accel.z = (float)(uint16_to_int16(packet[17] | (packet[18] << 8) & 0xFF00))  * jc->acc_cal_coeff[2];
+			jc->accel.z = (float)(uint16_to_int16(packet[17] | (packet[18] << 8) & 0xFF00)) * jc->acc_cal_coeff[2];
 		}
 
 
@@ -177,19 +191,104 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 		// Gyroscope:
 		// Gyroscope data is relative (rads/s)
 		{
+
 			// get roll:
-			jc->gyro.roll = (float)(uint16_to_int16(packet[19] | (packet[20] << 8) & 0xFF00)) * jc->gyro_cal_coeff[0];
+			jc->gyro.roll = (float)((uint16_to_int16(packet[19] | (packet[20] << 8) & 0xFF00)) - jc->sensor_cal[1][0]) * jc->gyro_cal_coeff[0];
 
 			// get pitch:
-			jc->gyro.pitch = (float)(uint16_to_int16(packet[21] | (packet[22] << 8) & 0xFF00)) * jc->gyro_cal_coeff[1];
+			jc->gyro.pitch = (float)((uint16_to_int16(packet[21] | (packet[22] << 8) & 0xFF00)) - jc->sensor_cal[1][1]) * jc->gyro_cal_coeff[1];
 
 			// get yaw:
-			jc->gyro.yaw = (float)(uint16_to_int16(packet[23] | (packet[24] << 8) & 0xFF00)) * jc->gyro_cal_coeff[2];
+			jc->gyro.yaw = (float)((uint16_to_int16(packet[23] | (packet[24] << 8) & 0xFF00)) - jc->sensor_cal[1][2]) * jc->gyro_cal_coeff[2];
+		}
+
+		// offsets:
+		{
+			jc->setGyroOffsets();
+
+			jc->gyro.roll -= jc->gyro.offset.roll;
+			jc->gyro.pitch -= jc->gyro.offset.pitch;
+			jc->gyro.yaw -= jc->gyro.offset.yaw;
+
+			//tracker.counter1++;
+			//if (tracker.counter1 > 10) {
+			//	tracker.counter1 = 0;
+			//	printf("%.3f %.3f %.3f\n", abs(jc->gyro.roll), abs(jc->gyro.pitch), abs(jc->gyro.yaw));
+			//}
+		}
+
+
+		//hex_dump(gyro_data, 20);
+
+		if (jc->left_right == 1) {
+			//hex_dump(gyro_data, 20);
+			//hex_dump(packet+12, 20);
+			//printf("x: %f, y: %f, z: %f\n", tracker.anglex, tracker.angley, tracker.anglez);
+			//printf("%04x\n", jc->stick.x);
+			//printf("%f\n", jc->stick.CalX);
+			//printf("%d\n", jc->gyro.yaw);
+			//printf("%02x\n", jc->gyro.roll);
+			//printf("%04x\n", jc->gyro.yaw);
+			//printf("%04x\n", jc->gyro.roll);
+			//printf("%f\n", jc->gyro.roll);
+			//printf("%d\n", accelXA);
+			//printf("%d\n", jc->buttons);
+			//printf("%.4f\n", jc->gyro.pitch);
+			//printf("%04x\n", accelX);
+			//printf("%02x %02x\n", rollA, rollB);
 		}
 
 	}
 
+
+
+
+
+
+	// handle button combos:
 	{
+
+		// press up, down, left, right, L, ZL to restart:
+		if (jc->left_right == 1) {
+			//if (jc->buttons == 207) {
+			//	settings.restart = true;
+			//}
+
+			// remove this, it's just for rumble testing
+			//uint8_t hfa2 = 0x88;
+			//uint16_t lfa2 = 0x804d;
+
+			//tracker.low_freq = clamp(tracker.low_freq, 41.0f, 626.0f);
+			//tracker.high_freq = clamp(tracker.high_freq, 82.0f, 1252.0f);
+			//
+			//// down:
+			//if (jc->buttons == 1) {
+			//	tracker.high_freq -= 1;
+			//	jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
+			//}
+			//// down:
+			//if (jc->buttons == 2) {
+			//	tracker.high_freq += 1;
+			//	jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
+			//}
+
+			//// left:
+			//if (jc->buttons == 8) {
+			//	tracker.low_freq -= 1;
+			//	jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
+			//}
+			//// right:
+			//if (jc->buttons == 4) {
+			//	tracker.low_freq += 1;
+			//	jc->rumble4(tracker.low_freq, tracker.high_freq, hfa2, lfa2);
+			//}
+
+			////printf("%i\n", jc->buttons);
+			////printf("%f\n", tracker.frequency);
+			//printf("%f %f\n", tracker.low_freq, tracker.high_freq);
+		}
+
+
 		// left:
 		if (jc->left_right == 1) {
 			jc->btns.down = (jc->buttons & (1 << 0)) ? 1 : 0;
@@ -210,6 +309,11 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 					jc->btns.up, jc->btns.down, jc->btns.left, jc->btns.right, jc->btns.l, jc->btns.zl, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
 					jc->btns.minus, jc->btns.capture, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
 			}
+			//if (settings.writeDebugToFile) {
+			//	fprintf(settings.outputFile, "U: %d D: %d L: %d R: %d LL: %d ZL: %d SB: %d SL: %d SR: %d M: %d C: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
+			//		jc->btns.up, jc->btns.down, jc->btns.left, jc->btns.right, jc->btns.l, jc->btns.zl, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
+			//		jc->btns.minus, jc->btns.capture, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
+			//}
 		}
 
 		// right:
@@ -232,6 +336,11 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 					jc->btns.a, jc->btns.b, jc->btns.x, jc->btns.y, jc->btns.r, jc->btns.zr, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
 					jc->btns.plus, jc->btns.home, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
 			}
+			//if (settings.writeDebugToFile) {
+			//	fprintf(settings.outputFile, "A: %d B: %d X: %d Y: %d RR: %d ZR: %d SB: %d SL: %d SR: %d P: %d H: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
+			//		jc->btns.a, jc->btns.b, jc->btns.x, jc->btns.y, jc->btns.r, jc->btns.zr, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
+			//		jc->btns.plus, jc->btns.home, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
+			//}
 		}
 
 		// pro controller:
@@ -266,7 +375,6 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 
 			if (/*settings.debugMode*/false) {
 
-				// change from CalX to x to see if the calibration is the problem
 				printf("U: %d D: %d L: %d R: %d LL: %d ZL: %d SB: %d SL: %d SR: %d M: %d C: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
 					jc->btns.up, jc->btns.down, jc->btns.left, jc->btns.right, jc->btns.l, jc->btns.zl, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
 					jc->btns.minus, jc->btns.capture, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
@@ -276,11 +384,20 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 					jc->btns.plus, jc->btns.home, (jc->stick2.CalX + 1), (jc->stick2.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
 			}
 
+			//if (settings.writeDebugToFile) {
+			//	fprintf(settings.outputFile, "U: %d D: %d L: %d R: %d LL: %d ZL: %d SB: %d SL: %d SR: %d M: %d C: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
+			//		jc->btns.up, jc->btns.down, jc->btns.left, jc->btns.right, jc->btns.l, jc->btns.zl, jc->btns.stick_button, jc->btns.sl, jc->btns.sr, \
+			//		jc->btns.minus, jc->btns.capture, (jc->stick.CalX + 1), (jc->stick.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
+
+			//	fprintf(settings.outputFile, "A: %d B: %d X: %d Y: %d RR: %d ZR: %d SB: %d SL: %d SR: %d P: %d H: %d SX: %.5f SY: %.5f GR: %06d GP: %06d GY: %06d\n", \
+			//		jc->btns.a, jc->btns.b, jc->btns.x, jc->btns.y, jc->btns.r, jc->btns.zr, jc->btns.stick_button2, jc->btns.sl, jc->btns.sr, \
+			//		jc->btns.plus, jc->btns.home, (jc->stick2.CalX + 1), (jc->stick2.CalY + 1), (int)jc->gyro.roll, (int)jc->gyro.pitch, (int)jc->gyro.yaw);
+			//}
+
 		}
+
 	}
-
 }
-
 
 
 
