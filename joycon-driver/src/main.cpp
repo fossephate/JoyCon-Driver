@@ -165,7 +165,7 @@ struct Settings {
 	float timeToSleepMS = 4.0f;
 
 	// version number
-	std::string version = "1.06";
+	std::string version = "1.07";
 
 } settings;
 
@@ -249,6 +249,7 @@ void handle_input(Joycon *jc, uint8_t *packet, int len) {
 				// clear nth bit
 				//num &= ~(1UL << n);
 				jc->buttons &= ~(1UL << 9);
+				jc->buttons &= ~(1UL << 10);
 				jc->buttons &= ~(1UL << 12);
 				jc->buttons &= ~(1UL << 14);
 
