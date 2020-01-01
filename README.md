@@ -60,6 +60,7 @@ A vJoy feeder / Driver for the Nintendo Switch JoyCons and Pro Controller on Win
 
 ## Contact
 * If you have any questions you can contact me on discord (fosse#0430) twitter (@fossephate) or even my email fossephate@gmail.com
+you can also join the discord server here: https://discord.gg/jmcfdeS
 
 ## Donate
 * If you like the project and would like to donate:
