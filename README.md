@@ -2,7 +2,7 @@
 A vJoy feeder / Driver for the Nintendo Switch JoyCons and Pro Controller on Windows with analog stick support and motion controls
 
 ## How to use
-1. Install vJoy, here: http://vjoystick.sourceforge.net/site/
+1. Install vJoy, here: https://sourceforge.net/projects/vjoystick/
 
 2. Setup your vJoy Devices to look like this (search for configure vJoy in Windows search):
     * ![Imgur](http://i.imgur.com/nXQDFPK.png)
